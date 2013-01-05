@@ -1,0 +1,51 @@
+/* Style for laroux.js
+----------------------------------------------------------*/
+#floatDiv {
+	width: 100%;
+	position: fixed;
+	top: 10px;
+	left: 0px;
+	z-index: 100002;
+	font-size: 14px;
+}
+
+.msgbox {
+	margin: auto;
+	width: 300px;
+	display: none;
+	padding: 6px 10px 6px 10px;
+	color: #393939;
+	background-color: #F0F0F0;
+	border-radius: 4px;
+	border: 1px solid #808080;
+	box-shadow: 3px 3px 5px #000000;
+	font: 14px sans-serif;
+}
+
+.msgbox h3 {
+	font-size: 14px;
+	font-weight: bold;
+	margin: 0px 0px 4px 0px;
+}
+
+.ui-autocomplete {
+	max-height: 200px;
+	overflow-y: auto;
+
+	/* prevent horizontal scrollbar */
+	overflow-x: hidden;
+}
+
+.catcomplete {
+	background: url('scabbia/laroux/images/profilearrow.png') no-repeat right center;
+}
+
+.ui-autocomplete-category {
+	font-weight: bold;
+}
+
+.ui-autocomplete .desc {
+	display: block;
+	color: #CCCCCC;
+	font-size: 8pt;
+}
