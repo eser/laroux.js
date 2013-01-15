@@ -818,7 +818,7 @@ window.laroux = window.$l = (function() {
 		},
 
 		flush: function() {
-			laroux.storage.data = [];
+			laroux.storage.data.length = 0;
 		},
 
 		exists: function(key) {
