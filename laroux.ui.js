@@ -13,16 +13,16 @@
         },
 
         createBox: function(id, xclass, message) {
-            return laroux.dom.createElement('DIV', { id: id, class: xclass },
+            return laroux.dom.createElement('DIV', { 'id': id, 'class': xclass },
                 message
             );
         },
 
         msgbox: function(timeout, message) {
             var id = laroux.helpers.getUniqueId();
-            laroux.ui.floatContainer.appendChild(laroux.ui.createBox(id, 'laroux_msgbox', message));
+            var obj = laroux.ui.createBox(id, 'laroux_msgbox', message);
+            laroux.ui.floatContainer.appendChild(obj);
 
-            var obj = laroux.dom.select('#' + id);
             laroux.css.setProperty(obj, 'opacity', '1');
 
             laroux.timers.set(timeout, function(x) {
