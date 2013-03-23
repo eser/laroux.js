@@ -881,6 +881,7 @@
                     }
                 }
                 catch(e) {
+                    console.log(e)
                 }
             }
 
@@ -1006,8 +1007,8 @@
                     xhr.setRequestHeader(i, o.headers[i]);
                 }
             }
-            catch(_) {
-                console.log(_)
+            catch(e) {
+                console.log(e)
             }
 
             if (isPost) {
@@ -1031,7 +1032,7 @@
                 userAgent: 'XMLHttpRequest',
                 lang: 'en',
                 processData: true,
-                headers: { 'X-Requested-With': 'XMLHttpRequest' },
+                headers: { 'X-Requested-With': 'XMLHttpRequest', 'X-Wrapper-Function': 'laroux.js' },
                 success: function(data) {
                     if (!data.isSuccess) {
                         laroux.popupFunc('Error: ' + data.errorMessage);
@@ -1055,7 +1056,7 @@
                 userAgent: 'XMLHttpRequest',
                 lang: 'en',
                 processData: true,
-                headers: { 'X-Requested-With': 'XMLHttpRequest' },
+                headers: { 'X-Requested-With': 'XMLHttpRequest', 'X-Wrapper-Function': 'laroux.js' },
                 success: function(data) {
                     if (!data.isSuccess) {
                         laroux.popupFunc('Error: ' + data.errorMessage);
@@ -1083,7 +1084,7 @@
                 userAgent: 'XMLHttpRequest',
                 lang: 'en',
                 processData: true,
-                headers: { 'X-Requested-With': 'XMLHttpRequest' },
+                headers: { 'X-Requested-With': 'XMLHttpRequest', 'X-Wrapper-Function': 'laroux.js' },
                 success: fnc
             });
         }
