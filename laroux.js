@@ -1098,7 +1098,7 @@
                 lang: 'en',
                 processData: true,
                 headers: { 'X-Requested-With': 'XMLHttpRequest', 'X-Wrapper-Function': 'laroux.js' },
-                success: function(data) {
+                success: function(data, wrapperFunc) {
                     if (wrapperFunc == 'laroux.js') {
                         if (!data.isSuccess) {
                             laroux.popupFunc('Error: ' + data.errorMessage);
