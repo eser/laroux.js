@@ -630,7 +630,7 @@
         },
 
         set: function(name, value) {
-            document.cookie = name + '=' + value + '; path=/';
+            document.cookie = name + '=' + value + '; path=' + laroux.baseLocation;
         }
     };
 
@@ -1043,6 +1043,13 @@
             xhr.send(data);
         },
 
+        request: function(path, values, fnc, method) {
+            if (typeof method === 'undefined') {
+                method = (typeof values === 'undefined' || values == null) ? 'get' : 'post';
+            }
+            laroux.ajax[method](path, values, fnc);
+        },
+        
         get: function(path, values, fnc) {
             laroux.ajax.makeRequest({
                 type: 'GET',
