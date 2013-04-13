@@ -12,7 +12,6 @@
             laroux.baseLocation = locationUrl;
             laroux.selectedMaster = masterName;
 
-            laroux.dom.loadAsyncElements();
             laroux.events.invoke('contentBegin');
         },
 
@@ -243,28 +242,6 @@
             }
         },
 
-        loadAsyncElements: function() {
-            var asyncScripts = laroux.dom.select('data[class=\'laroux-async\']');
-            for (var i = 0; i < asyncScripts.length; ++i) {
-                var type = asyncScripts[i].getAttribute('data-type');
-
-                switch (type) {
-                    case 'js':
-                        laroux.dom.loadAsyncScript(
-                            asyncScripts[i].getAttribute('value'),
-                            asyncScripts[i].getAttribute('data-trigger')
-                        );
-                        break;
-                    case 'css':
-                        laroux.dom.loadAsyncStyle(
-                            asyncScripts[i].getAttribute('value'),
-                            asyncScripts[i].getAttribute('data-trigger')
-                        );
-                        break;
-                }
-            }
-        },
-
         loadAsyncScript: function(path, triggerName, async) {
             var elem = document.createElement('script');
             elem.type = 'text/javascript';
@@ -370,52 +347,6 @@
             return newElement;
         },
 
-        applyTemplate: function(element, model) {
-            var domElementsNative = element.querySelectorAll('*[data-repeat], *[data-bindings]');
-            if (domElementsNative.length == 0) {
-                return;
-            }
-
-            var domElements = Array.prototype.slice.call(domElementsNative);
-            domElements.push(element);
-
-            for (var i = domElements.length - 1; i >= 0; i--) {
-                var currentElement = domElements[i];
-                var dataBindings = currentElement.getAttribute('data-bindings');
-                var dataRepeat = currentElement.getAttribute('data-repeat');
-
-                if (dataRepeat != null) {
-                    var repeatEval = eval('(' + dataRepeat + ')');
-                    var lastElement = null;
-                    var container = (typeof repeatEval['container'] != 'undefined') ? laroux.dom.selectSingle(repeatEval['container']) : currentElement.parentNode;
-
-                    if (typeof repeatEval['clearFirst'] != 'undefined' && repeatEval['clearFirst'] == true) {
-                        container.innerHTML = '';
-                    }
-
-                    for (key in repeatEval['items']) {
-                        var item = repeatEval['items'][key];
-                        var operations = (dataBindings != null) ? eval('(' + dataBindings + ')') : {};
-
-                        var newElement = laroux.dom.clone(currentElement, (lastElement == null) ? laroux.dom.cloneAppend : laroux.dom.cloneInsertAfter, container, lastElement);
-                        lastElement = newElement;
-
-                        laroux.dom.applyOperations(newElement, operations);
-                        newElement.removeAttribute('id');
-                        newElement.removeAttribute('data-repeat');
-                        if (dataBindings != null) {
-                            newElement.removeAttribute('data-bindings');
-                        }
-                    }
-                } else {
-                    var operations = (dataBindings != null) ? eval('(' + dataBindings + ')') : {};
-                    laroux.dom.applyOperations(currentElement, operations);
-                    // newElement.removeAttribute('id');
-                    currentElement.removeAttribute('data-bindings');
-                }
-            }
-        },
-
         applyOperations: function(element, operations) {
             for (operation in operations) {
                 for (binding in operations[operation]) {
@@ -475,40 +406,6 @@
                             console.log(operation);
                     }
                 }
-            }
-        },
-
-        cloneTemplate: function(element, model, type, container, target) {
-            var newElement = laroux.dom.clone(element, type, container, target);
-            laroux.dom.applyTemplate(newElement, model);
-
-            return newElement;
-        },
-
-        applyDefaultTexts: function() {
-            var focusFunc = function() {
-                if (this.value == this.getAttribute('data-defaulttext')) {
-                    this.value = '';
-                }
-                // this.style['content'] = 'none';
-            };
-            
-            var blurFunc = function() {
-                if (this.value == '') {
-                    this.value = this.getAttribute('data-defaulttext');
-                    // this.style['content'] = 'attr(\'data-defaulttext\')';
-                }
-            };
-            
-            var domElements = document.body.querySelectorAll('*[data-defaulttext]');
-            for (var i = domElements.length - 1; i >= 0; i--) {
-                if (domElements[i].value == '') {
-                    domElements[i].value = domElements[i].getAttribute('data-defaulttext');
-                    // domElements[i].style['content'] = 'attr(\'data-defaulttext\')';
-                }
-
-                domElements[i].addEventListener('focus', focusFunc, false);
-                domElements[i].addEventListener('blur', blurFunc, false);
             }
         }
     };
@@ -869,7 +766,8 @@
         }
     };
 
-    // ajax
+    // ajax - partially taken from 'jquery in parts' project
+    //        can be found at: https://github.com/mythz/jquip/
     laroux.ajax = {
         _xhrf: null,
         xhrs: [
@@ -1186,7 +1084,5 @@
     };
 
     // initialization
-    laroux.ready(laroux.dom.applyDefaultTexts);
-
     this.$l = this.laroux = laroux;
 }).call(this);
