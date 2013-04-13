@@ -371,7 +371,12 @@
         },
 
         applyTemplate: function(element, model) {
-            var domElements = Array.prototype.slice.call(element.querySelectorAll('*[data-repeat], *[data-bindings]'));
+            var domElementsNative = element.querySelectorAll('*[data-repeat], *[data-bindings]');
+            if (domElementsNative.length == 0) {
+                return;
+            }
+
+            var domElements = Array.prototype.slice.call(domElementsNative);
             domElements.push(element);
 
             for (var i = domElements.length - 1; i >= 0; i--) {
