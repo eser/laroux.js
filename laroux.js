@@ -5,12 +5,17 @@
     var laroux = {
         baseLocation: '',
         selectedMaster: '',
+        isOldInternetExplorer: false,
         popupFunc: alert,
         readyPassed: false,
 
         contentBegin: function(masterName, locationUrl) {
             laroux.baseLocation = locationUrl;
             laroux.selectedMaster = masterName;
+
+            if (laroux.css.hasClass(laroux.dom.selectSingle('html'), 'oldInternetExplorer')) {
+                laroux.isOldInternetExplorer = true;
+            }
 
             laroux.events.invoke('contentBegin');
         },
@@ -304,15 +309,30 @@
         },
 
         replace: function(element, content) {
+            if (laroux.isOldInternetExplorer) {
+                element.innerHTML = content;
+                return;
+            }
+
             laroux.dom.clear(element);
             element.insertAdjacentHTML('afterbegin', content);
         },
 
         prepend: function(element, content) {
+            if (laroux.isOldInternetExplorer) {
+                element.innerHTML = content + element.innerHTML;
+                return;
+            }
+
             element.insertAdjacentHTML('afterbegin', content);
         },
         
         append: function(element, content) {
+            if (laroux.isOldInternetExplorer) {
+                element.innerHTML += content;
+                return;
+            }
+
             element.insertAdjacentHTML('beforeend', content);
         },
 
