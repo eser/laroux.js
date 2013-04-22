@@ -773,6 +773,8 @@
         xhrs: [
             function() { return new XMLHttpRequest(); },
             function() { return new ActiveXObject('Microsoft.XMLHTTP'); },
+            function() { return new ActiveXObject('MSXML2.XMLHTTP.5.0'); },
+            function() { return new ActiveXObject('MSXML2.XMLHTTP.4.0'); },
             function() { return new ActiveXObject('MSXML2.XMLHTTP.3.0'); },
             function() { return new ActiveXObject('MSXML2.XMLHTTP'); }
         ],
