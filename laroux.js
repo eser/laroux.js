@@ -219,6 +219,18 @@
             delete laroux.dom.eventHistory[element][eventname];
         },
 
+        create: function(html) {
+            var frag = document.createDocumentFragment(),
+                temp = document.createElement('DIV');
+
+            temp.innerHTML = html;
+            while (temp.firstChild) {
+                frag.appendChild(temp.firstChild);
+            }
+
+            return frag;
+        },
+
         createElement: function(element, attributes, children) {
             var elem = document.createElement(element);
 
@@ -239,6 +251,15 @@
             }
 
             return elem;
+        },
+
+        createOption: function(element, key, value, isDefault) {
+            var count = element.options.length;
+            element.options[count] = new Option(value, key);
+
+            if (typeof isDefault != 'undefined' && isDefault === true) {
+                element.options.selectedIndex = count - 1;
+            }
         },
 
         loadImage: function() {
@@ -275,7 +296,7 @@
         },
 
         loadAsyncStyle: function(path, triggerName, async) {
-            var elem = document.createElement('link');
+            var elem = document.createElement('LINK');
             elem.type = 'text/css';
             elem.async = (typeof async != 'undefined') ? async : true;
             elem.href = path;
@@ -310,7 +331,7 @@
 
         replace: function(element, content) {
             if (laroux.isOldInternetExplorer) {
-                element.innerHTML = content;
+                element.innerHTML = laroux.dom.create(content);
                 return;
             }
 
@@ -320,7 +341,7 @@
 
         prepend: function(element, content) {
             if (laroux.isOldInternetExplorer) {
-                element.innerHTML = content + element.innerHTML;
+                element.innerHTML = content + laroux.dom.create(content);
                 return;
             }
 
@@ -329,7 +350,7 @@
         
         append: function(element, content) {
             if (laroux.isOldInternetExplorer) {
-                element.innerHTML += content;
+                element.innerHTML += laroux.dom.create(content);
                 return;
             }
 
