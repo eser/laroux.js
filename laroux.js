@@ -176,7 +176,7 @@
 
         eventHistory: { },
         setEvent: function(element, eventname, fnc) {
-            if (typeof element == 'object') {
+            if (element instanceof NodeList) {
                 for (i = 0; i < element.length; i++) {
                     laroux.dom.setEvent(element[i], eventname, fnc);
                 }
@@ -213,7 +213,7 @@
         },
 
         unsetEvent: function(element, eventname) {
-            if (typeof element == 'object') {
+            if (element instanceof NodeList) {
                 for (i = 0; i < element.length; i++) {
                     laroux.dom.unsetEvent(element[i], eventname);
                 }
