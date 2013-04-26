@@ -176,6 +176,13 @@
 
         eventHistory: { },
         setEvent: function(element, eventname, fnc) {
+            if (typeof element == 'object') {
+                for (i = 0; i < element.length; i++) {
+                    laroux.dom.setEvent(element[i], eventname, fnc);
+                }
+                return;
+            }
+
             var fncWrapper = function(e) {
                 if (fnc(e, element) === false) {
                     if (e.preventDefault) {
@@ -206,6 +213,13 @@
         },
 
         unsetEvent: function(element, eventname) {
+            if (typeof element == 'object') {
+                for (i = 0; i < element.length; i++) {
+                    laroux.dom.unsetEvent(element[i], eventname);
+                }
+                return;
+            }
+
             if (typeof laroux.dom.eventHistory[element] == 'undefined') {
                 return;
             }
@@ -329,32 +343,21 @@
             }
         },
 
-        replace: function(element, content) {
-            if (laroux.isOldInternetExplorer) {
-                element.innerHTML = laroux.dom.create(content);
-                return;
-            }
-
-            laroux.dom.clear(element);
-            element.insertAdjacentHTML('afterbegin', content);
+        insert: function(element, position, content) {
+            element.insertAdjacentHTML(position, content);
         },
 
         prepend: function(element, content) {
-            if (laroux.isOldInternetExplorer) {
-                element.innerHTML = content + laroux.dom.create(content);
-                return;
-            }
-
             element.insertAdjacentHTML('afterbegin', content);
         },
         
         append: function(element, content) {
-            if (laroux.isOldInternetExplorer) {
-                element.innerHTML += laroux.dom.create(content);
-                return;
-            }
-
             element.insertAdjacentHTML('beforeend', content);
+        },
+
+        replace: function(element, content) {
+            laroux.dom.clear(element);
+            element.insertAdjacentHTML('afterbegin', content);
         },
 
         remove: function(element) {
@@ -467,10 +470,14 @@
             return template.render(model);
         },
 
-        append: function(element, model, target, options) {
+        insert: function(element, model, target, position, options) {
             var output = laroux.templates.apply(element, model, options);
 
-            laroux.dom.append(target, output);
+            if (typeof position == 'undefined') {
+                position = 'beforeend';
+            }
+
+            laroux.dom.insert(target, position, output);
         }
     };
 
