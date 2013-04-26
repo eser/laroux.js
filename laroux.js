@@ -451,6 +451,29 @@
         }
     };
 
+    // templates
+    laroux.templates = {
+        engine: null,
+
+        load: function(element, options) {
+            var content = element.innerHTML;
+
+            return laroux.templates.engine.compile(content, options);
+        },
+
+        apply: function(element, model, options) {
+            var template = laroux.templates.load(element, options);
+
+            return template.render(model);
+        },
+
+        append: function(element, model, target, options) {
+            var output = laroux.templates.apply(element, model, options);
+
+            laroux.dom.append(target, output);
+        }
+    };
+
     // css
     laroux.css = {
         hasClass: function(element, className) {
