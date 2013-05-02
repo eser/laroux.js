@@ -41,7 +41,7 @@
         },
 
         extend: function(obj) {
-            for (name in obj) {
+            for (var name in obj) {
                 laroux[name] = obj[name];
             }
         }
@@ -56,7 +56,7 @@
         },
 
         invoke: function(event, args) {
-            for (key in laroux.events.delegates) {
+            for (var key in laroux.events.delegates) {
                 if (laroux.events.delegates[key].event != event) {
                     continue;
                 }
@@ -80,7 +80,7 @@
 
         ontick: function() {
             var removeKeys = [];
-            for (key in laroux.timers.delegates) {
+            for (var key in laroux.timers.delegates) {
                 var keyObj = laroux.timers.delegates[key];
 
                 if (keyObj.timeout == null) {
@@ -95,7 +95,7 @@
                 }
             }
 
-            for (key in removeKeys) {
+            for (var key in removeKeys) {
                 laroux.timers.delegates.splice(removeKeys[key], 1);
             }
         }
@@ -107,7 +107,7 @@
         list: [],
 
         set: function(condition, fnc, obj) {
-            for (key in condition) {
+            for (var key in condition) {
                 if (laroux.triggers.list.indexOf(condition[key]) == -1) {
                     laroux.triggers.list.push(condition[key]);
                 }
@@ -127,11 +127,11 @@
             }
 
             var removeKeys = [];
-            for (key in laroux.triggers.delegates) {
+            for (var key in laroux.triggers.delegates) {
                 var count = 0;
                 var keyObj = laroux.triggers.delegates[key];
 
-                for (conditionKey in keyObj.condition) {
+                for (var conditionKey in keyObj.condition) {
                     var conditionObj = keyObj.condition[conditionKey];
 
                     if (laroux.triggers.list.indexOf(conditionObj) != -1) {
@@ -146,7 +146,7 @@
                 }
             }
 
-            for (key in removeKeys) {
+            for (var key in removeKeys) {
                 laroux.triggers.delegates.splice(removeKeys[key], 1);
             }
 
@@ -177,7 +177,7 @@
         eventHistory: { },
         setEvent: function(element, eventname, fnc) {
             if (element instanceof NodeList) {
-                for (i = 0; i < element.length; i++) {
+                for (var i = 0; i < element.length; i++) {
                     laroux.dom.setEvent(element[i], eventname, fnc);
                 }
                 return;
@@ -214,7 +214,7 @@
 
         unsetEvent: function(element, eventname) {
             if (element instanceof NodeList) {
-                for (i = 0; i < element.length; i++) {
+                for (var i = 0; i < element.length; i++) {
                     laroux.dom.unsetEvent(element[i], eventname);
                 }
                 return;
@@ -249,14 +249,16 @@
             var elem = document.createElement(element);
 
             if (typeof attributes == 'object') {
-                for (key in laroux.helpers.getKeys(attributes)) {
-                    elem.setAttribute(key, attributes[key]);
+                var keys = Object.keys(attributes);
+                for (var key in keys) {
+                    elem.setAttribute(keys[key], attributes[keys[key]]);
                 }
             }
 
             if (typeof children == 'object') {
-                for (key in laroux.helpers.getKeys(children)) {
-                    elem.setAttribute(key, children[key]);
+                var keys = Object.keys(children);
+                for (var key in keys) {
+                    elem.setAttribute(keys[key], children[keys[key]]);
                 }
             } else if (typeof children == 'string') {
                 laroux.dom.append(elem, children);
@@ -286,9 +288,16 @@
         },
 
         loadImage: function() {
-            for (i = 0; i < arguments.length; i++) {
-                laroux.dom.createElement('IMG', { src: arguments[i] }, null);
+            var images = [];
+
+            for (var i = 0; i < arguments.length; i++) {
+                var image = document.createElement('IMG');
+                image.setAttribute('src', arguments[i]);
+
+                images.push(image);
             }
+
+            return images;
         },
 
         loadAsyncScript: function(path, triggerName, async) {
@@ -401,8 +410,8 @@
         },
 
         applyOperations: function(element, operations) {
-            for (operation in operations) {
-                for (binding in operations[operation]) {
+            for (var operation in operations) {
+                for (var binding in operations[operation]) {
                     var value = operations[operation][binding];
                     
                     switch (operation) {
@@ -531,7 +540,7 @@
             var flag = false;
             var newStyleName = '';
 
-            for (i = 0; i < styleName.length; i++) {
+            for (var i = 0; i < styleName.length; i++) {
                 if (styleName.charAt(i) == '-') {
                     flag = true;
                     continue;
@@ -556,7 +565,7 @@
         buildQueryString: function(values) {
             var uri = '';
 
-            for (name in values) {
+            for (var name in values) {
                 if (typeof values[name] != 'function') {
                     uri += '&' + escape(name) + '=' + escape(values[name]);
                 }
@@ -609,14 +618,14 @@
             }
 
             return -1;
-        },
+        } /* for javascript 1.7 or later,
 
         getKeys: function(obj) {
             var keys = Object.keys(obj);
-            for(key in keys) {
+            for (var key in keys) {
                 yield keys[key];
             }
-        }
+        } */
     };
 
     // cookies
@@ -719,7 +728,7 @@
             }
 
             if (element.tagName == 'SELECT') {
-                for (option in element.options) {
+                for (var option in element.options) {
                     if (element.options[option].value == value) {
                         element.selectedIndex = option;
                         return;
@@ -781,7 +790,7 @@
         toggleFormEditing: function(formobj, value) {
             var selection = formobj.querySelectorAll('*[name]');
 
-            for (selected = 0; selected < selection.length; selected++) {
+            for (var selected = 0; selected < selection.length; selected++) {
                 if (!laroux.forms.isFormField(selection[selected])) {
                     continue;
                 }
@@ -799,7 +808,7 @@
             var formdata = new FormData();
             var selection = formobj.querySelectorAll('*[name]');
 
-            for (selected = 0; selected < selection.length; selected++) {
+            for (var selected = 0; selected < selection.length; selected++) {
                 var value = laroux.forms.getFormFieldValue(selection[selected]);
 
                 if (value != null) {
@@ -814,7 +823,7 @@
             var values = {};
             var selection = formobj.querySelectorAll('*[name]');
 
-            for (selected = 0; selected < selection.length; selected++) {
+            for (var selected = 0; selected < selection.length; selected++) {
                 var value = laroux.forms.getFormFieldValue(selection[selected]);
 
                 if (value != null) {
@@ -828,7 +837,7 @@
         deserialize: function(formobj, data) {
             var selection = formobj.querySelectorAll('*[name]');
 
-            for (selected = 0; selected < selection.length; selected++) {
+            for (var selected = 0; selected < selection.length; selected++) {
                 laroux.forms.setFormFieldValue(selection[selected], data[selection[selected].getAttribute('name')]);
             }
         }
@@ -1164,7 +1173,7 @@
         };
 
         this.addRange = function(entryArray) {
-            for (entry in entryArray) {
+            for (var entry in entryArray) {
                 this.entries[entry] = entryArray[entry];
             }
         };
