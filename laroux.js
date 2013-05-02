@@ -237,7 +237,7 @@
             var frag = document.createDocumentFragment(),
                 temp = document.createElement('DIV');
 
-            temp.innerHTML = html;
+            laroux.dom.append(temp, html);
             while (temp.firstChild) {
                 frag.appendChild(temp.firstChild);
             }
@@ -248,32 +248,41 @@
         createElement: function(element, attributes, children) {
             var elem = document.createElement(element);
 
-            if (typeof(attributes) == 'object') {
-                for (key in attributes) {
+            if (typeof attributes == 'object') {
+                for (key in laroux.helpers.getKeys(attributes)) {
                     elem.setAttribute(key, attributes[key]);
                 }
             }
 
-            if (children !== null) {
-                if (typeof children == 'string') {
-                    elem.innerHTML = children;
-                } else if (typeof children == 'object') {
-                    for (i = 0; i < children.length; i++) {
-                        elem.appendChild(children[i]);
-                    }
+            if (typeof children == 'object') {
+                for (key in laroux.helpers.getKeys(children)) {
+                    elem.setAttribute(key, children[key]);
                 }
+            } else if (typeof children == 'string') {
+                laroux.dom.append(elem, children);
             }
 
             return elem;
         },
 
         createOption: function(element, key, value, isDefault) {
+            /* old behaviour, does not support optgroups as parents.
             var count = element.options.length;
             element.options[count] = new Option(value, key);
 
             if (typeof isDefault != 'undefined' && isDefault === true) {
                 element.options.selectedIndex = count - 1;
             }
+            */
+
+            var option = document.createElement('OPTION');
+            option.setAttribute('value', key);
+            if (typeof isDefault != 'undefined' && isDefault === true) {
+                option.setAttribute('checked', 'checked');
+            }
+
+            laroux.dom.append(value);
+            element.appendChild(option);
         },
 
         loadImage: function() {
@@ -404,7 +413,7 @@
                             }
 
                             if (binding == 'content') {
-                                element.innerHTML = value;
+                                laroux.dom.replace(element, value);
                                 continue;
                             }
                             break;
@@ -415,7 +424,7 @@
                             }
 
                             if (binding == 'content') {
-                                element.innerHTML += value;
+                                laroux.dom.append(element, value);
                                 continue;
                             }
                             break;
@@ -426,7 +435,7 @@
                             }
                             
                             if (value == 'content') {
-                                element.innerHTML = '';
+                                laroux.dom.clear(element);
                                 continue;
                             }
                             break;
@@ -588,6 +597,25 @@
             });
 
             return shuffled;
+        },
+
+        getLength: function(obj) {
+            if (typeof obj == 'object') {
+                if (typeof obj.length != 'undefined') {
+                    return obj.length;
+                }
+
+                return Object.keys(obj).length;
+            }
+
+            return -1;
+        },
+
+        getKeys: function(obj) {
+            var keys = Object.keys(obj);
+            for(key in keys) {
+                yield keys[key];
+            }
         }
     };
 
@@ -881,18 +909,14 @@
             if (dataType.indexOf('json') >= 0) {
                 if (typeof window.JSON != 'undefined') {
                     response = window.JSON.parse(xhr.responseText);
-                }
-                else {
+                } else {
                     response = eval(xhr.responseText);
                 }
-            }
-            else if (dataType.indexOf('script') >= 0) {
+            } else if (dataType.indexOf('script') >= 0) {
                 response = eval(xhr.responseText);
-            }
-            else if (dataType.indexOf('xml') >= 0) {
+            } else if (dataType.indexOf('xml') >= 0) {
                 response = xhr.responseXML;
-            }
-            else {
+            } else {
                 response = xhr.responseText;
             }
 
@@ -1050,8 +1074,7 @@
 
                             if (typeof window.JSON != 'undefined') {
                                 obj = window.JSON.parse(data.object);
-                            }
-                            else {
+                            } else {
                                 obj = eval(data.object);
                             }
 
@@ -1093,8 +1116,7 @@
 
                             if (typeof window.JSON != 'undefined') {
                                 obj = window.JSON.parse(data.object);
-                            }
-                            else {
+                            } else {
                                 obj = eval(data.object);
                             }
 
