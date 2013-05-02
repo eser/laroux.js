@@ -283,7 +283,7 @@
                 option.setAttribute('checked', 'checked');
             }
 
-            laroux.dom.append(value);
+            laroux.dom.append(option, value);
             element.appendChild(option);
         },
 
