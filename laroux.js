@@ -287,6 +287,15 @@
             element.appendChild(option);
         },
 
+        selectByValue: function(element, value) {
+            for (var i = element.options.length - 1;i >= 0; i--) {
+                if (element.options[i].getAttribute('value') == value) {
+                    element.selectedIndex = i;
+                    break;
+                }
+            }
+        },
+
         loadImage: function() {
             var images = [];
 
