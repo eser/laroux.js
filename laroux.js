@@ -512,7 +512,7 @@
     // css
     laroux.css = {
         hasClass: function(element, className) {
-            return element.className.match(new RegExp('(\\s|^)' + className + '(\\s|$)'));
+            return (element.className.match(new RegExp('(\\s|^)' + className + '(\\s|$)')) != null);
         },
 
         addClass: function(element, className) {
@@ -531,10 +531,6 @@
             var elements = laroux.helpers.getAsArray(element);
 
             for (var i = 0; i < elements.length; i++) {
-                if (!laroux.css.hasClass(elements[i], className)) {
-                    continue;
-                }
-
                 elements[i].className = elements[i].className.replace(new RegExp('(\\s|^)' + className + '(\\s|$)'), ' ');
             }
         },
@@ -543,12 +539,15 @@
             var elements = laroux.helpers.getAsArray(element);
 
             for (var i = 0; i < elements.length; i++) {
-                if (!laroux.css.hasClass(elements[i], className)) {
-                    elements[i].className += ' ' + className;
+                var oldClassName = elements[i].className;
+                var newClassName = oldClassName.replace(new RegExp('(\\s|^)' + className + '(\\s|$)'), ' ');
+
+                if (oldClassName === newClassName) {
+                    elements[i].className = oldClassName + ' ' + className;
                     continue;
                 }
 
-                elements[i].className = elements[i].className.replace(new RegExp('(\\s|^)' + className + '(\\s|$)'), ' ');
+                elements[i].className = newClassName;
             }
         },
 
