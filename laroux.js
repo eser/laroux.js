@@ -157,11 +157,14 @@
     // dom
     laroux.dom = {
         select: function(selector, parent) {
+            var elements;
             if (typeof parent == 'undefined') {
-                return document.querySelectorAll(selector);
+                elements = document.querySelectorAll(selector);
+            } else {
+                elements = parent.querySelectorAll(selector);
             }
 
-            return parent.querySelectorAll(selector);
+            return Array.prototype.slice.call(elements);
             // return document.querySelectorAll.apply(document, arguments);
         },
 
@@ -176,61 +179,55 @@
 
         eventHistory: { },
         setEvent: function(element, eventname, fnc) {
-            if (element instanceof NodeList) {
-                for (var i = 0; i < element.length; i++) {
-                    laroux.dom.setEvent(element[i], eventname, fnc);
-                }
-                return;
-            }
+            var elements = laroux.helpers.getAsArray(element);
 
-            var fncWrapper = function(e) {
-                if (fnc(e, element) === false) {
-                    if (e.preventDefault) {
-                        e.preventDefault();
-                    } else if (window.event) {
-                        window.event.returnValue = false;
+            for (var i = 0; i < elements.length; i++) {
+                var fncWrapper = function(e) {
+                    if (fnc(e, elements[i]) === false) {
+                        if (e.preventDefault) {
+                            e.preventDefault();
+                        } else if (window.event) {
+                            window.event.returnValue = false;
+                        }
+                    }
+                };
+
+                if (typeof laroux.dom.eventHistory[elements[i]] == 'undefined') {
+                    laroux.dom.eventHistory[elements[i]] = { };
+                }
+                if (typeof laroux.dom.eventHistory[elements[i]][eventname] != 'undefined') {
+                    if (elements[i].removeEventListener) {
+                        elements[i].removeEventListener(eventname, laroux.dom.eventHistory[elements[i]][eventname], false);
+                    } else if (elements[i].detachEvent) {
+                        elements[i].detachEvent('on' + eventname, laroux.dom.eventHistory[elements[i]][eventname]);
                     }
                 }
-            };
+                laroux.dom.eventHistory[elements[i]][eventname] = fncWrapper;
 
-            if (typeof laroux.dom.eventHistory[element] == 'undefined') {
-                laroux.dom.eventHistory[element] = { };
-            }
-            if (typeof laroux.dom.eventHistory[element][eventname] != 'undefined') {
-                if (element.removeEventListener) {
-                    element.removeEventListener(eventname, laroux.dom.eventHistory[element][eventname], false);
-                } else if (element.detachEvent) {
-                    element.detachEvent('on' + eventname, laroux.dom.eventHistory[element][eventname]);
+                if (elements[i].addEventListener) {
+                    elements[i].addEventListener(eventname, fncWrapper, false);
+                } else if (elements[i].attachEvent) {
+                    elements[i].attachEvent('on' + eventname, fncWrapper);
                 }
-            }
-            laroux.dom.eventHistory[element][eventname] = fncWrapper;
-
-            if (element.addEventListener) {
-                element.addEventListener(eventname, fncWrapper, false);
-            } else if (element.attachEvent) {
-                element.attachEvent('on' + eventname, fncWrapper);
             }
         },
 
         unsetEvent: function(element, eventname) {
-            if (element instanceof NodeList) {
-                for (var i = 0; i < element.length; i++) {
-                    laroux.dom.unsetEvent(element[i], eventname);
-                }
-                return;
-            }
+            var elements = laroux.helpers.getAsArray(element);
 
-            if (typeof laroux.dom.eventHistory[element] == 'undefined') {
-                return;
-            }
-            if (typeof laroux.dom.eventHistory[element][eventname] != 'undefined') {
-                if (element.removeEventListener) {
-                    element.removeEventListener(eventname, laroux.dom.eventHistory[element][eventname], false);
-                } else if (element.detachEvent) {
-                    element.detachEvent('on' + eventname, laroux.dom.eventHistory[element][eventname]);
+            for (var i = 0; i < elements.length; i++) {
+                if (typeof laroux.dom.eventHistory[elements[i]] == 'undefined') {
+                    return;
                 }
+                if (typeof laroux.dom.eventHistory[elements[i]][eventname] != 'undefined') {
+                    if (elements[i].removeEventListener) {
+                        elements[i].removeEventListener(eventname, laroux.dom.eventHistory[elements[i]][eventname], false);
+                    } else if (elements[i].detachEvent) {
+                        elements[i].detachEvent('on' + eventname, laroux.dom.eventHistory[elements[i]][eventname]);
+                    }
+                }
+                delete laroux.dom.eventHistory[elements[i]][eventname];
             }
-            delete laroux.dom.eventHistory[element][eventname];
         },
 
         create: function(html) {
@@ -515,28 +512,40 @@
         },
 
         addClass: function(element, className) {
-            if (laroux.css.hasClass(element, className)) {
-                return;
-            }
+            var elements = laroux.helpers.getAsArray(element);
 
-            element.className += ' ' + className;
+            for (var i = 0; i < elements.length; i++) {
+                if (laroux.css.hasClass(elements[i], className)) {
+                    continue;
+                }
+
+                elements[i].className += ' ' + className;
+            }
         },
 
         removeClass: function(element, className) {
-            if (!laroux.css.hasClass(element, className)) {
-                return;
-            }
+            var elements = laroux.helpers.getAsArray(element);
 
-            element.className = element.className.replace(new RegExp('(\\s|^)' + className + '(\\s|$)'), ' ');
+            for (var i = 0; i < elements.length; i++) {
+                if (!laroux.css.hasClass(elements[i], className)) {
+                    continue;
+                }
+
+                elements[i].className = elements[i].className.replace(new RegExp('(\\s|^)' + className + '(\\s|$)'), ' ');
+            }
         },
 
         toggleClass: function(element, className) {
-            if (!laroux.css.hasClass(element, className)) {
-                element.className += ' ' + className;
-                return;
-            }
+            var elements = laroux.helpers.getAsArray(element);
 
-            element.className = element.className.replace(new RegExp('(\\s|^)' + className + '(\\s|$)'), ' ');
+            for (var i = 0; i < elements.length; i++) {
+                if (!laroux.css.hasClass(elements[i], className)) {
+                    elements[i].className += ' ' + className;
+                    continue;
+                }
+
+                elements[i].className = elements[i].className.replace(new RegExp('(\\s|^)' + className + '(\\s|$)'), ' ');
+            }
         },
 
         getProperty: function(element, styleName) {
@@ -546,20 +555,24 @@
         },
 
         setProperty: function(element, styleName, value) {
-            var flag = false;
-            var newStyleName = '';
+            var elements = laroux.helpers.getAsArray(element);
 
-            for (var i = 0; i < styleName.length; i++) {
-                if (styleName.charAt(i) == '-') {
-                    flag = true;
-                    continue;
+            for (var i = 0; i < elements.length; i++) {
+                var flag = false;
+                var newStyleName = '';
+
+                for (var i = 0; i < styleName.length; i++) {
+                    if (styleName.charAt(i) == '-') {
+                        flag = true;
+                        continue;
+                    }
+
+                    newStyleName += (!flag) ? styleName.charAt(i) : styleName.charAt(i).toUpperCase();
+                    flag = false;
                 }
 
-                newStyleName += (!flag) ? styleName.charAt(i) : styleName.charAt(i).toUpperCase();
-                flag = false;
+                elements[i].style[newStyleName] = value;
             }
-
-            element.style[newStyleName] = value;
         }
     };
 
@@ -615,6 +628,20 @@
             });
 
             return shuffled;
+        },
+
+        getAsArray: function(obj) {
+            var items;
+
+            if (obj instanceof Array) {
+                items = obj;
+            } else if (obj instanceof NodeList) {
+                items = Array.prototype.slice.call(obj);
+            } else {
+                items = [ obj ];
+            }
+
+            return items;
         },
 
         getLength: function(obj) {
