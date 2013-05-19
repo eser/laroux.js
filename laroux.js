@@ -182,8 +182,9 @@
             var elements = laroux.helpers.getAsArray(element);
 
             for (var i = 0; i < elements.length; i++) {
+                var currentElement = elements[i];
                 var fncWrapper = function(e) {
-                    if (fnc(e, elements[i]) === false) {
+                    if (fnc(e, currentElement) === false) {
                         if (e.preventDefault) {
                             e.preventDefault();
                         } else if (window.event) {
@@ -192,22 +193,22 @@
                     }
                 };
 
-                if (typeof laroux.dom.eventHistory[elements[i]] == 'undefined') {
-                    laroux.dom.eventHistory[elements[i]] = { };
+                if (typeof laroux.dom.eventHistory[currentElement] == 'undefined') {
+                    laroux.dom.eventHistory[currentElement] = { };
                 }
-                if (typeof laroux.dom.eventHistory[elements[i]][eventname] != 'undefined') {
-                    if (elements[i].removeEventListener) {
-                        elements[i].removeEventListener(eventname, laroux.dom.eventHistory[elements[i]][eventname], false);
-                    } else if (elements[i].detachEvent) {
-                        elements[i].detachEvent('on' + eventname, laroux.dom.eventHistory[elements[i]][eventname]);
+                if (typeof laroux.dom.eventHistory[currentElement][eventname] != 'undefined') {
+                    if (currentElement.removeEventListener) {
+                        currentElement.removeEventListener(eventname, laroux.dom.eventHistory[currentElement][eventname], false);
+                    } else if (currentElement.detachEvent) {
+                        currentElement.detachEvent('on' + eventname, laroux.dom.eventHistory[currentElement][eventname]);
                     }
                 }
-                laroux.dom.eventHistory[elements[i]][eventname] = fncWrapper;
+                laroux.dom.eventHistory[currentElement][eventname] = fncWrapper;
 
-                if (elements[i].addEventListener) {
-                    elements[i].addEventListener(eventname, fncWrapper, false);
-                } else if (elements[i].attachEvent) {
-                    elements[i].attachEvent('on' + eventname, fncWrapper);
+                if (currentElement.addEventListener) {
+                    currentElement.addEventListener(eventname, fncWrapper, false);
+                } else if (currentElement.attachEvent) {
+                    currentElement.attachEvent('on' + eventname, fncWrapper);
                 }
             }
         },
