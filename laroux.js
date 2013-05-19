@@ -182,34 +182,37 @@
             var elements = laroux.helpers.getAsArray(element);
 
             for (var i = 0; i < elements.length; i++) {
-                var currentElement = elements[i];
-                var fncWrapper = function(e) {
-                    if (fnc(e, currentElement) === false) {
-                        if (e.preventDefault) {
-                            e.preventDefault();
-                        } else if (window.event) {
-                            window.event.returnValue = false;
-                        }
-                    }
-                };
+                laroux.dom.setEventSingle(elements[i], eventname, fnc);
+            }
+        },
 
-                if (typeof laroux.dom.eventHistory[currentElement] == 'undefined') {
-                    laroux.dom.eventHistory[currentElement] = { };
-                }
-                if (typeof laroux.dom.eventHistory[currentElement][eventname] != 'undefined') {
-                    if (currentElement.removeEventListener) {
-                        currentElement.removeEventListener(eventname, laroux.dom.eventHistory[currentElement][eventname], false);
-                    } else if (currentElement.detachEvent) {
-                        currentElement.detachEvent('on' + eventname, laroux.dom.eventHistory[currentElement][eventname]);
+        setEventSingle: function(element, eventname, fnc) {
+            var fncWrapper = function(e) {
+                if (fnc(e, element) === false) {
+                    if (e.preventDefault) {
+                        e.preventDefault();
+                    } else if (window.event) {
+                        window.event.returnValue = false;
                     }
                 }
-                laroux.dom.eventHistory[currentElement][eventname] = fncWrapper;
+            };
 
-                if (currentElement.addEventListener) {
-                    currentElement.addEventListener(eventname, fncWrapper, false);
-                } else if (currentElement.attachEvent) {
-                    currentElement.attachEvent('on' + eventname, fncWrapper);
+            if (typeof laroux.dom.eventHistory[element] == 'undefined') {
+                laroux.dom.eventHistory[element] = { };
+            }
+            if (typeof laroux.dom.eventHistory[element][eventname] != 'undefined') {
+                if (element.removeEventListener) {
+                    element.removeEventListener(eventname, laroux.dom.eventHistory[element][eventname], false);
+                } else if (element.detachEvent) {
+                    element.detachEvent('on' + eventname, laroux.dom.eventHistory[element][eventname]);
                 }
+            }
+            laroux.dom.eventHistory[element][eventname] = fncWrapper;
+
+            if (element.addEventListener) {
+                element.addEventListener(eventname, fncWrapper, false);
+            } else if (element.attachEvent) {
+                element.attachEvent('on' + eventname, fncWrapper);
             }
         },
 
@@ -557,21 +560,20 @@
 
         setProperty: function(element, styleName, value) {
             var elements = laroux.helpers.getAsArray(element);
+            var flag = false;
+            var newStyleName = '';
 
-            for (var i = 0; i < elements.length; i++) {
-                var flag = false;
-                var newStyleName = '';
-
-                for (var i = 0; i < styleName.length; i++) {
-                    if (styleName.charAt(i) == '-') {
-                        flag = true;
-                        continue;
-                    }
-
-                    newStyleName += (!flag) ? styleName.charAt(i) : styleName.charAt(i).toUpperCase();
-                    flag = false;
+            for (var j = 0; j < styleName.length; j++) {
+                if (styleName.charAt(j) == '-') {
+                    flag = true;
+                    continue;
                 }
 
+                newStyleName += (!flag) ? styleName.charAt(j) : styleName.charAt(j).toUpperCase();
+                flag = false;
+            }
+
+            for (var i = 0; i < elements.length; i++) {
                 elements[i].style[newStyleName] = value;
             }
         }
