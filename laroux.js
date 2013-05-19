@@ -557,21 +557,20 @@
 
         setProperty: function(element, styleName, value) {
             var elements = laroux.helpers.getAsArray(element);
+            var flag = false;
+            var newStyleName = '';
 
-            for (var i = 0; i < elements.length; i++) {
-                var flag = false;
-                var newStyleName = '';
-
-                for (var i = 0; i < styleName.length; i++) {
-                    if (styleName.charAt(i) == '-') {
-                        flag = true;
-                        continue;
-                    }
-
-                    newStyleName += (!flag) ? styleName.charAt(i) : styleName.charAt(i).toUpperCase();
-                    flag = false;
+            for (var j = 0; j < styleName.length; j++) {
+                if (styleName.charAt(j) == '-') {
+                    flag = true;
+                    continue;
                 }
 
+                newStyleName += (!flag) ? styleName.charAt(j) : styleName.charAt(j).toUpperCase();
+                flag = false;
+            }
+
+            for (var i = 0; i < elements.length; i++) {
                 elements[i].style[newStyleName] = value;
             }
         }
