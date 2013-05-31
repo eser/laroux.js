@@ -597,6 +597,17 @@
 
             return uri.substr(1);
         },
+        
+        quoteAttr: function(value) {
+            return value.replace(/&/g, '&amp;')
+                        .replace(/'/g, '&apos;')
+                        .replace(/"/g, '&quot;')
+                        .replace(/</g, '&lt;')
+                        .replace(/>/g, '&gt;')
+                        .replace(/"/g, '&quot;')
+                        .replace(/\r\n/g, '&#13;')
+                        .replace(/[\r\n]/g, '&#13;');
+        },
 
         random: function(min, max) {
             return min + Math.floor(Math.random() * (max - min + 1));
