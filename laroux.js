@@ -168,6 +168,18 @@
             // return document.querySelectorAll.apply(document, arguments);
         },
 
+        selectByClass: function(selector, parent) {
+            var elements;
+            if (typeof parent == 'undefined') {
+                elements = document.getElementsByClassName(selector);
+            } else {
+                elements = parent.getElementsByClassName(selector);
+            }
+
+            return Array.prototype.slice.call(elements);
+            // return document.getElementsByClassName.apply(document, arguments);
+        },
+
         selectSingle: function(selector, parent) {
             if (typeof parent == 'undefined') {
                 return document.querySelector(selector);
@@ -512,42 +524,22 @@
     // css
     laroux.css = {
         hasClass: function(element, className) {
-            return (element.className.match(new RegExp('(\\s|^)' + className + '(\\s|$)')) != null);
+            return element.classList.contains(className);
         },
 
         addClass: function(element, className) {
-            var elements = laroux.helpers.getAsArray(element);
-
-            for (var i = 0; i < elements.length; i++) {
-                if (laroux.css.hasClass(elements[i], className)) {
-                    continue;
-                }
-
-                elements[i].className += ' ' + className;
-            }
+            element.classList.add(className);
         },
 
         removeClass: function(element, className) {
-            var elements = laroux.helpers.getAsArray(element);
-
-            for (var i = 0; i < elements.length; i++) {
-                elements[i].className = elements[i].className.replace(new RegExp('(\\s|^)' + className + '(\\s|$)'), ' ');
-            }
+            element.classList.remove(className);
         },
 
         toggleClass: function(element, className) {
-            var elements = laroux.helpers.getAsArray(element);
-
-            for (var i = 0; i < elements.length; i++) {
-                var oldClassName = elements[i].className;
-                var newClassName = oldClassName.replace(new RegExp('(\\s|^)' + className + '(\\s|$)'), ' ');
-
-                if (oldClassName === newClassName) {
-                    elements[i].className = oldClassName + ' ' + className;
-                    continue;
-                }
-
-                elements[i].className = newClassName;
+            if (element.classList.contains(className)) {
+                element.classList.remove(className);
+            } else {
+                element.classList.add(className);
             }
         },
 
@@ -559,18 +551,7 @@
 
         setProperty: function(element, styleName, value) {
             var elements = laroux.helpers.getAsArray(element);
-            var flag = false;
-            var newStyleName = '';
-
-            for (var j = 0; j < styleName.length; j++) {
-                if (styleName.charAt(j) == '-') {
-                    flag = true;
-                    continue;
-                }
-
-                newStyleName += (!flag) ? styleName.charAt(j) : styleName.charAt(j).toUpperCase();
-                flag = false;
-            }
+            var newStyleName = laroux.helpers.camelCase(styleName);
 
             for (var i = 0; i < elements.length; i++) {
                 elements[i].style[newStyleName] = value;
@@ -596,6 +577,23 @@
             }
 
             return uri.substr(1);
+        },
+        
+        camelCase: function(value) {
+            var flag = false;
+            var output = '';
+
+            for (var j = 0; j < value.length; j++) {
+                if (value.charAt(j) == '-') {
+                    flag = true;
+                    continue;
+                }
+
+                output += (!flag) ? value.charAt(j) : value.charAt(j).toUpperCase();
+                flag = false;
+            }
+            
+            return output;
         },
         
         quoteAttr: function(value) {
