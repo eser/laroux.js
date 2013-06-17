@@ -638,7 +638,9 @@
                     }
 
                     elements[i].style[newStyleName] = value[0];
-                    laroux.dom.setEvent(elements[i], 'transitionend', callback);
+                    if (typeof callback != 'undefined') {
+                        laroux.dom.setEvent(elements[i], 'transitionend', callback);
+                    }
                 }
             }
         }
