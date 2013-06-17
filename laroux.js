@@ -209,7 +209,7 @@
         setEvent: function(element, eventname, fnc) {
             var elements = laroux.helpers.getAsArray(element);
 
-            for (var i = 0; i < elements.length; i++) {
+            for (var i = elements.length - 1;i >= 0; i--) {
                 laroux.dom.setEventSingle(elements[i], eventname, fnc);
             }
         },
@@ -247,7 +247,7 @@
         unsetEvent: function(element, eventname) {
             var elements = laroux.helpers.getAsArray(element);
 
-            for (var i = 0; i < elements.length; i++) {
+            for (var i = elements.length - 1;i >= 0; i--) {
                 if (typeof laroux.dom.eventHistory[elements[i]] == 'undefined') {
                     return;
                 }
@@ -328,7 +328,7 @@
         loadImage: function() {
             var images = [];
 
-            for (var i = 0; i < arguments.length; i++) {
+            for (var i = arguments.length - 1;i >= 0; i--) {
                 var image = document.createElement('IMG');
                 image.setAttribute('src', arguments[i]);
 
@@ -569,8 +569,77 @@
             var elements = laroux.helpers.getAsArray(element);
             var newStyleName = laroux.helpers.camelCase(styleName);
 
-            for (var i = 0; i < elements.length; i++) {
+            for (var i = elements.length - 1;i >= 0; i--) {
                 elements[i].style[newStyleName] = value;
+            }
+        },
+        
+        setTransitions: function(element, transitions) {
+            var elements = laroux.helpers.getAsArray(element);
+            
+            for (var styleName in transitions) {
+                var value = transitions[styleName];
+                var newStyleName = laroux.helpers.camelCase(styleName);
+
+                for (var i = elements.length - 1;i >= 0; i--) {
+                    var style = window.getComputedStyle(elements[i]);
+                    var currentTransitions = style.getPropertyValue('transition');
+
+                    if (currentTransitions != null) {
+                        var currentTransitionsArray = currentTransitions.split(',');
+                        for (var j = 0; j < currentTransitionsArray.length; j++) {
+                            if (currentTransitionsArray[j].trim().localeCompare(styleName) == 0) {
+                                delete currentTransitionsArray[j];
+                            }
+                        }
+
+                        if (value != null) {
+                            elements[i].style['transition'] = currentTransitionsArray.join(', ') + ', ' + styleName + ' ' + value;
+                        } else {
+                            elements[i].style['transition'] = currentTransitionsArray.join(', ');
+                        }
+                    } else if (value != null) {
+                        elements[i].style['transition'] = styleName + ' ' + value;
+                    }
+                }
+            }
+        },
+        
+        transition: function(element, transitions, callback) {
+            var elements = laroux.helpers.getAsArray(element);
+            
+            for (var styleName in transitions) {
+                var value = (transitions[styleName] instanceof Array) ? transitions[styleName] : [ transitions[styleName] ];
+                if (typeof value[1] == 'undefined') {
+                    value[1] = '2s ease';
+                }
+                
+                var newStyleName = laroux.helpers.camelCase(styleName);
+
+                for (var i = elements.length - 1;i >= 0; i--) {
+                    var style = window.getComputedStyle(elements[i]);
+                    var currentTransitions = style.getPropertyValue('transition');
+
+                    if (currentTransitions != null) {
+                        var currentTransitionsArray = currentTransitions.split(',');
+                        for (var j = 0; j < currentTransitionsArray.length; j++) {
+                            if (currentTransitionsArray[j].trim().localeCompare(styleName) == 0) {
+                                delete currentTransitionsArray[j];
+                            }
+                        }
+
+                        if (value[1] != null) {
+                            elements[i].style['transition'] = currentTransitionsArray.join(', ') + ', ' + styleName + ' ' + value[1];
+                        } else {
+                            elements[i].style['transition'] = currentTransitionsArray.join(', ');
+                        }
+                    } else if (value[1] != null) {
+                        elements[i].style['transition'] = styleName + ' ' + value;
+                    }
+
+                    elements[i].style[newStyleName] = value[0];
+                    laroux.dom.setEvent(elements[i], 'transitionend', callback);
+                }
             }
         }
     };
