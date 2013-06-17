@@ -638,6 +638,7 @@
                     }
 
                     elements[i].style[newStyleName] = value[0];
+                    laroux.dom.unsetEvent(elements[i], 'transitionend');
                     if (typeof callback != 'undefined') {
                         laroux.dom.setEvent(elements[i], 'transitionend', callback);
                     }
