@@ -1051,11 +1051,7 @@
             var response;
 
             if (dataType.indexOf('json') >= 0) {
-                if (typeof window.JSON != 'undefined') {
-                    response = window.JSON.parse(xhr.responseText);
-                } else {
-                    response = eval(xhr.responseText);
-                }
+                response = JSON.parse(xhr.responseText);
             } else if (dataType.indexOf('script') >= 0) {
                 response = eval(xhr.responseText);
             } else if (dataType.indexOf('xml') >= 0) {
@@ -1216,10 +1212,14 @@
                         if (fnc != null) {
                             var obj;
 
-                            if (typeof window.JSON != 'undefined') {
-                                obj = window.JSON.parse(data.object);
-                            } else {
+                            if (data.format == 'json') {
+                                obj = JSON.parse(data.object);
+                            } else if (data.format == 'script') {
                                 obj = eval(data.object);
+                            // } else if (data.format == 'xml') {
+                            //    obj = data.object;
+                            } else {
+                                obj = data.object;
                             }
 
                             fnc(obj);
@@ -1258,10 +1258,14 @@
                         if (fnc != null) {
                             var obj;
 
-                            if (typeof window.JSON != 'undefined') {
-                                obj = window.JSON.parse(data.object);
-                            } else {
+                            if (data.format == 'json') {
+                                obj = JSON.parse(data.object);
+                            } else if (data.format == 'script') {
                                 obj = eval(data.object);
+                            // } else if (data.format == 'xml') {
+                            //    obj = data.object;
+                            } else {
+                                obj = data.object;
                             }
 
                             fnc(obj);
