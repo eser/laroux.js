@@ -125,7 +125,7 @@
             var leadingHour = ('0' + date.getHours()).substr(-2, 2);
             var leadingMinute = ('0' + date.getMinutes()).substr(-2, 2);
 
-            return leadingDate + ' ' + leadingMonth + ' ' + fullYear + ' ' + leadingHour + ':' + leadingMinute;
+            return leadingDate + '.' + leadingMonth + '.' + fullYear + ' ' + leadingHour + ':' + leadingMinute;
         },
 
         updateDates: function() {
