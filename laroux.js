@@ -1127,34 +1127,34 @@
                         var dt = (options.dataType || '');
 
                         try {
-                            res = laroux.ajax._xhrResp(xhr, dt, o);
+                            res = laroux.ajax._xhrResp(xhr, dt, options);
                         } catch (e) {
                             decode = false;
                             if (typeof options.error != 'undefined') {
                                 options.error(xhr, xhr.status, xhr.statusText);
                             }
 
-                            laroux.events.invoke('ajaxError', [xhr, xhr.statusText, o]);
+                            laroux.events.invoke('ajaxError', [xhr, xhr.statusText, options]);
                         }
 
                         if (typeof options.success != 'undefined' && decode && (dt.indexOf('json') >= 0 || !!res.response)) {
                             options.success(res.response, res.wrapperFunc);
                         }
 
-                        laroux.events.invoke('ajaxSuccess', [xhr, res.response, o]);
+                        laroux.events.invoke('ajaxSuccess', [xhr, res.response, options]);
                     } else {
                         if (typeof options.error != 'undefined') {
                             options.error(xhr, xhr.status, xhr.statusText);
                         }
 
-                        laroux.events.invoke('ajaxError', [xhr, xhr.statusText, o]);
+                        laroux.events.invoke('ajaxError', [xhr, xhr.statusText, options]);
                     }
 
                     if (typeof options.complete != 'undefined') {
                         options.complete(xhr, xhr.statusText);
                     }
 
-                    laroux.events.invoke('ajaxComplete', [xhr, o]);
+                    laroux.events.invoke('ajaxComplete', [xhr, options]);
                 } else if (typeof options.progress != 'undefined') {
                     options.progress(++n);
                 }
