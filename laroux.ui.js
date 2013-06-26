@@ -122,8 +122,8 @@
             var leadingMonth = ('0' + date.getMonth()).substr(-2, 2);
             var fullYear = date.getFullYear();
 
-            var leadingHour = ('0' + date.getHour()).substr(-2, 2);
-            var leadingMinute = ('0' + date.getMinute()).substr(-2, 2);
+            var leadingHour = ('0' + date.getHours()).substr(-2, 2);
+            var leadingMinute = ('0' + date.getMinutes()).substr(-2, 2);
 
             return leadingDate + ' ' + leadingMonth + ' ' + fullYear + ' ' + leadingHour + ':' + leadingMinute;
         },
