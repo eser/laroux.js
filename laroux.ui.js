@@ -87,13 +87,12 @@
             return null;
         },
 
-        getDateString: function(timestamp) {
-            var date = new Date(timestamp);
+        monthsShort: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+        getDateString: function(date) {
             var now = new Date();
 
-            var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
             var leadingDate = ('0' + date.getDate()).substr(-2, 2);
-            var monthName = months[date.getMonth()];
+            var monthName = laroux.ui.monthsShort[date.getMonth()];
             var leadingYear = ('' + date.getFullYear()).substr(2, 2);
 
             // timespan
@@ -117,14 +116,29 @@
 
             return leadingDate + ' ' + monthName + ' ' + leadingYear;
         },
+        
+        getLongDateString: function(date) {
+            var leadingDate = ('0' + date.getDate()).substr(-2, 2);
+            var leadingMonth = ('0' + date.getMonth()).substr(-2, 2);
+            var fullYear = date.getFullYear();
+
+            var leadingHour = ('0' + date.getHour()).substr(-2, 2);
+            var leadingMinute = ('0' + date.getMinute()).substr(-2, 2);
+
+            return leadingDate + ' ' + leadingMonth + ' ' + fullYear + ' ' + leadingHour + ':' + leadingMinute;
+        },
 
         updateDates: function() {
             var elements = laroux.dom.select('*[data-epoch]');
             elements.forEach(function(obj) {
+            	var date = new Date(parseInt(obj.getAttribute('data-epoch')) * 1000);
+
                 laroux.dom.replace(
                     obj,
-                    laroux.ui.getDateString(parseInt(obj.getAttribute('data-epoch')) * 1000)
+                    laroux.ui.getDateString(date)
                 );
+
+                obj.setAttribute('title', laroux.ui.getLongDateString(date));
             });
         }
     };
