@@ -94,7 +94,7 @@
             var now = new Date();
 
             var leadingDate = ('0' + date.getDate()).substr(-2, 2);
-            var monthName = laroux.ui.monthsShort[date.getMonth()];
+            var monthName = laroux.date.monthsShort[date.getMonth()];
             var leadingYear = ('' + date.getFullYear()).substr(2, 2);
 
             // timespan
@@ -107,7 +107,7 @@
                 future = false;
             }
 
-            var timespanstring = laroux.ui.parseEpoch(timespan);
+            var timespanstring = laroux.date.parseEpoch(timespan);
             if (timespanstring != null) {
                 if (future) {
                     return timespanstring + ' later';
@@ -141,16 +141,16 @@
 
                 laroux.dom.replace(
                     obj,
-                    laroux.ui.getDateString(date)
+                    laroux.date.getDateString(date)
                 );
 
-                obj.setAttribute('title', laroux.ui.getLongDateString(date));
+                obj.setAttribute('title', laroux.date.getLongDateString(date));
             });
         },
 
         trackDates: function() {
-            laroux.ui.updateDates();
-            laroux.timers.set(5, laroux.ui.trackDates);
+            laroux.date.updateDates();
+            laroux.timers.set(5, laroux.date.trackDates);
         }
     };
 
