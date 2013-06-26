@@ -30,11 +30,13 @@
                 // laroux.css.setProperty(x, 'opacity', '0');
                 laroux.dom.remove(x);
             }, obj);
-        },
-
+        }
+    };
+    
+    // date
+    laroux.date = {
         parseEpoch: function(timespan) {
-            if (timespan <= 3000) // minimum 2 seconds, otherwise not worth it
-            {
+            if (timespan <= 3000) {
                 return 'now';
             }
 
@@ -128,8 +130,12 @@
             return leadingDate + '.' + leadingMonth + '.' + fullYear + ' ' + leadingHour + ':' + leadingMinute;
         },
 
+        updateDatesElements: null,
         updateDates: function() {
-            var elements = laroux.dom.select('*[data-epoch]');
+        	if (updateDatesElements == null) {
+                updateDatesElements = laroux.dom.select('*[data-epoch]');
+            }
+
             elements.forEach(function(obj) {
             	var date = new Date(parseInt(obj.getAttribute('data-epoch')) * 1000);
 
@@ -140,6 +146,11 @@
 
                 obj.setAttribute('title', laroux.ui.getLongDateString(date));
             });
+        },
+
+        trackDates: function() {
+            laroux.ui.updateDates();
+            laroux.timers.set(5, laroux.ui.trackDates);
         }
     };
 
