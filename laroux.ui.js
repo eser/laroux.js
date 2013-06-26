@@ -132,11 +132,11 @@
 
         updateDatesElements: null,
         updateDates: function() {
-        	if (updateDatesElements == null) {
-                updateDatesElements = laroux.dom.select('*[data-epoch]');
+        	if (laroux.date.updateDatesElements == null) {
+                laroux.date.updateDatesElements = laroux.dom.select('*[data-epoch]');
             }
 
-            elements.forEach(function(obj) {
+            laroux.date.updateDatesElements.forEach(function(obj) {
             	var date = new Date(parseInt(obj.getAttribute('data-epoch')) * 1000);
 
                 laroux.dom.replace(
