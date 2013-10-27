@@ -32,7 +32,7 @@
             }, obj);
         }
     };
-    
+
     // date
     laroux.date = {
         parseEpoch: function(timespan) {
@@ -118,7 +118,7 @@
 
             return leadingDate + ' ' + monthName + ' ' + leadingYear;
         },
-        
+
         getLongDateString: function(date) {
             var leadingDate = ('0' + date.getDate()).substr(-2, 2);
             var leadingMonth = ('0' + date.getMonth()).substr(-2, 2);
@@ -132,12 +132,12 @@
 
         updateDatesElements: null,
         updateDates: function() {
-        	if (laroux.date.updateDatesElements == null) {
+            if (laroux.date.updateDatesElements == null) {
                 laroux.date.updateDatesElements = laroux.dom.select('*[data-epoch]');
             }
 
             laroux.date.updateDatesElements.forEach(function(obj) {
-            	var date = new Date(parseInt(obj.getAttribute('data-epoch')) * 1000);
+                var date = new Date(parseInt(obj.getAttribute('data-epoch')) * 1000);
 
                 laroux.dom.replace(
                     obj,
