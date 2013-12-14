@@ -107,7 +107,7 @@
 
                 var keyObj = laroux.timers.delegates[key];
 
-                if (keyObj.timeout == null) {
+                if (keyObj.timeout === null) {
                     keyObj.fnc(keyObj.obj);
                 } else {
                     keyObj.timeout -= 0.5;
@@ -119,12 +119,12 @@
                 }
             }
 
-            for (var key in removeKeys) {
-                if (!removeKeys.hasOwnProperty(key)) {
+            for (var key2 in removeKeys) {
+                if (!removeKeys.hasOwnProperty(key2)) {
                     continue;
                 }
 
-                laroux.timers.delegates.splice(removeKeys[key], 1);
+                laroux.timers.delegates.splice(removeKeys[key2], 1);
             }
         }
     };
@@ -180,18 +180,18 @@
                     }
                 }
 
-                if (count == 0) {
+                if (count === 0) {
                     keyObj.fnc(keyObj.obj, eventArgs);
                     removeKeys.unshift(key);
                 }
             }
 
-            for (var key in removeKeys) {
-                if (!removeKeys.hasOwnProperty(key)) {
+            for (var key2 in removeKeys) {
+                if (!removeKeys.hasOwnProperty(key2)) {
                     continue;
                 }
 
-                laroux.triggers.delegates.splice(removeKeys[key], 1);
+                laroux.triggers.delegates.splice(removeKeys[key2], 1);
             }
 
             console.log('trigger name: ' + triggerName);
@@ -320,12 +320,12 @@
             }
 
             if (typeof children == 'object') {
-                for (var key in children) {
-                    if (!children.hasOwnProperty(key)) {
+                for (var key2 in children) {
+                    if (!children.hasOwnProperty(key2)) {
                         continue;
                     }
 
-                    elem.setAttribute(key, children[key]);
+                    elem.setAttribute(key2, children[key2]);
                 }
             } else if (typeof children == 'string') {
                 laroux.dom.append(elem, children);
@@ -390,7 +390,7 @@
 
                 elem.onload = elem.onreadystatechange = null;
                 loaded = true;
-                if (typeof triggerName != 'undefined' && triggerName != null) {
+                if (typeof triggerName != 'undefined' && triggerName !== null) {
                     if (typeof triggerName == 'function') {
                         triggerName();
                     } else {
@@ -418,7 +418,7 @@
 
                 elem.onload = elem.onreadystatechange = null;
                 loaded = true;
-                if (typeof triggerName != 'undefined' && triggerName != null) {
+                if (typeof triggerName != 'undefined' && triggerName !== null) {
                     if (typeof triggerName == 'function') {
                         triggerName();
                     } else {
@@ -455,7 +455,7 @@
         },
 
         remove: function(element) {
-            if (element.parentElement != null) {
+            if (element.parentElement !== null) {
                 element.parentElement.removeChild(element);
             }
         },
@@ -534,14 +534,12 @@
                             break;
                         case 'addclass':
                             laroux.css.addClass(element, value);
-                            continue;
                             break;
                         case 'removeclass':
                             laroux.css.removeClass(element, value);
                             break;
                         case 'addstyle':
                             laroux.css.setProperty(element, binding, value);
-                            continue;
                             break;
                         case 'removestyle':
                             laroux.css.setProperty(element, value, 'inherit !important');
@@ -635,21 +633,21 @@
                     var style = window.getComputedStyle(elements[i]);
                     var currentTransitions = style.getPropertyValue('transition');
 
-                    if (currentTransitions != null) {
+                    if (currentTransitions !== null) {
                         var currentTransitionsArray = currentTransitions.split(',');
                         for (var j = 0; j < currentTransitionsArray.length; j++) {
-                            if (currentTransitionsArray[j].trim().localeCompare(styleName) == 0) {
+                            if (currentTransitionsArray[j].trim().localeCompare(styleName) === 0) {
                                 delete currentTransitionsArray[j];
                             }
                         }
 
-                        if (value != null) {
-                            elements[i].style['transition'] = currentTransitionsArray.join(', ') + ', ' + styleName + ' ' + value;
+                        if (value !== null) {
+                            elements[i].style.transition = currentTransitionsArray.join(', ') + ', ' + styleName + ' ' + value;
                         } else {
-                            elements[i].style['transition'] = currentTransitionsArray.join(', ');
+                            elements[i].style.transition = currentTransitionsArray.join(', ');
                         }
-                    } else if (value != null) {
-                        elements[i].style['transition'] = styleName + ' ' + value;
+                    } else if (value !== null) {
+                        elements[i].style.transition = styleName + ' ' + value;
                     }
                 }
             }
@@ -674,21 +672,21 @@
                     var style = window.getComputedStyle(elements[i]);
                     var currentTransitions = style.getPropertyValue('transition');
 
-                    if (currentTransitions != null) {
+                    if (currentTransitions !== null) {
                         var currentTransitionsArray = currentTransitions.split(',');
                         for (var j = 0; j < currentTransitionsArray.length; j++) {
-                            if (currentTransitionsArray[j].trim().localeCompare(styleName) == 0) {
+                            if (currentTransitionsArray[j].trim().localeCompare(styleName) === 0) {
                                 delete currentTransitionsArray[j];
                             }
                         }
 
-                        if (value[1] != null) {
-                            elements[i].style['transition'] = currentTransitionsArray.join(', ') + ', ' + styleName + ' ' + value[1];
+                        if (value[1] !== null) {
+                            elements[i].style.transition = currentTransitionsArray.join(', ') + ', ' + styleName + ' ' + value[1];
                         } else {
-                            elements[i].style['transition'] = currentTransitionsArray.join(', ');
+                            elements[i].style.transition = currentTransitionsArray.join(', ');
                         }
-                    } else if (value[1] != null) {
-                        elements[i].style['transition'] = styleName + ' ' + value;
+                    } else if (value[1] !== null) {
+                        elements[i].style.transition = styleName + ' ' + value;
                     }
 
                     elements[i].style[newStyleName] = value[0];
@@ -915,7 +913,7 @@
         },
 
         getFormFieldValue: function(element) {
-            if (element.disabled == true) {
+            if (element.disabled === true) {
                 return null;
             }
 
@@ -1026,7 +1024,7 @@
             for (var selected = 0; selected < selection.length; selected++) {
                 var value = laroux.forms.getFormFieldValue(selection[selected]);
 
-                if (value != null) {
+                if (value !== null) {
                     formdata.append(selection[selected].getAttribute('name'), value);
                 }
             }
@@ -1041,7 +1039,7 @@
             for (var selected = 0; selected < selection.length; selected++) {
                 var value = laroux.forms.getFormFieldValue(selection[selected]);
 
-                if (value != null) {
+                if (value !== null) {
                     values[selection[selected].getAttribute('name')] = value;
                 }
             }
@@ -1063,12 +1061,12 @@
         data: [], // default with noframe
 
         install: function() {
-            if (parent && parent.frames['hidden']) {
-                if (parent.frames['hidden'].storage == undefined) {
-                    parent.frames['hidden'].storage = [];
+            if (typeof parent != 'undefined' && typeof parent.frames.hidden != 'undefined') {
+                if (typeof parent.frames.hidden.storage == 'undefined') {
+                    parent.frames.hidden.storage = [];
                 }
 
-                laroux.storage.data = parent.frames['hidden'].storage;
+                laroux.storage.data = parent.frames.hidden.storage;
             }
         },
 
@@ -1077,7 +1075,7 @@
         },
 
         exists: function(key) {
-            return (laroux.storage.data[key] != undefined);
+            return (typeof laroux.storage.data[key] != 'undefined');
         },
 
         set: function(key, value) {
@@ -1121,7 +1119,7 @@
 
         _xhrf: null,
         _xhr: function() {
-            if (laroux.ajax._xhrf == null) {
+            if (laroux.ajax._xhrf === null) {
                 laroux.ajax._xhrf = new XMLHttpRequest();
             }
 
@@ -1129,10 +1127,14 @@
         },
 
         _xhrResp: function(xhr, dataType) {
-            var dataType = (dataType || xhr.getResponseHeader('Content-Type').split(';')[0]).toLowerCase();
+            if (typeof dataType == 'undefined') {
+                dataType = xhr.getResponseHeader('Content-Type').split(';')[0];
+            }            
+
             var wrapperFunction = xhr.getResponseHeader('X-Response-Wrapper-Function');
             var response;
 
+            dataType = dataType.toLowerCase();
             if (dataType.indexOf('json') >= 0) {
                 response = JSON.parse(xhr.responseText);
             } else if (dataType.indexOf('script') >= 0) {
@@ -1143,7 +1145,7 @@
                 response = xhr.responseText;
             }
 
-            if (wrapperFunction != null && typeof laroux.ajax.wrappers.registry[wrapperFunction] != 'undefined') {
+            if (wrapperFunction !== null && typeof laroux.ajax.wrappers.registry[wrapperFunction] != 'undefined') {
                 response = laroux.ajax.wrappers.registry[wrapperFunction](response);
             }
 
@@ -1172,7 +1174,7 @@
 
             xhr.onreadystatechange = function() {
                 if (xhr.readyState == 4) {
-                    if (timer != null) {
+                    if (timer !== null) {
                         clearTimeout(timer);
                     }
 
@@ -1193,7 +1195,7 @@
                         }
 
                         if (isSuccess) {
-                            if (typeof options.success != 'undefined' && res != null) {
+                            if (typeof options.success != 'undefined' && res !== null) {
                                 options.success(res.response, res.wrapperFunc);
                             }
 

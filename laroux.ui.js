@@ -108,7 +108,7 @@
             }
 
             var timespanstring = laroux.date.parseEpoch(timespan);
-            if (timespanstring != null) {
+            if (timespanstring !== null) {
                 if (future) {
                     return timespanstring + ' later';
                 }
@@ -132,7 +132,7 @@
 
         updateDatesElements: null,
         updateDates: function() {
-            if (laroux.date.updateDatesElements == null) {
+            if (laroux.date.updateDatesElements === null) {
                 laroux.date.updateDatesElements = laroux.dom.select('*[data-epoch]');
             }
 
