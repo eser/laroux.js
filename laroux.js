@@ -951,7 +951,7 @@
         },
 
         setFormFieldValue: function(element, value) {
-            if (element.disabled == true) {
+            if (element.disabled === true) {
                 return;
             }
 
@@ -1238,7 +1238,7 @@
                     xhr.setRequestHeader(i, options.headers[i]);
                 }
             } catch(e) {
-                console.log(e)
+                console.log(e);
             }
 
             var data = null;
@@ -1330,7 +1330,7 @@
 
         this.length = function() {
             return Object.keys(this.entries).length;
-        }
+        };
     };
 
     // initialization
