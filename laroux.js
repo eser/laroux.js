@@ -1126,20 +1126,15 @@
             return laroux.ajax._xhrf;
         },
 
-        _xhrResp: function(xhr, dataType) {
-            if (typeof dataType == 'undefined') {
-                dataType = xhr.getResponseHeader('Content-Type').split(';')[0];
-            }            
-
+        _xhrResp: function(xhr, options) {
             var wrapperFunction = xhr.getResponseHeader('X-Response-Wrapper-Function');
             var response;
 
-            dataType = dataType.toLowerCase();
-            if (dataType.indexOf('json') >= 0) {
+            if (options.datatype == 'json') {
                 response = JSON.parse(xhr.responseText);
-            } else if (dataType.indexOf('script') >= 0) {
+            } else if (options.datatype == 'script') {
                 response = eval(xhr.responseText);
-            } else if (dataType.indexOf('xml') >= 0) {
+            } else if (options.datatype == 'xml') {
                 response = xhr.responseXML;
             } else {
                 response = xhr.responseText;
@@ -1180,11 +1175,10 @@
 
                     if (xhr.status < 300) {
                         var res = null;
-                        var dt = (options.dataType || '');
                         var isSuccess = true;
 
                         try {
-                            res = laroux.ajax._xhrResp(xhr, dt, options);
+                            res = laroux.ajax._xhrResp(xhr, options);
                         } catch (e) {
                             if (typeof options.error != 'undefined') {
                                 options.error(xhr, xhr.status, xhr.statusText);
@@ -1245,8 +1239,10 @@
             if (typeof options.postdata != 'undefined') {
                 if (options.postdata instanceof FormData) {
                     data = options.postdata;
-                } else {
+                } else if (options.postdata instanceof Object) {
                     data = laroux.helpers.buildFormData(options.postdata);
+                } else {
+                    data = options.postdata;
                 }
             }
 
@@ -1295,6 +1291,24 @@
                 datatype: 'json',
                 headers: {
                 //     'Content-Type': 'multipart/form-data; charset=UTF-8; boundary=' + Math.random().toString().substr(2),
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'X-Wrapper-Function': 'laroux.js'
+                },
+                success: fnc,
+                error: function(data) {
+                    console.log(data);
+                }
+            });
+        },
+
+        postJson: function(path, values, fnc) {
+            laroux.ajax.makeRequest({
+                type: 'POST',
+                url: path,
+                postdata: (values instanceof Object) ? JSON.stringify(values) : values,
+                datatype: 'json',
+                headers: {
+                    'Content-Type': 'application/json; charset=UTF-8',
                     'X-Requested-With': 'XMLHttpRequest',
                     'X-Wrapper-Function': 'laroux.js'
                 },
