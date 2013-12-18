@@ -1184,7 +1184,7 @@
                                 options.error(xhr, xhr.status, xhr.statusText);
                             }
 
-                            laroux.events.invoke('ajaxError', [xhr, xhr.statusText, options]);
+                            laroux.events.invoke('ajaxError', [xhr, xhr.status, xhr.statusText, options]);
                             isSuccess = false;
                         }
 
@@ -1193,21 +1193,21 @@
                                 options.success(res.response, res.wrapperFunc);
                             }
 
-                            laroux.events.invoke('ajaxSuccess', [xhr, res.response, options]);
+                            laroux.events.invoke('ajaxSuccess', [xhr, res.response, res.wrapperFunc, options]);
                         }
                     } else {
                         if (typeof options.error != 'undefined') {
                             options.error(xhr, xhr.status, xhr.statusText);
                         }
 
-                        laroux.events.invoke('ajaxError', [xhr, xhr.statusText, options]);
+                        laroux.events.invoke('ajaxError', [xhr, xhr.status, xhr.statusText, options]);
                     }
 
                     if (typeof options.complete != 'undefined') {
                         options.complete(xhr, xhr.statusText);
                     }
 
-                    laroux.events.invoke('ajaxComplete', [xhr, options]);
+                    laroux.events.invoke('ajaxComplete', [xhr, xhr.statusText, options]);
                 } else if (typeof options.progress != 'undefined') {
                     options.progress(++n);
                 }
@@ -1249,7 +1249,7 @@
             xhr.send(data);
         },
 
-        get: function(path, values, fnc) {
+        get: function(path, values, successfnc, errorfnc) {
             laroux.ajax.makeRequest({
                 type: 'GET',
                 url: path,
@@ -1260,14 +1260,12 @@
                     'X-Requested-With': 'XMLHttpRequest',
                     'X-Wrapper-Function': 'laroux.js'
                 },
-                success: fnc,
-                error: function(data) {
-                    console.log(data);
-                }
+                success: successfnc,
+                error: errorfnc
             });
         },
 
-        getScript: function(path, fnc) {
+        getScript: function(path, successfnc, errorfnc) {
             laroux.ajax.makeRequest({
                 type: 'GET',
                 url: path,
@@ -1276,14 +1274,12 @@
                     'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
                     'X-Requested-With': 'XMLHttpRequest'
                 },
-                success: fnc,
-                error: function(data) {
-                    console.log(data);
-                }
+                success: successfnc,
+                error: errorfnc
             });
         },
 
-        post: function(path, values, fnc) {
+        post: function(path, values, successfnc, errorfnc) {
             laroux.ajax.makeRequest({
                 type: 'POST',
                 url: path,
@@ -1294,14 +1290,12 @@
                     'X-Requested-With': 'XMLHttpRequest',
                     'X-Wrapper-Function': 'laroux.js'
                 },
-                success: fnc,
-                error: function(data) {
-                    console.log(data);
-                }
+                success: successfnc,
+                error: errorfnc
             });
         },
 
-        postJson: function(path, values, fnc) {
+        postJson: function(path, values, successfnc, errorfnc) {
             laroux.ajax.makeRequest({
                 type: 'POST',
                 url: path,
@@ -1312,10 +1306,8 @@
                     'X-Requested-With': 'XMLHttpRequest',
                     'X-Wrapper-Function': 'laroux.js'
                 },
-                success: fnc,
-                error: function(data) {
-                    console.log(data);
-                }
+                success: successfnc,
+                error: errorfnc
             });
         }
     };
