@@ -36,5 +36,8 @@
         "grunt": "~0.4.1"
     },
     "dependencies": {
+    },
+    "scripts": {
+        "test": "grunt test --verbose --force"
     }
 }
