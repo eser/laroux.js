@@ -1,8 +1,10 @@
-README
-======
+laroux.js
+=========
 
 [This project](https://github.com/larukedi/laroux.js/) is a jquery substitute for modern browsers.
 
+[![Build Status](https://travis-ci.org/larukedi/laroux.js.png?branch=master)](https://travis-ci.org/larukedi/laroux.js)
+[![Scrutinizer Quality Score](https://scrutinizer-ci.com/g/larukedi/laroux.js/badges/quality-score.png?s=0a36236d23cac2919f7aafff510a636d9437abec)](https://scrutinizer-ci.com/g/larukedi/laroux.js/)
 
 Dev Installation
 ----------------
