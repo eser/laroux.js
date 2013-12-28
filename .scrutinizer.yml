@@ -1,0 +1,12 @@
+# before_commands:
+#     - npm install
+
+tools:
+    js_hint:
+        filter:
+            paths: [ 'src/' ]
+
+#    custom_commands:
+#        -
+#            scope: project
+#            command: grunt

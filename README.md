@@ -8,7 +8,7 @@ Dev Installation
 ----------------
 ##### Alternative 1: Zip Package #####
 
-Download [Skeleton Application](https://github.com/larukedi/laroux.js/archive/master.zip) and launch `npm install`.
+Download [the package](https://github.com/larukedi/laroux.js/archive/master.zip) and launch `npm install`.
 
 ##### Alternative 2: Git #####
 
