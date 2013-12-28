@@ -137,7 +137,7 @@
             }
 
             laroux.date.updateDatesElements.forEach(function(obj) {
-                var date = new Date(parseInt(obj.getAttribute('data-epoch')) * 1000);
+                var date = new Date(parseInt(obj.getAttribute('data-epoch'), 10) * 1000);
 
                 laroux.dom.replace(
                     obj,

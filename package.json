@@ -1,0 +1,40 @@
+{
+    "name": "laroux",
+    "version": "1.0.0",
+    "description": "A jquery substitute for modern browsers",
+    "keywords": "laroux larouxjs laroux.js jquery substitute dom css helpers ajax",
+    "homepage": "http://eser.ozvataf.com/",
+    "bugs": {
+        "url": "https://github.com/larukedi/laroux.js/issues",
+        "email": "eser@sent.com"
+    },
+    "licenses": [
+        {
+            "type": "Apache-2.0",
+            "url": "https://github.com/larukedi/laroux.js/blob/master/LICENSE"
+        }
+    ],
+    "contributors": [
+        {
+            "name": "Eser 'Laroux' Ozvataf",
+            "email": "eser@sent.com",
+            "url": "http://eser.ozvataf.com/"
+        }
+    ],
+    "main": "laroux",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/larukedi/laroux.js.git"
+    },
+    "devDependencies": {
+        "grunt-contrib-uglify": "~0.2.7",
+        "grunt-contrib-jshint": "~0.6.3",
+        "grunt-contrib-watch": "~0.5.3",
+        "grunt-contrib-concat": "~0.3.0",
+        "grunt-contrib-copy": "~0.5.0",
+        "grunt-contrib-clean": "~0.5.0",
+        "grunt": "~0.4.1"
+    },
+    "dependencies": {
+    }
+}
