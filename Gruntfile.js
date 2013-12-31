@@ -24,7 +24,7 @@ module.exports = function(grunt) {
                     'src/laroux.triggers.js',
                     'src/laroux.ui.js'
                 ],
-                dest: '<%= pkg.name %>.js'
+                dest: 'dist/<%= pkg.name %>.js'
             }
         },
         uglify: {
@@ -33,7 +33,7 @@ module.exports = function(grunt) {
             },
             dist: {
                 files: {
-                    '<%= pkg.name %>.min.js': ['<%= concat.dist.dest %>']
+                    'dist/<%= pkg.name %>.min.js': ['<%= concat.dist.dest %>']
                 }
             }
         },
@@ -56,16 +56,16 @@ module.exports = function(grunt) {
         copy: {
             main: {
                 files: [
-                    { expand: true, cwd: 'src/', src: ['**/*.css'], dest: './', filter: 'isFile' }
+                    { expand: true, cwd: 'src/', src: ['**/*.css'], dest: 'dist/', filter: 'isFile' }
                 ]
             }
         },
         clean: {
             dist: {
                 src: [
-                    '<%= pkg.name %>.js',
-                    '<%= pkg.name %>.min.js',
-                    '*.css'
+                    'dist/<%= pkg.name %>.js',
+                    'dist/<%= pkg.name %>.min.js',
+                    'dist/*.css'
                 ]
             }
         }
