@@ -1,0 +1,43 @@
+<html>
+    <head>
+        <script type="text/javascript" src="../src/laroux.js"></script>
+        <script type="text/javascript" src="../src/laroux.ajax.js"></script>
+        <script type="text/javascript" src="../src/laroux.cookies.js"></script>
+        <script type="text/javascript" src="../src/laroux.css.js"></script>
+        <script type="text/javascript" src="../src/laroux.date.js"></script>
+        <script type="text/javascript" src="../src/laroux.dom.js"></script>
+        <script type="text/javascript" src="../src/laroux.events.js"></script>
+        <script type="text/javascript" src="../src/laroux.forms.js"></script>
+        <script type="text/javascript" src="../src/laroux.helpers.js"></script>
+        <script type="text/javascript" src="../src/laroux.mvc.js"></script>
+        <script type="text/javascript" src="../src/laroux.stack.js"></script>
+        <script type="text/javascript" src="../src/laroux.storage.js"></script>
+        <script type="text/javascript" src="../src/laroux.templates.js"></script>
+        <script type="text/javascript" src="../src/laroux.timers.js"></script>
+        <script type="text/javascript" src="../src/laroux.triggers.js"></script>
+        <script type="text/javascript" src="../src/laroux.ui.js"></script>
+
+        <script type="text/javascript">
+            function deneme($scope) {
+
+                $scope.hello = 'selam';
+
+            }
+        </script>
+    </head>
+    <body>
+
+        <script type="text/javascript">
+            $l.contentBegin('main', '' );
+        </script>
+
+        <div lr-app="deneme">
+            {{hello}}
+        </div>
+
+        <script type="text/javascript">
+            $l.contentEnd();
+        </script>
+
+    </body>
+</html>
