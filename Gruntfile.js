@@ -7,7 +7,23 @@ module.exports = function(grunt) {
                 separator: ';'
             },
             dist: {
-                src: ['src/**/*.js'],
+                src: [
+                    'src/laroux.js',
+                    'src/laroux.ajax.js',
+                    'src/laroux.cookies.js',
+                    'src/laroux.css.js',
+                    'src/laroux.date.js',
+                    'src/laroux.dom.js',
+                    'src/laroux.events.js',
+                    'src/laroux.forms.js',
+                    'src/laroux.helpers.js',
+                    'src/laroux.stack.js',
+                    'src/laroux.storage.js',
+                    'src/laroux.templates.js',
+                    'src/laroux.timers.js',
+                    'src/laroux.triggers.js',
+                    'src/laroux.ui.js'
+                ],
                 dest: '<%= pkg.name %>.js'
             }
         },
