@@ -302,7 +302,7 @@
     // cookies
     laroux.cookies = {
         get: function(name) {
-            re = new RegExp(name + '=[^;]+', 'i');
+            var re = new RegExp(name + '=[^;]+', 'i');
             if (!document.cookie.match(re)) {
                 return null;
             }
