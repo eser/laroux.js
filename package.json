@@ -17,7 +17,7 @@
     "contributors": [
         {
             "name": "Eser 'Laroux' Ozvataf",
-            "email": "eser@sent.com",
+            "email": "eser@ozvataf.com",
             "url": "http://eser.ozvataf.com/"
         }
     ],
@@ -27,15 +27,16 @@
         "url": "https://github.com/larukedi/laroux.js.git"
     },
     "devDependencies": {
+        "grunt-contrib-less": "~0.11.0",
         "grunt-contrib-uglify": "~0.2.7",
         "grunt-contrib-jshint": "~0.6.3",
-        "grunt-contrib-watch": "~0.5.3",
+        "grunt-contrib-watch": "~0.6.1",
         "grunt-contrib-concat": "~0.3.0",
-        "grunt-contrib-copy": "~0.5.0",
         "grunt-contrib-clean": "~0.5.0",
+        "grunt-contrib-cssmin": "~0.9.0",
         "grunt-cli": "~0.1",
         "grunt": "~0.4.1"
-    },
+     },
     "dependencies": {
     },
     "scripts": {
