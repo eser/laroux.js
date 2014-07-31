@@ -29,17 +29,13 @@
     laroux.contentBegin = function(masterName, locationUrl) {
         laroux.baseLocation = locationUrl;
         laroux.selectedMaster = masterName;
-
-        laroux.events.invoke('contentBegin');
     };
 
     laroux.contentEnd = function() {
-        laroux.events.invoke('contentEnd');
-        laroux.readyPassed = true;
-    };
-
-    laroux.begin = function(fnc) {
-        laroux.events.add('contentBegin', fnc);
+        if (!laroux.readyPassed) {
+            laroux.events.invoke('contentEnd');
+            laroux.readyPassed = true;
+        }
     };
 
     laroux.ready = function(fnc) {
@@ -63,5 +59,7 @@
 
     // initialization
     this.$l = this.laroux = laroux;
+
+    document.addEventListener('DOMContentLoaded', laroux.contentEnd);
 
 }).call(this);
