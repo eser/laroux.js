@@ -23,21 +23,20 @@
                 $scope.hello = 'selam';
 
             }
+
+            $l.ready(function() {
+                $l.ui.loading.elementSelector = '#loading';
+                $l.ui.init();
+            });
         </script>
     </head>
     <body>
 
-        <script type="text/javascript">
-            $l.contentBegin('main', '' );
-        </script>
+        <div id="loading">Loading...</div>
 
         <div lr-app="deneme">
             {{hello}}
         </div>
-
-        <script type="text/javascript">
-            $l.contentEnd();
-        </script>
 
     </body>
 </html>
