@@ -11,6 +11,10 @@
 See [wiki page](https://github.com/larukedi/laroux.js/wiki) for documentation.
 
 
+## Installation
+Download [laroux.min.js](https://github.com/larukedi/laroux.js/blob/master/dist/laroux.min.js) and [laroux.min.css](https://github.com/larukedi/laroux.js/blob/master/dist/laroux.min.css) and include them in your web project.
+
+
 ## Sample Usage
 
 ```js
