@@ -26,7 +26,7 @@
             var diff = newanim.to - current;
             console.log(diff);
 
-            if (diff == 0) {
+            if (diff === 0) {
                 return false;
             }
 
