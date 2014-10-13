@@ -6,16 +6,18 @@
 [![Scrutinizer Quality Score](https://scrutinizer-ci.com/g/larukedi/laroux.js/badges/quality-score.png?s=0a36236d23cac2919f7aafff510a636d9437abec)](https://scrutinizer-ci.com/g/larukedi/laroux.js/)
 
 
-## Documentation
+## For Users
+
+### Documentation
 
 See [wiki page](https://github.com/larukedi/laroux.js/wiki) for documentation.
 
 
-## Installation
-Download [laroux.min.js](https://raw.githubusercontent.com/larukedi/laroux.js/master/dist/laroux.min.js) and [laroux.min.css](https://raw.githubusercontent.com/larukedi/laroux.js/master/dist/laroux.min.css) and include them in your web project.
+### Installation
+Download [laroux.min.js](https://raw.githubusercontent.com/larukedi/laroux.js/master/dist/laroux.min.js) and [laroux.min.css](https://raw.githubusercontent.com/larukedi/laroux.js/master/dist/laroux.min.css), and include them in your web project.
 
 
-## Sample Usage
+### Sample Usage
 
 ```js
 
@@ -36,7 +38,9 @@ $l.ready(function() {
 ```
 
 
-## Dev Installation
+## For Developers Want To Contribute
+
+### Installation
 
 **Alternative 1: Zip Package**
 
@@ -52,7 +56,7 @@ npm install
 ```
 
 
-## Dev Requirements
+### Requirements
 
 * NPM (https://npmjs.org)
 * Grunt (http://gruntjs.com)
