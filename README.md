@@ -5,6 +5,9 @@
 [![Build Status](https://travis-ci.org/larukedi/laroux.js.png?branch=master)](https://travis-ci.org/larukedi/laroux.js)
 [![Scrutinizer Quality Score](https://scrutinizer-ci.com/g/larukedi/laroux.js/badges/quality-score.png?s=0a36236d23cac2919f7aafff510a636d9437abec)](https://scrutinizer-ci.com/g/larukedi/laroux.js/)
 
+
+## Documentation
+
 See [wiki page](https://github.com/larukedi/laroux.js/wiki) for documentation.
 
 
@@ -31,11 +34,11 @@ $l.ready(function() {
 
 ## Dev Installation
 
-** Alternative 1: Zip Package **
+**Alternative 1: Zip Package**
 
 Download [the package](https://github.com/larukedi/laroux.js/archive/master.zip) and launch `npm install`.
 
-** Alternative 2: Git **
+**Alternative 2: Git**
 
 On Terminal or Command Prompt:
 ``` bash
