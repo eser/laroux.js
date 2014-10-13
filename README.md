@@ -6,6 +6,29 @@ laroux.js
 [![Build Status](https://travis-ci.org/larukedi/laroux.js.png?branch=master)](https://travis-ci.org/larukedi/laroux.js)
 [![Scrutinizer Quality Score](https://scrutinizer-ci.com/g/larukedi/laroux.js/badges/quality-score.png?s=0a36236d23cac2919f7aafff510a636d9437abec)](https://scrutinizer-ci.com/g/larukedi/laroux.js/)
 
+See [wiki page](https://github.com/larukedi/laroux.js/wiki) for documentation.
+
+
+Sample Usage
+------------
+```js
+
+$l.ready(function() {
+    var buttons = $l(['.confirm-action']);
+
+    $l.css.setProperty(buttons, 'background-color', 'crimson');
+    $l.dom.setEvent(
+        buttons,
+        'click',
+        function(event, element) {
+            if (!confirm('Are you sure to do it?')) {
+                return false; // cancel event
+            }
+        }
+    );
+});
+
+
 Dev Installation
 ----------------
 ##### Alternative 1: Zip Package #####
