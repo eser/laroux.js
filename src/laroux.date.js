@@ -118,7 +118,7 @@
 
         init: function() {
             laroux.timers.set({
-                timeout: 5,
+                timeout: 500,
                 reset: true,
                 ontick: laroux.date.updateDates
             });

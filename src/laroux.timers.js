@@ -43,15 +43,15 @@
                 var keyObj = laroux.timers.data[key];
 
                 if (typeof keyObj.timeoutR == 'undefined') {
-                    keyObj.timeoutR = keyObj.timeout - 0.5;
+                    keyObj.timeoutR = keyObj.timeout - 1;
                 } else {
-                    keyObj.timeoutR -= 0.5;
+                    keyObj.timeoutR -= 1;
                 }
 
                 if (keyObj.timeoutR < 0) {
-                    keyObj.ontick(keyObj.state);
+                    var result = keyObj.ontick(keyObj.state);
 
-                    if (typeof keyObj.reset != 'undefined' && keyObj.reset) {
+                    if (result !== false && typeof keyObj.reset != 'undefined' && keyObj.reset) {
                         keyObj.timeoutR = keyObj.timeout;
                     } else {
                         removeKeys.unshift(key);
@@ -70,7 +70,7 @@
     };
 
     laroux.ready(function() {
-        setInterval(laroux.timers.ontick, 500);
+        setInterval(laroux.timers.ontick, 1);
     });
 
 })(this.laroux);

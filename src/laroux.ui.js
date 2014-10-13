@@ -6,7 +6,7 @@
         floatContainer: null,
 
         popup: {
-            defaultTimeout: 5,
+            defaultTimeout: 500,
 
             createBox: function(id, xclass, message) {
                 return laroux.dom.createElement('DIV', { 'id': id, 'class': xclass },
