@@ -41,7 +41,7 @@
             timer: null,
 
             killTimer: function() {
-                window.clearTimeout(laroux.ui.loading.timer);
+                clearTimeout(laroux.ui.loading.timer);
             },
 
             hide: function() {
@@ -59,7 +59,7 @@
                 }
 
                 if (delay > 0) {
-                    window.setTimeout(function() { laroux.ui.loading.show(0); }, delay);
+                    setTimeout(function() { laroux.ui.loading.show(0); }, delay);
                 } else {
                     laroux.css.setProperty(laroux.ui.loading.element, 'display', 'block');
                     localStorage.loadingIndicator = 'true';

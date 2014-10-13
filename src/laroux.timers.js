@@ -45,7 +45,7 @@
     };
 
     laroux.ready(function() {
-        window.setInterval(laroux.timers.ontick, 500);
+        setInterval(laroux.timers.ontick, 500);
     });
 
 })(this.laroux);

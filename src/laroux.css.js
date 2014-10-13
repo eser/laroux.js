@@ -24,7 +24,7 @@
         },
 
         getProperty: function(element, styleName) {
-            var style = window.getComputedStyle(element);
+            var style = getComputedStyle(element);
 
             return style.getPropertyValue(styleName);
         },
@@ -50,7 +50,7 @@
                 var newStyleName = laroux.helpers.camelCase(styleName);
 
                 for (var i = elements.length - 1;i >= 0; i--) {
-                    var style = window.getComputedStyle(elements[i]);
+                    var style = getComputedStyle(elements[i]);
                     var currentTransitions = style.getPropertyValue('transition');
 
                     if (currentTransitions !== null) {
@@ -89,7 +89,7 @@
                 var newStyleName = laroux.helpers.camelCase(styleName);
 
                 for (var i = elements.length - 1;i >= 0; i--) {
-                    var style = window.getComputedStyle(elements[i]);
+                    var style = getComputedStyle(elements[i]);
                     var currentTransitions = style.getPropertyValue('transition');
 
                     if (currentTransitions !== null) {

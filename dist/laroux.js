@@ -340,7 +340,7 @@
         },
 
         getProperty: function(element, styleName) {
-            var style = window.getComputedStyle(element);
+            var style = getComputedStyle(element);
 
             return style.getPropertyValue(styleName);
         },
@@ -366,7 +366,7 @@
                 var newStyleName = laroux.helpers.camelCase(styleName);
 
                 for (var i = elements.length - 1;i >= 0; i--) {
-                    var style = window.getComputedStyle(elements[i]);
+                    var style = getComputedStyle(elements[i]);
                     var currentTransitions = style.getPropertyValue('transition');
 
                     if (currentTransitions !== null) {
@@ -405,7 +405,7 @@
                 var newStyleName = laroux.helpers.camelCase(styleName);
 
                 for (var i = elements.length - 1;i >= 0; i--) {
-                    var style = window.getComputedStyle(elements[i]);
+                    var style = getComputedStyle(elements[i]);
                     var currentTransitions = style.getPropertyValue('transition');
 
                     if (currentTransitions !== null) {
@@ -1446,7 +1446,7 @@
     };
 
     laroux.ready(function() {
-        window.setInterval(laroux.timers.ontick, 500);
+        setInterval(laroux.timers.ontick, 500);
     });
 
 })(this.laroux);
@@ -1566,7 +1566,7 @@
             timer: null,
 
             killTimer: function() {
-                window.clearTimeout(laroux.ui.loading.timer);
+                clearTimeout(laroux.ui.loading.timer);
             },
 
             hide: function() {
@@ -1584,7 +1584,7 @@
                 }
 
                 if (delay > 0) {
-                    window.setTimeout(function() { laroux.ui.loading.show(0); }, delay);
+                    setTimeout(function() { laroux.ui.loading.show(0); }, delay);
                 } else {
                     laroux.css.setProperty(laroux.ui.loading.element, 'display', 'block');
                     localStorage.loadingIndicator = 'true';
