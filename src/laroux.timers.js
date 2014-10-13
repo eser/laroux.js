@@ -9,6 +9,30 @@
             laroux.timers.data.push(timer);
         },
 
+        remove: function(id) {
+            var targetKey = null;
+
+            for (var key in laroux.timers.data) {
+                if (!laroux.timers.data.hasOwnProperty(key)) {
+                    continue;
+                }
+
+                var keyObj = laroux.timers.data[key];
+
+                if (typeof keyObj.id != 'undefined' && keyObj.id == id) {
+                    targetKey = key;
+                    break;
+                }
+            }
+
+            if (targetKey !== null) {
+                laroux.timers.data.splice(targetKey, 1);
+                return true;
+            }
+
+            return false;
+        },
+
         ontick: function() {
             var removeKeys = [];
             for (var key in laroux.timers.data) {
