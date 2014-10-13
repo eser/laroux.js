@@ -116,9 +116,12 @@
             });
         },
 
-        trackDates: function() {
-            laroux.date.updateDates();
-            laroux.timers.set(5, laroux.date.trackDates);
+        init: function() {
+            laroux.timers.set({
+                timeout: 5,
+                reset: true,
+                ontick: laroux.date.updateDates
+            });
         }
     };
 

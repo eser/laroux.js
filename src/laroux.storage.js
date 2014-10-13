@@ -3,32 +3,20 @@
 
     // storage
     laroux.storage = {
-        data: [], // default with noframe
+        data: null,
 
-        install: function() {
+        init: function() {
             if (typeof parent != 'undefined' && typeof parent.frames.hidden != 'undefined') {
                 if (typeof parent.frames.hidden.storage == 'undefined') {
-                    parent.frames.hidden.storage = [];
+                    parent.frames.hidden.storage = new laroux.stack();
                 }
 
                 laroux.storage.data = parent.frames.hidden.storage;
+                return;
             }
-        },
 
-        flush: function() {
-            laroux.storage.data.length = 0;
-        },
-
-        exists: function(key) {
-            return (typeof laroux.storage.data[key] != 'undefined');
-        },
-
-        set: function(key, value) {
-            laroux.storage.data[key] = value;
-        },
-
-        get: function(key, value) {
-            return laroux.storage.data[key];
+            // default with noframe
+            laroux.storage.data = new laroux.stack();
         }
     };
 

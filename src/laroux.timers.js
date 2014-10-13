@@ -3,32 +3,33 @@
 
     // timers
     laroux.timers = {
-        delegates: [],
+        data: [],
 
-        set: function(timeout, fnc, obj) {
-            laroux.timers.delegates.push({
-                timeout: timeout,
-                fnc: fnc,
-                obj: obj
-            });
+        set: function(timer) {
+            laroux.timers.data.push(timer);
         },
 
         ontick: function() {
             var removeKeys = [];
-            for (var key in laroux.timers.delegates) {
-                if (!laroux.timers.delegates.hasOwnProperty(key)) {
+            for (var key in laroux.timers.data) {
+                if (!laroux.timers.data.hasOwnProperty(key)) {
                     continue;
                 }
 
-                var keyObj = laroux.timers.delegates[key];
+                var keyObj = laroux.timers.data[key];
 
-                if (keyObj.timeout === null) {
-                    keyObj.fnc(keyObj.obj);
+                if (typeof keyObj.timeoutR == 'undefined') {
+                    keyObj.timeoutR = keyObj.timeout - 0.5;
                 } else {
-                    keyObj.timeout -= 0.5;
+                    keyObj.timeoutR -= 0.5;
+                }
 
-                    if (keyObj.timeout < 0) {
-                        keyObj.fnc(keyObj.obj);
+                if (keyObj.timeoutR < 0) {
+                    keyObj.ontick(keyObj.state);
+
+                    if (typeof keyObj.reset != 'undefined' && keyObj.reset) {
+                        keyObj.timeoutR = keyObj.timeout;
+                    } else {
                         removeKeys.unshift(key);
                     }
                 }
@@ -39,7 +40,7 @@
                     continue;
                 }
 
-                laroux.timers.delegates.splice(removeKeys[key2], 1);
+                laroux.timers.data.splice(removeKeys[key2], 1);
             }
         }
     };
