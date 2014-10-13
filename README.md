@@ -1,5 +1,4 @@
-laroux.js
-=========
+# laroux.js
 
 [This project](https://github.com/larukedi/laroux.js/) is a jquery substitute for modern browsers.
 
@@ -9,8 +8,8 @@ laroux.js
 See [wiki page](https://github.com/larukedi/laroux.js/wiki) for documentation.
 
 
-Sample Usage
-------------
+## Sample Usage
+
 ```js
 
 $l.ready(function() {
@@ -27,15 +26,16 @@ $l.ready(function() {
         }
     );
 });
+```
 
 
-Dev Installation
-----------------
-##### Alternative 1: Zip Package #####
+## Dev Installation
+
+** Alternative 1: Zip Package **
 
 Download [the package](https://github.com/larukedi/laroux.js/archive/master.zip) and launch `npm install`.
 
-##### Alternative 2: Git #####
+** Alternative 2: Git **
 
 On Terminal or Command Prompt:
 ``` bash
@@ -45,19 +45,19 @@ npm install
 ```
 
 
-Dev Requirements
-----------------
+## Dev Requirements
+
 * NPM (https://npmjs.org)
 * Grunt (http://gruntjs.com)
 
 
-License
--------
+## License
+
 See [LICENSE](LICENSE)
 
 
-Contributing
-------------
+## Contributing
+
 It is publicly open for any contribution. Bugfixes and suggestions are welcome.
 
 * Fork the repo, push your changes to your fork, and submit a pull request.
