@@ -303,7 +303,6 @@
         set: function(newanim) {
             if (typeof newanim.from != 'undefined' && newanim.from !== null) {
                 newanim.object[newanim.property] = newanim.from;
-                // newanim.target = newanim.from;
             }
 
             // if (typeof newanim.id == 'undefined') {
@@ -320,9 +319,7 @@
 
         ontick: function(newanim) {
             var current = newanim.object[newanim.property];
-            // var current = newanim.target;
             var diff = newanim.to - current;
-            console.log(diff);
 
             if (diff === 0) {
                 return false;
@@ -332,10 +329,14 @@
 
             if (diff > 0) {
                 newanim.object[newanim.property] += step;
-                // newanim.target += step;
+                if (newanim.object[newanim.property] > newanim.to) {
+                    newanim.object[newanim.property] = newanim.to;
+                }
             } else {
                 newanim.object[newanim.property] -= step;
-                // newanim.target -= step;
+                if (newanim.object[newanim.property] < newanim.to) {
+                    newanim.object[newanim.property] = newanim.to;
+                }
             }
         }
     };
