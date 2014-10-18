@@ -29,12 +29,25 @@
             return style.getPropertyValue(styleName);
         },
 
-        setProperty: function(element, styleName, value) {
+        setProperty: function(element, properties, value) {
             var elements = laroux.helpers.getAsArray(element);
-            var newStyleName = laroux.helpers.camelCase(styleName);
 
-            for (var i = elements.length - 1;i >= 0; i--) {
-                elements[i].style[newStyleName] = value;
+            if (typeof properties == 'string') {
+                var oldProperties = properties;
+                properties = {};
+                properties[oldProperties] = value;
+            }
+
+            for (var styleName in properties) {
+                if (!properties.hasOwnProperty(styleName)) {
+                    continue;
+                }
+
+                var newStyleName = laroux.helpers.camelCase(styleName);
+
+                for (var i = elements.length - 1;i >= 0; i--) {
+                    elements[i].style[newStyleName] = properties[styleName];
+                }
             }
         },
 
