@@ -59,14 +59,14 @@
 
         monthsShort: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
         getDateString: function(date) {
-            var now = new Date();
+            var now = Date.now();
 
             var leadingDate = ('0' + date.getDate()).substr(-2, 2);
             var monthName = laroux.date.monthsShort[date.getMonth()];
             var leadingYear = ('' + date.getFullYear()).substr(2, 2);
 
             // timespan
-            var timespan = now.getTime() - date.getTime();
+            var timespan = now - date.getTime();
             var future;
             if (timespan < 0) {
                 future = true;

@@ -3,9 +3,19 @@
 
     // anim
     laroux.anim = {
+        fx: {
+            interpolate: function (source, target, shift) {
+                return (source + (target - source) * shift);
+            },
+
+            easing: function (pos) {
+                return (-Math.cos(pos * Math.PI) / 2) + 0.5;
+            }
+        },
+
         // { object, property, from, to, time, unit }
         set: function(newanim) {
-            newanim.startTime = new Date();
+            newanim.startTime = Date.now();
 
             if (typeof newanim.unit == 'undefined' || newanim.unit === null) {
                 newanim.unit = '';
@@ -29,11 +39,17 @@
         },
 
         ontick: function(newanim) {
-            var step = Math.min(1, (new Date().getTime() - newanim.startTime) / newanim.time);
-            var diff = newanim.to - newanim.from;
+            var now = Date.now(),
+                finishT = newanim.startTime + newanim.time,
+                shift = (now > finishT) ? 1 : (now - newanim.startTime) / newanim.time;
 
-            newanim.object[newanim.property] = (newanim.from + step * diff) + newanim.unit;
-            if (step === 1) {
+            newanim.object[newanim.property] = laroux.anim.fx.interpolate(
+                newanim.from,
+                newanim.to,
+                laroux.anim.fx.easing(shift)
+            ) + newanim.unit;
+
+            if (now > finishT) {
                 return false;
             }
         }
