@@ -299,15 +299,25 @@
 
     // anim
     laroux.anim = {
+        fx: {
+            interpolate: function (source, target, shift) {
+                return (source + (target - source) * shift);
+            },
+
+            easing: function (pos) {
+                return (-Math.cos(pos * Math.PI) / 2) + 0.5;
+            }
+        },
+
         // { object, property, from, to, time, unit }
         set: function(newanim) {
-            newanim.startTime = new Date();
+            newanim.startTime = Date.now();
 
-            if (typeof newanim.unit == 'undefined') {
+            if (typeof newanim.unit == 'undefined' || newanim.unit === null) {
                 newanim.unit = '';
             }
 
-            if (typeof newanim.from != 'undefined' && newanim.from !== null) {
+            if (typeof newanim.from == 'undefined' || newanim.from === null) {
                 newanim.from = newanim.object[newanim.property];
             }
 
@@ -317,7 +327,7 @@
 
             laroux.timers.set({
                 // id: newanim.id,
-                timeout: 25,
+                timeout: 1,
                 reset: true,
                 ontick: laroux.anim.ontick,
                 state: newanim
@@ -325,11 +335,17 @@
         },
 
         ontick: function(newanim) {
-            var step = Math.min(1, (new Date().getTime() - newanim.startTime) / newanim.time);
-            var diff = newanim.to - newanim.from;
+            var now = Date.now(),
+                finishT = newanim.startTime + newanim.time,
+                shift = (now > finishT) ? 1 : (now - newanim.startTime) / newanim.time;
 
-            newanim.object[newanim.property] = (newanim.from + step * diff) + newanim.unit;
-            if (step === 1) {
+            newanim.object[newanim.property] = laroux.anim.fx.interpolate(
+                newanim.from,
+                newanim.to,
+                laroux.anim.fx.easing(shift)
+            ) + newanim.unit;
+
+            if (now > finishT) {
                 return false;
             }
         }
@@ -517,14 +533,14 @@
 
         monthsShort: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
         getDateString: function(date) {
-            var now = new Date();
+            var now = Date.now();
 
             var leadingDate = ('0' + date.getDate()).substr(-2, 2);
             var monthName = laroux.date.monthsShort[date.getMonth()];
             var leadingYear = ('' + date.getFullYear()).substr(2, 2);
 
             // timespan
-            var timespan = now.getTime() - date.getTime();
+            var timespan = now - date.getTime();
             var future;
             if (timespan < 0) {
                 future = true;
