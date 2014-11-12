@@ -22,6 +22,7 @@ module.exports = function(grunt) {
                 src: [
                     'src/laroux.js',
                     'src/laroux.ajax.js',
+                    'src/laroux.anim.js',
                     'src/laroux.cookies.js',
                     'src/laroux.css.js',
                     'src/laroux.date.js',
