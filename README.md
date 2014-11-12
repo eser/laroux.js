@@ -1,6 +1,11 @@
 # laroux.js
 
-[This project](https://github.com/larukedi/laroux.js/) is a jquery substitute for modern browsers.
+[This project](https://github.com/larukedi/laroux.js/) is a jquery substitute for modern browsers. But instead of offering some wrappers and own dynamics, it simply provides helper functions to achieve the same objectives with jquery or zepto.
+
+Even though keeping compactness is the primary concern of this library, lightweight versions of some concepts/components will be included such as UI elements and MVC.
+
+So far, it has [Ajax](wiki/ajax), [Anim](wiki/anim), [Cookies](wiki/cookies), [CSS](wiki/css), [Date](wiki/date), [DOM](wiki/dom), [Events](wiki/events), [Forms](wiki/forms), [Helpers](wiki/helpers), [Stack](wiki/stack), [Templates](wiki/templates), [Timers](wiki/timers), [Triggers](wiki/triggers) and [UI](wiki/ui) components.
+
 
 [![Build Status](https://travis-ci.org/larukedi/laroux.js.png?branch=master)](https://travis-ci.org/larukedi/laroux.js)
 [![Scrutinizer Quality Score](https://scrutinizer-ci.com/g/larukedi/laroux.js/badges/quality-score.png?s=0a36236d23cac2919f7aafff510a636d9437abec)](https://scrutinizer-ci.com/g/larukedi/laroux.js/)
