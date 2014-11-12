@@ -7,11 +7,11 @@
         set: function(newanim) {
             newanim.startTime = new Date();
 
-            if (typeof newanim.unit == 'undefined') {
+            if (typeof newanim.unit == 'undefined' || newanim.unit === null) {
                 newanim.unit = '';
             }
 
-            if (typeof newanim.from != 'undefined' && newanim.from !== null) {
+            if (typeof newanim.from == 'undefined' || newanim.from === null) {
                 newanim.from = newanim.object[newanim.property];
             }
 
@@ -21,7 +21,7 @@
 
             laroux.timers.set({
                 // id: newanim.id,
-                timeout: 25,
+                timeout: 1,
                 reset: true,
                 ontick: laroux.anim.ontick,
                 state: newanim
