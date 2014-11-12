@@ -4,7 +4,7 @@
 
 Even though keeping compactness is the primary concern of this library, lightweight versions of some concepts/components will be included such as UI elements and MVC.
 
-So far, it has [Ajax](wiki/ajax), [Anim](wiki/anim), [Cookies](wiki/cookies), [CSS](wiki/css), [Date](wiki/date), [DOM](wiki/dom), [Events](wiki/events), [Forms](wiki/forms), [Helpers](wiki/helpers), [Stack](wiki/stack), [Templates](wiki/templates), [Timers](wiki/timers), [Triggers](wiki/triggers) and [UI](wiki/ui) components.
+So far, it has [Ajax](https://github.com/larukedi/laroux.js/wiki/ajax), [Anim](https://github.com/larukedi/laroux.js/wiki/anim), [Cookies](https://github.com/larukedi/laroux.js/wiki/cookies), [CSS](https://github.com/larukedi/laroux.js/wiki/css), [Date](https://github.com/larukedi/laroux.js/wiki/date), [DOM](https://github.com/larukedi/laroux.js/wiki/dom), [Events](https://github.com/larukedi/laroux.js/wiki/events), [Forms](https://github.com/larukedi/laroux.js/wiki/forms), [Helpers](https://github.com/larukedi/laroux.js/wiki/helpers), [Stack](https://github.com/larukedi/laroux.js/wiki/stack), [Templates](https://github.com/larukedi/laroux.js/wiki/templates), [Timers](https://github.com/larukedi/laroux.js/wiki/timers), [Triggers](https://github.com/larukedi/laroux.js/wiki/triggers) and [UI](https://github.com/larukedi/laroux.js/wiki/ui) components.
 
 
 [![Build Status](https://travis-ci.org/larukedi/laroux.js.png?branch=master)](https://travis-ci.org/larukedi/laroux.js)
