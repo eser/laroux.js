@@ -115,6 +115,10 @@
         merge: function(obj1, obj2) {
             var tmp = obj1;
 
+            if (tmp instanceof Array) {
+                return tmp.concat(obj2);
+            }
+
             for (var attr in obj2) {
                 if (!tmp.hasOwnProperty(attr)) {
                     tmp[attr] = obj2[attr];
