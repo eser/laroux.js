@@ -96,32 +96,6 @@
             var leadingMinute = ('0' + date.getMinutes()).substr(-2, 2);
 
             return leadingDate + '.' + leadingMonth + '.' + fullYear + ' ' + leadingHour + ':' + leadingMinute;
-        },
-
-        updateDatesElements: null,
-        updateDates: function() {
-            if (laroux.date.updateDatesElements === null) {
-                laroux.date.updateDatesElements = laroux.dom.select('*[data-epoch]');
-            }
-
-            laroux.date.updateDatesElements.forEach(function(obj) {
-                var date = new Date(parseInt(obj.getAttribute('data-epoch'), 10) * 1000);
-
-                laroux.dom.replace(
-                    obj,
-                    laroux.date.getDateString(date)
-                );
-
-                obj.setAttribute('title', laroux.date.getLongDateString(date));
-            });
-        },
-
-        init: function() {
-            laroux.timers.set({
-                timeout: 500,
-                reset: true,
-                ontick: laroux.date.updateDates
-            });
         }
     };
 

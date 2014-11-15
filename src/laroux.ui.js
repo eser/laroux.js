@@ -89,6 +89,35 @@
             }
         },
 
+        dynamicDates: {
+            updateDatesElements: null,
+
+            updateDates: function() {
+                if (laroux.ui.dynamicDates.updateDatesElements === null) {
+                    laroux.ui.dynamicDates.updateDatesElements = laroux.dom.select('*[data-epoch]');
+                }
+
+                laroux.ui.dynamicDates.updateDatesElements.forEach(function(obj) {
+                    var date = new Date(parseInt(obj.getAttribute('data-epoch'), 10) * 1000);
+
+                    laroux.dom.replace(
+                        obj,
+                        laroux.date.getDateString(date)
+                    );
+
+                    obj.setAttribute('title', laroux.date.getLongDateString(date));
+                });
+            },
+
+            init: function() {
+                laroux.timers.set({
+                    timeout: 500,
+                    reset: true,
+                    ontick: laroux.ui.dynamicDates.updateDates
+                });
+            }
+        },
+
         createFloatContainer: function() {
             if (!laroux.ui.floatContainer) {
                 laroux.ui.floatContainer = laroux.dom.createElement('DIV', { id: 'laroux_floatdiv' }, '');
@@ -100,6 +129,7 @@
             laroux.ui.createFloatContainer();
             laroux.ui.popup.init();
             laroux.ui.loading.init();
+            laroux.ui.dynamicDates.init();
         }
     };
 })(this.laroux);

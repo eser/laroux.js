@@ -323,6 +323,10 @@
                 newanim.from = newanim.object[newanim.property];
             }
 
+            if (typeof newanim.from == 'string') {
+                newanim.from = parseFloat(newanim.from);
+            }
+
             if (typeof newanim.reset == 'undefined' || newanim.reset === null) {
                 newanim.reset = false;
             }
@@ -335,6 +339,17 @@
             if (laroux.anim.data.length === 1) {
                 requestAnimationFrame(laroux.anim.onframe);
             }
+        },
+
+        setCss: function(newanim) {
+            if (typeof newanim.from == 'undefined' || newanim.from === null) {
+                newanim.from = laroux.css.getProperty(newanim.object, newanim.property);
+            }
+
+            newanim.object = newanim.object.style;
+            newanim.property = laroux.helpers.camelCase(newanim.property);
+
+            laroux.anim.set(newanim);
         },
 
         remove: function(id) {
@@ -417,17 +432,31 @@
 
     // cookies
     laroux.cookies = {
-        get: function(name) {
+        get: function(name, defaultValue) {
+            if (typeof defaultValue == 'undefined') {
+                defaultValue = null;
+            }
+
             var re = new RegExp(name + '=[^;]+', 'i');
             if (!document.cookie.match(re)) {
-                return null;
+                return defaultValue;
             }
 
             return document.cookie.match(re)[0].split('=')[1];
         },
 
-        set: function(name, value) {
-            document.cookie = name + '=' + value + '; path=' + laroux.baseLocation;
+        set: function(name, value, expires) {
+            var expireValue = '';
+            if (typeof expires != 'undefined' || expires !== null) {
+                expireValue = '; expires=' + expires.toGMTString();
+            }
+
+            var pathValue = laroux.baseLocation;
+            if (pathValue.length === 0) {
+                pathValue = '/';
+            }
+
+            document.cookie = name + '=' + value + expireValue + '; path=' + pathValue;
         }
     };
 
@@ -459,6 +488,8 @@
 
         getProperty: function(element, styleName) {
             var style = getComputedStyle(element);
+            styleName = laroux.helpers.antiCamelCase(styleName);
+            console.log(styleName);
 
             return style.getPropertyValue(styleName);
         },
@@ -631,32 +662,6 @@
             var leadingMinute = ('0' + date.getMinutes()).substr(-2, 2);
 
             return leadingDate + '.' + leadingMonth + '.' + fullYear + ' ' + leadingHour + ':' + leadingMinute;
-        },
-
-        updateDatesElements: null,
-        updateDates: function() {
-            if (laroux.date.updateDatesElements === null) {
-                laroux.date.updateDatesElements = laroux.dom.select('*[data-epoch]');
-            }
-
-            laroux.date.updateDatesElements.forEach(function(obj) {
-                var date = new Date(parseInt(obj.getAttribute('data-epoch'), 10) * 1000);
-
-                laroux.dom.replace(
-                    obj,
-                    laroux.date.getDateString(date)
-                );
-
-                obj.setAttribute('title', laroux.date.getLongDateString(date));
-            });
-        },
-
-        init: function() {
-            laroux.timers.set({
-                timeout: 500,
-                reset: true,
-                ontick: laroux.date.updateDates
-            });
         }
     };
 
@@ -1298,13 +1303,30 @@
             var output = '';
 
             for (var j = 0; j < value.length; j++) {
-                if (value.charAt(j) == '-') {
+                var currChar = value.charAt(j);
+                if (currChar == '-') {
                     flag = true;
                     continue;
                 }
 
-                output += (!flag) ? value.charAt(j) : value.charAt(j).toUpperCase();
+                output += (!flag) ? currChar : currChar.toUpperCase();
                 flag = false;
+            }
+
+            return output;
+        },
+
+        antiCamelCase: function(value) {
+            var output = '';
+
+            for (var j = 0; j < value.length; j++) {
+                var currChar = value.charAt(j);
+                if (currChar != '-' && currChar == currChar.toUpperCase()) {
+                    output += '-' + currChar.toLowerCase();
+                    continue;
+                }
+
+                output += currChar;
             }
 
             return output;
@@ -1727,6 +1749,35 @@
             }
         },
 
+        dynamicDates: {
+            updateDatesElements: null,
+
+            updateDates: function() {
+                if (laroux.ui.dynamicDates.updateDatesElements === null) {
+                    laroux.ui.dynamicDates.updateDatesElements = laroux.dom.select('*[data-epoch]');
+                }
+
+                laroux.ui.dynamicDates.updateDatesElements.forEach(function(obj) {
+                    var date = new Date(parseInt(obj.getAttribute('data-epoch'), 10) * 1000);
+
+                    laroux.dom.replace(
+                        obj,
+                        laroux.date.getDateString(date)
+                    );
+
+                    obj.setAttribute('title', laroux.date.getLongDateString(date));
+                });
+            },
+
+            init: function() {
+                laroux.timers.set({
+                    timeout: 500,
+                    reset: true,
+                    ontick: laroux.ui.dynamicDates.updateDates
+                });
+            }
+        },
+
         createFloatContainer: function() {
             if (!laroux.ui.floatContainer) {
                 laroux.ui.floatContainer = laroux.dom.createElement('DIV', { id: 'laroux_floatdiv' }, '');
@@ -1738,6 +1789,7 @@
             laroux.ui.createFloatContainer();
             laroux.ui.popup.init();
             laroux.ui.loading.init();
+            laroux.ui.dynamicDates.init();
         }
     };
 })(this.laroux);
