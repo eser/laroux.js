@@ -55,13 +55,30 @@
             var output = '';
 
             for (var j = 0; j < value.length; j++) {
-                if (value.charAt(j) == '-') {
+                var currChar = value.charAt(j);
+                if (currChar == '-') {
                     flag = true;
                     continue;
                 }
 
-                output += (!flag) ? value.charAt(j) : value.charAt(j).toUpperCase();
+                output += (!flag) ? currChar : currChar.toUpperCase();
                 flag = false;
+            }
+
+            return output;
+        },
+
+        antiCamelCase: function(value) {
+            var output = '';
+
+            for (var j = 0; j < value.length; j++) {
+                var currChar = value.charAt(j);
+                if (currChar != '-' && currChar == currChar.toUpperCase()) {
+                    output += '-' + currChar.toLowerCase();
+                    continue;
+                }
+
+                output += currChar;
             }
 
             return output;

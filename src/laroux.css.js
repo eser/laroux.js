@@ -25,6 +25,8 @@
 
         getProperty: function(element, styleName) {
             var style = getComputedStyle(element);
+            styleName = laroux.helpers.antiCamelCase(styleName);
+            console.log(styleName);
 
             return style.getPropertyValue(styleName);
         },

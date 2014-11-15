@@ -27,6 +27,10 @@
                 newanim.from = newanim.object[newanim.property];
             }
 
+            if (typeof newanim.from == 'string') {
+                newanim.from = parseFloat(newanim.from);
+            }
+
             if (typeof newanim.reset == 'undefined' || newanim.reset === null) {
                 newanim.reset = false;
             }
@@ -39,6 +43,17 @@
             if (laroux.anim.data.length === 1) {
                 requestAnimationFrame(laroux.anim.onframe);
             }
+        },
+
+        setCss: function(newanim) {
+            if (typeof newanim.from == 'undefined' || newanim.from === null) {
+                newanim.from = laroux.css.getProperty(newanim.object, newanim.property);
+            }
+
+            newanim.object = newanim.object.style;
+            newanim.property = laroux.helpers.camelCase(newanim.property);
+
+            laroux.anim.set(newanim);
         },
 
         remove: function(id) {

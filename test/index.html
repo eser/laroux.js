@@ -28,12 +28,20 @@
             $l.ready(function() {
                 $l.ui.loading.elementSelector = '#loading';
                 $l.ui.init();
+
+                var movingObj = $l('#movingObj');
+                $l.css.setProperty(movingObj, { position: 'absolute', backgroundColor: 'red', left: '150px' });
+                // $l.anim.setCss({ object: movingObj, property: 'top', from: 50, to: 200, time: 2000, unit: 'px', reset: true });
+                // $l.anim.setCss({ object: movingObj, property: 'font-size', from: null, to: 30, time: 1200, unit: 'pt', reset: true });
+                // $l.css.transition(movingObj, { 'background-color': [ 'silver', '5s ease' ] });
             });
         </script>
     </head>
     <body>
 
         <div id="loading">Loading...</div>
+
+        <div id="movingObj">MOVE</div>
 
         <div lr-app="deneme">
             {{hello}}
