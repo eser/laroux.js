@@ -57,6 +57,35 @@
         }
     };
 
+    laroux.each = function(arr, fnc) {
+        var keys = Object.keys(arr);
+
+        for (var key in keys) {
+            if (fnc(key, arr[key]) === false) {
+                break;
+            }
+        }
+
+        return arr;
+    };
+
+    laroux.map = function(arr, fnc) {
+        var keys = Object.keys(arr);
+        var results = [];
+
+        for (var key in keys) {
+            var result = fnc(key, arr[key]);
+            if (result === false) {
+                break;
+            }
+            if (result !== null) {
+                results.push(result);
+            }
+        }
+
+        return results;
+    };
+
     // initialization
     this.$l = this.laroux = laroux;
 
