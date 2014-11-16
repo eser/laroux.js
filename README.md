@@ -13,6 +13,11 @@ So far, it has [Ajax](https://github.com/larukedi/laroux.js/wiki/ajax), [Anim](h
 
 ## For Users
 
+### Demos
+
+See [GitHub Page](https://larukedi.github.io/laroux.js/) for feature demonstrations.
+
+
 ### Documentation
 
 See [wiki page](https://github.com/larukedi/laroux.js/wiki) for documentation.
