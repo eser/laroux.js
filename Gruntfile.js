@@ -23,18 +23,19 @@ module.exports = function(grunt) {
                     'src/laroux.js',
                     'src/laroux.ajax.js',
                     'src/laroux.anim.js',
-                    'src/laroux.cookies.js',
                     'src/laroux.css.js',
                     'src/laroux.date.js',
                     'src/laroux.dom.js',
                     'src/laroux.events.js',
                     'src/laroux.forms.js',
                     'src/laroux.helpers.js',
+                    'src/laroux.mvc.js',
                     'src/laroux.stack.js',
                     'src/laroux.templates.js',
                     'src/laroux.timers.js',
                     'src/laroux.triggers.js',
-                    'src/laroux.ui.js'
+                    'src/laroux.ui.js',
+                    'src/laroux.vars.js'
                 ],
                 dest: 'dist/<%= pkg.name %>.js'
             },
