@@ -113,10 +113,11 @@
                 if (selectedAppObject.app == app) {
                     selectedAppObject.model = model;
                 }
+
+                laroux.mvc.updateApp(selectedAppObject);
             }
 
             Object.observe(model, laroux.mvc.observer);
-            laroux.mvc.update();
         }
     };
 
