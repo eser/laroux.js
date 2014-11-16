@@ -180,6 +180,48 @@ $l.css.toggleClass(box, 'box-silver');
             </div>
 
             <div class="example-area">
+                <h3>Dates</h3>
+                <div class="row">
+                    <div class="col-sm-4">
+                        <button id="button-date-dates" class="btn btn-default">Show Dates</button>
+                        <div id="text-date-dates"></div>
+                    </div>
+                    <div class="col-sm-8">
+                        <h4>HTML</h4>
+                        <pre class="prettyprint">
+&lt;div id="text-date-dates"&gt;&lt;/div&gt;
+                        </pre>
+
+                        <h4>Javascript</h4>
+                        <pre class="prettyprint">
+var text = $l('#text-date-dates');
+
+var now = new Date();
+var yesterday = new Date();
+yesterday.setDate(yesterday.getDate() - 1);
+
+$l.dom.clear(text);
+
+$l.dom.append(text, '&lt;div&gt;&lt;strong&gt;From yesterday to today:&lt;/strong&gt;&lt;/div&gt;');
+$l.dom.append(text, $l.date.parseEpoch(now.getTime() - yesterday.getTime()));
+
+$l.dom.append(text, '&lt;div&gt;&lt;strong&gt;Short Date:&lt;/strong&gt;&lt;/div&gt;');
+$l.dom.append(text, $l.date.getDateString(now) + '&lt;br /&gt;');
+
+$l.dom.append(text, '&lt;div&gt;&lt;strong&gt;Short Date + month names:&lt;/strong&gt;&lt;/div&gt;');
+$l.dom.append(text, $l.date.getDateString(now, true) + '&lt;br /&gt;');
+
+$l.dom.append(text, '&lt;div&gt;&lt;strong&gt;Long Date:&lt;/strong&gt;&lt;/div&gt;');
+$l.dom.append(text, $l.date.getLongDateString(now) + '&lt;br /&gt;');
+
+$l.dom.append(text, '&lt;div&gt;&lt;strong&gt;Long Date + month names:&lt;/strong&gt;&lt;/div&gt;');
+$l.dom.append(text, $l.date.getLongDateString(now, true) + '&lt;br /&gt;');
+
+$l.dom.append(text, '&lt;div&gt;&lt;strong&gt;Long Date + month names + time:&lt;/strong&gt;&lt;/div&gt;');
+$l.dom.append(text, $l.date.getLongDateString(now, true, true) + '&lt;br /&gt;');
+                        </pre>
+                    </div>
+                </div>
             </div>
 
             <div class="row header-row">

@@ -74,3 +74,41 @@ $l.ready(function() {
         }
     );
 });
+
+// date - Dates
+$l.ready(function() {
+    var button = $l('#button-date-dates');
+    var text = $l('#text-date-dates');
+
+    $l.dom.setEvent(
+        button,
+        'click',
+        function() {
+            var now = new Date();
+            var yesterday = new Date();
+            yesterday.setDate(yesterday.getDate() - 1);
+
+            $l.dom.clear(text);
+
+            $l.dom.append(text, '<div><strong>From yesterday to today:</strong></div>');
+            $l.dom.append(text, $l.date.parseEpoch(now.getTime() - yesterday.getTime()));
+
+            $l.dom.append(text, '<div><strong>Short Date:</strong></div>');
+            $l.dom.append(text, $l.date.getDateString(now) + '<br />');
+
+            $l.dom.append(text, '<div><strong>Short Date + month names:</strong></div>');
+            $l.dom.append(text, $l.date.getDateString(now, true) + '<br />');
+
+            $l.dom.append(text, '<div><strong>Long Date:</strong></div>');
+            $l.dom.append(text, $l.date.getLongDateString(now) + '<br />');
+
+            $l.dom.append(text, '<div><strong>Long Date + month names:</strong></div>');
+            $l.dom.append(text, $l.date.getLongDateString(now, true) + '<br />');
+
+            $l.dom.append(text, '<div><strong>Long Date + month names + time:</strong></div>');
+            $l.dom.append(text, $l.date.getLongDateString(now, true, true) + '<br />');
+
+            return false;
+        }
+    );
+});
