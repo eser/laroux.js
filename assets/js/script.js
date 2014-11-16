@@ -21,5 +21,29 @@ $l.ready(function() {
 
             return false;
         }
-    )
+    );
+});
+
+// anim - Creating a CSS animation
+$l.ready(function() {
+    var button = $l('#button-anim-animate');
+    var box = $l('#div-anim-animate');
+
+    $l.dom.setEvent(
+        button,
+        'click',
+        function() {
+            $l.anim.setCss({
+                object:   box,
+                property: 'top',
+                from:     0, // current value
+                to:       50,
+                time:     1200,
+                unit:     'px',
+                reset:    false
+            });
+
+            return false;
+        }
+    );
 });

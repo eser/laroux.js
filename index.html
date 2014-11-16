@@ -68,39 +68,25 @@
             <div class="example-area">
                 <h3>Making a GET request</h3>
                 <div class="row">
-                    <div class="col-sm-6">
+                    <div class="col-sm-4">
                         <button id="button-ajax-get-request" class="btn btn-default">Make Request</button>
                         <div id="text-ajax-get-request"></div>
                     </div>
-                    <div class="col-sm-6">
+                    <div class="col-sm-8">
                         <h4>HTML</h4>
                         <pre class="prettyprint">
-&lt;button id="button-ajax-get-request" class="btn btn-default"&gt;Make Request&lt;/button&gt;
 &lt;div id="text-ajax-get-request"&gt;&lt;/div&gt;
                         </pre>
 
                         <h4>Javascript</h4>
                         <pre class="prettyprint">
-$l.ready(function() {
-    var button = $l('#button-ajax-get-request');
-    var text = $l('#text-ajax-get-request');
-
-    $l.dom.setEvent(
-        button,
-        'click',
-        function() {
-            $l.ajax.getJson(
-                'test.json',
-                null,
-                function(response) {
-                    $l.dom.replace(text, response.testResponse);
-                }
-            );
-
-            return false;
-        }
-    )
-});
+$l.ajax.getJson(
+    'test.json',
+    null,
+    function(response) {
+        $l.dom.replace($l('#text-ajax-get-request'), response.testResponse);
+    }
+);
                         </pre>
                     </div>
                 </div>
@@ -116,6 +102,32 @@ $l.ready(function() {
             </div>
 
             <div class="example-area">
+                <h3>Creating a CSS animation</h3>
+                <div class="row">
+                    <div class="col-sm-4">
+                        <button id="button-anim-animate" class="btn btn-default">Animate</button>
+                        <div class="box" id="div-anim-animate"></div>
+                    </div>
+                    <div class="col-sm-8">
+                        <h4>HTML</h4>
+                        <pre class="prettyprint">
+&lt;div class="box" id="div-anim-animate"&gt;&lt;/div&gt;
+                        </pre>
+
+                        <h4>Javascript</h4>
+                        <pre class="prettyprint">
+$l.anim.setCss({
+    object:   $l('#div-anim-animate'),
+    property: 'top',
+    from:     0, // current value
+    to:       50,
+    time:     1200,
+    unit:     'px',
+    reset:    false
+});
+                        </pre>
+                    </div>
+                </div>
             </div>
 
             <div class="row header-row">
