@@ -1,10 +1,10 @@
 # laroux.js
 
-[This project](https://github.com/larukedi/laroux.js/) is a jquery substitute for modern browsers. But instead of offering some wrappers and own dynamics, it simply provides helper functions to achieve the same objectives with jquery or zepto.
+[This project](https://github.com/larukedi/laroux.js) is a jquery substitute for modern browsers. But instead of offering some wrappers and own dynamics, it simply provides helper functions to achieve the same objectives with jquery or zepto.
 
-Even though keeping compactness is the primary concern of this library, lightweight versions of some concepts/components will be included such as UI elements and MVC.
+Even though keeping compactness is the primary concern of this library, lightweight versions of some concepts/components including some UI helpers and MVC.
 
-So far, it has [Ajax](https://github.com/larukedi/laroux.js/wiki/ajax), [Anim](https://github.com/larukedi/laroux.js/wiki/anim), [Cookies](https://github.com/larukedi/laroux.js/wiki/cookies), [CSS](https://github.com/larukedi/laroux.js/wiki/css), [Date](https://github.com/larukedi/laroux.js/wiki/date), [DOM](https://github.com/larukedi/laroux.js/wiki/dom), [Events](https://github.com/larukedi/laroux.js/wiki/events), [Forms](https://github.com/larukedi/laroux.js/wiki/forms), [Helpers](https://github.com/larukedi/laroux.js/wiki/helpers), [Stack](https://github.com/larukedi/laroux.js/wiki/stack), [Templates](https://github.com/larukedi/laroux.js/wiki/templates), [Timers](https://github.com/larukedi/laroux.js/wiki/timers), [Triggers](https://github.com/larukedi/laroux.js/wiki/triggers) and [UI](https://github.com/larukedi/laroux.js/wiki/ui) components.
+So far, it has [Ajax](https://github.com/larukedi/laroux.js/wiki/ajax), [Anim](https://github.com/larukedi/laroux.js/wiki/anim), [CSS](https://github.com/larukedi/laroux.js/wiki/css), [Date](https://github.com/larukedi/laroux.js/wiki/date), [DOM](https://github.com/larukedi/laroux.js/wiki/dom), [Events](https://github.com/larukedi/laroux.js/wiki/events), [Forms](https://github.com/larukedi/laroux.js/wiki/forms), [Helpers](https://github.com/larukedi/laroux.js/wiki/helpers), [MVC](https://github.com/larukedi/laroux.js/wiki/mvc), [Stack](https://github.com/larukedi/laroux.js/wiki/stack), [Templates](https://github.com/larukedi/laroux.js/wiki/templates), [Timers](https://github.com/larukedi/laroux.js/wiki/timers), [Triggers](https://github.com/larukedi/laroux.js/wiki/triggers), [UI](https://github.com/larukedi/laroux.js/wiki/ui) and [Vars](https://github.com/larukedi/laroux.js/wiki/vars) components.
 
 
 [![Build Status](https://travis-ci.org/larukedi/laroux.js.png?branch=master)](https://travis-ci.org/larukedi/laroux.js)
@@ -19,7 +19,7 @@ See [wiki page](https://github.com/larukedi/laroux.js/wiki) for documentation.
 
 
 ### Installation
-Download [laroux.min.js](https://raw.githubusercontent.com/larukedi/laroux.js/master/dist/laroux.min.js) and [laroux.min.css](https://raw.githubusercontent.com/larukedi/laroux.js/master/dist/laroux.min.css), and include them in your web project.
+Download the latest version for [releases page](https://github.com/larukedi/laroux.js/releases), and include `laroux.min.js` and `laroux.min.css` in your web project.
 
 
 ### Sample Usage
