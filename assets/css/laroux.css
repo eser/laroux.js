@@ -1,0 +1,32 @@
+/* Stylesheet for laroux.ui.js
+----------------------------------------------------------*/
+#laroux_floatdiv {
+  width: 100%;
+  position: fixed;
+  top: 10px;
+  left: 0px;
+  z-index: 100002;
+  font-size: 14px;
+}
+.laroux_msgbox {
+  margin: auto;
+  width: 300px;
+  opacity: 0;
+  padding: 6px 10px 6px 10px;
+  color: #393939;
+  background-color: #F0F0F0;
+  border-radius: 4px;
+  border: 1px solid #808080;
+  box-shadow: 3px 3px 5px #000000;
+  font: 14px sans-serif;
+}
+.laroux_msgbox h3 {
+  font-size: 14px;
+  font-weight: bold;
+  margin: 0px 0px 4px 0px;
+}
+.laroux_fade {
+  transition: opacity 0.25s ease-in-out;
+  -moz-transition: opacity 0.25s ease-in-out;
+  -webkit-transition: opacity 0.25s ease-in-out;
+}

@@ -1,0 +1,285 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <title>laroux.js</title>
+        <meta name="description" content="" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+        <!-- Latest compiled and minified CSS -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" />
+        <link rel="stylesheet" href="assets/css/prettify.css" />
+        <link rel="stylesheet" href="assets/css/laroux.min.css" />
+        <link rel="stylesheet" href="assets/css/style.css" />
+    </head>
+    <body>
+
+        <div id="home" class="container">
+
+            <!-- Static navbar -->
+            <nav class="navbar navbar-default" role="navigation">
+                <div class="container-fluid">
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                            <span class="sr-only">Toggle navigation</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                        <a class="navbar-brand" href="#">laroux.js</a>
+                    </div>
+                    <div id="navbar" class="navbar-collapse collapse">
+                        <ul class="nav navbar-nav">
+                            <li><a href="#home">Home</a></li>
+                            <li><a href="#examples">Examples</a></li>
+                        </ul>
+                        <ul class="nav navbar-nav navbar-right">
+                            <li><a href="https://github.com/larukedi/laroux.js">GitHub Repository</a></li>
+                        </ul>
+                    </div><!--/.nav-collapse -->
+                </div><!--/.container-fluid -->
+            </nav>
+
+            <!-- Main component for a primary marketing message or call to action -->
+            <div class="jumbotron">
+                <h1>laroux.js 1.0</h1>
+                <div class="lead">
+                    This project is a jquery substitute for modern browsers. But instead of offering some wrappers and own dynamics, it simply provides helper functions to achieve the same objectives with jquery or zepto.
+                </div>
+                <p>
+                    <a class="btn btn-lg btn-primary" href="https://github.com/larukedi/laroux.js" role="button">View GitHub Repository &raquo;</a>
+                    <a class="btn btn-lg btn-primary" href="https://github.com/larukedi/laroux.js/wiki" role="button">See Wiki &raquo;</a>
+                    <a class="btn btn-lg btn-success" href="https://github.com/larukedi/laroux.js/releases" role="button">Download &raquo;</a>
+                </p>
+            </div>
+        </div>
+
+        <div id="examples" class="container">
+            <div class="row header-row">
+                <div class="col-sm-6">
+                    <h2 class="nomargin">Ajax Examples</h2>
+                </div>
+                <div class="col-sm-6 text-right">
+                    <a class="btn btn-sm btn-default" href="https://github.com/larukedi/laroux.js/wiki/ajax" role="button">Wiki Page</a>
+                </div>
+            </div>
+            
+            <div class="example-area">
+                <h3>Making a GET request</h3>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <button id="button-ajax-get-request" class="btn btn-default">Make Request</button>
+                        <div id="text-ajax-get-request"></div>
+                    </div>
+                    <div class="col-sm-6">
+                        <h4>HTML</h4>
+                        <pre class="prettyprint">
+&lt;button id="button-ajax-get-request" class="btn btn-default"&gt;Make Request&lt;/button&gt;
+&lt;div id="text-ajax-get-request"&gt;&lt;/div&gt;
+                        </pre>
+
+                        <h4>Javascript</h4>
+                        <pre class="prettyprint">
+$l.ready(function() {
+    var button = $l('#button-ajax-get-request');
+    var text = $l('#text-ajax-get-request');
+
+    $l.dom.setEvent(
+        button,
+        'click',
+        function() {
+            $l.ajax.getJson(
+                'test.json',
+                null,
+                function(response) {
+                    $l.dom.replace(text, response.testResponse);
+                }
+            );
+
+            return false;
+        }
+    )
+});
+                        </pre>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row header-row">
+                <div class="col-sm-6">
+                    <h2 class="nomargin">Anim Examples</h2>
+                </div>
+                <div class="col-sm-6 text-right">
+                    <a class="btn btn-sm btn-default" href="https://github.com/larukedi/laroux.js/wiki/anim" role="button">Wiki Page</a>
+                </div>
+            </div>
+
+            <div class="example-area">
+            </div>
+
+            <div class="row header-row">
+                <div class="col-sm-6">
+                    <h2 class="nomargin">CSS Examples</h2>
+                </div>
+                <div class="col-sm-6 text-right">
+                    <a class="btn btn-sm btn-default" href="https://github.com/larukedi/laroux.js/wiki/css" role="button">Wiki Page</a>
+                </div>
+            </div>
+
+            <div class="example-area">
+            </div>
+
+            <div class="row header-row">
+                <div class="col-sm-6">
+                    <h2 class="nomargin">Date Examples</h2>
+                </div>
+                <div class="col-sm-6 text-right">
+                    <a class="btn btn-sm btn-default" href="https://github.com/larukedi/laroux.js/wiki/date" role="button">Wiki Page</a>
+                </div>
+            </div>
+
+            <div class="example-area">
+            </div>
+
+            <div class="row header-row">
+                <div class="col-sm-6">
+                    <h2 class="nomargin">DOM Examples</h2>
+                </div>
+                <div class="col-sm-6 text-right">
+                    <a class="btn btn-sm btn-default" href="https://github.com/larukedi/laroux.js/wiki/dom" role="button">Wiki Page</a>
+                </div>
+            </div>
+
+            <div class="example-area">
+            </div>
+
+            <div class="row header-row">
+                <div class="col-sm-6">
+                    <h2 class="nomargin">Events Examples</h2>
+                </div>
+                <div class="col-sm-6 text-right">
+                    <a class="btn btn-sm btn-default" href="https://github.com/larukedi/laroux.js/wiki/events" role="button">Wiki Page</a>
+                </div>
+            </div>
+
+            <div class="example-area">
+            </div>
+
+            <div class="row header-row">
+                <div class="col-sm-6">
+                    <h2 class="nomargin">Forms Examples</h2>
+                </div>
+                <div class="col-sm-6 text-right">
+                    <a class="btn btn-sm btn-default" href="https://github.com/larukedi/laroux.js/wiki/forms" role="button">Wiki Page</a>
+                </div>
+            </div>
+
+            <div class="example-area">
+            </div>
+
+            <div class="row header-row">
+                <div class="col-sm-6">
+                    <h2 class="nomargin">Helpers Examples</h2>
+                </div>
+                <div class="col-sm-6 text-right">
+                    <a class="btn btn-sm btn-default" href="https://github.com/larukedi/laroux.js/wiki/helpers" role="button">Wiki Page</a>
+                </div>
+            </div>
+
+            <div class="example-area">
+            </div>
+
+            <div class="row header-row">
+                <div class="col-sm-6">
+                    <h2 class="nomargin">MVC Examples</h2>
+                </div>
+                <div class="col-sm-6 text-right">
+                    <a class="btn btn-sm btn-default" href="https://github.com/larukedi/laroux.js/wiki/mvc" role="button">Wiki Page</a>
+                </div>
+            </div>
+
+            <div class="example-area">
+            </div>
+
+            <div class="row header-row">
+                <div class="col-sm-6">
+                    <h2 class="nomargin">Stack Examples</h2>
+                </div>
+                <div class="col-sm-6 text-right">
+                    <a class="btn btn-sm btn-default" href="https://github.com/larukedi/laroux.js/wiki/stack" role="button">Wiki Page</a>
+                </div>
+            </div>
+
+            <div class="example-area">
+            </div>
+
+            <div class="row header-row">
+                <div class="col-sm-6">
+                    <h2 class="nomargin">Templates Examples</h2>
+                </div>
+                <div class="col-sm-6 text-right">
+                    <a class="btn btn-sm btn-default" href="https://github.com/larukedi/laroux.js/wiki/templates" role="button">Wiki Page</a>
+                </div>
+            </div>
+
+            <div class="example-area">
+            </div>
+
+            <div class="row header-row">
+                <div class="col-sm-6">
+                    <h2 class="nomargin">Timers Examples</h2>
+                </div>
+                <div class="col-sm-6 text-right">
+                    <a class="btn btn-sm btn-default" href="https://github.com/larukedi/laroux.js/wiki/timers" role="button">Wiki Page</a>
+                </div>
+            </div>
+
+            <div class="example-area">
+            </div>
+
+            <div class="row header-row">
+                <div class="col-sm-6">
+                    <h2 class="nomargin">Triggers Examples</h2>
+                </div>
+                <div class="col-sm-6 text-right">
+                    <a class="btn btn-sm btn-default" href="https://github.com/larukedi/laroux.js/wiki/triggers" role="button">Wiki Page</a>
+                </div>
+            </div>
+
+            <div class="example-area">
+            </div>
+
+            <div class="row header-row">
+                <div class="col-sm-6">
+                    <h2 class="nomargin">UI Examples</h2>
+                </div>
+                <div class="col-sm-6 text-right">
+                    <a class="btn btn-sm btn-default" href="https://github.com/larukedi/laroux.js/wiki/ui" role="button">Wiki Page</a>
+                </div>
+            </div>
+
+            <div class="example-area">
+            </div>
+
+            <div class="row header-row">
+                <div class="col-sm-6">
+                    <h2 class="nomargin">Vars Examples</h2>
+                </div>
+                <div class="col-sm-6 text-right">
+                    <a class="btn btn-sm btn-default" href="https://github.com/larukedi/laroux.js/wiki/vars" role="button">Wiki Page</a>
+                </div>
+            </div>
+
+            <footer>
+                <hr />
+                <p>laroux.js GitHub Demo Page - Documented by <a href="http://eser.ozvataf.com/">Eser Ozvataf</a> 2014</p>
+            </footer>
+        </div>
+
+        <script src="assets/js/prettify.min.js"></script>
+        <script src="assets/js/laroux.min.js"></script>
+        <script src="assets/js/script.js"></script>
+    </body>
+</html>
+
