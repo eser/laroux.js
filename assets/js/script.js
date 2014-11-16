@@ -47,3 +47,30 @@ $l.ready(function() {
         }
     );
 });
+
+// css - Transitions
+$l.ready(function() {
+    var button = $l('#button-css-transition');
+    var box = $l('#div-css-transition');
+
+    $l.css.setTransition(
+        box,
+        {
+            'background-color': '2s',
+            'width': '1s ease'
+        }
+    );
+
+    $l.dom.setEvent(
+        button,
+        'click',
+        function() {
+            $l.css.toggleClass(
+                box,
+                'box-silver'
+            );
+
+            return false;
+        }
+    );
+});

@@ -140,6 +140,34 @@ $l.anim.setCss({
             </div>
 
             <div class="example-area">
+                <h3>Transitions</h3>
+                <div class="row">
+                    <div class="col-sm-4">
+                        <button id="button-css-transition" class="btn btn-default">Toggle Class</button>
+                        <div class="box" id="div-css-transition"></div>
+                    </div>
+                    <div class="col-sm-8">
+                        <h4>HTML</h4>
+                        <pre class="prettyprint">
+&lt;div class="box" id="div-css-transition"&gt;&lt;/div&gt;
+                        </pre>
+
+                        <h4>Javascript</h4>
+                        <pre class="prettyprint">
+var box = $l('#div-css-transition');
+
+$l.css.setTransition(
+    box,
+    {
+        'background-color': '2s',
+        'width': '1s ease'
+    }
+);
+
+$l.css.toggleClass(box, 'box-silver');
+                        </pre>
+                    </div>
+                </div>
             </div>
 
             <div class="row header-row">
