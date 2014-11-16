@@ -719,7 +719,23 @@
                 return timespan + ' weeks';
             }
 
-            return null;
+            if (timespan < 30*7*24*60*60*1000) {
+                timespan = Math.ceil(timespan / (30*24*60*60*1000));
+
+                if (timespan == 1) {
+                    return 'a month';
+                }
+
+                return timespan + ' months';
+            }
+
+            timespan = Math.ceil(timespan / (365*24*60*60*1000));
+
+            if (timespan == 1) {
+                return 'a year';
+            }
+
+            return timespan + ' years';
         },
 
         monthsShort: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
