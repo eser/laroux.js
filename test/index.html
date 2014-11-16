@@ -21,7 +21,7 @@
         <script>
             function deneme($scope) {
 
-                $scope.hello = 'selam';
+                console.log($scope.hello);
 
             }
 
@@ -47,6 +47,19 @@
                 //         console.log(content);
                 //     }
                 // );
+
+                var newApp = { 'hello': 'merhaba', 'name': 'eser', 'favoritecolor': 'darkorange' };
+
+                $l.mvc.init();
+                $l.mvc.bind('deneme', newApp);
+
+                $l.dom.setEvent(
+                    $l('#clickme'),
+                    'click',
+                    function() {
+                        newApp.hello = 'selam';
+                    }
+                )
             });
         </script>
     </head>
@@ -58,10 +71,14 @@
 
         <div lr-app="deneme">
             {{hello}}
+
+            <span style="color: {{favoritecolor}};">{{name}}</span>
         </div>
 
         <div id="late-content">
         </div>
+
+        <input id="clickme" type="button" value="Change" />
 
     </body>
 </html>

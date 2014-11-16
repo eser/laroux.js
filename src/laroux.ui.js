@@ -132,4 +132,5 @@
             laroux.ui.dynamicDates.init();
         }
     };
+
 })(this.laroux);
