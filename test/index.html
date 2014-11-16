@@ -29,11 +29,24 @@
                 $l.ui.loading.elementSelector = '#loading';
                 $l.ui.init();
 
-                var movingObj = $l('#movingObj');
-                $l.css.setProperty(movingObj, { position: 'absolute', backgroundColor: 'red', left: '150px' });
-                // $l.anim.setCss({ object: movingObj, property: 'top', from: 50, to: 200, time: 2000, unit: 'px', reset: true });
-                // $l.anim.setCss({ object: movingObj, property: 'font-size', from: null, to: 30, time: 1200, unit: 'pt', reset: true });
-                // $l.css.transition(movingObj, { 'background-color': [ 'silver', '5s ease' ] });
+                var movingObject = $l('#moving-object');
+                $l.css.setProperty(movingObject, { position: 'absolute', backgroundColor: 'red', left: '150px' });
+                // $l.anim.setCss({ object: movingObject, property: 'top', from: 50, to: 200, time: 2000, unit: 'px', reset: true });
+                // $l.anim.setCss({ object: movingObject, property: 'font-size', from: null, to: 30, time: 1200, unit: 'pt', reset: true });
+                // $l.css.transition(movingObject, { 'background-color': [ 'silver', '5s ease' ] });
+
+                // $l.ajax.getScript(
+                //     'test.js',
+                //     null
+                // );
+
+                // $l.ajax.post(
+                //     'test.php',
+                //     { tested: 't' },
+                //     function(content) {
+                //         console.log(content);
+                //     }
+                // );
             });
         </script>
     </head>
@@ -41,10 +54,13 @@
 
         <div id="loading">Loading...</div>
 
-        <div id="movingObj">MOVE</div>
+        <div id="moving-object">MOVE</div>
 
         <div lr-app="deneme">
             {{hello}}
+        </div>
+
+        <div id="late-content">
         </div>
 
     </body>

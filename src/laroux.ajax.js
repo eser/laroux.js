@@ -4,6 +4,8 @@
     // ajax - partially taken from 'jquery in parts' project
     //        can be found at: https://github.com/mythz/jquip/
     laroux.ajax = {
+        corsDefault: false,
+
         wrappers: {
             registry: {
                 'laroux.js': function(data) {
@@ -32,20 +34,38 @@
             }
         },
 
-        _xhrf: null,
-        _xhr: function() {
-            if (laroux.ajax._xhrf === null) {
-                laroux.ajax._xhrf = new XMLHttpRequest();
+        xDomainObject: false,
+        _xmlHttpRequestObject: null,
+        _xDomainRequestObject: null,
+        _xhr: function(crossDomain) {
+            if (laroux.ajax._xmlHttpRequestObject === null) {
+                laroux.ajax._xmlHttpRequestObject = new XMLHttpRequest();
             }
 
-            return laroux.ajax._xhrf;
+            if (crossDomain) {
+                if (!('withCredentials' in laroux.ajax._xmlHttpRequestObject) && typeof XDomainRequest != 'undefined') {
+                    laroux.ajax.xDomainObject = true;
+
+                    if (laroux.ajax._xDomainRequestObject === null) {
+                        laroux.ajax._xDomainRequestObject = new XDomainRequest();
+                    }
+
+                    return laroux.ajax._xDomainRequestObject;
+                }
+            } else {
+                laroux.ajax.xDomainObject = false;
+            }
+
+            return laroux.ajax._xmlHttpRequestObject;
         },
 
         _xhrResp: function(xhr, options) {
             var wrapperFunction = xhr.getResponseHeader('X-Response-Wrapper-Function');
             var response;
 
-            if (options.datatype == 'json') {
+            if (typeof options.datatype == 'undefined') {
+                response = xhr.responseText;
+            } else if (options.datatype == 'json') {
                 response = JSON.parse(xhr.responseText);
             } else if (options.datatype == 'script') {
                 /* jshint evil:true */
@@ -67,7 +87,12 @@
         },
 
         makeRequest: function(options) {
-            var xhr = laroux.ajax._xhr();
+            var cors = laroux.ajax.corsDefault;
+            if (typeof options.cors != 'undefined') {
+                cors = options.cors;
+            }
+
+            var xhr = laroux.ajax._xhr(cors);
             var timer = null;
             var n = 0;
 
@@ -137,28 +162,51 @@
                 }
             }
 
-            xhr.open(options.type, url, true);
+            if (typeof options.jsonp != 'undefined') {
+                url += ((url.indexOf('?') < 0) ? '?' : '&') + 'jsonp=' + options.jsonp;
+            }
+
+            if (!laroux.ajax.xDomainObject) {
+                xhr.open(options.type, url, true);
+            } else {
+                xhr.open(options.type, url);
+            }
 
             try {
-                for (var i in options.headers) {
-                    if (!options.headers.hasOwnProperty(i)) {
-                        continue;
-                    }
+                if (typeof options.xhrFields != 'undefined') {
+                    for (var i in options.xhrFields) {
+                        if (!options.xhrFields.hasOwnProperty(i)) {
+                            continue;
+                        }
 
-                    xhr.setRequestHeader(i, options.headers[i]);
+                        xhr[i] = options.xhrFields[i];
+                    }
+                }
+
+                if (typeof options.headers != 'undefined') {
+                    for (var j in options.headers) {
+                        if (!options.headers.hasOwnProperty(j)) {
+                            continue;
+                        }
+
+                        xhr.setRequestHeader(j, options.headers[j]);
+                    }
                 }
             } catch(e) {
                 console.log(e);
             }
 
             var data = null;
+
             if (typeof options.postdata != 'undefined') {
-                if (options.postdata instanceof FormData) {
-                    data = options.postdata;
-                } else if (options.postdata instanceof Object) {
-                    data = laroux.helpers.buildFormData(options.postdata);
-                } else {
-                    data = options.postdata;
+                data = options.postdata;
+
+                if (typeof options.postdatatype != 'undefined') {
+                    if (options.postdatatype == 'json') {
+                        data = JSON.stringify(data);
+                    } else if (options.postdatatype == 'form') {
+                        data = laroux.helpers.buildFormData(options.postdata);
+                    }
                 }
             }
 
@@ -169,10 +217,9 @@
             laroux.ajax.makeRequest({
                 type: 'GET',
                 url: path,
+                datatype: 'html',
                 getdata: values,
-                datatype: 'json',
                 headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
                     'X-Requested-With': 'XMLHttpRequest',
                     'X-Wrapper-Function': 'laroux.js'
                 },
@@ -181,13 +228,43 @@
             });
         },
 
-        getScript: function(path, successfnc, errorfnc) {
+        getJson: function(path, values, successfnc, errorfnc) {
+            laroux.ajax.makeRequest({
+                type: 'GET',
+                url: path,
+                datatype: 'json',
+                getdata: values,
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'X-Wrapper-Function': 'laroux.js'
+                },
+                success: successfnc,
+                error: errorfnc
+            });
+        },
+
+        getJsonP: function(path, values, method, successfnc, errorfnc) {
             laroux.ajax.makeRequest({
                 type: 'GET',
                 url: path,
                 datatype: 'script',
+                getdata: values,
+                jsonp: method,
                 headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+                    'X-Requested-With': 'XMLHttpRequest'
+                },
+                success: successfnc,
+                error: errorfnc
+            });
+        },
+
+        getScript: function(path, values, successfnc, errorfnc) {
+            laroux.ajax.makeRequest({
+                type: 'GET',
+                url: path,
+                datatype: 'script',
+                getdata: values,
+                headers: {
                     'X-Requested-With': 'XMLHttpRequest'
                 },
                 success: successfnc,
@@ -199,10 +276,11 @@
             laroux.ajax.makeRequest({
                 type: 'POST',
                 url: path,
-                postdata: values,
                 datatype: 'json',
+                postdata: values,
+                postdatatype: 'form',
                 headers: {
-                //     'Content-Type': 'multipart/form-data; charset=UTF-8; boundary=' + Math.random().toString().substr(2),
+                    // 'Content-Type': 'multipart/formdata; charset=UTF-8',
                     'X-Requested-With': 'XMLHttpRequest',
                     'X-Wrapper-Function': 'laroux.js'
                 },
@@ -215,8 +293,9 @@
             laroux.ajax.makeRequest({
                 type: 'POST',
                 url: path,
-                postdata: (values instanceof Object) ? JSON.stringify(values) : values,
                 datatype: 'json',
+                postdata: values,
+                postdatatype: 'json',
                 headers: {
                     'Content-Type': 'application/json; charset=UTF-8',
                     'X-Requested-With': 'XMLHttpRequest',
