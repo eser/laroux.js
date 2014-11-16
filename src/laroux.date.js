@@ -3,7 +3,7 @@
 
     // date
     laroux.date = {
-        parseEpoch: function(timespan) {
+        parseEpoch: function(timespan, limitWithWeeks) {
             if (timespan <= 3000) {
                 return 'now';
             }
@@ -54,6 +54,10 @@
                 return timespan + ' weeks';
             }
 
+            if (typeof limitWithWeeks != 'undefined' && limitWithWeeks === true) {
+                return null;
+            }
+
             if (timespan < 30*7*24*60*60*1000) {
                 timespan = Math.ceil(timespan / (30*24*60*60*1000));
 
@@ -74,12 +78,13 @@
         },
 
         monthsShort: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-        getDateString: function(date) {
+        getDateString: function(date, monthNames) {
             var now = Date.now();
 
             var leadingDate = ('0' + date.getDate()).substr(-2, 2);
+            var leadingMonth = ('0' + (date.getMonth() + 1)).substr(-2, 2);
             var monthName = laroux.date.monthsShort[date.getMonth()];
-            var leadingYear = ('' + date.getFullYear()).substr(2, 2);
+            var fullYear = date.getFullYear();
 
             // timespan
             var timespan = now - date.getTime();
@@ -91,7 +96,7 @@
                 future = false;
             }
 
-            var timespanstring = laroux.date.parseEpoch(timespan);
+            var timespanstring = laroux.date.parseEpoch(timespan, true);
             if (timespanstring !== null) {
                 if (future) {
                     return timespanstring + ' later';
@@ -100,18 +105,35 @@
                 return timespanstring;
             }
 
-            return leadingDate + ' ' + monthName + ' ' + leadingYear;
+            if (typeof monthNames != 'undefined' && monthNames) {
+                return leadingDate + ' ' + monthName + ' ' + fullYear;
+            }
+
+            return leadingDate + '.' + leadingMonth + '.' + fullYear;
         },
 
-        getLongDateString: function(date) {
+        getLongDateString: function(date, monthNames, includeTime) {
             var leadingDate = ('0' + date.getDate()).substr(-2, 2);
-            var leadingMonth = ('0' + date.getMonth()).substr(-2, 2);
+            var leadingMonth = ('0' + (date.getMonth() + 1)).substr(-2, 2);
+            var monthName = laroux.date.monthsShort[date.getMonth()];
             var fullYear = date.getFullYear();
 
-            var leadingHour = ('0' + date.getHours()).substr(-2, 2);
-            var leadingMinute = ('0' + date.getMinutes()).substr(-2, 2);
+            var result;
 
-            return leadingDate + '.' + leadingMonth + '.' + fullYear + ' ' + leadingHour + ':' + leadingMinute;
+            if (typeof monthNames != 'undefined' && monthNames) {
+                result = leadingDate + ' ' + monthName + ' ' + fullYear;
+            } else {
+                result = leadingDate + '.' + leadingMonth + '.' + fullYear;
+            }
+
+            if (typeof includeTime != 'undefined' && includeTime) {
+                var leadingHour = ('0' + date.getHours()).substr(-2, 2);
+                var leadingMinute = ('0' + date.getMinutes()).substr(-2, 2);
+
+                result += ' ' + leadingHour + ':' + leadingMinute;
+            }
+
+            return result;
         }
     };
 
