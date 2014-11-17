@@ -79,6 +79,12 @@ npm install
 See [LICENSE](LICENSE)
 
 
+## Thanks to
+
+- Burak 'burky' Babir
+- Sevket Bulamaz
+
+
 ## Contributing
 
 It is publicly open for any contribution. Bugfixes and suggestions are welcome.
