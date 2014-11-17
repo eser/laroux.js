@@ -167,3 +167,49 @@ $l.ready(function() {
     );
 });
 
+// helpers - Helpers
+$l.ready(function() {
+    var button = $l('#button-helpers-helpers');
+    var text = $l('#text-helpers-helpers');
+
+    $l.dom.setEvent(
+        button,
+        'click',
+        function() {
+            $l.dom.clear(text);
+
+            $l.dom.append(text, '<div><strong>Unique Id Generator:</strong></div>');
+            $l.dom.append(text, $l.helpers.getUniqueId() + '<br />');
+            $l.dom.append(text, $l.helpers.getUniqueId() + '<br />');
+
+            $l.dom.append(text, '<div><strong>Query String Generation:</strong></div>');
+            $l.dom.append(text, $l.helpers.buildQueryString({ pageId: 5, showAll: 'yes' }) + '<br />');
+
+            $l.dom.append(text, '<div><strong>Transform string into camel case:</strong></div>');
+            $l.dom.append(text, $l.helpers.camelCase('text-align') + '<br />');
+
+            $l.dom.append(text, '<div><strong>Transform string back from camel case:</strong></div>');
+            $l.dom.append(text, $l.helpers.antiCamelCase('textAlign') + '<br />');
+
+            $l.dom.append(text, '<div><strong>Encoding special characters:</strong></div>');
+            $l.dom.append(text, $l.helpers.quoteAttr('<br clear="all" />') + '<br />');
+
+            $l.dom.append(text, '<div><strong>Generating random value:</strong></div>');
+            $l.dom.append(text, $l.helpers.random(1, 15) + '<br />');
+            $l.dom.append(text, $l.helpers.random(1, 15) + '<br />');
+
+            $l.dom.append(text, '<div><strong>Getting values from a single column:</strong></div>');
+            var arr = [{id: 1, count: 5}, {id: 2, count: 12}];
+            $l.dom.append(text, JSON.stringify($l.helpers.column(arr, 'count')) + '<br />');
+
+            $l.dom.append(text, '<div><strong>Merging two arrays:</strong></div>');
+            $l.dom.append(text, JSON.stringify($l.helpers.merge({id: 1}, {name: 'eser', count: 5})) + '<br />');
+
+            $l.dom.append(text, '<div><strong>Getting count of elements:</strong></div>');
+            $l.dom.append(text, $l.helpers.getLength({id: 1, name: 'eser', count: 5}) + '<br />');
+
+            return false;
+        }
+    );
+});
+

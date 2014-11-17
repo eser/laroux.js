@@ -362,9 +362,56 @@ $l.dom.replace($l('#text-forms-serializing'), JSON.stringify(serialized));
             </div>
 
             <div class="example-area">
-                <div class="well">
-                    <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
-                    No examples yet
+                <h3>Helpers</h3>
+                <div class="row">
+                    <div class="col-sm-4">
+                        <button id="button-helpers-helpers" class="btn btn-default">Show Helpers</button>
+                        <div id="text-helpers-helpers"></div>
+                    </div>
+                    <div class="col-sm-8">
+                        <h4>HTML</h4>
+                        <pre class="prettyprint">
+&lt;div id="text-helpers-helpers"&gt;&lt;/div&gt;
+                        </pre>
+
+                        <h4>Javascript</h4>
+                        <pre class="prettyprint">
+var text = $l('#text-helpers-helpers');
+
+$l.dom.clear(text);
+
+$l.dom.append(text, '&lt;div&gt;&lt;strong&gt;Unique Id Generator:&lt;/strong&gt;&lt;/div&gt;');
+$l.dom.append(text, $l.helpers.getUniqueId() + '&lt;br /&gt;');
+$l.dom.append(text, $l.helpers.getUniqueId() + '&lt;br /&gt;');
+
+$l.dom.append(text, '&lt;div&gt;&lt;strong&gt;Query String Generation:&lt;/strong&gt;&lt;/div&gt;');
+$l.dom.append(text, $l.helpers.buildQueryString({ pageId: 5, showAll: 'yes' }) + '&lt;br /&gt;');
+
+$l.dom.append(text, '&lt;div&gt;&lt;strong&gt;Transform string into camel case:&lt;/strong&gt;&lt;/div&gt;');
+$l.dom.append(text, $l.helpers.camelCase('text-align') + '&lt;br /&gt;');
+
+$l.dom.append(text, '&lt;div&gt;&lt;strong&gt;Transform string back from camel case:&lt;/strong&gt;&lt;/div&gt;');
+$l.dom.append(text, $l.helpers.antiCamelCase('textAlign') + '&lt;br /&gt;');
+
+$l.dom.append(text, '&lt;div&gt;&lt;strong&gt;Encoding special characters:&lt;/strong&gt;&lt;/div&gt;');
+$l.dom.append(text, $l.helpers.quoteAttr('&lt;br clear="all" /&gt;') + '&lt;br /&gt;');
+
+$l.dom.append(text, '&lt;div&gt;&lt;strong&gt;Generating random value:&lt;/strong&gt;&lt;/div&gt;');
+$l.dom.append(text, $l.helpers.random(1, 15) + '&lt;br /&gt;');
+$l.dom.append(text, $l.helpers.random(1, 15) + '&lt;br /&gt;');
+
+$l.dom.append(text, '&lt;div&gt;&lt;strong&gt;Getting values from a single column:&lt;/strong&gt;&lt;/div&gt;');
+var arr = [{id: 1, count: 5}, {id: 2, count: 12}];
+$l.dom.append(text, JSON.stringify($l.helpers.column(arr, 'count')) + '&lt;br /&gt;');
+
+$l.dom.append(text, '&lt;div&gt;&lt;strong&gt;Merging two arrays:&lt;/strong&gt;&lt;/div&gt;');
+$l.dom.append(text, JSON.stringify($l.helpers.merge({id: 1}, {name: 'eser', count: 5})) + '&lt;br /&gt;');
+
+$l.dom.append(text, '&lt;div&gt;&lt;strong&gt;Getting count of elements:&lt;/strong&gt;&lt;/div&gt;');
+$l.dom.append(text, $l.helpers.getLength({id: 1, name: 'eser', count: 5}) + '&lt;br /&gt;');
+
+                        </pre>
+                    </div>
                 </div>
             </div>
 
