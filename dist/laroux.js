@@ -58,9 +58,7 @@
     };
 
     laroux.each = function(arr, fnc) {
-        var keys = Object.keys(arr);
-
-        for (var key in keys) {
+        for (var key in arr) {
             if (fnc(key, arr[key]) === false) {
                 break;
             }
@@ -70,10 +68,9 @@
     };
 
     laroux.map = function(arr, fnc) {
-        var keys = Object.keys(arr);
         var results = [];
 
-        for (var key in keys) {
+        for (var key in arr) {
             var result = fnc(key, arr[key]);
             if (result === false) {
                 break;
