@@ -24,10 +24,33 @@ $l.ready(function() {
     );
 });
 
+// anim - Creating a variable animation
+$l.ready(function() {
+    var button = $l('#button-anim-var-animate');
+
+    $l.dom.setEvent(
+        button,
+        'click',
+        function() {
+            $l.anim.set({
+                object:   document.body,
+                property: 'scrollTop',
+                from:     null,
+                to:       0,
+                time:     800,
+                unit:     '',
+                reset:    false
+            });
+
+            return false;
+        }
+    );
+});
+
 // anim - Creating a CSS animation
 $l.ready(function() {
-    var button = $l('#button-anim-animate');
-    var box = $l('#div-anim-animate');
+    var button = $l('#button-anim-css-animate');
+    var box = $l('#div-anim-css-animate');
 
     $l.dom.setEvent(
         button,

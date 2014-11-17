@@ -102,22 +102,43 @@ $l.ajax.getJson(
             </div>
 
             <div class="example-area">
+                <h3>Creating a variable animation</h3>
+                <div class="row">
+                    <div class="col-sm-4">
+                        <button id="button-anim-var-animate" class="btn btn-default">Scroll to top</button>
+                    </div>
+                    <div class="col-sm-8">
+                        <h4>Javascript</h4>
+                        <pre class="prettyprint">
+$l.anim.set({
+    object:   document.body,
+    property: 'scrollTop',
+    from:     null,
+    to:       0,
+    time:     800,
+    unit:     '',
+    reset:    false
+});
+                        </pre>
+                    </div>
+                </div>
+
                 <h3>Creating a CSS animation</h3>
                 <div class="row">
                     <div class="col-sm-4">
-                        <button id="button-anim-animate" class="btn btn-default">Animate</button>
-                        <div class="box" id="div-anim-animate"></div>
+                        <button id="button-anim-css-animate" class="btn btn-default">Animate</button>
+                        <div class="box" id="div-anim-css-animate"></div>
                     </div>
                     <div class="col-sm-8">
                         <h4>HTML</h4>
                         <pre class="prettyprint">
-&lt;div class="box" id="div-anim-animate"&gt;&lt;/div&gt;
+&lt;div class="box" id="div-anim-css-animate"&gt;&lt;/div&gt;
                         </pre>
 
                         <h4>Javascript</h4>
                         <pre class="prettyprint">
 $l.anim.setCss({
-    object:   $l('#div-anim-animate'),
+    object:   $l('#div-anim-css-animate'),
     property: 'top',
     from:     0, // current value
     to:       50,
