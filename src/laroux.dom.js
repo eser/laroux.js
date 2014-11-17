@@ -268,9 +268,10 @@
             }
         },
 
-        cloneAppend: 0,
-        cloneInsertAfter: 1,
-        cloneInsertBefore: 2,
+        cloneReturn: 0,
+        cloneAppend: 1,
+        cloneInsertAfter: 2,
+        cloneInsertBefore: 3,
 
         clone: function(element, type, container, target) {
             var newElement = element.cloneNode(true);
@@ -282,12 +283,14 @@
                 target = element;
             }
 
-            if (typeof type == 'undefined' || type == laroux.dom.cloneAppend) {
-                container.appendChild(newElement);
-            } else if (type == laroux.dom.cloneInsertAfter) {
-                container.insertBefore(newElement, target.nextSibling);
-            } else { // type == laroux.dom.cloneInsertBefore
-                container.insertBefore(newElement, target);
+            if (typeof type != 'undefined' && type != laroux.dom.cloneReturn) {
+                if (typeof type == 'undefined' || type == laroux.dom.cloneAppend) {
+                    container.appendChild(newElement);
+                } else if (type == laroux.dom.cloneInsertAfter) {
+                    container.insertBefore(newElement, target.nextSibling);
+                } else { // type == laroux.dom.cloneInsertBefore
+                    container.insertBefore(newElement, target);
+                }
             }
 
             return newElement;
