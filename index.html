@@ -234,6 +234,30 @@ $l.dom.append(text, $l.date.getLongDateString(now, true, true) + '&lt;br /&gt;')
             </div>
 
             <div class="example-area">
+                <h3>Clone</h3>
+                <div class="row">
+                    <div class="col-sm-4">
+                        <button id="button-dom-clone" class="btn btn-default">Duplicate Node</button>
+                        <ul id="target-dom-clone">
+                            <li>Item</li>
+                        </ul>
+                    </div>
+                    <div class="col-sm-8">
+                        <h4>HTML</h4>
+                        <pre class="prettyprint">
+&lt;ul id="target-dom-clone"&gt;
+    &lt;li&gt;Item&lt;/li&gt;
+&lt;/ul&gt;
+                        </pre>
+
+                        <h4>Javascript</h4>
+                        <pre class="prettyprint">
+var target = $l('#target-dom-clone');
+
+$l.dom.clone(target.firstElementChild, $l.dom.cloneAppend);
+                        </pre>
+                    </div>
+                </div>
             </div>
 
             <div class="row header-row">

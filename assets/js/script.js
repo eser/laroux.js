@@ -112,3 +112,19 @@ $l.ready(function() {
         }
     );
 });
+
+// dom - Clone
+$l.ready(function() {
+    var button = $l('#button-dom-clone');
+    var target = $l('#target-dom-clone');
+
+    $l.dom.setEvent(
+        button,
+        'click',
+        function() {
+            $l.dom.clone(target.firstElementChild, $l.dom.cloneAppend);
+
+            return false;
+        }
+    );
+});
