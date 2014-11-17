@@ -132,17 +132,38 @@
         toggleFormEditing: function(formobj, value) {
             var selection = formobj.querySelectorAll('*[name]');
 
+            if (typeof value == 'undefined') {
+                if (formobj.getAttribute('data-last-enabled') === null) {
+                    formobj.setAttribute('data-last-enabled', 'enabled');
+                    value = false;
+                } else {
+                    formobj.removeAttribute('data-last-enabled');
+                    value = true;
+                }
+            }
+
             for (var selected = 0; selected < selection.length; selected++) {
                 if (!laroux.forms.isFormField(selection[selected])) {
                     continue;
                 }
 
+                var lastDisabled = selection[selected].getAttribute('data-last-disabled');
                 if (!value) {
+                    if (lastDisabled === null) {
+                        if (selection[selected].getAttribute('disabled') !== null) {
+                            selection[selected].setAttribute('data-last-disabled', 'disabled');
+                        }
+                    }
+
                     selection[selected].setAttribute('disabled', 'disabled');
                     continue;
                 }
 
-                selection[selected].removeAttribute('disabled');
+                if (lastDisabled !== null) {
+                    selection[selected].removeAttribute('data-last-disabled');
+                } else {
+                    selection[selected].removeAttribute('disabled');
+                }
             }
         },
 
