@@ -62,9 +62,11 @@
                 var newStyleName = laroux.helpers.camelCase(styleName);
 
                 var style = getComputedStyle(element);
-                var currentTransitions = style.getPropertyValue('transition');
+                var currentTransitions = style.getPropertyValue('transition') || style.getPropertyValue('-webkit-transition') ||
+                    style.getPropertyValue('-ms-transition');
 
-                if (currentTransitions !== null) {
+                var value;
+                if (currentTransitions !== null && currentTransitions.length > 0) {
                     var currentTransitionsArray = currentTransitions.split(',');
                     for (var j = 0; j < currentTransitionsArray.length; j++) {
                         if (currentTransitionsArray[j].trim().localeCompare(styleName) === 0) {
@@ -73,10 +75,14 @@
                     }
 
                     currentTransitionsArray.push(styleName + ' ' + transitions[styleName]);
-                    element.style.transition = currentTransitionsArray.join(', ');
+                    value = currentTransitionsArray.join(', ');
                 } else {
-                    element.style.transition = styleName + ' ' + transitions[styleName];
+                    value = styleName + ' ' + transitions[styleName];
                 }
+
+                element.style.transition = value;
+                element.style['-webkit-transition'] = value;
+                element.style['-ms-transition'] = value;
             }
         },
 
