@@ -169,7 +169,61 @@
             }
 
             return -1;
-        } /* for javascript 1.7 or later,
+        },
+
+        getKeysRecursive: function(obj, delimiter, prefix, keys) {
+            if (typeof delimiter == 'undefined') {
+                delimiter = '.';
+            }
+
+            if (typeof prefix == 'undefined') {
+                prefix = '';
+                keys = [];
+            }
+
+            for (var item in obj) {
+                keys.push(prefix + item);
+
+                if (obj[item] instanceof Object) {
+                    laroux.helpers.getKeysRecursive(obj[item], delimiter, prefix + item + delimiter, keys);
+                    continue;
+                }
+            }
+
+            return keys;
+        },
+
+        getElement: function(obj, path, defaultValue, delimiter) {
+            if (typeof defaultValue == 'undefined') {
+                defaultValue = null;
+            }
+
+            if (typeof delimiter == 'undefined') {
+                delimiter = '.';
+            }
+
+            var pos = path.indexOf(delimiter);
+            var key;
+            var rest;
+            if (pos === -1) {
+                key = path;
+                rest = null;
+            } else {
+                key = path.substring(0, pos);
+                rest = path.substring(pos + 1);
+            }
+
+            if (typeof obj[key] == 'undefined') {
+                return null;
+            }
+
+            if (rest === null || rest.length === 0) {
+                return obj[key];
+            }
+
+            return laroux.helpers.getElement(obj[key], rest, defaultValue, delimiter);
+        },
+        /* for javascript 1.7 or later,
 
         getKeys: function(obj) {
             var keys = Object.keys(obj);

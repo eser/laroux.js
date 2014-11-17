@@ -63,22 +63,38 @@
 
             if (appObject.cachedNodes === null) {
                 appObject.cachedNodes = [];
-                laroux.mvc.scanElement(appObject.element, Object.keys(appObject.model), appObject.cachedNodes);
+                var objectKeys = laroux.helpers.getKeysRecursive(appObject.model);
+                laroux.mvc.scanElement(appObject.element, objectKeys, appObject.cachedNodes);
             }
 
-            for (var i in appObject.cachedNodes) {
-                var item = appObject.cachedNodes[i];
+            for (var i1 in appObject.cachedNodes) {
+                var item1 = appObject.cachedNodes[i1];
 
-                if (typeof keys != 'undefined' && keys.indexOf(item.key) === -1) {
+                if (typeof keys != 'undefined' && keys.indexOf(item1.key) === -1) {
                     continue;
                 }
 
-                var findStr = '{{' + item.key + '}}';
-
-                if (item.node instanceof Attr) {
-                    item.node.value = item.value.replace(findStr, appObject.model[item.key]);
+                if (item1.node instanceof Attr) {
+                    item1.node.value = item1.value;
                 } else {
-                    item.node.textContent = item.value.replace(findStr, appObject.model[item.key]);
+                    item1.node.textContent = item1.value;
+                }
+            }
+
+            for (var i2 in appObject.cachedNodes) {
+                var item2 = appObject.cachedNodes[i2];
+
+                if (typeof keys != 'undefined' && keys.indexOf(item2.key) === -1) {
+                    continue;
+                }
+
+                var findStr = '{{' + item2.key + '}}';
+                var objectValue = laroux.helpers.getElement(appObject.model, item2.key);
+
+                if (item2.node instanceof Attr) {
+                    item2.node.value = item2.node.value.replace(findStr, objectValue);
+                } else {
+                    item2.node.textContent = item2.node.textContent.replace(findStr, objectValue);
                 }
             }
         },

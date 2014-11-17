@@ -48,7 +48,7 @@
                 //     }
                 // );
 
-                var newApp = { 'hello': 'merhaba', 'name': 'eser', 'favoritecolor': 'darkorange' };
+                var newApp = { hello: 'merhaba', name: 'eser', favoritecolor: 'darkorange', x: { y: 'nice' } };
 
                 $l.mvc.init();
                 $l.mvc.bind('deneme', newApp);
@@ -58,6 +58,7 @@
                     'click',
                     function() {
                         newApp.hello = 'selam';
+                        newApp.x.y = 'whoops';
                     }
                 )
             });
@@ -72,7 +73,7 @@
         <div lr-app="deneme">
             {{hello}}
 
-            <span style="color: {{favoritecolor}};">{{name}}</span>
+            <span style="color: {{favoritecolor}};">{{name}} {{x.y}}</span>
         </div>
 
         <div id="late-content">
