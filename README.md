@@ -1,5 +1,7 @@
 # laroux.js
 
+![laroux.js logo](https://larukedi.github.io/laroux.js/assets/images/logo-medium.png)
+
 [This project](https://github.com/larukedi/laroux.js) is a jquery substitute for modern browsers. But instead of offering some wrappers and own dynamics, it simply provides helper functions to achieve the same objectives with jquery or zepto.
 
 Even though keeping compactness is the primary concern of this library, lightweight versions of some concepts/components including some UI helpers and MVC.
