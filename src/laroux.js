@@ -75,7 +75,7 @@
             if (result === false) {
                 break;
             }
-            if (result !== null) {
+            if (typeof result !== 'undefined') {
                 results.push(result);
             }
         }
