@@ -273,13 +273,13 @@ $l.dom.clone(target.firstElementChild, $l.dom.cloneAppend);
                 <h3>Setting Events</h3>
                 <div class="row">
                     <div class="col-sm-4">
-                        <label><input id="checkbox-events-setting-events" type="checkbox" value="1" /> Check me</label>
+                        <label><input id="checkbox-events-setting-events" type="checkbox" /> Check me</label>
                         <div id="text-events-setting-events"></div>
                     </div>
                     <div class="col-sm-8">
                         <h4>HTML</h4>
                         <pre class="prettyprint">
-&lt;label&gt;&lt;input id="checkbox-events-setting-events" type="checkbox" value="1" /&gt; Check me&lt;/label&gt;
+&lt;label&gt;&lt;input id="checkbox-events-setting-events" type="checkbox" /&gt; Check me&lt;/label&gt;
 &lt;div id="text-events-setting-events"&gt;&lt;/div&gt;
                         </pre>
 
@@ -316,6 +316,40 @@ $l.dom.setEvent(
             </div>
 
             <div class="example-area">
+                <h3>Serializing</h3>
+                <div class="row">
+                    <div class="col-sm-4">
+                        <button id="button-forms-serializing" class="btn btn-default">Serialize</button>
+
+                        <form id="target-forms-serializing">
+                            Username:<br />
+                            <input type="text" name="username" value="eserozvataf" /><br />
+                            Password:<br />
+                            <input type="password" name="password" value="123456" />
+                        </form>
+
+                        <div id="text-forms-serializing"></div>
+                    </div>
+                    <div class="col-sm-8">
+                        <h4>HTML</h4>
+                        <pre class="prettyprint">
+&lt;form id="target-forms-serializing"&gt;
+    Username:&lt;br /&gt;
+    &lt;input type="text" name="username" value="eserozvataf" /&gt;&lt;br /&gt;
+    Password:&lt;br /&gt;
+    &lt;input type="password" name="password" value="123456" /&gt;
+&lt;/form&gt;
+
+&lt;div id="text-forms-serializing"&gt;&lt;/div&gt;
+                        </pre>
+
+                        <h4>Javascript</h4>
+                        <pre class="prettyprint">
+var serialized = $l.forms.serialize($l('#target-forms-serializing'));
+$l.dom.replace($l('#text-forms-serializing'), JSON.stringify(serialized));
+                        </pre>
+                    </div>
+                </div>
             </div>
 
             <div class="row header-row">

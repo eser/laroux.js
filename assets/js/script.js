@@ -148,3 +148,22 @@ $l.ready(function() {
         }
     );
 });
+
+// forms - Serializing
+$l.ready(function() {
+    var button = $l('#button-forms-serializing');
+    var target = $l('#target-forms-serializing');
+    var text = $l('#text-forms-serializing');
+
+    $l.dom.setEvent(
+        button,
+        'click',
+        function() {
+            var serialized = $l.forms.serialize(target);
+            $l.dom.replace(text, JSON.stringify(serialized));
+
+            return false;
+        }
+    );
+});
+
