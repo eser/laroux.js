@@ -428,7 +428,11 @@
             }
 
             if (typeof newanim.from == 'undefined' || newanim.from === null) {
-                newanim.from = newanim.object[newanim.property];
+                if (newanim.object === document.body && newanim.property == 'scrollTop') {
+                    newanim.from = (document.documentElement && document.documentElement.scrollTop) || document.body.scrollTop;
+                } else {
+                    newanim.from = newanim.object[newanim.property];
+                }
             }
 
             if (typeof newanim.from == 'string') {
@@ -503,7 +507,11 @@
                 } else if (timestamp > keyObj.startTime + keyObj.time) {
                     if (keyObj.reset) {
                         keyObj.startTime = timestamp;
-                        keyObj.object[keyObj.property] = keyObj.from;
+                        if (newanim.object === document.body && newanim.property == 'scrollTop') {
+                            scrollTo(document.body, keyObj.from);
+                        } else {
+                            keyObj.object[keyObj.property] = keyObj.from;
+                        }
                     } else {
                         removeKeys.unshift(key);
                     }
@@ -527,11 +535,17 @@
             var finishT = newanim.startTime + newanim.time,
                 shift = (timestamp > finishT) ? 1 : (timestamp - newanim.startTime) / newanim.time;
 
-            newanim.object[newanim.property] = laroux.anim.fx.interpolate(
+            var value = laroux.anim.fx.interpolate(
                 newanim.from,
                 newanim.to,
                 laroux.anim.fx.easing(shift)
             ) + newanim.unit;
+
+            if (newanim.object === document.body && newanim.property == 'scrollTop') {
+                scrollTo(document.body, value);
+            } else {
+                newanim.object[newanim.property] = value;
+            }
         }
     };
 
@@ -599,9 +613,11 @@
                 var newStyleName = laroux.helpers.camelCase(styleName);
 
                 var style = getComputedStyle(element);
-                var currentTransitions = style.getPropertyValue('transition');
+                var currentTransitions = style.getPropertyValue('transition') || style.getPropertyValue('-webkit-transition') ||
+                    style.getPropertyValue('-ms-transition');
 
-                if (currentTransitions !== null) {
+                var value;
+                if (currentTransitions !== null && currentTransitions.length > 0) {
                     var currentTransitionsArray = currentTransitions.split(',');
                     for (var j = 0; j < currentTransitionsArray.length; j++) {
                         if (currentTransitionsArray[j].trim().localeCompare(styleName) === 0) {
@@ -610,10 +626,14 @@
                     }
 
                     currentTransitionsArray.push(styleName + ' ' + transitions[styleName]);
-                    element.style.transition = currentTransitionsArray.join(', ');
+                    value = currentTransitionsArray.join(', ');
                 } else {
-                    element.style.transition = styleName + ' ' + transitions[styleName];
+                    value = styleName + ' ' + transitions[styleName];
                 }
+
+                element.style.transition = value;
+                element.style['-webkit-transition'] = value;
+                element.style['-ms-transition'] = value;
             }
         },
 
