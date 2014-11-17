@@ -128,3 +128,23 @@ $l.ready(function() {
         }
     );
 });
+
+// events - Setting Events
+$l.ready(function() {
+    var checkbox = $l('#checkbox-events-setting-events');
+    var text = $l('#text-events-setting-events');
+
+    $l.dom.setEvent(
+        checkbox,
+        'change',
+        function(ev, element) {
+            if (element.checked) {
+                $l.dom.replace(text, 'checked');
+            } else {
+                $l.dom.replace(text, 'unchecked');
+            }
+
+            return false;
+        }
+    );
+});

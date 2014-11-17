@@ -270,7 +270,41 @@ $l.dom.clone(target.firstElementChild, $l.dom.cloneAppend);
             </div>
 
             <div class="example-area">
+                <h3>Setting Events</h3>
+                <div class="row">
+                    <div class="col-sm-4">
+                        <label><input id="checkbox-events-setting-events" type="checkbox" value="1" /> Check me</label>
+                        <div id="text-events-setting-events"></div>
+                    </div>
+                    <div class="col-sm-8">
+                        <h4>HTML</h4>
+                        <pre class="prettyprint">
+&lt;label&gt;&lt;input id="checkbox-events-setting-events" type="checkbox" value="1" /&gt; Check me&lt;/label&gt;
+&lt;div id="text-events-setting-events"&gt;&lt;/div&gt;
+                        </pre>
+
+                        <h4>Javascript</h4>
+                        <pre class="prettyprint">
+var text = $l('#text-events-setting-events');
+
+$l.dom.setEvent(
+    $l('#checkbox-events-setting-events'),
+    'change',
+    function(ev, element) {
+        if (element.checked) {
+            $l.dom.replace(text, 'checked');
+        } else {
+            $l.dom.replace(text, 'unchecked');
+        }
+
+        return false;
+    }
+);
+                        </pre>
+                    </div>
+                </div>
             </div>
+
 
             <div class="row header-row">
                 <div class="col-sm-6">
