@@ -425,11 +425,20 @@ $l.dom.append(text, '&lt;div&gt;&lt;strong&gt;Getting values from a single colum
 var arr = [{id: 1, count: 5}, {id: 2, count: 12}];
 $l.dom.append(text, JSON.stringify($l.helpers.column(arr, 'count')) + '&lt;br /&gt;');
 
+$l.dom.append(text, '&lt;div&gt;&lt;strong&gt;Shuffling values:&lt;/strong&gt;&lt;/div&gt;');
+$l.dom.append(text, $l.helpers.shuffle([1, 2, 3, 4, 5]) + '&lt;br /&gt;');
+
 $l.dom.append(text, '&lt;div&gt;&lt;strong&gt;Merging two arrays:&lt;/strong&gt;&lt;/div&gt;');
 $l.dom.append(text, JSON.stringify($l.helpers.merge({id: 1}, {name: 'eser', count: 5})) + '&lt;br /&gt;');
 
 $l.dom.append(text, '&lt;div&gt;&lt;strong&gt;Getting count of elements:&lt;/strong&gt;&lt;/div&gt;');
 $l.dom.append(text, $l.helpers.getLength({id: 1, name: 'eser', count: 5}) + '&lt;br /&gt;');
+
+$l.dom.append(text, '&lt;div&gt;&lt;strong&gt;Getting elements with dot notation:&lt;/strong&gt;&lt;/div&gt;');
+$l.dom.append(text, $l.helpers.getElement({id: 1, child: { a: 1, b: 2 }}, 'child.a') + '&lt;br /&gt;');
+
+$l.dom.append(text, '&lt;div&gt;&lt;strong&gt;Getting keys for dot notation:&lt;/strong&gt;&lt;/div&gt;');
+$l.dom.append(text, JSON.stringify($l.helpers.getKeysRecursive({id: 1, child: { a: 1, b: 2 }})) + '&lt;br /&gt;');
 
                         </pre>
                     </div>
