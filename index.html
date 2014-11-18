@@ -534,6 +534,49 @@ $l.dom.setEvent(
                         </pre>
                     </div>
                 </div>
+
+                <h3>Model Binding with Controller</h3>
+                <div class="row">
+                    <div class="col-sm-4">
+                        A: <input class="textboxes-mvc-controller" type="text" name="a" value="3" size="3" />
+                        B: <input class="textboxes-mvc-controller" type="text" name="b" value="5" size="3" />
+                        <div lr-app="mvccontroller">
+                            Total: {{total}}
+                        </div>
+                    </div>
+                    <div class="col-sm-8">
+                        <h4>HTML</h4>
+                        <pre class="prettyprint">
+A: &lt;input class="textboxes-mvc-controller" type="text" name="a" value="3" size="3" /&gt;
+B: &lt;input class="textboxes-mvc-controller" type="text" name="b" value="5" size="3" /&gt;
+&lt;div lr-app="mvccontroller"&gt;
+    Total: {{total}}
+&lt;/div&gt;
+                        </pre>
+
+                        <h4>Javascript</h4>
+                        <pre class="prettyprint">
+function mvccontroller($model) {
+    $model.total = parseInt($model.a) + parseInt($model.b);
+}
+
+var myModel = { a: 3, b: 5 };
+
+$l.mvc.init();
+$l.mvc.bind('mvccontroller', myModel);
+
+$l.dom.setEvent(
+    $l(['.textboxes-mvc-controller']),
+    'keyup',
+    function(ev, element) {
+        myModel[element.getAttribute('name')] = element.value;
+
+        return false;
+    }
+);
+                        </pre>
+                    </div>
+                </div>
             </div>
 
             <div class="row header-row">
