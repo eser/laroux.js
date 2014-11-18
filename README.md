@@ -1,6 +1,6 @@
 # laroux.js
 
-![laroux.js logo](https://larukedi.github.io/laroux.js/assets/images/logo-medium.png)
+[![laroux.js logo](https://larukedi.github.io/laroux.js/assets/images/logo-medium.png)](https://larukedi.github.io/laroux.js/)
 
 [This project](https://github.com/larukedi/laroux.js) is a jquery substitute for modern browsers. But instead of offering some wrappers and own dynamics, it simply provides helper functions to achieve the same objectives with jquery or zepto.
 
@@ -15,9 +15,16 @@ So far, it has [Ajax](https://github.com/larukedi/laroux.js/wiki/ajax), [Anim](h
 
 ## For Users
 
+`laroux.js` is right for you if you:
+
+- Complain people who do not know the difference between jQuery and Javascript.
+- Love working with more compact, organized libraries in smaller sizes (26K).
+- Want working with native DOM objects instead of wrappers.
+- Get pace with debug console's autocomplete/fluent typing.
+
 ### Demos
 
-See [GitHub Page](https://larukedi.github.io/laroux.js/) for feature demonstrations.
+See [GitHub Page](https://larukedi.github.io/laroux.js/) for feature demonstrations and benchmarks.
 
 
 ### Documentation
@@ -83,6 +90,7 @@ See [LICENSE](LICENSE)
 
 - Burak 'burky' Babir
 - Sevket Bulamaz
+- Yalcin Ceylan
 
 
 ## Contributing
