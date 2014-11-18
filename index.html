@@ -658,9 +658,32 @@ $l.dom.append(text, JSON.stringify(stack.data) + '&lt;br /&gt;');
             </div>
 
             <div class="example-area">
-                <div class="well">
-                    <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
-                    No examples yet
+                <h3>Dates</h3>
+                <div class="row">
+                    <div class="col-sm-4">
+                        <button id="button-timers-set" class="btn btn-default">Set Timer</button>
+                        <div id="text-timers-set"></div>
+                    </div>
+                    <div class="col-sm-8">
+                        <h4>HTML</h4>
+                        <pre class="prettyprint">
+&lt;div id="text-timers-set"&gt;&lt;/div&gt;
+                        </pre>
+
+                        <h4>Javascript</h4>
+                        <pre class="prettyprint">
+var text = $l('#text-timers-set');
+$l.dom.replace(text, 'waiting...&lt;br /&gt;');
+
+$l.timers.set({
+    'timeout': 500,
+    'reset': false,
+    'ontick': function() {
+        $l.dom.insert(text, 'time\'s up');
+    }
+});
+                        </pre>
+                    </div>
                 </div>
             </div>
 

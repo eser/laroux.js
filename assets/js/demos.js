@@ -341,3 +341,26 @@ $l.ready(function() {
         }
     );
 });
+
+// timers - Set
+$l.ready(function() {
+    var button = $l('#button-timers-set');
+    var text = $l('#text-timers-set');
+
+    $l.dom.setEvent(
+        button,
+        'click',
+        function() {
+            $l.dom.replace(text, 'waiting...' + crlf);
+            $l.timers.set({
+                'timeout': 500,
+                'reset': false,
+                'ontick': function() {
+                    $l.dom.append(text, 'time\'s up');
+                }
+            });
+
+            return false;
+        }
+    );
+});
