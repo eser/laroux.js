@@ -336,7 +336,6 @@ $l.dom.setEvent(
                 </div>
             </div>
 
-
             <div class="row header-row">
                 <div class="col-sm-6">
                     <h2 class="nomargin">Forms Examples</h2>
@@ -499,9 +498,41 @@ $l.dom.append(text, JSON.stringify($l.helpers.getKeysRecursive({id: 1, child: { 
             </div>
 
             <div class="example-area">
-                <div class="well">
-                    <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
-                    No examples yet
+                <h3>Simple Model Binding</h3>
+                <div class="row">
+                    <div class="col-sm-4">
+                        Name: <input id="textbox-mvc-simple" type="text" value="" />
+                        <div lr-app="mvcsimple">
+                            Entered: {{name}}
+                        </div>
+                    </div>
+                    <div class="col-sm-8">
+                        <h4>HTML</h4>
+                        <pre class="prettyprint">
+Name: &lt;input id="textbox-mvc-simple" type="text" value="" /&gt;
+&lt;div lr-app="mvcsimple"&gt;
+    Entered: {{name}}
+&lt;/div&gt;
+                        </pre>
+
+                        <h4>Javascript</h4>
+                        <pre class="prettyprint">
+var myModel = { name: '' };
+
+$l.mvc.init();
+$l.mvc.bind('mvcsimple', myModel);
+
+$l.dom.setEvent(
+    $l('#textbox-mvc-simple'),
+    'keyup',
+    function(ev, element) {
+        myModel.name = element.value;
+
+        return false;
+    }
+);
+                        </pre>
+                    </div>
                 </div>
             </div>
 

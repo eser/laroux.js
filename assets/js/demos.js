@@ -257,3 +257,22 @@ $l.ready(function() {
     );
 });
 
+// mvc - Simple Model Binding
+$l.ready(function() {
+    var textbox = $l('#textbox-mvc-simple');
+    var myModel = { name: '' };
+
+    $l.mvc.init();
+    $l.mvc.bind('mvcsimple', myModel);
+
+    $l.dom.setEvent(
+        textbox,
+        'keyup',
+        function(ev, element) {
+            myModel.name = element.value;
+
+            return false;
+        }
+    );
+});
+
