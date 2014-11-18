@@ -55,10 +55,8 @@
         },
 
         updateApp: function(appObject, keys) {
-            var controller = window[appObject.app];
-
-            if (typeof controller != 'undefined') {
-                controller(appObject.model);
+            if (typeof appObject.controller != 'undefined') {
+                appObject.controller(appObject.model);
             }
 
             if (appObject.cachedNodes === null) {
@@ -122,15 +120,20 @@
             }
         },
 
-        bind: function(app, model) {
+        bind: function(app, model, controller) {
+            if (typeof controller == 'undefined') {
+                controller = window[app];
+            }
+
             for (var appObject in laroux.mvc.appObjects) {
                 var selectedAppObject = laroux.mvc.appObjects[appObject];
 
                 if (selectedAppObject.app == app) {
                     selectedAppObject.model = model;
-                }
+                    selectedAppObject.controller = controller;
 
-                laroux.mvc.updateApp(selectedAppObject);
+                    laroux.mvc.updateApp(selectedAppObject);
+                }
             }
 
             Object.observe(model, laroux.mvc.observer);
