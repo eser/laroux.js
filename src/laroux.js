@@ -71,10 +71,11 @@
         var results = [];
 
         for (var key in arr) {
-            var result = fnc(key, arr[key]);
+            var result = fnc(arr[key], key);
             if (result === false) {
                 break;
             }
+
             if (typeof result !== 'undefined') {
                 results.push(result);
             }
