@@ -186,6 +186,22 @@ $l.ready(function() {
     );
 });
 
+// forms - Toggle Form Editing
+$l.ready(function() {
+    var button = $l('#button-forms-toggle');
+    var target = $l('#target-forms-toggle');
+
+    $l.dom.setEvent(
+        button,
+        'click',
+        function() {
+            $l.forms.toggleFormEditing($l('#target-forms-toggle'));
+
+            return false;
+        }
+    );
+});
+
 // helpers - Helpers
 $l.ready(function() {
     var button = $l('#button-helpers-helpers');

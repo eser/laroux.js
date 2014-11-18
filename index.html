@@ -381,6 +381,40 @@ $l.dom.replace($l('#text-forms-serializing'), JSON.stringify(serialized));
                         </pre>
                     </div>
                 </div>
+
+                <h3>Toggle Form Editing</h3>
+                <div class="row">
+                    <div class="col-sm-4">
+                        <button id="button-forms-toggle" class="btn btn-default">Enable/Disable</button>
+
+                        <form id="target-forms-toggle">
+                            Username:<br />
+                            <input type="text" name="username" value="eserozvataf" disabled="disabled" /><br />
+                            Password:<br />
+                            <input type="password" name="password" value="123456" /><br />
+                            <label><input type="checkbox" name="rememberme" value="1" /> Remember me</label>
+                        </form>
+                    </div>
+                    <div class="col-sm-8">
+                        <h4>HTML</h4>
+                        <pre class="prettyprint">
+&lt;form id="target-forms-toggle"&gt;
+    Username:&lt;br /&gt;
+    &lt;input type="text" name="username" value="eserozvataf" disabled="disabled" /&gt;&lt;br /&gt;
+    Password:&lt;br /&gt;
+    &lt;input type="password" name="password" value="123456" /&gt;&lt;br /&gt;
+    &lt;label&gt;&lt;input type="checkbox" name="rememberme" value="1" /&gt; Remember me&lt;/label&gt;
+&lt;/form&gt;
+
+&lt;div id="text-forms-toggle"&gt;&lt;/div&gt;
+                        </pre>
+
+                        <h4>Javascript</h4>
+                        <pre class="prettyprint">
+$l.forms.toggleFormEditing($l('#target-forms-toggle'));
+                        </pre>
+                    </div>
+                </div>
             </div>
 
             <div class="row header-row">
