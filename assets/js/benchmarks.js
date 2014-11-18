@@ -183,7 +183,6 @@ $l.ready(function() {
     );
 });
 
-
 // Each on Objects
 $l.ready(function() {
     var button = $l('#button-main-each-objects');
@@ -217,6 +216,94 @@ $l.ready(function() {
                         fnc: function() {
                             $.each({a: 1, b: 2}, function(index, value) {
                                 console.log(index + ': ' + value);
+                            });
+                        }
+                    }
+                ]
+            );
+
+            return false;
+        }
+    );
+});
+
+// Map on Arrays
+$l.ready(function() {
+    var button = $l('#button-main-map-arrays');
+    var text = $l('#text-main-map-arrays');
+
+    $l.dom.setEvent(
+        button,
+        'click',
+        function() {
+            doBenchmark(
+                text,
+                [
+                    {
+                        name: 'laroux.js',
+                        fnc: function() {
+                            $l.map(['eser', 'ozvataf'], function(value) {
+                                return value.toUpperCase();
+                            });
+                        }
+                    },
+                    {
+                        name: 'jQuery',
+                        fnc: function() {
+                            $.map(['eser', 'ozvataf'], function(value) {
+                                return value.toUpperCase();
+                            });
+                        }
+                    },
+                    {
+                        name: 'Zepto',
+                        fnc: function() {
+                            $.map(['eser', 'ozvataf'], function(value) {
+                                return value.toUpperCase();
+                            });
+                        }
+                    }
+                ]
+            );
+
+            return false;
+        }
+    );
+});
+
+// Map on Objects
+$l.ready(function() {
+    var button = $l('#button-main-map-objects');
+    var text = $l('#text-main-map-objects');
+
+    $l.dom.setEvent(
+        button,
+        'click',
+        function() {
+            doBenchmark(
+                text,
+                [
+                    {
+                        name: 'laroux.js',
+                        fnc: function() {
+                            $l.map({a: 'eser', b: 'ozvataf'}, function(value) {
+                                return value.toUpperCase();
+                            });
+                        }
+                    },
+                    {
+                        name: 'jQuery',
+                        fnc: function() {
+                            $.map({a: 'eser', b: 'ozvataf'}, function(value) {
+                                return value.toUpperCase();
+                            });
+                        }
+                    },
+                    {
+                        name: 'Zepto',
+                        fnc: function() {
+                            $.map({a: 'eser', b: 'ozvataf'}, function(value) {
+                                return value.toUpperCase();
                             });
                         }
                     }
