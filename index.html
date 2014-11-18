@@ -589,9 +589,46 @@ $l.dom.setEvent(
             </div>
 
             <div class="example-area">
-                <div class="well">
-                    <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
-                    No examples yet
+                <h3>Stack Example</h3>
+                <div class="row">
+                    <div class="col-sm-4">
+                        <button id="button-stack-example" class="btn btn-default">Execute</button>
+                        <div id="text-stack-example"></div>
+                    </div>
+                    <div class="col-sm-8">
+                        <h4>HTML</h4>
+                        <pre class="prettyprint">
+&lt;div id="text-stack-example"&gt;&lt;/div&gt;
+                        </pre>
+
+                        <h4>Javascript</h4>
+                        <pre class="prettyprint">
+var stack = new $l.stack();
+stack.add('id', 1);
+stack.addRange({count: 15, name: 'eser'});
+
+$l.dom.clear(text);
+
+$l.dom.append(text, '&lt;div&gt;&lt;strong&gt;Element with key \'id\':&lt;/strong&gt;&lt;/div&gt;');
+$l.dom.append(text, stack.get('id') + '&lt;br /&gt;');
+
+$l.dom.append(text, '&lt;div&gt;&lt;strong&gt;Elements with keys \'id\' and \'name\':&lt;/strong&gt;&lt;/div&gt;');
+$l.dom.append(text, JSON.stringify(stack.getRange(['id', 'name'])) + '&lt;br /&gt;');
+
+$l.dom.append(text, '&lt;div&gt;&lt;strong&gt;Keys:&lt;/strong&gt;&lt;/div&gt;');
+$l.dom.append(text, JSON.stringify(stack.keys()) + '&lt;br /&gt;');
+
+$l.dom.append(text, '&lt;div&gt;&lt;strong&gt;Length:&lt;/strong&gt;&lt;/div&gt;');
+$l.dom.append(text, JSON.stringify(stack.length()) + '&lt;br /&gt;');
+
+$l.dom.append(text, '&lt;div&gt;&lt;strong&gt;Check if it has element with key \'name\':&lt;/strong&gt;&lt;/div&gt;');
+$l.dom.append(text, JSON.stringify(stack.exists('name')) + '&lt;br /&gt;');
+
+$l.dom.append(text, '&lt;div&gt;&lt;strong&gt;All data:&lt;/strong&gt;&lt;/div&gt;');
+$l.dom.append(text, JSON.stringify(stack.data) + '&lt;br /&gt;');
+
+                        </pre>
+                    </div>
                 </div>
             </div>
 

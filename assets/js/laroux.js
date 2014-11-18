@@ -1825,6 +1825,28 @@
             }
         };
 
+        this.get = function(key, defaultValue) {
+            if (typeof this.data[key] == 'undefined') {
+                return defaultValue;
+            }
+
+            return this.data[key];
+        };
+
+        this.getRange = function(keys) {
+            var values = {};
+
+            for (var key in keys) {
+                if (!keys.hasOwnProperty(key)) {
+                    continue;
+                }
+
+                values[keys[key]] = this.data[keys[key]];
+            }
+
+            return values;
+        };
+
         this.keys = function() {
             return Object.keys(this.data);
         };

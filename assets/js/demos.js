@@ -1,3 +1,5 @@
+var crlf = '<br />';
+
 // ajax - Making a GET request
 $l.ready(function() {
     var button = $l('#button-ajax-get-request');
@@ -113,19 +115,19 @@ $l.ready(function() {
             $l.dom.append(text, $l.date.parseEpoch(now.getTime() - yesterday.getTime()));
 
             $l.dom.append(text, '<div><strong>Short Date:</strong></div>');
-            $l.dom.append(text, $l.date.getDateString(now) + '<br />');
+            $l.dom.append(text, $l.date.getDateString(now) + crlf);
 
             $l.dom.append(text, '<div><strong>Short Date + month names:</strong></div>');
-            $l.dom.append(text, $l.date.getDateString(now, true) + '<br />');
+            $l.dom.append(text, $l.date.getDateString(now, true) + crlf);
 
             $l.dom.append(text, '<div><strong>Long Date:</strong></div>');
-            $l.dom.append(text, $l.date.getLongDateString(now) + '<br />');
+            $l.dom.append(text, $l.date.getLongDateString(now) + crlf);
 
             $l.dom.append(text, '<div><strong>Long Date + month names:</strong></div>');
-            $l.dom.append(text, $l.date.getLongDateString(now, true) + '<br />');
+            $l.dom.append(text, $l.date.getLongDateString(now, true) + crlf);
 
             $l.dom.append(text, '<div><strong>Long Date + month names + time:</strong></div>');
-            $l.dom.append(text, $l.date.getLongDateString(now, true, true) + '<br />');
+            $l.dom.append(text, $l.date.getLongDateString(now, true, true) + crlf);
 
             return false;
         }
@@ -214,43 +216,43 @@ $l.ready(function() {
             $l.dom.clear(text);
 
             $l.dom.append(text, '<div><strong>Unique Id Generator:</strong></div>');
-            $l.dom.append(text, $l.helpers.getUniqueId() + '<br />');
-            $l.dom.append(text, $l.helpers.getUniqueId() + '<br />');
+            $l.dom.append(text, $l.helpers.getUniqueId() + crlf);
+            $l.dom.append(text, $l.helpers.getUniqueId() + crlf);
 
             $l.dom.append(text, '<div><strong>Query String Generation:</strong></div>');
-            $l.dom.append(text, $l.helpers.buildQueryString({ pageId: 5, showAll: 'yes' }) + '<br />');
+            $l.dom.append(text, $l.helpers.buildQueryString({ pageId: 5, showAll: 'yes' }) + crlf);
 
             $l.dom.append(text, '<div><strong>Transform string into camel case:</strong></div>');
-            $l.dom.append(text, $l.helpers.camelCase('text-align') + '<br />');
+            $l.dom.append(text, $l.helpers.camelCase('text-align') + crlf);
 
             $l.dom.append(text, '<div><strong>Transform string back from camel case:</strong></div>');
-            $l.dom.append(text, $l.helpers.antiCamelCase('textAlign') + '<br />');
+            $l.dom.append(text, $l.helpers.antiCamelCase('textAlign') + crlf);
 
             $l.dom.append(text, '<div><strong>Encoding special characters:</strong></div>');
-            $l.dom.append(text, $l.helpers.quoteAttr('<br clear="all" />') + '<br />');
+            $l.dom.append(text, $l.helpers.quoteAttr('<br clear="all" />') + crlf);
 
             $l.dom.append(text, '<div><strong>Generating random value:</strong></div>');
-            $l.dom.append(text, $l.helpers.random(1, 15) + '<br />');
-            $l.dom.append(text, $l.helpers.random(1, 15) + '<br />');
+            $l.dom.append(text, $l.helpers.random(1, 15) + crlf);
+            $l.dom.append(text, $l.helpers.random(1, 15) + crlf);
 
             $l.dom.append(text, '<div><strong>Getting values from a single column:</strong></div>');
             var arr = [{id: 1, count: 5}, {id: 2, count: 12}];
-            $l.dom.append(text, JSON.stringify($l.helpers.column(arr, 'count')) + '<br />');
+            $l.dom.append(text, JSON.stringify($l.helpers.column(arr, 'count')) + crlf);
 
             $l.dom.append(text, '<div><strong>Shuffling values:</strong></div>');
-            $l.dom.append(text, $l.helpers.shuffle([1, 2, 3, 4, 5]) + '<br />');
+            $l.dom.append(text, $l.helpers.shuffle([1, 2, 3, 4, 5]) + crlf);
 
             $l.dom.append(text, '<div><strong>Merging two arrays:</strong></div>');
-            $l.dom.append(text, JSON.stringify($l.helpers.merge({id: 1}, {name: 'eser', count: 5})) + '<br />');
+            $l.dom.append(text, JSON.stringify($l.helpers.merge({id: 1}, {name: 'eser', count: 5})) + crlf);
 
             $l.dom.append(text, '<div><strong>Getting count of elements:</strong></div>');
-            $l.dom.append(text, $l.helpers.getLength({id: 1, name: 'eser', count: 5}) + '<br />');
+            $l.dom.append(text, $l.helpers.getLength({id: 1, name: 'eser', count: 5}) + crlf);
 
             $l.dom.append(text, '<div><strong>Getting elements with dot notation:</strong></div>');
-            $l.dom.append(text, $l.helpers.getElement({id: 1, child: { a: 1, b: 2 }}, 'child.a') + '<br />');
+            $l.dom.append(text, $l.helpers.getElement({id: 1, child: { a: 1, b: 2 }}, 'child.a') + crlf);
 
             $l.dom.append(text, '<div><strong>Getting keys for dot notation:</strong></div>');
-            $l.dom.append(text, JSON.stringify($l.helpers.getKeysRecursive({id: 1, child: { a: 1, b: 2 }})) + '<br />');
+            $l.dom.append(text, JSON.stringify($l.helpers.getKeysRecursive({id: 1, child: { a: 1, b: 2 }})) + crlf);
 
             return false;
         }
@@ -296,6 +298,44 @@ $l.ready(function() {
         'keyup',
         function(ev, element) {
             myModel[element.getAttribute('name')] = element.value;
+
+            return false;
+        }
+    );
+});
+
+// stack - Examples
+$l.ready(function() {
+    var button = $l('#button-stack-example');
+    var text = $l('#text-stack-example');
+
+    $l.dom.setEvent(
+        button,
+        'click',
+        function() {
+            var stack = new $l.stack();
+            stack.add('id', 1);
+            stack.addRange({count: 15, name: 'eser'});
+
+            $l.dom.clear(text);
+
+            $l.dom.append(text, '<div><strong>Element with key \'id\':</strong></div>');
+            $l.dom.append(text, stack.get('id') + crlf);
+
+            $l.dom.append(text, '<div><strong>Elements with keys \'id\' and \'name\':</strong></div>');
+            $l.dom.append(text, JSON.stringify(stack.getRange(['id', 'name'])) + crlf);
+
+            $l.dom.append(text, '<div><strong>Keys:</strong></div>');
+            $l.dom.append(text, JSON.stringify(stack.keys()) + crlf);
+
+            $l.dom.append(text, '<div><strong>Length:</strong></div>');
+            $l.dom.append(text, JSON.stringify(stack.length()) + crlf);
+
+            $l.dom.append(text, '<div><strong>Check if it has element with key \'name\':</strong></div>');
+            $l.dom.append(text, JSON.stringify(stack.exists('name')) + crlf);
+
+            $l.dom.append(text, '<div><strong>All data:</strong></div>');
+            $l.dom.append(text, JSON.stringify(stack.data) + crlf);
 
             return false;
         }
