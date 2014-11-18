@@ -49,6 +49,12 @@ $l.ready(function() {
                             $('body');
                         }
                     },
+                    {
+                        name: 'Zepto',
+                        fnc: function() {
+                            Zepto('body');
+                        }
+                    }
                 ]
             );
 
@@ -81,6 +87,12 @@ $l.ready(function() {
                             $('#home');
                         }
                     },
+                    {
+                        name: 'Zepto',
+                        fnc: function() {
+                            Zepto('#home');
+                        }
+                    }
                 ]
             );
 
@@ -113,6 +125,12 @@ $l.ready(function() {
                             $('.container');
                         }
                     },
+                    {
+                        name: 'Zepto',
+                        fnc: function() {
+                            Zepto('.container');
+                        }
+                    }
                 ]
             );
 
