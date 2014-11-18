@@ -575,7 +575,6 @@
         getProperty: function(element, styleName) {
             var style = getComputedStyle(element);
             styleName = laroux.helpers.antiCamelCase(styleName);
-            console.log(styleName);
 
             return style.getPropertyValue(styleName);
         },
@@ -603,36 +602,41 @@
         },
 
         setTransitionSingle: function(element, transitions) {
+            var style = getComputedStyle(element);
+            var currentTransitions = style.getPropertyValue('transition') || style.getPropertyValue('-webkit-transition') ||
+                style.getPropertyValue('-ms-transition') || '';
+
+            var currentTransitionsArray;
+            if (currentTransitions.length > 0) {
+                currentTransitionsArray = currentTransitions.split(',');
+            } else {
+                currentTransitionsArray = [];
+            }
+
             for (var styleName in transitions) {
                 if (!transitions.hasOwnProperty(styleName)) {
                     continue;
                 }
 
-                var newStyleName = laroux.helpers.camelCase(styleName);
-
-                var style = getComputedStyle(element);
-                var currentTransitions = style.getPropertyValue('transition') || style.getPropertyValue('-webkit-transition') ||
-                    style.getPropertyValue('-ms-transition');
-
-                var value;
-                if (currentTransitions !== null && currentTransitions.length > 0) {
-                    var currentTransitionsArray = currentTransitions.split(',');
-                    for (var j = 0; j < currentTransitionsArray.length; j++) {
-                        if (currentTransitionsArray[j].trim().localeCompare(styleName) === 0) {
-                            currentTransitionsArray.splice(j, 1);
-                        }
+                var found = false;
+                for (var j = 0; j < currentTransitionsArray.length; j++) {
+                    if (currentTransitionsArray[j].trim().localeCompare(styleName) === 0) {
+                        currentTransitionsArray[j] = styleName + ' ' + transitions[styleName];
+                        found = true;
+                        break;
                     }
-
-                    currentTransitionsArray.push(styleName + ' ' + transitions[styleName]);
-                    value = currentTransitionsArray.join(', ');
-                } else {
-                    value = styleName + ' ' + transitions[styleName];
                 }
 
-                element.style.transition = value;
-                element.style['-webkit-transition'] = value;
-                element.style['-ms-transition'] = value;
+                if (!found) {
+                    currentTransitionsArray.push(styleName + ' ' + transitions[styleName]);
+                }
             }
+
+            var value = currentTransitionsArray.join(', ');
+
+            element.style.transition = value;
+            element.style['-webkit-transition'] = value;
+            element.style['-ms-transition'] = value;
         },
 
         setTransition: function(element, transitions) {
