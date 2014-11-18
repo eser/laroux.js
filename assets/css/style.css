@@ -24,3 +24,23 @@
     background-color: silver;
     width: 100px;
 }
+
+.benchmark-area {
+    margin-bottom: 100px;
+    padding-bottom: 40px;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.benchmark-graph {
+    width: 100%;
+    height: 250px;
+    font-size: 14px;
+    line-height: 1.2em;
+    margin-bottom: 15px;
+}
+
+.benchmark-description {
+    font-style: italic;
+    font-size: 10pt;
+    text-align: center;
+}

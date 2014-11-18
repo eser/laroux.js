@@ -67,16 +67,22 @@
 
         <div class="container">
 
-            <h2 class="nomargin">Benchmarks</h2>
-
+            <div class="row header-row">
+                <div class="col-sm-6">
+                    <h2 class="nomargin">Selectors by Tagname</h2>
+                </div>
+                <div class="col-sm-6 text-right">
+                    <button id="button-selectors-tagname" class="btn btn-sm btn-default">Start Local Benchmark</button>
+                </div>
+            </div>
             <div class="benchmark-area">
-                <h3>Selectors by Tagname</h3>
                 <div class="row">
-                    <div class="col-sm-6">
-                        <button id="button-selectors-tagname" class="btn btn-default">Start</button>
+                    <div class="col-sm-5">
+                        <div id="graph-selectors-tagname" class="benchmark-graph"></div>
+                        <div class="benchmark-description">operations per second (higher is better)</div>
                         <div id="text-selectors-tagname"></div>
                     </div>
-                    <div class="col-sm-6">
+                    <div class="col-sm-7">
                         <h4>laroux.js</h4>
                         <pre class="prettyprint">
 $l('body');
@@ -89,14 +95,22 @@ $('body');
                 </div>
             </div>
 
+            <div class="row header-row">
+                <div class="col-sm-6">
+                    <h2 class="nomargin">Selectors by Element Id</h2>
+                </div>
+                <div class="col-sm-6 text-right">
+                    <button id="button-selectors-elementid" class="btn btn-default">Start Local Benchmark</button>
+                </div>
+            </div>
             <div class="benchmark-area">
-                <h3>Selectors by Element Id</h3>
                 <div class="row">
-                    <div class="col-sm-6">
-                        <button id="button-selectors-elementid" class="btn btn-default">Start</button>
+                    <div class="col-sm-5">
+                        <div id="graph-selectors-elementid" class="benchmark-graph"></div>
+                        <div class="benchmark-description">operations per second (higher is better)</div>
                         <div id="text-selectors-elementid"></div>
                     </div>
-                    <div class="col-sm-6">
+                    <div class="col-sm-7">
                         <h4>laroux.js</h4>
                         <pre class="prettyprint">
 $l('#home');
@@ -109,14 +123,22 @@ $('#home');
                 </div>
             </div>
 
+            <div class="row header-row">
+                <div class="col-sm-6">
+                    <h2 class="nomargin">Selectors by Class</h2>
+                </div>
+                <div class="col-sm-6 text-right">
+                    <button id="button-selectors-class" class="btn btn-default">Start Local Benchmark</button>
+                </div>
+            </div>
             <div class="benchmark-area">
-                <h3>Selectors by Class</h3>
                 <div class="row">
-                    <div class="col-sm-6">
-                        <button id="button-selectors-class" class="btn btn-default">Start</button>
+                    <div class="col-sm-5">
+                        <div id="graph-selectors-class" class="benchmark-graph"></div>
+                        <div class="benchmark-description">operations per second (higher is better)</div>
                         <div id="text-selectors-class"></div>
                     </div>
-                    <div class="col-sm-6">
+                    <div class="col-sm-7">
                         <h4>laroux.js</h4>
                         <pre class="prettyprint">
 $l('.container');
@@ -133,14 +155,22 @@ $('.container');
                 </div>
             </div>
 
+            <div class="row header-row">
+                <div class="col-sm-6">
+                    <h2 class="nomargin">Each on Arrays</h2>
+                </div>
+                <div class="col-sm-6 text-right">
+                    <button id="button-main-each-arrays" class="btn btn-default">Start Local Benchmark</button>
+                </div>
+            </div>
             <div class="benchmark-area">
-                <h3>Each on Arrays</h3>
                 <div class="row">
-                    <div class="col-sm-6">
-                        <button id="button-main-each-arrays" class="btn btn-default">Start</button>
+                    <div class="col-sm-5">
+                        <div id="graph-main-each-arrays" class="benchmark-graph"></div>
+                        <div class="benchmark-description">operations per second (higher is better)</div>
                         <div id="text-main-each-arrays"></div>
                     </div>
-                    <div class="col-sm-6">
+                    <div class="col-sm-7">
                         <h4>laroux.js</h4>
                         <pre class="prettyprint">
 $l.each([52, 97], function(index, value) {
@@ -157,14 +187,22 @@ $.each([52, 97], function(index, value) {
                 </div>
             </div>
 
+            <div class="row header-row">
+                <div class="col-sm-6">
+                    <h2 class="nomargin">Each on Objects</h2>
+                </div>
+                <div class="col-sm-6 text-right">
+                    <button id="button-main-each-objects" class="btn btn-default">Start Local Benchmark</button>
+                </div>
+            </div>
             <div class="benchmark-area">
-                <h3>Each on Objects</h3>
                 <div class="row">
-                    <div class="col-sm-6">
-                        <button id="button-main-each-objects" class="btn btn-default">Start</button>
+                    <div class="col-sm-5">
+                        <div id="graph-main-each-objects" class="benchmark-graph"></div>
+                        <div class="benchmark-description">operations per second (higher is better)</div>
                         <div id="text-main-each-objects"></div>
                     </div>
-                    <div class="col-sm-6">
+                    <div class="col-sm-7">
                         <h4>laroux.js</h4>
                         <pre class="prettyprint">
 $l.each({a: 1, b: 2}, function(index, value) {
@@ -181,14 +219,22 @@ $.each({a: 1, b: 2}, function(index, value) {
                 </div>
             </div>
 
+            <div class="row header-row">
+                <div class="col-sm-6">
+                    <h2 class="nomargin">Map on Arrays</h2>
+                </div>
+                <div class="col-sm-6 text-right">
+                    <button id="button-main-map-arrays" class="btn btn-default">Start Local Benchmark</button>
+                </div>
+            </div>
             <div class="benchmark-area">
-                <h3>Map on Arrays</h3>
                 <div class="row">
-                    <div class="col-sm-6">
-                        <button id="button-main-map-arrays" class="btn btn-default">Start</button>
+                    <div class="col-sm-5">
+                        <div id="graph-main-map-arrays" class="benchmark-graph"></div>
+                        <div class="benchmark-description">operations per second (higher is better)</div>
                         <div id="text-main-map-arrays"></div>
                     </div>
-                    <div class="col-sm-6">
+                    <div class="col-sm-7">
                         <h4>laroux.js</h4>
                         <pre class="prettyprint">
 $l.map(['eser', 'ozvataf'], function(value) {
@@ -205,14 +251,22 @@ $.map(['eser', 'ozvataf'], function(value) {
                 </div>
             </div>
 
+            <div class="row header-row">
+                <div class="col-sm-6">
+                    <h2 class="nomargin">Map on Objects</h2>
+                </div>
+                <div class="col-sm-6 text-right">
+                    <button id="button-main-map-objects" class="btn btn-default">Start Local Benchmark</button>
+                </div>
+            </div>
             <div class="benchmark-area">
-                <h3>Map on Objects</h3>
                 <div class="row">
-                    <div class="col-sm-6">
-                        <button id="button-main-map-objects" class="btn btn-default">Start</button>
+                    <div class="col-sm-5">
+                        <div id="graph-main-map-objects" class="benchmark-graph"></div>
+                        <div class="benchmark-description">operations per second (higher is better)</div>
                         <div id="text-main-map-objects"></div>
                     </div>
-                    <div class="col-sm-6">
+                    <div class="col-sm-7">
                         <h4>laroux.js</h4>
                         <pre class="prettyprint">
 $l.map({a: 'eser', b: 'ozvataf'}, function(value) {
@@ -229,14 +283,22 @@ $.map({a: 'eser', b: 'ozvataf'}, function(value) {
                 </div>
             </div>
 
+            <div class="row header-row">
+                <div class="col-sm-6">
+                    <h2 class="nomargin">Create DOM Element</h2>
+                </div>
+                <div class="col-sm-6 text-right">
+                    <button id="button-dom-create-element" class="btn btn-default">Start Local Benchmark</button>
+                </div>
+            </div>
             <div class="benchmark-area">
-                <h3>Create DOM Element</h3>
                 <div class="row">
-                    <div class="col-sm-6">
-                        <button id="button-dom-create-element" class="btn btn-default">Start</button>
+                    <div class="col-sm-5">
+                        <div id="graph-dom-create-element" class="benchmark-graph"></div>
+                        <div class="benchmark-description">operations per second (higher is better)</div>
                         <div id="text-dom-create-element"></div>
                     </div>
-                    <div class="col-sm-6">
+                    <div class="col-sm-7">
                         <h4>laroux.js</h4>
                         <pre class="prettyprint">
 $l.dom.createElement('DIV', { class: 'x' }, 'y');
@@ -253,14 +315,22 @@ $('&lt;div class="x"&gt;y&lt;/div&gt;');
                 </div>
             </div>
 
+            <div class="row header-row">
+                <div class="col-sm-6">
+                    <h2 class="nomargin">DOM Manipulations</h2>
+                </div>
+                <div class="col-sm-6 text-right">
+                    <button id="button-dom-manipulations" class="btn btn-default">Start Local Benchmark</button>
+                </div>
+            </div>
             <div class="benchmark-area">
-                <h3>DOM Manipulations</h3>
                 <div class="row">
-                    <div class="col-sm-6">
-                        <button id="button-dom-manipulations" class="btn btn-default">Start</button>
+                    <div class="col-sm-5">
+                        <div id="graph-dom-manipulations" class="benchmark-graph"></div>
+                        <div class="benchmark-description">operations per second (higher is better)</div>
                         <div id="text-dom-manipulations"></div>
                     </div>
-                    <div class="col-sm-6">
+                    <div class="col-sm-7">
                         <h4>laroux.js</h4>
                         <pre class="prettyprint">
 var div = $l.dom.createElement('DIV');
@@ -291,6 +361,8 @@ $('&lt;div&gt;')
         <script src="assets/js/benchmark.js"></script>
         <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/zepto/1.1.4/zepto.min.js"></script>
+        <script src="assets/js/jquery.flot.js"></script>
+        <script src="assets/js/jquery.flot.categories.js"></script>
         <script src="assets/js/benchmarks.js"></script>
         <script src="assets/js/script.js"></script>
     </body>

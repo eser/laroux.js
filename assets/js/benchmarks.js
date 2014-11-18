@@ -1,7 +1,9 @@
-function doBenchmark(target, tests) {
+function doBenchmark(button, target, tests) {
     var suite = new Benchmark.Suite;
     var text = $l('#content');
     var crlf = '<br />';
+
+    button.setAttribute('disabled', 'disabled');
 
     $l.dom.clear(target);
     $l.dom.append(target, 'Awaiting test results...' + crlf);
@@ -19,14 +21,70 @@ function doBenchmark(target, tests) {
         })
         .on('complete', function() {
             $l.dom.append(target, 'Fastest is <strong>' + this.filter('fastest').pluck('name') + '</strong>' + crlf);
+            button.removeAttribute('disabled');
         });
 
     // run async
     suite.run({ 'async': true });
 }
 
+function unitFormatter(val, axis) {
+    if (val === 0) {
+        return '';
+    }
+
+    if (val >= 1000000) {
+        return (val / 1000000).toFixed(axis.tickDecimals) + 'M';
+    }
+
+    if (val >= 1000) {
+        return (val / 1000).toFixed(axis.tickDecimals) + 'K';
+    }
+
+    return val.toFixed(axis.tickDecimals);
+}
+
+function drawGraph(target, data) {
+    $.plot(
+        target,
+        [
+            { data: data, label: 'ops/sec' } // , color: '#333333'
+        ],
+        {
+            grid: {
+                borderWidth: 0
+            },
+            series: {
+                bars: {
+                    show: true,
+                    barWidth: 0.3,
+                    align: 'center'
+                }
+            },
+            xaxis: {
+                mode: 'categories',
+                tickLength: 0
+            },
+            yaxis: {
+                show: true,
+                ticks: 5,
+                tickDecimals: 1,
+                tickFormatter: unitFormatter
+            }
+        }
+    );
+}
+
 // Selectors by Tagname
 $l.ready(function() {
+    var graph = $l('#graph-selectors-tagname');
+    var graphdata = [
+        ['laroux.js', 2196203],
+        ['jQuery', 127885],
+        ['Zepto', 123737]
+    ];
+    drawGraph(graph, graphdata);
+
     var button = $l('#button-selectors-tagname');
     var text = $l('#text-selectors-tagname');
 
@@ -35,6 +93,7 @@ $l.ready(function() {
         'click',
         function() {
             doBenchmark(
+                button,
                 text,
                 [
                     {
@@ -65,6 +124,14 @@ $l.ready(function() {
 
 // Selectors by Element Id
 $l.ready(function() {
+    var graph = $l('#graph-selectors-elementid');
+    var graphdata = [
+        ['laroux.js', 3051122],
+        ['jQuery', 383496],
+        ['Zepto', 488508]
+    ];
+    drawGraph(graph, graphdata);
+
     var button = $l('#button-selectors-elementid');
     var text = $l('#text-selectors-elementid');
 
@@ -73,6 +140,7 @@ $l.ready(function() {
         'click',
         function() {
             doBenchmark(
+                button,
                 text,
                 [
                     {
@@ -103,6 +171,15 @@ $l.ready(function() {
 
 // Selectors by Class
 $l.ready(function() {
+    var graph = $l('#graph-selectors-class');
+    var graphdata = [
+        ['laroux.js', 2099914],
+        ['laroux.js (II)', 177507],
+        ['jQuery', 86141],
+        ['Zepto', 88549]
+    ];
+    drawGraph(graph, graphdata);
+
     var button = $l('#button-selectors-class');
     var text = $l('#text-selectors-class');
 
@@ -111,6 +188,7 @@ $l.ready(function() {
         'click',
         function() {
             doBenchmark(
+                button,
                 text,
                 [
                     {
@@ -147,6 +225,14 @@ $l.ready(function() {
 
 // Each on Arrays
 $l.ready(function() {
+    var graph = $l('#graph-main-each-arrays');
+    var graphdata = [
+        ['laroux.js', 7474],
+        ['jQuery', 7041],
+        ['Zepto', 6976]
+    ];
+    drawGraph(graph, graphdata);
+
     var button = $l('#button-main-each-arrays');
     var text = $l('#text-main-each-arrays');
 
@@ -155,6 +241,7 @@ $l.ready(function() {
         'click',
         function() {
             doBenchmark(
+                button,
                 text,
                 [
                     {
@@ -191,6 +278,14 @@ $l.ready(function() {
 
 // Each on Objects
 $l.ready(function() {
+    var graph = $l('#graph-main-each-objects');
+    var graphdata = [
+        ['laroux.js', 7882],
+        ['jQuery', 7111],
+        ['Zepto', 7067]
+    ];
+    drawGraph(graph, graphdata);
+
     var button = $l('#button-main-each-objects');
     var text = $l('#text-main-each-objects');
 
@@ -199,6 +294,7 @@ $l.ready(function() {
         'click',
         function() {
             doBenchmark(
+                button,
                 text,
                 [
                     {
@@ -235,6 +331,14 @@ $l.ready(function() {
 
 // Map on Arrays
 $l.ready(function() {
+    var graph = $l('#graph-main-map-arrays');
+    var graphdata = [
+        ['laroux.js', 305799],
+        ['jQuery', 134039],
+        ['Zepto', 153342]
+    ];
+    drawGraph(graph, graphdata);
+
     var button = $l('#button-main-map-arrays');
     var text = $l('#text-main-map-arrays');
 
@@ -243,6 +347,7 @@ $l.ready(function() {
         'click',
         function() {
             doBenchmark(
+                button,
                 text,
                 [
                     {
@@ -279,6 +384,14 @@ $l.ready(function() {
 
 // Map on Objects
 $l.ready(function() {
+    var graph = $l('#graph-main-map-objects');
+    var graphdata = [
+        ['laroux.js', 1937590],
+        ['jQuery', 138664],
+        ['Zepto', 138091]
+    ];
+    drawGraph(graph, graphdata);
+
     var button = $l('#button-main-map-objects');
     var text = $l('#text-main-map-objects');
 
@@ -287,6 +400,7 @@ $l.ready(function() {
         'click',
         function() {
             doBenchmark(
+                button,
                 text,
                 [
                     {
@@ -323,6 +437,15 @@ $l.ready(function() {
 
 // Create DOM element
 $l.ready(function() {
+    var graph = $l('#graph-dom-create-element');
+    var graphdata = [
+        ['laroux.js', 22216],
+        ['laroux.js (II)', 17178],
+        ['jQuery', 6275],
+        ['Zepto', 6901]
+    ];
+    drawGraph(graph, graphdata);
+
     var button = $l('#button-dom-create-element');
     var text = $l('#text-dom-create-element');
 
@@ -331,6 +454,7 @@ $l.ready(function() {
         'click',
         function() {
             doBenchmark(
+                button,
                 text,
                 [
                     {
@@ -367,6 +491,14 @@ $l.ready(function() {
 
 // DOM Manipulations
 $l.ready(function() {
+    var graph = $l('#graph-dom-manipulations');
+    var graphdata = [
+        ['laroux.js', 14268],
+        ['jQuery', 5856],
+        ['Zepto', 6242]
+    ];
+    drawGraph(graph, graphdata);
+
     var button = $l('#button-dom-manipulations');
     var text = $l('#text-dom-manipulations');
 
@@ -375,6 +507,7 @@ $l.ready(function() {
         'click',
         function() {
             doBenchmark(
+                button,
                 text,
                 [
                     {
