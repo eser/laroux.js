@@ -121,6 +121,10 @@ $('#home');
                         <pre class="prettyprint">
 $l('.container');
                         </pre>
+                        <h4>laroux.js (II)</h4>
+                        <pre class="prettyprint">
+$l.dom.selectByClass('container');
+                        </pre>
                         <h4>jQuery/Zepto</h4>
                         <pre class="prettyprint">
 $('.container');
@@ -220,6 +224,58 @@ $l.map({a: 'eser', b: 'ozvataf'}, function(value) {
 $.map({a: 'eser', b: 'ozvataf'}, function(value) {
     return value.toUpperCase();
 });
+                        </pre>
+                    </div>
+                </div>
+            </div>
+
+            <div class="benchmark-area">
+                <h3>Create DOM Element</h3>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <button id="button-dom-create-element" class="btn btn-default">Start</button>
+                        <div id="text-dom-create-element"></div>
+                    </div>
+                    <div class="col-sm-6">
+                        <h4>laroux.js</h4>
+                        <pre class="prettyprint">
+$l.dom.createElement('DIV', { class: 'x' }, 'y');
+                        </pre>
+                        <h4>laroux.js (II)</h4>
+                        <pre class="prettyprint">
+$l.dom.create('&lt;div class="x"&gt;y&lt;/div&gt;');
+                        </pre>
+                        <h4>jQuery/Zepto</h4>
+                        <pre class="prettyprint">
+$('&lt;div class="x"&gt;y&lt;/div&gt;');
+                        </pre>
+                    </div>
+                </div>
+            </div>
+
+            <div class="benchmark-area">
+                <h3>DOM Manipulations</h3>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <button id="button-dom-manipulations" class="btn btn-default">Start</button>
+                        <div id="text-dom-manipulations"></div>
+                    </div>
+                    <div class="col-sm-6">
+                        <h4>laroux.js</h4>
+                        <pre class="prettyprint">
+var div = $l.dom.createElement('DIV');
+$l.dom.append(div, 'appended');
+$l.dom.prepend(div, 'prepended');
+$l.dom.clear(div);
+$l.dom.remove(div);
+                        </pre>
+                        <h4>jQuery/Zepto</h4>
+                        <pre class="prettyprint">
+$('&lt;div&gt;')
+    .append('appended')
+    .prepend('prepended')
+    .empty()
+    .remove();
                         </pre>
                     </div>
                 </div>

@@ -120,6 +120,12 @@ $l.ready(function() {
                         }
                     },
                     {
+                        name: 'laroux.js (II)',
+                        fnc: function() {
+                            $l.dom.selectByClass('container');
+                        }
+                    },
+                    {
                         name: 'jQuery',
                         fnc: function() {
                             $('.container');
@@ -305,6 +311,100 @@ $l.ready(function() {
                             $.map({a: 'eser', b: 'ozvataf'}, function(value) {
                                 return value.toUpperCase();
                             });
+                        }
+                    }
+                ]
+            );
+
+            return false;
+        }
+    );
+});
+
+// Create DOM element
+$l.ready(function() {
+    var button = $l('#button-dom-create-element');
+    var text = $l('#text-dom-create-element');
+
+    $l.dom.setEvent(
+        button,
+        'click',
+        function() {
+            doBenchmark(
+                text,
+                [
+                    {
+                        name: 'laroux.js',
+                        fnc: function() {
+                            $l.dom.createElement('DIV', { class: 'x' }, 'y');
+                        }
+                    },
+                    {
+                        name: 'laroux.js (II)',
+                        fnc: function() {
+                            $l.dom.create('<div class="x">y</div>');
+                        }
+                    },
+                    {
+                        name: 'jQuery',
+                        fnc: function() {
+                            $('<div class="x">y</div>');
+                        }
+                    },
+                    {
+                        name: 'Zepto',
+                        fnc: function() {
+                            $('<div class="x">y</div>');
+                        }
+                    }
+                ]
+            );
+
+            return false;
+        }
+    );
+});
+
+// DOM Manipulations
+$l.ready(function() {
+    var button = $l('#button-dom-manipulations');
+    var text = $l('#text-dom-manipulations');
+
+    $l.dom.setEvent(
+        button,
+        'click',
+        function() {
+            doBenchmark(
+                text,
+                [
+                    {
+                        name: 'laroux.js',
+                        fnc: function() {
+                            var div = $l.dom.createElement('DIV');
+                            $l.dom.append(div, 'appended');
+                            $l.dom.prepend(div, 'prepended');
+                            $l.dom.clear(div);
+                            $l.dom.remove(div);
+                        }
+                    },
+                    {
+                        name: 'jQuery',
+                        fnc: function() {
+                            $('<div>')
+                                .append('appended')
+                                .prepend('prepended')
+                                .empty()
+                                .remove();
+                        }
+                    },
+                    {
+                        name: 'Zepto',
+                        fnc: function() {
+                            $('<div>')
+                                .append('appended')
+                                .prepend('prepended')
+                                .empty()
+                                .remove();
                         }
                     }
                 ]
