@@ -364,3 +364,23 @@ $l.ready(function() {
         }
     );
 });
+
+// ui
+$l.ready(function() {
+    $l.ui.init();
+});
+
+// ui - Popup
+$l.ready(function() {
+    var button = $l('#button-ui-popup');
+
+    $l.dom.setEvent(
+        button,
+        'click',
+        function() {
+            $l.ui.popup.msgbox(500, 'test message');
+
+            return false;
+        }
+    );
+});

@@ -658,7 +658,7 @@ $l.dom.append(text, JSON.stringify(stack.data) + '&lt;br /&gt;');
             </div>
 
             <div class="example-area">
-                <h3>Dates</h3>
+                <h3>Setting a timer</h3>
                 <div class="row">
                     <div class="col-sm-4">
                         <button id="button-timers-set" class="btn btn-default">Set Timer</button>
@@ -713,9 +713,18 @@ $l.timers.set({
             </div>
 
             <div class="example-area">
-                <div class="well">
-                    <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
-                    No examples yet
+                <h3>Disposable Message Popup</h3>
+                <div class="row">
+                    <div class="col-sm-4">
+                        <button id="button-ui-popup" class="btn btn-default">Show Message</button>
+                    </div>
+                    <div class="col-sm-8">
+                        <h4>Javascript</h4>
+                        <pre class="prettyprint">
+$l.ui.init();
+$l.ui.popup.msgbox(500, 'test message');
+                        </pre>
+                    </div>
                 </div>
             </div>
 
