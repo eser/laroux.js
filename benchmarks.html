@@ -129,6 +129,54 @@ $('.container');
                 </div>
             </div>
 
+            <div class="benchmark-area">
+                <h3>Each on Arrays</h3>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <button id="button-main-each-arrays" class="btn btn-default">Start</button>
+                        <div id="text-main-each-arrays"></div>
+                    </div>
+                    <div class="col-sm-6">
+                        <h4>laroux.js</h4>
+                        <pre class="prettyprint">
+$l.each([52, 97], function(index, value) {
+    console.log(index + ': ' + value);
+});
+                        </pre>
+                        <h4>jQuery/Zepto</h4>
+                        <pre class="prettyprint">
+$.each([52, 97], function(index, value) {
+    console.log(index + ': ' + value);
+});
+                        </pre>
+                    </div>
+                </div>
+            </div>
+
+            <div class="benchmark-area">
+                <h3>Each on Objects</h3>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <button id="button-main-each-objects" class="btn btn-default">Start</button>
+                        <div id="text-main-each-objects"></div>
+                    </div>
+                    <div class="col-sm-6">
+                        <h4>laroux.js</h4>
+                        <pre class="prettyprint">
+$l.each([52, 97], function(index, value) {
+    console.log(index + ': ' + value);
+});
+                        </pre>
+                        <h4>jQuery/Zepto</h4>
+                        <pre class="prettyprint">
+$.each([52, 97], function(index, value) {
+    console.log(index + ': ' + value);
+});
+                        </pre>
+                    </div>
+                </div>
+            </div>
+
             <footer>
                 <p>laroux.js GitHub Demo Page - Documented by <a href="http://eser.ozvataf.com/">Eser Ozvataf</a> 2014</p>
             </footer>

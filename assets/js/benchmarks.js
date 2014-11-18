@@ -138,3 +138,92 @@ $l.ready(function() {
         }
     );
 });
+
+// Each on Arrays
+$l.ready(function() {
+    var button = $l('#button-main-each-arrays');
+    var text = $l('#text-main-each-arrays');
+
+    $l.dom.setEvent(
+        button,
+        'click',
+        function() {
+            doBenchmark(
+                text,
+                [
+                    {
+                        name: 'laroux.js',
+                        fnc: function() {
+                            $l.each([52, 97], function(index, value) {
+                                console.log(index + ': ' + value);
+                            });
+                        }
+                    },
+                    {
+                        name: 'jQuery',
+                        fnc: function() {
+                            $.each([52, 97], function(index, value) {
+                                console.log(index + ': ' + value);
+                            });
+                        }
+                    },
+                    {
+                        name: 'Zepto',
+                        fnc: function() {
+                            $.each([52, 97], function(index, value) {
+                                console.log(index + ': ' + value);
+                            });
+                        }
+                    }
+                ]
+            );
+
+            return false;
+        }
+    );
+});
+
+
+// Each on Objects
+$l.ready(function() {
+    var button = $l('#button-main-each-objects');
+    var text = $l('#text-main-each-objects');
+
+    $l.dom.setEvent(
+        button,
+        'click',
+        function() {
+            doBenchmark(
+                text,
+                [
+                    {
+                        name: 'laroux.js',
+                        fnc: function() {
+                            $l.each({a: 1, b: 2}, function(index, value) {
+                                console.log(index + ': ' + value);
+                            });
+                        }
+                    },
+                    {
+                        name: 'jQuery',
+                        fnc: function() {
+                            $.each({a: 1, b: 2}, function(index, value) {
+                                console.log(index + ': ' + value);
+                            });
+                        }
+                    },
+                    {
+                        name: 'Zepto',
+                        fnc: function() {
+                            $.each({a: 1, b: 2}, function(index, value) {
+                                console.log(index + ': ' + value);
+                            });
+                        }
+                    }
+                ]
+            );
+
+            return false;
+        }
+    );
+});
