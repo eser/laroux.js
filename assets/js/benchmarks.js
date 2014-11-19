@@ -425,18 +425,18 @@
                 name: 'Chrome',
                 color: chromeColor,
                 values: {
-                    'laroux.js': 305799,
-                    'jQuery': 134039,
-                    'Zepto': 153342
+                    'laroux.js': 352497,
+                    'jQuery': 171942,
+                    'Zepto': 169488
                 }
             },
             {
                 name: 'Firefox',
                 color: firefoxColor,
                 values: {
-                    'laroux.js': 145883,
-                    'jQuery': 313516,
-                    'Zepto': 309091
+                    'laroux.js': 177761,
+                    'jQuery': 648821,
+                    'Zepto': 644681
                 }
             }
         ];
@@ -493,18 +493,18 @@
                 name: 'Chrome',
                 color: chromeColor,
                 values: {
-                    'laroux.js': 1937590,
-                    'jQuery': 138664,
-                    'Zepto': 138091
+                    'laroux.js': 4364186,
+                    'jQuery': 180603,
+                    'Zepto': 179874
                 }
             },
             {
                 name: 'Firefox',
                 color: firefoxColor,
                 values: {
-                    'laroux.js': 821219,
-                    'jQuery': 290456,
-                    'Zepto': 287355
+                    'laroux.js': 2701741,
+                    'jQuery': 525629,
+                    'Zepto': 521860
                 }
             }
         ];
