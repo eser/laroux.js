@@ -457,7 +457,7 @@
                             name: 'laroux.js',
                             fnc: function() {
                                 $l.map(['eser', 'ozvataf'], function(value) {
-                                    return value.toUpperCase();
+                                    return value;
                                 });
                             }
                         },
@@ -465,7 +465,7 @@
                             name: 'jQuery',
                             fnc: function() {
                                 $.map(['eser', 'ozvataf'], function(value) {
-                                    return value.toUpperCase();
+                                    return value;
                                 });
                             }
                         },
@@ -473,7 +473,7 @@
                             name: 'Zepto',
                             fnc: function() {
                                 $.map(['eser', 'ozvataf'], function(value) {
-                                    return value.toUpperCase();
+                                    return value;
                                 });
                             }
                         }
@@ -525,7 +525,7 @@
                             name: 'laroux.js',
                             fnc: function() {
                                 $l.map({a: 'eser', b: 'ozvataf'}, function(value) {
-                                    return value.toUpperCase();
+                                    return value
                                 });
                             }
                         },
@@ -533,7 +533,7 @@
                             name: 'jQuery',
                             fnc: function() {
                                 $.map({a: 'eser', b: 'ozvataf'}, function(value) {
-                                    return value.toUpperCase();
+                                    return value;
                                 });
                             }
                         },
@@ -541,7 +541,7 @@
                             name: 'Zepto',
                             fnc: function() {
                                 $.map({a: 'eser', b: 'ozvataf'}, function(value) {
-                                    return value.toUpperCase();
+                                    return value;
                                 });
                             }
                         }
