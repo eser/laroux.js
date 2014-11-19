@@ -603,8 +603,8 @@
 
         setTransitionSingle: function(element, transitions) {
             var style = getComputedStyle(element);
-            var currentTransitions = style.getPropertyValue('transition') || style.getPropertyValue('-webkitTransition') ||
-                style.getPropertyValue('-msTransition') || '';
+            var currentTransitions = style.getPropertyValue('transition') || style.getPropertyValue('-webkit-transition') ||
+                style.getPropertyValue('-ms-transition') || '';
 
             var currentTransitionsArray;
             if (currentTransitions.length > 0) {
@@ -635,8 +635,8 @@
             var value = currentTransitionsArray.join(', ');
 
             element.style.transition = value;
-            element.style['-webkitTransition'] = value;
-            element.style['-msTransition'] = value;
+            element.style.webkitTransition = value;
+            element.style.msTransition = value;
         },
 
         setTransition: function(element, transitions) {
@@ -903,7 +903,6 @@
             }
 
             return Array.prototype.slice.call(elements);
-            // return document.querySelectorAll.apply(document, arguments);
         },
 
         selectByClass: function(selector, parent) {
@@ -915,7 +914,14 @@
             }
 
             return Array.prototype.slice.call(elements);
-            // return document.getElementsByClassName.apply(document, arguments);
+        },
+
+        selectById: function(selector, parent) {
+            if (typeof parent == 'undefined') {
+                return document.getElementById(selector);
+            }
+
+            return parent.getElementById(selector);
         },
 
         selectSingle: function(selector, parent) {
@@ -924,7 +930,6 @@
             }
 
             return parent.querySelector(selector);
-            // return document.querySelector.apply(document, arguments);
         },
 
         eventHistory: { },
