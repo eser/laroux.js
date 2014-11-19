@@ -18,7 +18,7 @@ So far, it has [Ajax](https://github.com/larukedi/laroux.js/wiki/ajax), [Anim](h
 `laroux.js` is right for you if you:
 
 - Complain people who do not know the difference between jQuery and Javascript.
-- Love working with more compact, organized libraries in smaller sizes (26K).
+- Love working with more compact, organized libraries in smaller sizes (28K).
 - Want working with native DOM objects instead of wrappers.
 - Get pace with debug console's autocomplete/fluent typing.
 - Did not satisfied from other libraries' performances on mobile devices.

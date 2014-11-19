@@ -3,7 +3,7 @@
 ## Committers
 
 * Eser Ozvataf - @larukedi (http://eser.ozvataf.com/)
-* Serkan Cakir - @mayoz
+* Sercan Cakir - @mayoz
 
 ## Supporters
 
