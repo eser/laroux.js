@@ -15,6 +15,7 @@
         }
 
         /*
+        -- non-chrome optimization
         var re = /^#([^\+\>\[\]\.# ]*)$/.exec(selector);
         if (re) {
             if (typeof parent == 'undefined') {
@@ -89,6 +90,24 @@
     laroux.map = function(arr, fnc) {
         var results = [];
 
+        /*
+        -- non-chrome optimization
+        if (typeof arr.length != 'undefined') {
+            for (var i = arr.length; i >= 0; i--) {
+                var result = fnc(arr[i], i);
+                if (result === false) {
+                    break;
+                }
+
+                if (typeof result !== 'undefined') {
+                    results.unshift(result);
+                }
+            }
+
+            return results;
+        }
+        */
+
         for (var key in arr) {
             var result = fnc(arr[key], key);
             if (result === false) {
@@ -97,6 +116,33 @@
 
             if (typeof result !== 'undefined') {
                 results.push(result);
+            }
+        }
+
+        return results;
+    };
+
+    laroux.aeach = function(arr, fnc) {
+        for (var i = arr.length; i >= 0; i--) {
+            if (fnc(i, arr[i]) === false) {
+                break;
+            }
+        }
+
+        return arr;
+    };
+
+    laroux.amap = function(arr, fnc) {
+        var results = [];
+
+        for (var i = arr.length; i >= 0; i--) {
+            var result = fnc(arr[i], i);
+            if (result === false) {
+                break;
+            }
+
+            if (typeof result !== 'undefined') {
+                results.unshift(result);
             }
         }
 
