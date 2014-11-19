@@ -86,8 +86,8 @@
             var value = currentTransitionsArray.join(', ');
 
             element.style.transition = value;
-            element.style['-webkit-transition'] = value;
-            element.style['-ms-transition'] = value;
+            element.style.webkitTransition = value;
+            element.style.msTransition = value;
         },
 
         setTransition: function(element, transitions) {
