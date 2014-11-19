@@ -685,13 +685,7 @@
 
         // height of element without padding, margin and border
         height: function(element) {
-            var val = parseFloat(this.getProperty(element, 'height'));
-            if (isNaN(val)) {
-                console.log(element.style);
-                val = parseFloat(this.getProperty(element, 'minHeight'));
-            }
-
-            return parseFloat(val);
+            return parseFloat(this.getProperty(element, 'height'));
         },
 
         // height of element with padding but without margin and border
@@ -721,13 +715,7 @@
 
         // width of element without padding, margin and border
         width: function(element) {
-            var val = parseFloat(this.getProperty(element, 'width'));
-
-            if (isNaN(val)) {
-                val = parseFloat(this.getProperty(element, 'minWidth'));
-            }
-
-            return val;
+            return parseFloat(this.getProperty(element, 'width'));
         },
 
         // width of element with padding but without margin and border
