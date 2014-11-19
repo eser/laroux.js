@@ -2,7 +2,7 @@
 
 [![laroux.js logo](https://larukedi.github.io/laroux.js/assets/images/logo-medium.png)](https://larukedi.github.io/laroux.js/)
 
-[This project](https://github.com/larukedi/laroux.js) is a jquery substitute for modern browsers. But instead of offering some wrappers and own dynamics, it simply provides helper functions to achieve the same objectives with jquery or zepto.
+[This project](https://github.com/larukedi/laroux.js) is a jQuery substitute for modern browsers and mobile devices. But instead of offering some wrappers and own dynamics, it simply provides helper functions to achieve the same objectives with jQuery or Zepto.
 
 Even though keeping compactness is the primary concern of this library, lightweight versions of some concepts/components including some UI helpers and MVC.
 
@@ -21,6 +21,8 @@ So far, it has [Ajax](https://github.com/larukedi/laroux.js/wiki/ajax), [Anim](h
 - Love working with more compact, organized libraries in smaller sizes (26K).
 - Want working with native DOM objects instead of wrappers.
 - Get pace with debug console's autocomplete/fluent typing.
+- Did not satisfied from other libraries' performances on mobile devices.
+
 
 ### Demos
 
@@ -86,14 +88,9 @@ npm install
 See [LICENSE](LICENSE)
 
 
-## Thanks to
-
-- Burak 'burky' Babir
-- Sevket Bulamaz
-- Yalcin Ceylan
-
-
 ## Contributing
+
+See [contributors.md](contributors.md)
 
 It is publicly open for any contribution. Bugfixes and suggestions are welcome.
 

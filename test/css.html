@@ -1,40 +1,40 @@
 <!doctype html>
-	<html>
-	<head>
-		<meta charset="utf-8">
-		<script src="../src/laroux.js"></script>
-		<script src="../src/laroux.css.js"></script>
+    <html>
+    <head>
+        <meta charset="utf-8">
+        <script src="../src/laroux.js"></script>
+        <script src="../src/laroux.css.js"></script>
         <script src="../src/laroux.events.js"></script>
         <script src="../src/laroux.helpers.js"></script>
         <script src="../src/laroux.dom.js"></script>
 
-		<script>
-			$l.ready(function() {
-				var $bar = $l('.bar');
+        <script>
+            $l.ready(function() {
+                var $bar = $l('.bar');
 
-				console.log([
-					'$l.css.height(bar)', $l.css.height($bar),
-					'$l.css.innerHeight(bar)', $l.css.innerHeight($bar),
-					'$l.css.outerHeight(bar)', $l.css.outerHeight($bar),
-					'$l.css.outerHeight(bar, true)', $l.css.outerHeight($bar, true),
+                console.log([
+                    '$l.css.height(bar)', $l.css.height($bar),
+                    '$l.css.innerHeight(bar)', $l.css.innerHeight($bar),
+                    '$l.css.outerHeight(bar)', $l.css.outerHeight($bar),
+                    '$l.css.outerHeight(bar, true)', $l.css.outerHeight($bar, true),
 
-					'$l.css.width(bar)', $l.css.width($bar),
-					'$l.css.innerWidth(bar)', $l.css.innerWidth($bar),
-					'$l.css.outerWidth(bar)', $l.css.outerWidth($bar),
-					'$l.css.outerWidth(bar, true)', $l.css.outerWidth($bar, true),
-				]);
-			});
-		</script>
+                    '$l.css.width(bar)', $l.css.width($bar),
+                    '$l.css.innerWidth(bar)', $l.css.innerWidth($bar),
+                    '$l.css.outerWidth(bar)', $l.css.outerWidth($bar),
+                    '$l.css.outerWidth(bar, true)', $l.css.outerWidth($bar, true),
+                ]);
+            });
+        </script>
 
-		<style>
-			.bar{background-color:red; border:5px solid black; margin:5px; padding:20px; max-width:300px;}
-		</style>
-	</head>
-	<body>
+        <style>
+            .bar{background-color:red; border:5px solid black; margin:5px; padding:20px; max-width:300px;}
+        </style>
+    </head>
+    <body>
 
-		<div class="bar">
-			bar
-		</div>
+        <div class="bar">
+            bar
+        </div>
 
-	</body>
+    </body>
 </html>
