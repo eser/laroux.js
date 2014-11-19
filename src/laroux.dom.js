@@ -16,7 +16,6 @@
             }
 
             return Array.prototype.slice.call(elements);
-            // return document.querySelectorAll.apply(document, arguments);
         },
 
         selectByClass: function(selector, parent) {
@@ -28,7 +27,14 @@
             }
 
             return Array.prototype.slice.call(elements);
-            // return document.getElementsByClassName.apply(document, arguments);
+        },
+
+        selectById: function(selector, parent) {
+            if (typeof parent == 'undefined') {
+                return document.getElementById(selector);
+            }
+
+            return parent.getElementById(selector);
         },
 
         selectSingle: function(selector, parent) {
@@ -37,7 +43,6 @@
             }
 
             return parent.querySelector(selector);
-            // return document.querySelector.apply(document, arguments);
         },
 
         eventHistory: { },

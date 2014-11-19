@@ -14,11 +14,30 @@
             return Array.prototype.slice.call(elements);
         }
 
+        /*
+        var re = /^#([^\+\>\[\]\.# ]*)$/.exec(selector);
+        if (re) {
+            if (typeof parent == 'undefined') {
+                return document.getElementById(re[1]);
+            }
+
+            return parent.getElementById(re[1]);
+        }
+        */
+
         if (typeof parent == 'undefined') {
             return document.querySelector(selector);
         }
 
         return parent.querySelector(selector);
+    };
+
+    laroux.id = function(selector, parent) {
+        if (typeof parent == 'undefined') {
+            return document.getElementById(selector);
+        }
+
+        return parent.getElementById(selector);
     };
 
     laroux.baseLocation = '';
