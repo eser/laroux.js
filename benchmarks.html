@@ -195,6 +195,12 @@ $l.each([52, 97], function(index, value) {
     console.log(index + ': ' + value);
 });
                         </pre>
+                        <h4>laroux.js (II)</h4>
+                        <pre class="prettyprint">
+$l.aeach([52, 97], function(index, value) {
+    console.log(index + ': ' + value);
+});
+                        </pre>
                         <h4>jQuery/Zepto</h4>
                         <pre class="prettyprint">
 $.each([52, 97], function(index, value) {
@@ -256,6 +262,12 @@ $.each({a: 1, b: 2}, function(index, value) {
                         <h4>laroux.js</h4>
                         <pre class="prettyprint">
 $l.map(['eser', 'ozvataf'], function(value) {
+    return value;
+});
+                        </pre>
+                        <h4>laroux.js (II)</h4>
+                        <pre class="prettyprint">
+$l.amap(['eser', 'ozvataf'], function(value) {
     return value;
 });
                         </pre>

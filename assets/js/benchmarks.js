@@ -3,6 +3,7 @@
 
     var chromeColor = 'rgba(237, 194, 64, 0.85)';
     var firefoxColor = 'rgba(255, 164, 34, 0.85)';
+    var ieColor = 'rgba(84, 164, 215, 0.85)';
 
     function doBenchmark(button, target, tests) {
         var suite = new Benchmark.Suite;
@@ -63,7 +64,7 @@
 
             var dataPoints = [];
             for (var pointItem in currentItem.values) {
-                dataPoints.push({ y: currentItem.values[pointItem], label: pointItem });
+                dataPoints.unshift({ y: currentItem.values[pointItem], label: pointItem });
             }
 
             chartData.data.push({
@@ -99,6 +100,15 @@
                     'laroux.js': 231524,
                     'jQuery': 59402,
                     'Zepto': 88427
+                }
+            },
+            {
+                name: 'IE',
+                color: ieColor,
+                values: {
+                    'laroux.js': 223489,
+                    'jQuery': 147338,
+                    'Zepto': 78652
                 }
             }
         ];
@@ -163,6 +173,16 @@
                     'laroux.js (II)': 421946,
                     'jQuery': 286514,
                     'Zepto': 74654
+                }
+            },
+            {
+                name: 'IE',
+                color: ieColor,
+                values: {
+                    'laroux.js': 309592,
+                    'laroux.js (II)': 632975,
+                    'jQuery': 314907,
+                    'Zepto': 86235
                 }
             }
         ];
@@ -234,6 +254,16 @@
                     'jQuery': 44510,
                     'Zepto': 71562
                 }
+            },
+            {
+                name: 'IE',
+                color: ieColor,
+                values: {
+                    'laroux.js': 199585,
+                    'laroux.js (II)': 308762,
+                    'jQuery': 117656,
+                    'Zepto': 65597
+                }
             }
         ];
         drawGraph(graph, graphdata);
@@ -290,6 +320,7 @@
                 color: chromeColor,
                 values: {
                     'laroux.js': 7474,
+                    'laroux.js (II)': 4971,
                     'jQuery': 7041,
                     'Zepto': 6976
                 }
@@ -299,8 +330,19 @@
                 color: firefoxColor,
                 values: {
                     'laroux.js': 21242,
+                    'laroux.js (II)': 18972,
                     'jQuery': 25108,
                     'Zepto': 24782
+                }
+            },
+            {
+                name: 'IE',
+                color: ieColor,
+                values: {
+                    'laroux.js': 237065,
+                    'laroux.js (II)': 174020,
+                    'jQuery': 196511,
+                    'Zepto': 187453
                 }
             }
         ];
@@ -321,6 +363,14 @@
                             name: 'laroux.js',
                             fnc: function() {
                                 $l.each([52, 97], function(index, value) {
+                                    console.log(index + ': ' + value);
+                                });
+                            }
+                        },
+                        {
+                            name: 'laroux.js (II)',
+                            fnc: function() {
+                                $l.aeach([52, 97], function(index, value) {
                                     console.log(index + ': ' + value);
                                 });
                             }
@@ -369,6 +419,15 @@
                     'laroux.js': 26740,
                     'jQuery': 24509,
                     'Zepto': 23855
+                }
+            },
+            {
+                name: 'IE',
+                color: ieColor,
+                values: {
+                    'laroux.js': 259837,
+                    'jQuery': 189345,
+                    'Zepto': 187967
                 }
             }
         ];
@@ -426,6 +485,7 @@
                 color: chromeColor,
                 values: {
                     'laroux.js': 352497,
+                    'laroux.js (II)': 814497,
                     'jQuery': 171942,
                     'Zepto': 169488
                 }
@@ -435,8 +495,19 @@
                 color: firefoxColor,
                 values: {
                     'laroux.js': 177761,
+                    'laroux.js (II)': 443161,
                     'jQuery': 648821,
                     'Zepto': 644681
+                }
+            },
+            {
+                name: 'IE',
+                color: ieColor,
+                values: {
+                    'laroux.js': 1052153,
+                    'laroux.js (II)': 1408633,
+                    'jQuery': 511160,
+                    'Zepto': 485873
                 }
             }
         ];
@@ -457,6 +528,14 @@
                             name: 'laroux.js',
                             fnc: function() {
                                 $l.map(['eser', 'ozvataf'], function(value) {
+                                    return value;
+                                });
+                            }
+                        },
+                        {
+                            name: 'laroux.js (II)',
+                            fnc: function() {
+                                $l.amap(['eser', 'ozvataf'], function(value) {
                                     return value;
                                 });
                             }
@@ -505,6 +584,15 @@
                     'laroux.js': 2701741,
                     'jQuery': 525629,
                     'Zepto': 521860
+                }
+            },
+            {
+                name: 'IE',
+                color: ieColor,
+                values: {
+                    'laroux.js': 1533039,
+                    'jQuery': 431474,
+                    'Zepto': 431442
                 }
             }
         ];
@@ -576,6 +664,16 @@
                     'jQuery': 10401,
                     'Zepto': 10487
                 }
+            },
+            {
+                name: 'IE',
+                color: ieColor,
+                values: {
+                    'laroux.js': 8851,
+                    'laroux.js (II)': 2797,
+                    'jQuery': 1389,
+                    'Zepto': 1394
+                }
             }
         ];
         drawGraph(graph, graphdata);
@@ -643,6 +741,15 @@
                     'laroux.js': 18946,
                     'jQuery': 5212,
                     'Zepto': 5078
+                }
+            },
+            {
+                name: 'IE',
+                color: ieColor,
+                values: {
+                    'laroux.js': 5793,
+                    'jQuery': 1029,
+                    'Zepto': 1127
                 }
             }
         ];
