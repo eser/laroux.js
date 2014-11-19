@@ -260,49 +260,51 @@ $l.ready(function() {
 });
 
 // mvc
-$l.ready(function() {
-    $l.mvc.init();
-});
+if (typeof Object.observe != 'undefined') {
+    $l.ready(function() {
+        $l.mvc.init();
+    });
 
-// mvc - Simple Model Binding
-$l.ready(function() {
-    var textbox = $l('#textbox-mvc-simple');
-    var myModel = { name: '' };
+    // mvc - Simple Model Binding
+    $l.ready(function() {
+        var textbox = $l('#textbox-mvc-simple');
+        var myModel = { name: '' };
 
-    $l.mvc.bind('mvcsimple', myModel);
+        $l.mvc.bind('mvcsimple', myModel);
 
-    $l.dom.setEvent(
-        textbox,
-        'keyup',
-        function(ev, element) {
-            myModel.name = element.value;
+        $l.dom.setEvent(
+            textbox,
+            'keyup',
+            function(ev, element) {
+                myModel.name = element.value;
 
-            return false;
-        }
-    );
-});
+                return false;
+            }
+        );
+    });
 
-// mvc - Model Binding with Controller
-$l.ready(function() {
-    var textboxes = $l(['.textboxes-mvc-controller']);
-    var myModel = { a: 3, b: 5 };
+    // mvc - Model Binding with Controller
+    $l.ready(function() {
+        var textboxes = $l(['.textboxes-mvc-controller']);
+        var myModel = { a: 3, b: 5 };
 
-    var controller = function($model) {
-        $model.total = parseInt($model.a) + parseInt($model.b);
-    };
+        var controller = function($model) {
+            $model.total = parseInt($model.a) + parseInt($model.b);
+        };
 
-    $l.mvc.bind('mvccontroller', myModel, controller);
+        $l.mvc.bind('mvccontroller', myModel, controller);
 
-    $l.dom.setEvent(
-        textboxes,
-        'keyup',
-        function(ev, element) {
-            myModel[element.getAttribute('name')] = element.value;
+        $l.dom.setEvent(
+            textboxes,
+            'keyup',
+            function(ev, element) {
+                myModel[element.getAttribute('name')] = element.value;
 
-            return false;
-        }
-    );
-});
+                return false;
+            }
+        );
+    });
+}
 
 // stack - Examples
 $l.ready(function() {
