@@ -188,7 +188,7 @@
                         {
                             name: 'laroux.js (II)',
                             fnc: function() {
-                                $l.dom.selectById('home');
+                                $l.id('home');
                             }
                         },
                         {
