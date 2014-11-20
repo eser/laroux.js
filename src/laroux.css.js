@@ -127,7 +127,7 @@
             var elements = laroux.helpers.getAsArray(element);
 
             for (var i = elements.length - 1;i >= 0; i--) {
-                laroux.css.setTransitionSingle(element[i], transition);
+                laroux.css.setTransitionSingle(elements[i], transition);
             }
         },
 
