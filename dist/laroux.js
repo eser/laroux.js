@@ -622,18 +622,30 @@
         },
 
         addClass: function(element, className) {
-            element.classList.add(className);
+            var elements = laroux.helpers.getAsArray(element);
+
+            for (var i = elements.length - 1;i >= 0; i--) {
+                elements[i].classList.add(className);
+            }
         },
 
         removeClass: function(element, className) {
-            element.classList.remove(className);
+            var elements = laroux.helpers.getAsArray(element);
+
+            for (var i = elements.length - 1;i >= 0; i--) {
+                elements[i].classList.remove(className);
+            }
         },
 
         toggleClass: function(element, className) {
-            if (element.classList.contains(className)) {
-                element.classList.remove(className);
-            } else {
-                element.classList.add(className);
+            var elements = laroux.helpers.getAsArray(element);
+
+            for (var i = elements.length - 1;i >= 0; i--) {
+                if (elements[i].classList.contains(className)) {
+                    elements[i].classList.remove(className);
+                } else {
+                    elements[i].classList.add(className);
+                }
             }
         },
 
