@@ -3,6 +3,7 @@
 
     var crlf = '<br />';
 
+    var snippetList = $l.id('snippet-list');
     var snippetDescription = $l.id('snippet-description');
     var snippetArea = $l.id('snippet-area');
     var checkboxExecSnippetOnLoad = $l.id('checkbox-exec-snippet-on-load');
@@ -38,6 +39,9 @@
     }
 
     function loadSnippet(ev, element) {
+        $l.css.removeClass($l(['li'], snippetList), 'active');
+        $l.css.addClass(element.parentElement, 'active');
+
         $l.dom.replace(
             $l('div', snippetDescription),
             element.getAttribute('title')
@@ -57,8 +61,6 @@
     }
 
     $l.ready(function() {
-        var snippetList = $l.id('snippet-list');
-
         $l.dom.setEvent(checkboxExecSnippetOnLoad, 'change', drawSnippet);
 
         $l.ajax.getJson(
