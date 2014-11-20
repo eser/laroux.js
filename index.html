@@ -35,6 +35,7 @@
                     <div id="navbar" class="navbar-collapse collapse">
                         <ul class="nav navbar-nav">
                             <li class="active"><a href="./">Demos</a></li>
+                            <li><a href="./snippets.html">Snippets</a></li>
                             <li><a href="./benchmarks.html">Benchmarks</a></li>
                         </ul>
                         <ul class="nav navbar-nav navbar-right">
@@ -58,10 +59,11 @@
                     </div>
                 </div>
                 <p class="text-center">
-                    <a class="btn btn-lg btn-primary" href="./benchmarks.html" role="button">Benchmarks &raquo;</a>
-                    <a class="btn btn-lg btn-primary" href="https://github.com/larukedi/laroux.js" role="button">GitHub &raquo;</a>
-                    <a class="btn btn-lg btn-primary" href="https://github.com/larukedi/laroux.js/wiki" role="button">Wiki &raquo;</a>
-                    <a class="btn btn-lg btn-success" href="https://github.com/larukedi/laroux.js/releases" role="button">Downloads &raquo;</a>
+                    <a class="btn btn-primary" href="./snippets.html" role="button">Snippets &raquo;</a>
+                    <a class="btn btn-primary" href="./benchmarks.html" role="button">Benchmarks &raquo;</a>
+                    <a class="btn btn-primary" href="https://github.com/larukedi/laroux.js" role="button">GitHub &raquo;</a>
+                    <a class="btn btn-primary" href="https://github.com/larukedi/laroux.js/wiki" role="button">Wiki &raquo;</a>
+                    <a class="btn btn-success" href="https://github.com/larukedi/laroux.js/releases" role="button">Downloads &raquo;</a>
                 </p>
             </div>
 
@@ -108,7 +110,7 @@ $l.ajax.getJson(
     'test.json',
     null,
     function(response) {
-        $l.dom.replace($l('#text-ajax-get-request'), response.testResponse);
+        $l.dom.replace($l.id('text-ajax-get-request'), response.testResponse);
     }
 );
                         </pre>
@@ -162,7 +164,7 @@ $l.anim.set({
                         <h4>Javascript</h4>
                         <pre class="prettyprint">
 $l.anim.setCss({
-    object:   $l('#div-anim-css-animate'),
+    object:   $l.id('div-anim-css-animate'),
     property: 'top',
     from:     0, // current value
     to:       50,
@@ -199,7 +201,7 @@ $l.anim.setCss({
 
                         <h4>Javascript</h4>
                         <pre class="prettyprint">
-var box = $l('#div-css-transition');
+var box = $l.id('div-css-transition');
 
 $l.css.setTransition(
     box,
@@ -239,7 +241,7 @@ $l.css.toggleClass(box, 'box-silver');
 
                         <h4>Javascript</h4>
                         <pre class="prettyprint">
-var text = $l('#text-date-dates');
+var text = $l.id('text-date-dates');
 
 var now = new Date();
 var yesterday = new Date();
@@ -297,7 +299,7 @@ $l.dom.append(text, $l.date.getLongDateString(now, true, true) + '&lt;br /&gt;')
 
                         <h4>Javascript</h4>
                         <pre class="prettyprint">
-var target = $l('#target-dom-clone');
+var target = $l.id('target-dom-clone');
 
 $l.dom.clone(target.firstElementChild, $l.dom.cloneAppend);
                         </pre>
@@ -330,10 +332,10 @@ $l.dom.clone(target.firstElementChild, $l.dom.cloneAppend);
 
                         <h4>Javascript</h4>
                         <pre class="prettyprint">
-var text = $l('#text-events-setting-events');
+var text = $l.id('text-events-setting-events');
 
 $l.dom.setEvent(
-    $l('#checkbox-events-setting-events'),
+    $l.id('checkbox-events-setting-events'),
     'change',
     function(ev, element) {
         if (element.checked) {
@@ -389,8 +391,8 @@ $l.dom.setEvent(
 
                         <h4>Javascript</h4>
                         <pre class="prettyprint">
-var serialized = $l.forms.serialize($l('#target-forms-serializing'));
-$l.dom.replace($l('#text-forms-serializing'), JSON.stringify(serialized));
+var serialized = $l.forms.serialize($l.id('target-forms-serializing'));
+$l.dom.replace($l.id('text-forms-serializing'), JSON.stringify(serialized));
                         </pre>
                     </div>
                 </div>
@@ -424,7 +426,7 @@ $l.dom.replace($l('#text-forms-serializing'), JSON.stringify(serialized));
 
                         <h4>Javascript</h4>
                         <pre class="prettyprint">
-$l.forms.toggleFormEditing($l('#target-forms-toggle'));
+$l.forms.toggleFormEditing($l.id('target-forms-toggle'));
                         </pre>
                     </div>
                 </div>
@@ -454,7 +456,7 @@ $l.forms.toggleFormEditing($l('#target-forms-toggle'));
 
                         <h4>Javascript</h4>
                         <pre class="prettyprint">
-var text = $l('#text-helpers-helpers');
+var text = $l.id('text-helpers-helpers');
 
 $l.dom.clear(text);
 
@@ -537,7 +539,7 @@ $l.mvc.init();
 $l.mvc.bind('mvcsimple', myModel);
 
 $l.dom.setEvent(
-    $l('#textbox-mvc-simple'),
+    $l.id('textbox-mvc-simple'),
     'keyup',
     function(ev, element) {
         myModel.name = element.value;
@@ -686,7 +688,7 @@ $l.dom.append(text, JSON.stringify(stack.data) + '&lt;br /&gt;');
 
                         <h4>Javascript</h4>
                         <pre class="prettyprint">
-var text = $l('#text-timers-set');
+var text = $l.id('text-timers-set');
 $l.dom.replace(text, 'waiting...&lt;br /&gt;');
 
 $l.timers.set({

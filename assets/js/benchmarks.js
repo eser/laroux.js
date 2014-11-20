@@ -8,7 +8,6 @@
 
     function doBenchmark(button, target, tests) {
         var suite = new Benchmark.Suite;
-        var text = $l('#content');
         var crlf = '<br />';
 
         button.setAttribute('disabled', 'disabled');
@@ -83,7 +82,7 @@
 
     // Selectors by Tagname
     $l.ready(function() {
-        var graph = $l('#graph-selectors-tagname');
+        var graph = $l.id('graph-selectors-tagname');
         var graphdata = [
             {
                 name: 'Chrome',
@@ -124,8 +123,8 @@
         ];
         drawGraph(graph, graphdata);
 
-        var button = $l('#button-selectors-tagname');
-        var text = $l('#text-selectors-tagname');
+        var button = $l.id('button-selectors-tagname');
+        var text = $l.id('text-selectors-tagname');
 
         $l.dom.setEvent(
             button,
@@ -163,7 +162,7 @@
 
     // Selectors by Element Id
     $l.ready(function() {
-        var graph = $l('#graph-selectors-elementid');
+        var graph = $l.id('graph-selectors-elementid');
         var graphdata = [
             {
                 name: 'Chrome',
@@ -208,8 +207,8 @@
         ];
         drawGraph(graph, graphdata);
 
-        var button = $l('#button-selectors-elementid');
-        var text = $l('#text-selectors-elementid');
+        var button = $l.id('button-selectors-elementid');
+        var text = $l.id('text-selectors-elementid');
 
         $l.dom.setEvent(
             button,
@@ -222,7 +221,7 @@
                         {
                             name: 'laroux.js',
                             fnc: function() {
-                                $l('#home');
+                                $l.id('home');
                             }
                         },
                         {
@@ -253,7 +252,7 @@
 
     // Selectors by Class
     $l.ready(function() {
-        var graph = $l('#graph-selectors-class');
+        var graph = $l.id('graph-selectors-class');
         var graphdata = [
             {
                 name: 'Chrome',
@@ -298,8 +297,8 @@
         ];
         drawGraph(graph, graphdata);
 
-        var button = $l('#button-selectors-class');
-        var text = $l('#text-selectors-class');
+        var button = $l.id('button-selectors-class');
+        var text = $l.id('text-selectors-class');
 
         $l.dom.setEvent(
             button,
@@ -343,7 +342,7 @@
 
     // Each on Arrays
     $l.ready(function() {
-        var graph = $l('#graph-main-each-arrays');
+        var graph = $l.id('graph-main-each-arrays');
         var graphdata = [
             {
                 name: 'Chrome',
@@ -388,8 +387,8 @@
         ];
         drawGraph(graph, graphdata);
 
-        var button = $l('#button-main-each-arrays');
-        var text = $l('#text-main-each-arrays');
+        var button = $l.id('button-main-each-arrays');
+        var text = $l.id('text-main-each-arrays');
 
         $l.dom.setEvent(
             button,
@@ -441,7 +440,7 @@
 
     // Each on Objects
     $l.ready(function() {
-        var graph = $l('#graph-main-each-objects');
+        var graph = $l.id('graph-main-each-objects');
         var graphdata = [
             {
                 name: 'Chrome',
@@ -482,8 +481,8 @@
         ];
         drawGraph(graph, graphdata);
 
-        var button = $l('#button-main-each-objects');
-        var text = $l('#text-main-each-objects');
+        var button = $l.id('button-main-each-objects');
+        var text = $l.id('text-main-each-objects');
 
         $l.dom.setEvent(
             button,
@@ -527,7 +526,7 @@
 
     // Map on Arrays
     $l.ready(function() {
-        var graph = $l('#graph-main-map-arrays');
+        var graph = $l.id('graph-main-map-arrays');
         var graphdata = [
             {
                 name: 'Chrome',
@@ -572,8 +571,8 @@
         ];
         drawGraph(graph, graphdata);
 
-        var button = $l('#button-main-map-arrays');
-        var text = $l('#text-main-map-arrays');
+        var button = $l.id('button-main-map-arrays');
+        var text = $l.id('text-main-map-arrays');
 
         $l.dom.setEvent(
             button,
@@ -625,7 +624,7 @@
 
     // Map on Objects
     $l.ready(function() {
-        var graph = $l('#graph-main-map-objects');
+        var graph = $l.id('graph-main-map-objects');
         var graphdata = [
             {
                 name: 'Chrome',
@@ -666,8 +665,8 @@
         ];
         drawGraph(graph, graphdata);
 
-        var button = $l('#button-main-map-objects');
-        var text = $l('#text-main-map-objects');
+        var button = $l.id('button-main-map-objects');
+        var text = $l.id('text-main-map-objects');
 
         $l.dom.setEvent(
             button,
@@ -711,7 +710,7 @@
 
     // Create DOM element
     $l.ready(function() {
-        var graph = $l('#graph-dom-create-element');
+        var graph = $l.id('graph-dom-create-element');
         var graphdata = [
             {
                 name: 'Chrome',
@@ -756,8 +755,8 @@
         ];
         drawGraph(graph, graphdata);
 
-        var button = $l('#button-dom-create-element');
-        var text = $l('#text-dom-create-element');
+        var button = $l.id('button-dom-create-element');
+        var text = $l.id('text-dom-create-element');
 
         $l.dom.setEvent(
             button,
@@ -801,7 +800,7 @@
 
     // DOM Manipulations
     $l.ready(function() {
-        var graph = $l('#graph-dom-manipulations');
+        var graph = $l.id('graph-dom-manipulations');
         var graphdata = [
             {
                 name: 'Chrome',
@@ -842,8 +841,8 @@
         ];
         drawGraph(graph, graphdata);
 
-        var button = $l('#button-dom-manipulations');
-        var text = $l('#text-dom-manipulations');
+        var button = $l.id('button-dom-manipulations');
+        var text = $l.id('text-dom-manipulations');
 
         $l.dom.setEvent(
             button,
