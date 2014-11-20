@@ -45,6 +45,32 @@
             return parent.querySelector(selector);
         },
 
+        attr: function(element, attrname, value) {
+            if (typeof value == 'undefined') {
+                return element.getAttribute(attrname);
+            }
+
+            if (value === null) {
+                element.removeAttribute(attrname);
+                return;
+            }
+
+            element.setAttribute(attrname, value);
+        },
+
+        data: function(element, dataname, value) {
+            if (typeof value == 'undefined') {
+                return element.getAttribute('data-' + dataname);
+            }
+
+            if (value === null) {
+                element.removeAttribute('data-' + dataname);
+                return;
+            }
+
+            element.setAttribute('data-' + dataname, value);
+        },
+
         eventHistory: { },
         setEvent: function(element, eventname, fnc) {
             var elements = laroux.helpers.getAsArray(element);
