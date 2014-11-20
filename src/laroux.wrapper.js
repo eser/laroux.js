@@ -136,4 +136,8 @@
 
     laroux.wrapper.fn = {};
 
+    laroux.wrapper.init = function() {
+        window.$ = laroux.wrapper;
+    };
+
 })(this.laroux);
