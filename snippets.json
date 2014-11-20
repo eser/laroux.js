@@ -27,5 +27,17 @@
         "file":         "smooth-page-scroll.js",
         "description":  "Scrolls smoothly to anchors in page, if the clicked link has .scroll-link class",
         "onload":       true
+    },
+    {
+        "name":         "Remove Class After Delay",
+        "file":         "remove-class-after-delay.js",
+        "description":  "Removes specified class from the element after 5 seconds passed",
+        "onload":       true
+    },
+    {
+        "name":         "Toggle Class In Every 2 Seconds",
+        "file":         "toggle-class-in-every-two-seconds.js",
+        "description":  "Toggles specified class for the element in every 2 seconds",
+        "onload":       true
     }
 ]
