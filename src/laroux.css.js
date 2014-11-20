@@ -6,6 +6,7 @@
 
     // css
     laroux.css = {
+        // class features
         hasClass: function(element, className) {
             return element.classList.contains(className);
         },
@@ -38,6 +39,7 @@
             }
         },
 
+        // style features
         getProperty: function(element, styleName) {
             var style = getComputedStyle(element);
             styleName = laroux.helpers.antiCamelCase(styleName);
@@ -67,7 +69,12 @@
             }
         },
 
-        setTransitionSingle: function(element, transitions) {
+        // transition features
+        defaultTransition: '2s ease',
+
+        setTransitionSingle: function(element, transition) {
+            var transitions = laroux.helpers.getAsArray(transition);
+
             var style = getComputedStyle(element);
             var currentTransitions = style.getPropertyValue('transition') || style.getPropertyValue('-webkit-transition') ||
                 style.getPropertyValue('-ms-transition') || '';
@@ -79,22 +86,33 @@
                 currentTransitionsArray = [];
             }
 
-            for (var styleName in transitions) {
-                if (!transitions.hasOwnProperty(styleName)) {
+            for (var item in transitions) {
+                if (!transitions.hasOwnProperty(item)) {
                     continue;
+                }
+
+                var styleName, transitionProperties,
+                    pos = transitions[item].indexOf(' ');
+
+                if (pos !== -1) {
+                    styleName = transitions[item].substring(0, pos);
+                    transitionProperties = transitions[item].substring(pos + 1);
+                } else {
+                    styleName = transitions[item];
+                    transitionProperties = laroux.css.defaultTransition;
                 }
 
                 var found = false;
                 for (var j = 0; j < currentTransitionsArray.length; j++) {
                     if (currentTransitionsArray[j].trim().localeCompare(styleName) === 0) {
-                        currentTransitionsArray[j] = styleName + ' ' + transitions[styleName];
+                        currentTransitionsArray[j] = styleName + ' ' + transitionProperties;
                         found = true;
                         break;
                     }
                 }
 
                 if (!found) {
-                    currentTransitionsArray.push(styleName + ' ' + transitions[styleName]);
+                    currentTransitionsArray.push(styleName + ' ' + transitionProperties);
                 }
             }
 
@@ -105,51 +123,15 @@
             element.style.msTransition = value;
         },
 
-        setTransition: function(element, transitions) {
+        setTransition: function(element, transition) {
             var elements = laroux.helpers.getAsArray(element);
 
             for (var i = elements.length - 1;i >= 0; i--) {
-                laroux.css.setTransitionSingle(element, transitions);
+                laroux.css.setTransitionSingle(element, transition);
             }
         },
 
-        defaultTransition: '2s ease',
-        // todo: move this under anim to get rid of $l.dom dependency
-        transition: function(element, transitions, callback) {
-            var elements = laroux.helpers.getAsArray(element);
-
-            var newTransitions = {};
-            var newValues = {};
-            for (var styleName in transitions) {
-                if (!transitions.hasOwnProperty(styleName)) {
-                    continue;
-                }
-
-                if (transitions[styleName] instanceof Array) {
-                    newValues[styleName] = transitions[styleName][0];
-
-                    if (typeof transitions[styleName][1] != 'undefined') {
-                        newTransitions[styleName] = transitions[styleName][1];
-                    } else {
-                        newTransitions[styleName] = laroux.css.defaultTransition;
-                    }
-                } else {
-                    newValues[styleName] = transitions[styleName];
-                    newTransitions[styleName] = laroux.css.defaultTransition;
-                }
-            }
-
-            for (var i = elements.length - 1;i >= 0; i--) {
-                laroux.css.setTransitionSingle(elements[i], newTransitions);
-                laroux.css.setProperty(elements[i], newValues);
-
-                laroux.dom.unsetEvent(elements[i], 'transitionend');
-                if (typeof callback != 'undefined') {
-                    laroux.dom.setEvent(elements[i], 'transitionend', callback);
-                }
-            }
-        },
-
+        // measurement features
         // height of element without padding, margin and border
         height: function(element) {
             var style = getComputedStyle(element);
