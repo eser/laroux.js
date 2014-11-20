@@ -1,6 +1,8 @@
 (function(laroux) {
     "use strict";
 
+    // requires $l
+
     // vars
     laroux.vars = {
         getCookie: function(name, defaultValue) {

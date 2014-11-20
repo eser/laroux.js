@@ -11,17 +11,18 @@
         <script>
             $l.ready(function() {
                 var $bar = $l('.bar');
+                window.$bar = $bar;
 
                 console.log([
-                    '$l.css.height(bar)', $l.css.height($bar),
-                    '$l.css.innerHeight(bar)', $l.css.innerHeight($bar),
-                    '$l.css.outerHeight(bar)', $l.css.outerHeight($bar),
-                    '$l.css.outerHeight(bar, true)', $l.css.outerHeight($bar, true),
+                    '$l.css.height($bar)', $l.css.height($bar),
+                    '$l.css.innerHeight($bar)', $l.css.innerHeight($bar),
+                    '$l.css.outerHeight($bar)', $l.css.outerHeight($bar),
+                    '$l.css.outerHeight($bar, true)', $l.css.outerHeight($bar, true),
 
-                    '$l.css.width(bar)', $l.css.width($bar),
-                    '$l.css.innerWidth(bar)', $l.css.innerWidth($bar),
-                    '$l.css.outerWidth(bar)', $l.css.outerWidth($bar),
-                    '$l.css.outerWidth(bar, true)', $l.css.outerWidth($bar, true),
+                    '$l.css.width($bar)', $l.css.width($bar),
+                    '$l.css.innerWidth($bar)', $l.css.innerWidth($bar),
+                    '$l.css.outerWidth($bar)', $l.css.outerWidth($bar),
+                    '$l.css.outerWidth($bar, true)', $l.css.outerWidth($bar, true),
                 ]);
             });
         </script>

@@ -1,6 +1,9 @@
 (function(laroux) {
     "use strict";
 
+    // requires $l.css
+    // requires $l.dom
+
     var WrapObject = function(element) {
         this.element = element;
 

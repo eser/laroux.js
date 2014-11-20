@@ -1,6 +1,13 @@
 (function(laroux) {
     "use strict";
 
+    // requires $l
+    // requires $l.dom
+    // requires $l.helpers
+    // requires $l.css
+    // requires $l.timers
+    // requires $l.date
+
     // ui
     laroux.ui = {
         floatContainer: null,

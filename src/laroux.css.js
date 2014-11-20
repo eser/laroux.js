@@ -1,6 +1,9 @@
 (function(laroux) {
     "use strict";
 
+    // requires $l.helpers
+    // requires $l.dom
+
     // css
     laroux.css = {
         hasClass: function(element, className) {
@@ -111,6 +114,7 @@
         },
 
         defaultTransition: '2s ease',
+        // todo: move this under anim to get rid of $l.dom dependency
         transition: function(element, transitions, callback) {
             var elements = laroux.helpers.getAsArray(element);
 
@@ -148,62 +152,74 @@
 
         // height of element without padding, margin and border
         height: function(element) {
-            return parseFloat(this.getProperty(element, 'height'));
+            var style = getComputedStyle(element);
+
+            return parseFloat(style.getPropertyValue('height'));
         },
 
         // height of element with padding but without margin and border
         innerHeight: function(element) {
-            var paddingBottom = parseFloat(this.getProperty(element, 'paddingBottom')),
-                paddingTop = parseFloat(this.getProperty(element, 'paddingTop')),
-                height = this.height(element);
-
-            return height + paddingBottom + paddingTop;
+            return element.clientHeight;
         },
 
         // height of element with padding and border but margin optional
         outerHeight: function(element, includeMargin) {
-            var innerHeight = this.innerHeight(element),
-                borderBottom = parseFloat(this.getProperty(element, 'borderBottom')),
-                borderTop = parseFloat(this.getProperty(element, 'borderTop')),
-                marginBottom = 0,
-                marginTop = 0;
-
-            if (typeof includeMargin != 'undefined' && includeMargin === true) {
-                marginBottom = parseFloat(this.getProperty(element, 'marginBottom'));
-                marginTop = parseFloat(this.getProperty(element, 'marginTop'));
+            if (typeof includeMargin == 'undefined' || includeMargin !== true) {
+                return element.offsetHeight;
             }
 
-            return innerHeight + borderBottom + borderTop + marginBottom + marginTop;
+            var style = getComputedStyle(element);
+            var margins = parseFloat(style.getPropertyValue('margin-top')) +
+                parseFloat(style.getPropertyValue('margin-bottom'));
+
+            return Math.ceil(element.offsetHeight + margins);
         },
 
         // width of element without padding, margin and border
         width: function(element) {
-            return parseFloat(this.getProperty(element, 'width'));
+            var style = getComputedStyle(element);
+
+            return parseFloat(style.getPropertyValue('width'));
         },
 
         // width of element with padding but without margin and border
         innerWidth: function(element) {
-            var paddingLeft = parseFloat(this.getProperty(element, 'paddingLeft')),
-                paddingRight = parseFloat(this.getProperty(element, 'paddingRight')),
-                width = this.width(element);
-
-            return width + paddingLeft + paddingRight;
+            return element.clientWidth;
         },
 
         // width of element with padding and border but margin optional
         outerWidth: function(element, includeMargin) {
-            var innerWidth = this.innerWidth(element),
-                borderLeft = parseFloat(this.getProperty(element, 'borderLeft')),
-                borderRight = parseFloat(this.getProperty(element, 'borderRight')),
-                marginLeft = 0,
-                marginRight = 0;
-
-            if (typeof includeMargin != 'undefined' && includeMargin === true) {
-                marginLeft = parseFloat(this.getProperty(element, 'marginLeft'));
-                marginRight = parseFloat(this.getProperty(element, 'marginRight'));
+            if (typeof includeMargin == 'undefined' || includeMargin !== true) {
+                return element.offsetWidth;
             }
 
-            return innerWidth + borderLeft + borderRight + marginLeft + marginRight;
+            var style = getComputedStyle(element);
+            var margins = parseFloat(style.getPropertyValue('margin-left')) +
+                parseFloat(style.getPropertyValue('margin-right'));
+
+            return Math.ceil(element.offsetWidth + margins);
+        },
+
+        aboveTheTop: function(element) {
+            return element.getBoundingClientRect().bottom <= 0;
+        },
+
+        belowTheFold: function(element) {
+            return element.getBoundingClientRect().top > window.innerHeight;
+        },
+
+        leftOfScreen: function(element) {
+            return element.getBoundingClientRect().right <= 0;
+        },
+
+        rightOfScreen: function(element) {
+            return element.getBoundingClientRect().left > window.innerWidth;
+        },
+
+        inViewport: function(element) {
+            var rect = element.getBoundingClientRect();
+            return !(rect.bottom <= 0 || rect.top > window.innerHeight ||
+                rect.right <= 0 || rect.left > window.innerWidth);
         }
     };
 

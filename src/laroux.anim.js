@@ -1,6 +1,9 @@
 (function(laroux) {
     "use strict";
 
+    // requires $l.helpers
+    // requires $l.css
+
     // anim
     laroux.anim = {
         data: [],

@@ -1,6 +1,10 @@
 (function(laroux) {
     "use strict";
 
+    // requires $l
+    // requires $l.events
+    // requires $l.helpers
+
     // ajax - partially taken from 'jquery in parts' project
     //        can be found at: https://github.com/mythz/jquip/
     laroux.ajax = {

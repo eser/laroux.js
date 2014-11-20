@@ -1,6 +1,8 @@
 (function(laroux) {
     "use strict";
 
+    // requires $l.dom
+
     // templates
     laroux.templates = {
         engine: null,

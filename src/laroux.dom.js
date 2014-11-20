@@ -1,6 +1,9 @@
 (function(laroux) {
     "use strict";
 
+    // requires $l.helpers
+    // requires $l.triggers
+
     // dom
     laroux.dom = {
         docprop: function(propName) {
@@ -325,8 +328,9 @@
             }
 
             return newElement;
-        },
+        } /*,
 
+        // todo: it's redundant
         applyOperations: function(element, operations) {
             for (var operation in operations) {
                 if (!operations.hasOwnProperty(operation)) {
@@ -394,6 +398,7 @@
                 }
             }
         }
+        */
     };
 
 })(this.laroux);

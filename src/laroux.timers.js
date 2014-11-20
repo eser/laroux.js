@@ -1,6 +1,8 @@
 (function(laroux) {
     "use strict";
 
+    // requires $l
+
     // timers
     laroux.timers = {
         data: [],

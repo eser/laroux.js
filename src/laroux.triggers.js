@@ -1,6 +1,8 @@
 (function(laroux) {
     "use strict";
 
+    // requires $l.helpers
+
     // triggers
     laroux.triggers = {
         delegates: [],

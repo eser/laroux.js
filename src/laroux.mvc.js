@@ -1,6 +1,9 @@
 (function(laroux) {
     "use strict";
 
+    // requires $l.dom
+    // requires $l.helpers
+
     // mvc
     laroux.mvc = {
         appObjects: [],
