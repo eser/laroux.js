@@ -9,5 +9,23 @@
         "file":         "confirmation-buttons.js",
         "description":  "Requests confirmation before link and button actions, if the element has .confirm-action class",
         "onload":       true
+    },
+    {
+        "name":         "Auto Select Texts",
+        "file":         "auto-select-texts.js",
+        "description":  "Automatically selects all contents of text fields on the page when they get focus",
+        "onload":       true
+    },
+    {
+        "name":         "Auto Clear Texts",
+        "file":         "auto-clear-texts.js",
+        "description":  "Automatically clears all contents of text fields on the page when they get focus",
+        "onload":       true
+    },
+    {
+        "name":         "Smooth Page Scroll",
+        "file":         "smooth-page-scroll.js",
+        "description":  "Scrolls smoothly to anchors in page, if the clicked link has .scroll-link class",
+        "onload":       true
     }
 ]
