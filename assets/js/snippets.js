@@ -39,6 +39,8 @@
     }
 
     function loadSnippet(ev, element) {
+        $l.css.removeClass(snippetArea, 'in');
+
         $l.css.removeClass($l(['li'], snippetList), 'active');
         $l.css.addClass(element.parentElement, 'active');
 
