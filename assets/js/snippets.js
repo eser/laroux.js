@@ -22,11 +22,11 @@
 
             code = '$l.ready(function() {\n\n';
             for (var item in splitted) {
-                code += ('    ' + splitted[item]).replace(/~+$/, '') + '\n';
+                code += $l.helpers.quoteAttr(('    ' + splitted[item]).replace(/~+$/, '')) + '\n';
             }
             code += '\n});';
         } else {
-            code = lastLoaded;
+            code = $l.helpers.quoteAttr(lastLoaded);
         }
 
         var pre = $l.dom.createElement('PRE', { class: 'prettyprint' }, code);
@@ -66,15 +66,21 @@
             null,
             function(response) {
                 for (var item in response) {
+                    if (typeof response[item].onload != 'undefined' && response[item].onload) {
+                        checkboxExecSnippetOnLoad.removeAttribute('disabled');
+                    } else {
+                        checkboxExecSnippetOnLoad.setAttribute('disabled', 'disabled');
+                    }
+
                     var li = $l.dom.createElement('LI');
                     snippetList.appendChild(li);
 
                     var a = $l.dom.createElement(
                         'A',
                         {
-                            href:        'javascript:;',
-                            'data-file': response[item].file,
-                            title:       response[item].description
+                            href:          'javascript:;',
+                            'data-file':   response[item].file,
+                            title:         response[item].description
                         },
                         response[item].name
                     );

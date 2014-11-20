@@ -1,7 +1,13 @@
 [
     {
+        "name":         "Include laroux.js",
+        "file":         "include-laroux-js.html",
+        "description":  "Includes laroux.js to your page in order to use its features"
+    },
+    {
         "name":         "Confirmation Buttons",
         "file":         "confirmation-buttons.js",
-        "description":  "Requests confirmation before link and button actions, if the element has .confirm-action class"
+        "description":  "Requests confirmation before link and button actions, if the element has .confirm-action class",
+        "onload":       true
     }
 ]
