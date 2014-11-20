@@ -15,7 +15,7 @@ module.exports = function(grunt) {
             }
         },
         concat: {
-            js: {
+            basejs: {
                 options: {
                     separator: ';'
                 },
@@ -39,6 +39,15 @@ module.exports = function(grunt) {
                 ],
                 dest: 'dist/<%= pkg.name %>.js'
             },
+            mimicjs: {
+                options: {
+                    separator: ';'
+                },
+                src: [
+                    'src/laroux.wrapper.js'
+                ],
+                dest: 'dist/<%= pkg.name %>.mimic.js'
+            },
             css: {
                 src: [
                     'temp/laroux.ui.css'
@@ -50,9 +59,14 @@ module.exports = function(grunt) {
             options: {
                 banner: '/*! <%= pkg.name %> <%= grunt.template.today("dd-mm-yyyy") %> */\n'
             },
-            js: {
+            basejs: {
                 files: {
-                    'dist/<%= pkg.name %>.min.js': ['<%= concat.js.dest %>']
+                    'dist/<%= pkg.name %>.min.js': ['<%= concat.basejs.dest %>']
+                }
+            },
+            mimicjs: {
+                files: {
+                    'dist/<%= pkg.name %>.mimic.min.js': ['<%= concat.mimicjs.dest %>']
                 }
             }
         },
@@ -75,6 +89,14 @@ module.exports = function(grunt) {
             files: ['Gruntfile.js', 'src/**/*.js']
         },
         watch: {
+            basejs: {
+                files: ['<%= concat.basejs.src %>'],
+                tasks: ['test', 'basejs']
+            },
+            mimicjs: {
+                files: ['<%= concat.mimicjs.src %>'],
+                tasks: ['test', 'mimicjs']
+            },
             less: {
                 files: ['src/**/*.less'],
                 tasks: ['less:css'],
@@ -85,17 +107,15 @@ module.exports = function(grunt) {
             css: {
                 files: ['<%= concat.css.src %>'],
                 tasks: ['concat:css', 'cssmin:css']
-            },
-            js: {
-                files: ['<%= concat.js.src %>'],
-                tasks: ['jshint', 'concat:js', 'uglify:js']
             }
         },
         clean: {
             all: {
                 src: [
                     'dist/<%= pkg.name %>.js',
+                    'dist/<%= pkg.name %>.mimic.js',
                     'dist/<%= pkg.name %>.min.js',
+                    'dist/<%= pkg.name %>.mimic.min.js',
                     'dist/<%= pkg.name %>.css',
                     'dist/<%= pkg.name %>.min.css'
                 ]
@@ -117,8 +137,10 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-clean');
 
     grunt.registerTask('test', ['jshint']);
-    grunt.registerTask('js', ['jshint', 'concat:js', 'uglify:js']);
+    grunt.registerTask('basejs', ['concat:basejs', 'uglify:basejs']);
+    grunt.registerTask('mimicjs', ['concat:mimicjs', 'uglify:mimicjs']);
+    grunt.registerTask('js', ['basejs', 'mimicjs']);
     grunt.registerTask('css', ['less:css', 'concat:css', 'cssmin:css']);
-    grunt.registerTask('default', ['jshint', 'concat:js', 'uglify:js', 'less:css', 'concat:css', 'cssmin:css', 'clean:temp']); // , 'copy'
+    grunt.registerTask('default', ['test', 'js', 'css', 'clean:temp']); // , 'copy'
 
 };
