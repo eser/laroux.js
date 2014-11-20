@@ -4,6 +4,7 @@
     var chromeColor = 'rgba(237, 194, 64, 0.85)';
     var firefoxColor = 'rgba(255, 164, 34, 0.85)';
     var ieColor = 'rgba(84, 164, 215, 0.85)';
+    var safariColor = 'rgba(210, 210, 210, 0.85)';
 
     function doBenchmark(button, target, tests) {
         var suite = new Benchmark.Suite;
@@ -110,6 +111,15 @@
                     'jQuery': 147338,
                     'Zepto': 78652
                 }
+            },
+            {
+                name: 'Safari',
+                color: safariColor,
+                values: {
+                    'laroux.js': 4333683,
+                    'jQuery': 327924,
+                    'Zepto': 409258
+                }
             }
         ];
         drawGraph(graph, graphdata);
@@ -183,6 +193,16 @@
                     'laroux.js (II)': 632975,
                     'jQuery': 314907,
                     'Zepto': 86235
+                }
+            },
+            {
+                name: 'Safari',
+                color: safariColor,
+                values: {
+                    'laroux.js': 5848097,
+                    'laroux.js (II)': 14050558,
+                    'jQuery': 635188,
+                    'Zepto': 411847
                 }
             }
         ];
@@ -264,6 +284,16 @@
                     'jQuery': 117656,
                     'Zepto': 65597
                 }
+            },
+            {
+                name: 'Safari',
+                color: safariColor,
+                values: {
+                    'laroux.js': 4060241,
+                    'laroux.js (II)': 3064627,
+                    'jQuery': 292788,
+                    'Zepto': 298792
+                }
             }
         ];
         drawGraph(graph, graphdata);
@@ -343,6 +373,16 @@
                     'laroux.js (II)': 174020,
                     'jQuery': 196511,
                     'Zepto': 187453
+                }
+            },
+            {
+                name: 'Safari',
+                color: safariColor,
+                values: {
+                    'laroux.js': 98140,
+                    'laroux.js (II)': 77570,
+                    'jQuery': 103823,
+                    'Zepto': 100608
                 }
             }
         ];
@@ -429,6 +469,15 @@
                     'jQuery': 189345,
                     'Zepto': 187967
                 }
+            },
+            {
+                name: 'Safari',
+                color: safariColor,
+                values: {
+                    'laroux.js': 119123,
+                    'jQuery': 103770,
+                    'Zepto': 103894
+                }
             }
         ];
         drawGraph(graph, graphdata);
@@ -508,6 +557,16 @@
                     'laroux.js (II)': 1408633,
                     'jQuery': 511160,
                     'Zepto': 485873
+                }
+            },
+            {
+                name: 'Safari',
+                color: safariColor,
+                values: {
+                    'laroux.js': 1008297,
+                    'laroux.js (II)': 2768481,
+                    'jQuery': 1455137,
+                    'Zepto': 1441696
                 }
             }
         ];
@@ -594,6 +653,15 @@
                     'jQuery': 431474,
                     'Zepto': 431442
                 }
+            },
+            {
+                name: 'Safari',
+                color: safariColor,
+                values: {
+                    'laroux.js': 3793695,
+                    'jQuery': 1401082,
+                    'Zepto': 1363933
+                }
             }
         ];
         drawGraph(graph, graphdata);
@@ -674,6 +742,16 @@
                     'jQuery': 1389,
                     'Zepto': 1394
                 }
+            },
+            {
+                name: 'Safari',
+                color: safariColor,
+                values: {
+                    'laroux.js': 166257,
+                    'laroux.js (II)': 95836,
+                    'jQuery': 28640,
+                    'Zepto': 27779
+                }
             }
         ];
         drawGraph(graph, graphdata);
@@ -750,6 +828,15 @@
                     'laroux.js': 5793,
                     'jQuery': 1029,
                     'Zepto': 1127
+                }
+            },
+            {
+                name: 'Safari',
+                color: safariColor,
+                values: {
+                    'laroux.js': 96953,
+                    'jQuery': 22014,
+                    'Zepto': 21463
                 }
             }
         ];
