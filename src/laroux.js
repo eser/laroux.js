@@ -123,7 +123,7 @@
     };
 
     laroux.aeach = function(arr, fnc) {
-        for (var i = arr.length; i >= 0; i--) {
+        for (var i = arr.length - 1; i >= 0; i--) {
             if (fnc(i, arr[i]) === false) {
                 break;
             }
@@ -135,7 +135,7 @@
     laroux.amap = function(arr, fnc) {
         var results = [];
 
-        for (var i = arr.length; i >= 0; i--) {
+        for (var i = arr.length - 1; i >= 0; i--) {
             var result = fnc(arr[i], i);
             if (result === false) {
                 break;

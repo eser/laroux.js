@@ -26,13 +26,13 @@
                 var obj = laroux.ui.popup.createBox(id, 'laroux_msgbox', message);
                 laroux.ui.floatContainer.appendChild(obj);
 
-                laroux.css.setProperty(obj, 'opacity', '1');
+                laroux.css.setProperty(obj, { opacity: 1 });
 
                 laroux.timers.set({
                     timeout: timeout,
                     reset: false,
                     ontick: function(x) {
-                        // laroux.css.setProperty(x, 'opacity', '0');
+                        // laroux.css.setProperty(x, { opacity: 0 });
                         laroux.dom.remove(x);
                     },
                     state: obj
@@ -59,7 +59,7 @@
             hide: function() {
                 laroux.ui.loading.killTimer();
 
-                laroux.css.setProperty(laroux.ui.loading.element, 'display', 'none');
+                laroux.css.setProperty(laroux.ui.loading.element, { display: 'none' });
                 localStorage.loadingIndicator = 'false';
             },
 
@@ -73,7 +73,7 @@
                 if (delay > 0) {
                     setTimeout(function() { laroux.ui.loading.show(0); }, delay);
                 } else {
-                    laroux.css.setProperty(laroux.ui.loading.element, 'display', 'block');
+                    laroux.css.setProperty(laroux.ui.loading.element, { display: 'block' });
                     localStorage.loadingIndicator = 'true';
                 }
             },
@@ -122,6 +122,54 @@
                     reset: true,
                     ontick: laroux.ui.dynamicDates.updateDates
                 });
+            }
+        },
+
+        scrollView: {
+            selectedElements: [],
+
+            set: function(selector) {
+                laroux.ui.scrollView.selectedElements = laroux.helpers.merge(
+                    laroux.ui.scrollView.selectedElements,
+                    laroux.amap(
+                        laroux.dom.select(selector),
+                        function(element) {
+                            if (!laroux.css.inViewport(element)) {
+                                return element;
+                            }
+                        }
+                    )
+                );
+
+                laroux.css.setTransition(laroux.ui.scrollView.selectedElements, ['opacity']);
+                laroux.css.setProperty(laroux.ui.scrollView.selectedElements, { opacity: 0 });
+                laroux.dom.setEvent(window, 'scroll', laroux.ui.scrollView.onscroll);
+            },
+
+            onscroll: function() {
+                var removeKeys = [];
+
+                laroux.each(
+                    laroux.ui.scrollView.selectedElements,
+                    function(i, element) {
+                        if (laroux.css.inViewport(element)) {
+                            removeKeys.unshift(i);
+                            element.style.opacity = 1;
+                        }
+                    }
+                );
+
+                for (var item in removeKeys) {
+                    if (!removeKeys.hasOwnProperty(item)) {
+                        continue;
+                    }
+
+                    laroux.ui.scrollView.selectedElements.splice(removeKeys[item], 1);
+                }
+
+                if (laroux.ui.scrollView.selectedElements.length === 0) {
+                    laroux.dom.unsetEvent(window, 'scroll');
+                }
             }
         },
 

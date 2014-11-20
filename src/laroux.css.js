@@ -77,7 +77,7 @@
 
             var style = getComputedStyle(element);
             var currentTransitions = style.getPropertyValue('transition') || style.getPropertyValue('-webkit-transition') ||
-                style.getPropertyValue('-ms-transition') || '';
+                    style.getPropertyValue('-ms-transition') || '';
 
             var currentTransitionsArray;
             if (currentTransitions.length > 0) {
@@ -127,7 +127,7 @@
             var elements = laroux.helpers.getAsArray(element);
 
             for (var i = elements.length - 1;i >= 0; i--) {
-                laroux.css.setTransitionSingle(element, transition);
+                laroux.css.setTransitionSingle(element[i], transition);
             }
         },
 
@@ -138,7 +138,7 @@
                 laroux.css.setTransition(element, 'opacity');
             }
 
-            laroux.css.setProperty(element, 'opacity', 1);
+            laroux.css.setProperty(element, { opacity: 1 });
         },
 
         hide: function(element, transitionProperties) {
@@ -148,7 +148,7 @@
                 laroux.css.setTransition(element, 'opacity');
             }
 
-            laroux.css.setProperty(element, 'opacity', 0);
+            laroux.css.setProperty(element, { opacity: 0 });
         },
 
         // measurement features
