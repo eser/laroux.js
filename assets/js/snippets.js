@@ -3,6 +3,7 @@
 
     var crlf = '<br />';
 
+    var snippetDescription = $l.id('snippet-description');
     var snippetArea = $l.id('snippet-area');
     var checkboxExecSnippetOnLoad = $l.id('checkbox-exec-snippet-on-load');
     var lastLoaded = null;
@@ -32,9 +33,17 @@
         snippetArea.appendChild(pre);
 
         prettyPrint();
+
+        $l.css.addClass(snippetArea, 'in');
     }
 
     function loadSnippet(ev, element) {
+        $l.dom.replace(
+            $l('div', snippetDescription),
+            element.getAttribute('title')
+        );
+        $l.css.addClass(snippetDescription, 'in');
+
         $l.ajax.get(
             'snippets/' + element.getAttribute('data-file'),
             null,
@@ -60,7 +69,16 @@
                     var li = $l.dom.createElement('LI');
                     snippetList.appendChild(li);
 
-                    var a = $l.dom.createElement('A', { 'href': 'javascript:;', 'data-file': response[item].file }, response[item].name);
+                    var a = $l.dom.createElement(
+                        'A',
+                        {
+                            href:        'javascript:;',
+                            'data-file': response[item].file,
+                            title:       response[item].description
+                        },
+                        response[item].name
+                    );
+
                     $l.dom.setEvent(a, 'click', loadSnippet);
                     li.appendChild(a);
                 }
