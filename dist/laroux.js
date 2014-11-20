@@ -752,6 +752,26 @@
             }
         },
 
+        show: function(element, transitionProperties) {
+            if (typeof transitionProperties != 'undefined') {
+                laroux.css.setTransition(element, 'opacity ' + transitionProperties);
+            } else {
+                laroux.css.setTransition(element, 'opacity');
+            }
+
+            laroux.css.setProperty(element, 'opacity', 1);
+        },
+
+        hide: function(element, transitionProperties) {
+            if (typeof transitionProperties != 'undefined') {
+                laroux.css.setTransition(element, 'opacity ' + transitionProperties);
+            } else {
+                laroux.css.setTransition(element, 'opacity');
+            }
+
+            laroux.css.setProperty(element, 'opacity', 0);
+        },
+
         // measurement features
         // height of element without padding, margin and border
         height: function(element) {
