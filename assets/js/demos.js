@@ -79,10 +79,10 @@
 
         $l.css.setTransition(
             box,
-            {
-                'background-color': '2s',
-                'width': '1s ease'
-            }
+            [
+                'background-color',
+                'width 1s linear'
+            ]
         );
 
         $l.dom.setEvent(
