@@ -51,5 +51,11 @@
         "file":         "enable-loading-indicator.js",
         "description":  "Enables displaying a loading indicator during the page load",
         "onload":       true
+    },
+    {
+        "name":         "Lazy Image Rendering",
+        "file":         "lazy-image-rendering.js",
+        "description":  "Starts image rendering when they shown in the viewport",
+        "onload":       true
     }
 ]
