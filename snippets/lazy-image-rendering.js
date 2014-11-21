@@ -1,4 +1,4 @@
 // replace the '.target-class' with your selector
-var target = $l(['.target-class']);
+var target = $l(['img']);
 
 $l.ui.scrollView.set(target);

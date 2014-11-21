@@ -65,8 +65,8 @@
     };
 
     laroux.each = function(arr, fnc) {
-        for (var key in arr) {
-            if (fnc(key, arr[key]) === false) {
+        for (var item in arr) {
+            if (fnc(item, arr[item]) === false) {
                 break;
             }
         }
@@ -77,8 +77,8 @@
     laroux.map = function(arr, fnc) {
         var results = [];
 
-        for (var key in arr) {
-            var result = fnc(arr[key], key);
+        for (var item in arr) {
+            var result = fnc(arr[item], item);
             if (result === false) {
                 break;
             }
@@ -506,15 +506,15 @@
         remove: function(id) {
             var targetKey = null;
 
-            for (var key in laroux.anim.data) {
-                if (!laroux.anim.data.hasOwnProperty(key)) {
+            for (var item in laroux.anim.data) {
+                if (!laroux.anim.data.hasOwnProperty(item)) {
                     continue;
                 }
 
-                var keyObj = laroux.anim.data[key];
+                var currentItem = laroux.anim.data[item];
 
-                if (typeof keyObj.id != 'undefined' && keyObj.id == id) {
-                    targetKey = key;
+                if (typeof currentItem.id != 'undefined' && currentItem.id == id) {
+                    targetKey = item;
                     break;
                 }
             }
@@ -529,40 +529,40 @@
 
         onframe: function(timestamp) {
             var removeKeys = [];
-            for (var key in laroux.anim.data) {
-                if (!laroux.anim.data.hasOwnProperty(key)) {
+            for (var item in laroux.anim.data) {
+                if (!laroux.anim.data.hasOwnProperty(item)) {
                     continue;
                 }
 
-                var keyObj = laroux.anim.data[key];
-                if (keyObj.startTime === null) {
-                    keyObj.startTime = timestamp;
+                var currentItem = laroux.anim.data[item];
+                if (currentItem.startTime === null) {
+                    currentItem.startTime = timestamp;
                 }
 
-                var result = laroux.anim.step(keyObj, timestamp);
+                var result = laroux.anim.step(currentItem, timestamp);
 
                 if (result === false) {
-                    removeKeys.unshift(key);
-                } else if (timestamp > keyObj.startTime + keyObj.time) {
-                    if (keyObj.reset) {
-                        keyObj.startTime = timestamp;
+                    removeKeys.unshift(item);
+                } else if (timestamp > currentItem.startTime + currentItem.time) {
+                    if (currentItem.reset) {
+                        currentItem.startTime = timestamp;
                         if (newanim.object === document.body && newanim.property == 'scrollTop') {
-                            scrollTo(document.body, keyObj.from);
+                            scrollTo(document.body, currentItem.from);
                         } else {
-                            keyObj.object[keyObj.property] = keyObj.from;
+                            currentItem.object[currentItem.property] = currentItem.from;
                         }
                     } else {
-                        removeKeys.unshift(key);
+                        removeKeys.unshift(item);
                     }
                 }
             }
 
-            for (var key2 in removeKeys) {
-                if (!removeKeys.hasOwnProperty(key2)) {
+            for (var item2 in removeKeys) {
+                if (!removeKeys.hasOwnProperty(item2)) {
                     continue;
                 }
 
-                laroux.anim.data.splice(removeKeys[key2], 1);
+                laroux.anim.data.splice(removeKeys[item2], 1);
             }
 
             if (laroux.anim.data.length > 0) {
@@ -1107,22 +1107,22 @@
             var elem = document.createElement(element);
 
             if (typeof attributes == 'object') {
-                for (var key in attributes) {
-                    if (!attributes.hasOwnProperty(key)) {
+                for (var item in attributes) {
+                    if (!attributes.hasOwnProperty(item)) {
                         continue;
                     }
 
-                    elem.setAttribute(key, attributes[key]);
+                    elem.setAttribute(item, attributes[item]);
                 }
             }
 
             if (typeof children == 'object') {
-                for (var key2 in children) {
-                    if (!children.hasOwnProperty(key2)) {
+                for (var item2 in children) {
+                    if (!children.hasOwnProperty(item2)) {
                         continue;
                     }
 
-                    elem.setAttribute(key2, children[key2]);
+                    elem.setAttribute(item2, children[item2]);
                 }
             } else if (typeof children == 'string' && children.length > 0) {
                 laroux.dom.append(elem, children);
@@ -1374,16 +1374,16 @@
         },
 
         invoke: function(event, args) {
-            for (var key in laroux.events.delegates) {
-                if (!laroux.events.delegates.hasOwnProperty(key)) {
+            for (var item in laroux.events.delegates) {
+                if (!laroux.events.delegates.hasOwnProperty(item)) {
                     continue;
                 }
 
-                if (laroux.events.delegates[key].event != event) {
+                if (laroux.events.delegates[item].event != event) {
                     continue;
                 }
 
-                laroux.events.delegates[key].fnc(args);
+                laroux.events.delegates[item].fnc(args);
             }
         },
     };
@@ -1827,8 +1827,8 @@
 
         getKeys: function(obj) {
             var keys = Object.keys(obj);
-            for (var key in keys) {
-                yield keys[key];
+            for (var item in keys) {
+                yield keys[item];
             }
         } */
     };
@@ -1859,22 +1859,22 @@
 
         scanElement: function(element, keys, nodes) {
             for (var i = 0, atts = element.attributes, m = atts.length; i < m; i++) {
-                for (var key1 in keys) {
-                    var findStr1 = '{{' + keys[key1] + '}}';
+                for (var item1 in keys) {
+                    var findStr1 = '{{' + keys[item1] + '}}';
 
                     if (atts[i].value.indexOf(findStr1) !== -1) {
-                        nodes.push({node: atts[i], key: keys[key1], value: atts[i].value});
+                        nodes.push({node: atts[i], key: keys[item1], value: atts[i].value});
                     }
                 }
             }
 
             for (var j = 0, chldrn = element.childNodes, n = chldrn.length; j < n; j++) {
-                for (var key2 in keys) {
-                    var findStr2 = '{{' + keys[key2] + '}}';
+                for (var item2 in keys) {
+                    var findStr2 = '{{' + keys[item2] + '}}';
 
                     if (chldrn[j].nodeType === 3) {
                         if (chldrn[j].textContent.indexOf(findStr2) !== -1) {
-                            nodes.push({node: chldrn[j], key: keys[key2], value: chldrn[j].textContent});
+                            nodes.push({node: chldrn[j], key: keys[item2], value: chldrn[j].textContent});
                         }
                         continue;
                     }
@@ -2008,12 +2008,12 @@
         this.getRange = function(keys) {
             var values = {};
 
-            for (var key in keys) {
-                if (!keys.hasOwnProperty(key)) {
+            for (var item in keys) {
+                if (!keys.hasOwnProperty(item)) {
                     continue;
                 }
 
-                values[keys[key]] = this.data[keys[key]];
+                values[keys[item]] = this.data[keys[item]];
             }
 
             return values;
@@ -2087,15 +2087,15 @@
         remove: function(id) {
             var targetKey = null;
 
-            for (var key in laroux.timers.data) {
-                if (!laroux.timers.data.hasOwnProperty(key)) {
+            for (var item in laroux.timers.data) {
+                if (!laroux.timers.data.hasOwnProperty(item)) {
                     continue;
                 }
 
-                var keyObj = laroux.timers.data[key];
+                var currentItem = laroux.timers.data[item];
 
-                if (typeof keyObj.id != 'undefined' && keyObj.id == id) {
-                    targetKey = key;
+                if (typeof currentItem.id != 'undefined' && currentItem.id == id) {
+                    targetKey = item;
                     break;
                 }
             }
@@ -2112,30 +2112,30 @@
             var now = Date.now();
 
             var removeKeys = [];
-            for (var key in laroux.timers.data) {
-                if (!laroux.timers.data.hasOwnProperty(key)) {
+            for (var item in laroux.timers.data) {
+                if (!laroux.timers.data.hasOwnProperty(item)) {
                     continue;
                 }
 
-                var keyObj = laroux.timers.data[key];
+                var currentItem = laroux.timers.data[item];
 
-                if (keyObj.next <= now) {
-                    var result = keyObj.ontick(keyObj.state);
+                if (currentItem.next <= now) {
+                    var result = currentItem.ontick(currentItem.state);
 
-                    if (result !== false && typeof keyObj.reset != 'undefined' && keyObj.reset) {
-                        keyObj.next = now + keyObj.timeout;
+                    if (result !== false && typeof currentItem.reset != 'undefined' && currentItem.reset) {
+                        currentItem.next = now + currentItem.timeout;
                     } else {
-                        removeKeys.unshift(key);
+                        removeKeys.unshift(item);
                     }
                 }
             }
 
-            for (var key2 in removeKeys) {
-                if (!removeKeys.hasOwnProperty(key2)) {
+            for (var item2 in removeKeys) {
+                if (!removeKeys.hasOwnProperty(item2)) {
                     continue;
                 }
 
-                laroux.timers.data.splice(removeKeys[key2], 1);
+                laroux.timers.data.splice(removeKeys[item2], 1);
             }
         }
     };
@@ -2158,13 +2158,13 @@
         set: function(condition, fnc, state) {
             var conditions = laroux.helpers.getAsArray(condition);
 
-            for (var key in conditions) {
-                if (!conditions.hasOwnProperty(key)) {
+            for (var item in conditions) {
+                if (!conditions.hasOwnProperty(item)) {
                     continue;
                 }
 
-                if (laroux.triggers.list.indexOf(conditions[key]) == -1) {
-                    laroux.triggers.list.push(conditions[key]);
+                if (laroux.triggers.list.indexOf(conditions[item]) == -1) {
+                    laroux.triggers.list.push(conditions[item]);
                 }
             }
 
@@ -2182,20 +2182,20 @@
             }
 
             var removeKeys = [];
-            for (var key in laroux.triggers.delegates) {
-                if (!laroux.triggers.delegates.hasOwnProperty(key)) {
+            for (var item in laroux.triggers.delegates) {
+                if (!laroux.triggers.delegates.hasOwnProperty(item)) {
                     continue;
                 }
 
                 var count = 0;
-                var keyObj = laroux.triggers.delegates[key];
+                var currentItem = laroux.triggers.delegates[item];
 
-                for (var conditionKey in keyObj.conditions) {
-                    if (!keyObj.conditions.hasOwnProperty(conditionKey)) {
+                for (var conditionKey in currentItem.conditions) {
+                    if (!currentItem.conditions.hasOwnProperty(conditionKey)) {
                         continue;
                     }
 
-                    var conditionObj = keyObj.conditions[conditionKey];
+                    var conditionObj = currentItem.conditions[conditionKey];
 
                     if (laroux.triggers.list.indexOf(conditionObj) != -1) {
                         count++;
@@ -2204,22 +2204,22 @@
                 }
 
                 if (count === 0) {
-                    keyObj.fnc(
+                    currentItem.fnc(
                         {
-                            state: keyObj.state,
+                            state: currentItem.state,
                             args: laroux.helpers.getAsArray(args)
                         }
                     );
-                    removeKeys.unshift(key);
+                    removeKeys.unshift(item);
                 }
             }
 
-            for (var key2 in removeKeys) {
-                if (!removeKeys.hasOwnProperty(key2)) {
+            for (var item2 in removeKeys) {
+                if (!removeKeys.hasOwnProperty(item2)) {
                     continue;
                 }
 
-                laroux.triggers.delegates.splice(removeKeys[key2], 1);
+                laroux.triggers.delegates.splice(removeKeys[item2], 1);
             }
 
             // console.log('trigger name: ' + triggerName);
@@ -2359,26 +2359,24 @@
             selectedElements: [],
 
             onhidden: function(elements) {
-                laroux.css.setTransition(elements, ['opacity']);
                 laroux.css.setProperty(elements, {opacity: 0});
+                laroux.css.setTransition(elements, ['opacity']);
             },
 
             onreveal: function(elements) {
                 laroux.css.setProperty(elements, {opacity: 1});
             },
 
-            set: function(selector) {
-                laroux.ui.scrollView.selectedElements = laroux.helpers.merge(
-                    laroux.ui.scrollView.selectedElements,
-                    laroux.amap(
-                        laroux.dom.select(selector),
-                        function(element) {
-                            if (!laroux.css.inViewport(element)) {
-                                return element;
-                            }
-                        }
-                    )
-                );
+            set: function(elements) {
+                for (var item in elements) {
+                    if (!elements.hasOwnProperty(item)) {
+                        continue;
+                    }
+
+                    if (!laroux.css.inViewport(elements[item])) {
+                        laroux.ui.scrollView.selectedElements.push(elements[item]);
+                    }
+                }
 
                 laroux.ui.scrollView.onhidden(laroux.ui.scrollView.selectedElements);
                 laroux.dom.setEvent(window, 'scroll', laroux.ui.scrollView.reveal);
@@ -2411,7 +2409,7 @@
                 }
 
                 if (elements.length > 0) {
-                    laroux.ui.scrollView.onhidden(elements.length);
+                    laroux.ui.scrollView.onreveal(elements);
                 }
             }
         },

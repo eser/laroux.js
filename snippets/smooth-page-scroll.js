@@ -3,9 +3,7 @@ $l.dom.setEvent(
     'click',
     function(ev, element) {
         var targetElement = $l(element.getAttribute('href'));
-
-        var targetPosition = targetElement.getBoundingClientRect().top +
-            (document.documentElement && document.documentElement.scrollTop) || document.body.scrollTop;
+        var targetPosition = $l.css.top(targetElement);
 
         $l.anim.set({
             object:   document.body,
