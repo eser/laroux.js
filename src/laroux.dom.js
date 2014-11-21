@@ -56,11 +56,11 @@
             element.setAttribute('data-' + dataname, value);
         },
 
-        eventHistory: { },
+        eventHistory: {},
         setEvent: function(element, eventname, fnc) {
             var elements = laroux.helpers.getAsArray(element);
 
-            for (var i = elements.length - 1;i >= 0; i--) {
+            for (var i = elements.length; i--; ) {
                 laroux.dom.setEventSingle(elements[i], eventname, fnc);
             }
         },
@@ -77,7 +77,7 @@
             };
 
             if (typeof laroux.dom.eventHistory[element] == 'undefined') {
-                laroux.dom.eventHistory[element] = { };
+                laroux.dom.eventHistory[element] = {};
             }
             if (typeof laroux.dom.eventHistory[element][eventname] != 'undefined') {
                 if (element.removeEventListener) {
@@ -98,7 +98,7 @@
         unsetEvent: function(element, eventname) {
             var elements = laroux.helpers.getAsArray(element);
 
-            for (var i = elements.length - 1;i >= 0; i--) {
+            for (var i = elements.length; i--; ) {
                 if (typeof laroux.dom.eventHistory[elements[i]] == 'undefined') {
                     return;
                 }
@@ -175,7 +175,7 @@
         },
 
         selectByValue: function(element, value) {
-            for (var i = element.options.length - 1;i >= 0; i--) {
+            for (var i = element.options.length; i--; ) {
                 if (element.options[i].getAttribute('value') == value) {
                     element.selectedIndex = i;
                     break;
@@ -187,7 +187,7 @@
         loadImage: function() {
             var images = [];
 
-            for (var i = arguments.length - 1;i >= 0; i--) {
+            for (var i = arguments.length; i--; ) {
                 var image = document.createElement('IMG');
                 image.setAttribute('src', arguments[i]);
 

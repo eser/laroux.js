@@ -125,7 +125,7 @@
         } else if (selector instanceof NodeList) {
             selection = Array.prototype.slice.call(selector);
         } else if (selector instanceof Node) {
-            selection = [ selector ];
+            selection = [selector];
         } else {
             selection = laroux.dom.select(selector);
         }
@@ -140,7 +140,7 @@
     laroux.wrapper.fn = {};
 
     laroux.wrapper.init = function() {
-        window.$ = laroux.wrapper;
+        laroux.parent.$ = laroux.wrapper;
     };
 
 })(this.laroux);

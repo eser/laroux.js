@@ -28,15 +28,15 @@
         return (parent || document).getElementById(selector);
     };
 
-    laroux.baseLocation = '';
-    laroux.selectedMaster = '';
+    laroux.idcs = {};
+    laroux.idc = function(selector) {
+        return laroux.idcs[selector] ||
+            (laroux.idcs[selector] = document.getElementById(selector));
+    };
+
+    laroux.parent = global;
     laroux.popupFunc = alert;
     laroux.readyPassed = false;
-
-    laroux.contentBegin = function(masterName, locationUrl) {
-        laroux.baseLocation = locationUrl;
-        laroux.selectedMaster = masterName;
-    };
 
     laroux.contentEnd = function() {
         if (!laroux.readyPassed) {
@@ -77,24 +77,6 @@
     laroux.map = function(arr, fnc) {
         var results = [];
 
-        /*
-        // FIXME: non-chrome optimization
-        if (typeof arr.length != 'undefined') {
-            for (var i = arr.length; i >= 0; i--) {
-                var result = fnc(arr[i], i);
-                if (result === false) {
-                    break;
-                }
-
-                if (typeof result !== 'undefined') {
-                    results.unshift(result);
-                }
-            }
-
-            return results;
-        }
-        */
-
         for (var key in arr) {
             var result = fnc(arr[key], key);
             if (result === false) {
@@ -110,7 +92,7 @@
     };
 
     laroux.aeach = function(arr, fnc) {
-        for (var i = arr.length - 1; i >= 0; i--) {
+        for (var i = arr.length; i--; ) {
             if (fnc(i, arr[i]) === false) {
                 break;
             }
@@ -122,7 +104,7 @@
     laroux.amap = function(arr, fnc) {
         var results = [];
 
-        for (var i = arr.length - 1; i >= 0; i--) {
+        for (var i = arr.length; i--; ) {
             var result = fnc(arr[i], i);
             if (result === false) {
                 break;

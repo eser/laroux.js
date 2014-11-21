@@ -13,17 +13,13 @@
             var uri = '';
             var regEx = /%20/g;
 
-            if (typeof rfc3986 == 'undefined') {
-                rfc3986 = false;
-            }
-
             for (var name in values) {
                 if (!values.hasOwnProperty(name)) {
                     continue;
                 }
 
                 if (typeof values[name] != 'function') {
-                    if (rfc3986) {
+                    if (rfc3986 || false) {
                         uri += '&' + encodeURIComponent(name).replace(regEx, '+') + '=' + encodeURIComponent(values[name].toString()).replace(regEx, '+');
                     } else {
                         uri += '&' + encodeURIComponent(name) + '=' + encodeURIComponent(values[name].toString());
@@ -145,6 +141,10 @@
             return tmp;
         },
 
+        duplicate: function(obj) {
+            return JSON.parse(JSON.stringify(obj));
+        },
+
         getAsArray: function(obj) {
             var items;
 
@@ -153,7 +153,7 @@
             } else if (obj instanceof NodeList) {
                 items = Array.prototype.slice.call(obj);
             } else {
-                items = [ obj ];
+                items = [obj];
             }
 
             return items;

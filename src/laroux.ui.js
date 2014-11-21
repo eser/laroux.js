@@ -16,7 +16,7 @@
             defaultTimeout: 500,
 
             createBox: function(id, xclass, message) {
-                return laroux.dom.createElement('DIV', { 'id': id, 'class': xclass },
+                return laroux.dom.createElement('DIV', {id: id, 'class': xclass},
                     message
                 );
             },
@@ -26,13 +26,13 @@
                 var obj = laroux.ui.popup.createBox(id, 'laroux_msgbox', message);
                 laroux.ui.floatContainer.appendChild(obj);
 
-                laroux.css.setProperty(obj, { opacity: 1 });
+                laroux.css.setProperty(obj, {opacity: 1});
 
                 laroux.timers.set({
                     timeout: timeout,
                     reset: false,
                     ontick: function(x) {
-                        // laroux.css.setProperty(x, { opacity: 0 });
+                        // laroux.css.setProperty(x, {opacity: 0});
                         laroux.dom.remove(x);
                     },
                     state: obj
@@ -59,7 +59,7 @@
             hide: function() {
                 laroux.ui.loading.killTimer();
 
-                laroux.css.setProperty(laroux.ui.loading.element, { display: 'none' });
+                laroux.css.setProperty(laroux.ui.loading.element, {display: 'none'});
                 localStorage.loadingIndicator = 'false';
             },
 
@@ -73,7 +73,7 @@
                 if (delay > 0) {
                     setTimeout(function() { laroux.ui.loading.show(0); }, delay);
                 } else {
-                    laroux.css.setProperty(laroux.ui.loading.element, { display: 'block' });
+                    laroux.css.setProperty(laroux.ui.loading.element, {display: 'block'});
                     localStorage.loadingIndicator = 'true';
                 }
             },
@@ -130,12 +130,12 @@
             selectedElements: [],
 
             onhidden: function(elements) {
-                laroux.css.setTransition(elements, [ 'opacity' ]);
-                laroux.css.setProperty(elements, { opacity: 0 });
+                laroux.css.setTransition(elements, ['opacity']);
+                laroux.css.setProperty(elements, {opacity: 0});
             },
 
             onreveal: function(elements) {
-                laroux.css.setProperty(elements, { opacity: 1 });
+                laroux.css.setProperty(elements, {opacity: 1});
             },
 
             set: function(selector) {
@@ -189,7 +189,7 @@
 
         createFloatContainer: function() {
             if (!laroux.ui.floatContainer) {
-                laroux.ui.floatContainer = laroux.dom.createElement('DIV', { id: 'laroux_floatdiv' }, '');
+                laroux.ui.floatContainer = laroux.dom.createElement('DIV', {id: 'laroux_floatdiv'}, '');
                 document.body.insertBefore(laroux.ui.floatContainer, document.body.firstChild);
             }
         },

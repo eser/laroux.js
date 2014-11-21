@@ -18,7 +18,7 @@
             }
         },
 
-        // { object, property, from, to, time, unit, reset }
+        // {object, property, from, to, time, unit, reset}
         set: function(newanim) {
             newanim.startTime = null;
 

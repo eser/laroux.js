@@ -27,7 +27,7 @@
                     var findStr1 = '{{' + keys[key1] + '}}';
 
                     if (atts[i].value.indexOf(findStr1) !== -1) {
-                        nodes.push({ node: atts[i], key: keys[key1], value: atts[i].value });
+                        nodes.push({node: atts[i], key: keys[key1], value: atts[i].value});
                     }
                 }
             }
@@ -38,7 +38,7 @@
 
                     if (chldrn[j].nodeType === 3) {
                         if (chldrn[j].textContent.indexOf(findStr2) !== -1) {
-                            nodes.push({ node: chldrn[j], key: keys[key2], value: chldrn[j].textContent });
+                            nodes.push({node: chldrn[j], key: keys[key2], value: chldrn[j].textContent});
                         }
                         continue;
                     }
@@ -109,7 +109,7 @@
 
                         if (selectedAppObject.model == changes[change].object) {
                             if (typeof updates[selectedAppObject.app] == 'undefined') {
-                                updates[selectedAppObject.app] = { app: selectedAppObject, keys: [changes[change].name] };
+                                updates[selectedAppObject.app] = {app: selectedAppObject, keys: [changes[change].name]};
                             } else {
                                 updates[selectedAppObject.app].keys.push(changes[change].name);
                             }

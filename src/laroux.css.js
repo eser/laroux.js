@@ -14,7 +14,7 @@
         addClass: function(element, className) {
             var elements = laroux.helpers.getAsArray(element);
 
-            for (var i = elements.length - 1;i >= 0; i--) {
+            for (var i = elements.length; i--; ) {
                 elements[i].classList.add(className);
             }
         },
@@ -22,7 +22,7 @@
         removeClass: function(element, className) {
             var elements = laroux.helpers.getAsArray(element);
 
-            for (var i = elements.length - 1;i >= 0; i--) {
+            for (var i = elements.length; i--; ) {
                 elements[i].classList.remove(className);
             }
         },
@@ -30,7 +30,7 @@
         toggleClass: function(element, className) {
             var elements = laroux.helpers.getAsArray(element);
 
-            for (var i = elements.length - 1;i >= 0; i--) {
+            for (var i = elements.length; i--; ) {
                 if (elements[i].classList.contains(className)) {
                     elements[i].classList.remove(className);
                 } else {
@@ -64,7 +64,7 @@
 
                 var newStyleName = laroux.helpers.camelCase(styleName);
 
-                for (var i = elements.length - 1;i >= 0; i--) {
+                for (var i = elements.length; i--; ) {
                     elements[i].style[newStyleName] = properties[styleName];
                 }
             }
@@ -127,7 +127,7 @@
         setTransition: function(element, transition) {
             var elements = laroux.helpers.getAsArray(element);
 
-            for (var i = elements.length - 1;i >= 0; i--) {
+            for (var i = elements.length; i--; ) {
                 laroux.css.setTransitionSingle(elements[i], transition);
             }
         },
@@ -139,7 +139,7 @@
                 laroux.css.setTransition(element, 'opacity');
             }
 
-            laroux.css.setProperty(element, { opacity: 1 });
+            laroux.css.setProperty(element, {opacity: 1});
         },
 
         hide: function(element, transitionProperties) {
@@ -149,7 +149,7 @@
                 laroux.css.setTransition(element, 'opacity');
             }
 
-            laroux.css.setProperty(element, { opacity: 0 });
+            laroux.css.setProperty(element, {opacity: 0});
         },
 
         // measurement features
