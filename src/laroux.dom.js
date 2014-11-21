@@ -11,43 +11,23 @@
         },
 
         select: function(selector, parent) {
-            var elements;
-
-            if (typeof parent == 'undefined') {
-                elements = document.querySelectorAll(selector);
-            } else {
-                elements = parent.querySelectorAll(selector);
-            }
-
-            return Array.prototype.slice.call(elements);
+            return Array.prototype.slice.call(
+                (parent || document).querySelectorAll(selector)
+            );
         },
 
         selectByClass: function(selector, parent) {
-            var elements;
-
-            if (typeof parent == 'undefined') {
-                elements = document.getElementsByClassName(selector);
-            } else {
-                elements = parent.getElementsByClassName(selector);
-            }
-
-            return Array.prototype.slice.call(elements);
+            return Array.prototype.slice.call(
+                (parent || document).getElementsByClassName(selector)
+            );
         },
 
         selectById: function(selector, parent) {
-            if (typeof parent == 'undefined') {
-                return document.getElementById(selector);
-            }
-
-            return parent.getElementById(selector);
+            return (parent || document).getElementById(selector);
         },
 
         selectSingle: function(selector, parent) {
-            if (typeof parent == 'undefined') {
-                return document.querySelector(selector);
-            }
-
-            return parent.querySelector(selector);
+            return (parent || document).querySelector(selector);
         },
 
         attr: function(element, attrname, value) {

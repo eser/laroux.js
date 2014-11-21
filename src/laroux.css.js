@@ -168,7 +168,7 @@
 
         // height of element with padding and border but margin optional
         outerHeight: function(element, includeMargin) {
-            if (typeof includeMargin == 'undefined' || includeMargin !== true) {
+            if (includeMargin || false) {
                 return element.offsetHeight;
             }
 
@@ -196,7 +196,7 @@
 
         // width of element with padding and border but margin optional
         outerWidth: function(element, includeMargin) {
-            if (typeof includeMargin == 'undefined' || includeMargin !== true) {
+            if (includeMargin || false) {
                 return element.offsetWidth;
             }
 
@@ -214,18 +214,8 @@
                 ((document.documentElement && document.documentElement.scrollTop) || document.body.scrollTop);
         },
 
-        bottom: function(element) {
-            return element.getBoundingClientRect().bottom +
-                ((document.documentElement && document.documentElement.scrollTop) || document.body.scrollTop);
-        },
-
         left: function(element) {
             return element.getBoundingClientRect().left +
-                ((document.documentElement && document.documentElement.scrollLeft) || document.body.scrollLeft);
-        },
-
-        right: function(element) {
-            return element.getBoundingClientRect().right +
                 ((document.documentElement && document.documentElement.scrollLeft) || document.body.scrollLeft);
         },
 

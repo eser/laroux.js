@@ -4,14 +4,9 @@
     // core
     var laroux = function(selector, parent) {
         if (selector instanceof Array) {
-            var elements;
-            if (typeof parent == 'undefined') {
-                elements = document.querySelectorAll(selector);
-            } else {
-                elements = parent.querySelectorAll(selector);
-            }
-
-            return Array.prototype.slice.call(elements);
+            return Array.prototype.slice.call(
+                (parent || document).querySelectorAll(selector)
+            );
         }
 
         /*
@@ -26,19 +21,11 @@
         }
         */
 
-        if (typeof parent == 'undefined') {
-            return document.querySelector(selector);
-        }
-
-        return parent.querySelector(selector);
+        return (parent || document).querySelector(selector);
     };
 
     laroux.id = function(selector, parent) {
-        if (typeof parent == 'undefined') {
-            return document.getElementById(selector);
-        }
-
-        return parent.getElementById(selector);
+        return (parent || document).getElementById(selector);
     };
 
     laroux.baseLocation = '';
@@ -790,7 +777,7 @@
 
         // height of element with padding and border but margin optional
         outerHeight: function(element, includeMargin) {
-            if (typeof includeMargin == 'undefined' || includeMargin !== true) {
+            if (includeMargin || false) {
                 return element.offsetHeight;
             }
 
@@ -818,7 +805,7 @@
 
         // width of element with padding and border but margin optional
         outerWidth: function(element, includeMargin) {
-            if (typeof includeMargin == 'undefined' || includeMargin !== true) {
+            if (includeMargin || false) {
                 return element.offsetWidth;
             }
 
@@ -836,18 +823,8 @@
                 ((document.documentElement && document.documentElement.scrollTop) || document.body.scrollTop);
         },
 
-        bottom: function(element) {
-            return element.getBoundingClientRect().bottom +
-                ((document.documentElement && document.documentElement.scrollTop) || document.body.scrollTop);
-        },
-
         left: function(element) {
             return element.getBoundingClientRect().left +
-                ((document.documentElement && document.documentElement.scrollLeft) || document.body.scrollLeft);
-        },
-
-        right: function(element) {
-            return element.getBoundingClientRect().right +
                 ((document.documentElement && document.documentElement.scrollLeft) || document.body.scrollLeft);
         },
 
@@ -1029,43 +1006,23 @@
         },
 
         select: function(selector, parent) {
-            var elements;
-
-            if (typeof parent == 'undefined') {
-                elements = document.querySelectorAll(selector);
-            } else {
-                elements = parent.querySelectorAll(selector);
-            }
-
-            return Array.prototype.slice.call(elements);
+            return Array.prototype.slice.call(
+                (parent || document).querySelectorAll(selector)
+            );
         },
 
         selectByClass: function(selector, parent) {
-            var elements;
-
-            if (typeof parent == 'undefined') {
-                elements = document.getElementsByClassName(selector);
-            } else {
-                elements = parent.getElementsByClassName(selector);
-            }
-
-            return Array.prototype.slice.call(elements);
+            return Array.prototype.slice.call(
+                (parent || document).getElementsByClassName(selector)
+            );
         },
 
         selectById: function(selector, parent) {
-            if (typeof parent == 'undefined') {
-                return document.getElementById(selector);
-            }
-
-            return parent.getElementById(selector);
+            return (parent || document).getElementById(selector);
         },
 
         selectSingle: function(selector, parent) {
-            if (typeof parent == 'undefined') {
-                return document.querySelector(selector);
-            }
-
-            return parent.querySelector(selector);
+            return (parent || document).querySelector(selector);
         },
 
         attr: function(element, attrname, value) {
