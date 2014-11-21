@@ -831,6 +831,26 @@
             return Math.ceil(element.offsetWidth + margins);
         },
 
+        top: function(element) {
+            return element.getBoundingClientRect().top +
+                ((document.documentElement && document.documentElement.scrollTop) || document.body.scrollTop);
+        },
+
+        bottom: function(element) {
+            return element.getBoundingClientRect().bottom +
+                ((document.documentElement && document.documentElement.scrollTop) || document.body.scrollTop);
+        },
+
+        left: function(element) {
+            return element.getBoundingClientRect().left +
+                ((document.documentElement && document.documentElement.scrollLeft) || document.body.scrollLeft);
+        },
+
+        right: function(element) {
+            return element.getBoundingClientRect().right +
+                ((document.documentElement && document.documentElement.scrollLeft) || document.body.scrollLeft);
+        },
+
         aboveTheTop: function(element) {
             return element.getBoundingClientRect().bottom <= 0;
         },
