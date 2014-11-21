@@ -2,9 +2,9 @@
 
 [![laroux.js logo](https://larukedi.github.io/laroux.js/assets/images/logo-medium.png)](https://larukedi.github.io/laroux.js/)
 
-[This project](https://github.com/larukedi/laroux.js) is a jQuery substitute for modern browsers and mobile devices. But instead of offering some wrappers and own dynamics, it simply provides helper functions to achieve the same objectives with jQuery or Zepto.
+[This project](https://github.com/larukedi/laroux.js) is a jQuery substitute for modern browsers and mobile devices. But instead of offering some wrappers and own dynamics, it simply provides helper functions to achieve the same objectives as jQuery or Zepto.
 
-Even though keeping compactness is the primary concern of this library, lightweight versions of some concepts/components including some UI helpers and MVC.
+Even though keeping compactness is the primary concern of this library, it does contain lightweight versions of some concepts/components, including some UI helpers and MVC.
 
 So far, it has [Ajax](https://github.com/larukedi/laroux.js/wiki/ajax), [Anim](https://github.com/larukedi/laroux.js/wiki/anim), [CSS](https://github.com/larukedi/laroux.js/wiki/css), [Date](https://github.com/larukedi/laroux.js/wiki/date), [DOM](https://github.com/larukedi/laroux.js/wiki/dom), [Events](https://github.com/larukedi/laroux.js/wiki/events), [Forms](https://github.com/larukedi/laroux.js/wiki/forms), [Helpers](https://github.com/larukedi/laroux.js/wiki/helpers), [MVC](https://github.com/larukedi/laroux.js/wiki/mvc), [Stack](https://github.com/larukedi/laroux.js/wiki/stack), [Templates](https://github.com/larukedi/laroux.js/wiki/templates), [Timers](https://github.com/larukedi/laroux.js/wiki/timers), [Triggers](https://github.com/larukedi/laroux.js/wiki/triggers), [UI](https://github.com/larukedi/laroux.js/wiki/ui) and [Vars](https://github.com/larukedi/laroux.js/wiki/vars) components.
 
@@ -17,11 +17,11 @@ So far, it has [Ajax](https://github.com/larukedi/laroux.js/wiki/ajax), [Anim](h
 
 `laroux.js` is right for you if you:
 
-- Complain people who do not know the difference between jQuery and Javascript.
-- Love working with more compact, organized libraries in smaller sizes (~28K).
-- Want working with native DOM objects instead of wrappers.
+- Complain about people who do not know the difference between jQuery and Javascript.
+- Love working with more compact, organized libraries with smaller sizes (~28K).
+- Want to be working with native DOM objects instead of wrappers.
 - Get pace with debug console's autocomplete/fluent typing.
-- Did not satisfied from other libraries' performances on mobile devices.
+- Are not satisfied from other libraries' performances on mobile devices.
 
 
 ### Demos
