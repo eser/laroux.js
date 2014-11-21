@@ -52,9 +52,9 @@
                         <img src="assets/images/logo-medium.png" />
                     </div>
                     <div class="col-md-9">
-                        <h1>laroux.js 1.2</h1>
+                        <h1>laroux.js 1.3</h1>
                         <div class="lead">
-                            This project is a jQuery substitute for modern browsers and mobile devices. But instead of offering some wrappers and own dynamics, it simply provides helper functions to achieve the same objectives with jQuery or Zepto.
+                            This project is a jQuery substitute for modern browsers and mobile devices. But instead of offering some wrappers and own dynamics, it simply provides helper functions to achieve the same objectives as jQuery or Zepto.
                         </div>
                     </div>
                 </div>
@@ -71,11 +71,11 @@
                 <em>laroux.js</em> is right for you if you:<br />
                 <br />
                 <ul>
-                    <li>Complain people who do not know the difference between jQuery and Javascript.</li>
+                    <li>Complain about people who do not know the difference between jQuery and Javascript.</li>
                     <li>Love working with more compact, organized libraries in smaller sizes (~28K).</li>
-                    <li>Want working with native DOM objects instead of wrappers.</li>
+                    <li>Want to be working with native DOM objects instead of wrappers.</li>
                     <li>Get pace with debug console's autocomplete/fluent typing.</li>
-                    <li>Did not satisfied from other libraries' performances on mobile devices.</li>
+                    <li>Are not satisfied from other libraries' performances on mobile devices.</li>
                 </ul>
             </blockquote>
 
@@ -131,9 +131,13 @@ $('body');
                         <pre class="prettyprint">
 $l('#home');
                         </pre>
-                        <h4>laroux.js (II)</h4>
+                        <h4>laroux.js (Alternative)</h4>
                         <pre class="prettyprint">
 $l.id('home');
+                        </pre>
+                        <h4>laroux.js (Alternative 2)</h4>
+                        <pre class="prettyprint">
+$l.idc('home');
                         </pre>
                         <h4>jQuery/Zepto</h4>
                         <pre class="prettyprint">
@@ -163,7 +167,7 @@ $('#home');
                         <pre class="prettyprint">
 $l('.container');
                         </pre>
-                        <h4>laroux.js (II)</h4>
+                        <h4>laroux.js (Alternative)</h4>
                         <pre class="prettyprint">
 $l.dom.selectByClass('container');
                         </pre>
@@ -197,7 +201,7 @@ $l.each([52, 97], function(index, value) {
     console.log(index + ': ' + value);
 });
                         </pre>
-                        <h4>laroux.js (II)</h4>
+                        <h4>laroux.js (Alternative)</h4>
                         <pre class="prettyprint">
 $l.aeach([52, 97], function(index, value) {
     console.log(index + ': ' + value);
@@ -267,7 +271,7 @@ $l.map(['eser', 'ozvataf'], function(value) {
     return value;
 });
                         </pre>
-                        <h4>laroux.js (II)</h4>
+                        <h4>laroux.js (Alternative)</h4>
                         <pre class="prettyprint">
 $l.amap(['eser', 'ozvataf'], function(value) {
     return value;
@@ -335,7 +339,7 @@ $.map({a: 'eser', b: 'ozvataf'}, function(value) {
                         <pre class="prettyprint">
 $l.dom.createElement('DIV', { class: 'x' }, 'y');
                         </pre>
-                        <h4>laroux.js (II)</h4>
+                        <h4>laroux.js (Alternative)</h4>
                         <pre class="prettyprint">
 $l.dom.create('&lt;div class="x"&gt;y&lt;/div&gt;');
                         </pre>

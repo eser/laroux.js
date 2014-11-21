@@ -72,6 +72,7 @@
                 showInLegend: true,
                 name: currentItem.name,
                 color: currentItem.color,
+                visible: currentItem.show,
                 dataPoints: dataPoints
             });
         }
@@ -87,15 +88,17 @@
             {
                 name: 'Chrome',
                 color: chromeColor,
+                show: true,
                 values: {
-                    'laroux.js': 2196203,
-                    'jQuery': 127885,
-                    'Zepto': 123737
+                    'laroux.js': 1976721,
+                    'jQuery': 137778,
+                    'Zepto': 116871
                 }
             },
             {
                 name: 'Firefox',
                 color: firefoxColor,
+                show: true,
                 values: {
                     'laroux.js': 231524,
                     'jQuery': 59402,
@@ -105,6 +108,7 @@
             {
                 name: 'IE',
                 color: ieColor,
+                show: false,
                 values: {
                     'laroux.js': 223489,
                     'jQuery': 147338,
@@ -114,6 +118,7 @@
             {
                 name: 'Safari',
                 color: safariColor,
+                show: false,
                 values: {
                     'laroux.js': 4333683,
                     'jQuery': 327924,
@@ -167,19 +172,23 @@
             {
                 name: 'Chrome',
                 color: chromeColor,
+                show: true,
                 values: {
-                    'laroux.js': 3190454,
-                    'laroux.js (II)': 7489227,
-                    'jQuery': 345253,
-                    'Zepto': 465402
+                    'laroux.js': 7983949,
+                    'laroux.js (Alt.)': 8168951,
+                    'laroux.js (Alt. 2)': 23675789,
+                    'jQuery': 370479,
+                    'Zepto': 441020
                 }
             },
             {
                 name: 'Firefox',
                 color: firefoxColor,
+                show: true,
                 values: {
                     'laroux.js': 200722,
-                    'laroux.js (II)': 421946,
+                    'laroux.js (Alt.)': 421946,
+                    'laroux.js (Alt. 2)': 0,
                     'jQuery': 286514,
                     'Zepto': 74654
                 }
@@ -187,9 +196,11 @@
             {
                 name: 'IE',
                 color: ieColor,
+                show: false,
                 values: {
                     'laroux.js': 309592,
-                    'laroux.js (II)': 632975,
+                    'laroux.js (Alt.)': 632975,
+                    'laroux.js (Alt. 2)': 0,
                     'jQuery': 314907,
                     'Zepto': 86235
                 }
@@ -197,9 +208,11 @@
             {
                 name: 'Safari',
                 color: safariColor,
+                show: false,
                 values: {
                     'laroux.js': 5848097,
-                    'laroux.js (II)': 14050558,
+                    'laroux.js (Alt.)': 14050558,
+                    'laroux.js (Alt. 2)': 0,
                     'jQuery': 635188,
                     'Zepto': 411847
                 }
@@ -225,9 +238,15 @@
                             }
                         },
                         {
-                            name: 'laroux.js (II)',
+                            name: 'laroux.js (Alternative)',
                             fnc: function() {
                                 $l.id('home');
+                            }
+                        },
+                        {
+                            name: 'laroux.js (Alternative 2)',
+                            fnc: function() {
+                                $l.idc('home');
                             }
                         },
                         {
@@ -257,19 +276,21 @@
             {
                 name: 'Chrome',
                 color: chromeColor,
+                show: true,
                 values: {
-                    'laroux.js': 2099914,
-                    'laroux.js (II)': 177507,
-                    'jQuery': 86141,
-                    'Zepto': 88549
+                    'laroux.js': 1956844,
+                    'laroux.js (Alt.)': 158550,
+                    'jQuery': 89110,
+                    'Zepto': 80006
                 }
             },
             {
                 name: 'Firefox',
                 color: firefoxColor,
+                show: true,
                 values: {
                     'laroux.js': 203644,
-                    'laroux.js (II)': 121056,
+                    'laroux.js (Alt.)': 121056,
                     'jQuery': 44510,
                     'Zepto': 71562
                 }
@@ -277,9 +298,10 @@
             {
                 name: 'IE',
                 color: ieColor,
+                show: false,
                 values: {
                     'laroux.js': 199585,
-                    'laroux.js (II)': 308762,
+                    'laroux.js (Alt.)': 308762,
                     'jQuery': 117656,
                     'Zepto': 65597
                 }
@@ -287,9 +309,10 @@
             {
                 name: 'Safari',
                 color: safariColor,
+                show: false,
                 values: {
                     'laroux.js': 4060241,
-                    'laroux.js (II)': 3064627,
+                    'laroux.js (Alt.)': 3064627,
                     'jQuery': 292788,
                     'Zepto': 298792
                 }
@@ -315,7 +338,7 @@
                             }
                         },
                         {
-                            name: 'laroux.js (II)',
+                            name: 'laroux.js (Alternative)',
                             fnc: function() {
                                 $l.dom.selectByClass('container');
                             }
@@ -347,19 +370,21 @@
             {
                 name: 'Chrome',
                 color: chromeColor,
+                show: true,
                 values: {
-                    'laroux.js': 7474,
-                    'laroux.js (II)': 4971,
-                    'jQuery': 7041,
-                    'Zepto': 6976
+                    'laroux.js': 7081,
+                    'laroux.js (Alt.)': 7674,
+                    'jQuery': 7271,
+                    'Zepto': 7058
                 }
             },
             {
                 name: 'Firefox',
                 color: firefoxColor,
+                show: true,
                 values: {
                     'laroux.js': 21242,
-                    'laroux.js (II)': 18972,
+                    'laroux.js (Alt.)': 18972,
                     'jQuery': 25108,
                     'Zepto': 24782
                 }
@@ -367,9 +392,10 @@
             {
                 name: 'IE',
                 color: ieColor,
+                show: false,
                 values: {
                     'laroux.js': 237065,
-                    'laroux.js (II)': 174020,
+                    'laroux.js (Alt.)': 174020,
                     'jQuery': 196511,
                     'Zepto': 187453
                 }
@@ -377,9 +403,10 @@
             {
                 name: 'Safari',
                 color: safariColor,
+                show: false,
                 values: {
                     'laroux.js': 98140,
-                    'laroux.js (II)': 77570,
+                    'laroux.js (Alt.)': 77570,
                     'jQuery': 103823,
                     'Zepto': 100608
                 }
@@ -407,7 +434,7 @@
                             }
                         },
                         {
-                            name: 'laroux.js (II)',
+                            name: 'laroux.js (Alternative)',
                             fnc: function() {
                                 $l.aeach([52, 97], function(index, value) {
                                     console.log(index + ': ' + value);
@@ -445,15 +472,17 @@
             {
                 name: 'Chrome',
                 color: chromeColor,
+                show: true,
                 values: {
-                    'laroux.js': 7882,
-                    'jQuery': 7111,
-                    'Zepto': 7067
+                    'laroux.js': 8233,
+                    'jQuery': 6785,
+                    'Zepto': 6626
                 }
             },
             {
                 name: 'Firefox',
                 color: firefoxColor,
+                show: true,
                 values: {
                     'laroux.js': 26740,
                     'jQuery': 24509,
@@ -463,6 +492,7 @@
             {
                 name: 'IE',
                 color: ieColor,
+                show: false,
                 values: {
                     'laroux.js': 259837,
                     'jQuery': 189345,
@@ -472,6 +502,7 @@
             {
                 name: 'Safari',
                 color: safariColor,
+                show: false,
                 values: {
                     'laroux.js': 119123,
                     'jQuery': 103770,
@@ -531,19 +562,21 @@
             {
                 name: 'Chrome',
                 color: chromeColor,
+                show: true,
                 values: {
-                    'laroux.js': 352497,
-                    'laroux.js (II)': 814497,
-                    'jQuery': 171942,
-                    'Zepto': 169488
+                    'laroux.js': 378533,
+                    'laroux.js (Alt.)': 1240165,
+                    'jQuery': 169422,
+                    'Zepto': 167668
                 }
             },
             {
                 name: 'Firefox',
                 color: firefoxColor,
+                show: true,
                 values: {
                     'laroux.js': 177761,
-                    'laroux.js (II)': 443161,
+                    'laroux.js (Alt.)': 443161,
                     'jQuery': 648821,
                     'Zepto': 644681
                 }
@@ -551,9 +584,10 @@
             {
                 name: 'IE',
                 color: ieColor,
+                show: false,
                 values: {
                     'laroux.js': 1052153,
-                    'laroux.js (II)': 1408633,
+                    'laroux.js (Alt.)': 1408633,
                     'jQuery': 511160,
                     'Zepto': 485873
                 }
@@ -561,9 +595,10 @@
             {
                 name: 'Safari',
                 color: safariColor,
+                show: false,
                 values: {
                     'laroux.js': 1008297,
-                    'laroux.js (II)': 2768481,
+                    'laroux.js (Alt.)': 2768481,
                     'jQuery': 1455137,
                     'Zepto': 1441696
                 }
@@ -591,7 +626,7 @@
                             }
                         },
                         {
-                            name: 'laroux.js (II)',
+                            name: 'laroux.js (Alternative)',
                             fnc: function() {
                                 $l.amap(['eser', 'ozvataf'], function(value) {
                                     return value;
@@ -629,15 +664,17 @@
             {
                 name: 'Chrome',
                 color: chromeColor,
+                show: true,
                 values: {
-                    'laroux.js': 4364186,
-                    'jQuery': 180603,
-                    'Zepto': 179874
+                    'laroux.js': 4340077,
+                    'jQuery': 148900,
+                    'Zepto': 148136
                 }
             },
             {
                 name: 'Firefox',
                 color: firefoxColor,
+                show: true,
                 values: {
                     'laroux.js': 2701741,
                     'jQuery': 525629,
@@ -647,6 +684,7 @@
             {
                 name: 'IE',
                 color: ieColor,
+                show: false,
                 values: {
                     'laroux.js': 1533039,
                     'jQuery': 431474,
@@ -656,6 +694,7 @@
             {
                 name: 'Safari',
                 color: safariColor,
+                show: false,
                 values: {
                     'laroux.js': 3793695,
                     'jQuery': 1401082,
@@ -715,19 +754,21 @@
             {
                 name: 'Chrome',
                 color: chromeColor,
+                show: true,
                 values: {
-                    'laroux.js': 22216,
-                    'laroux.js (II)': 17178,
-                    'jQuery': 6275,
-                    'Zepto': 6901
+                    'laroux.js': 22042,
+                    'laroux.js (Alt.)': 17080,
+                    'jQuery': 6743,
+                    'Zepto': 7143
                 }
             },
             {
                 name: 'Firefox',
                 color: firefoxColor,
+                show: true,
                 values: {
                     'laroux.js': 27208,
-                    'laroux.js (II)': 19259,
+                    'laroux.js (Alt.)': 19259,
                     'jQuery': 10401,
                     'Zepto': 10487
                 }
@@ -735,9 +776,10 @@
             {
                 name: 'IE',
                 color: ieColor,
+                show: false,
                 values: {
                     'laroux.js': 8851,
-                    'laroux.js (II)': 2797,
+                    'laroux.js (Alt.)': 2797,
                     'jQuery': 1389,
                     'Zepto': 1394
                 }
@@ -745,9 +787,10 @@
             {
                 name: 'Safari',
                 color: safariColor,
+                show: false,
                 values: {
                     'laroux.js': 166257,
-                    'laroux.js (II)': 95836,
+                    'laroux.js (Alt.)': 95836,
                     'jQuery': 28640,
                     'Zepto': 27779
                 }
@@ -773,7 +816,7 @@
                             }
                         },
                         {
-                            name: 'laroux.js (II)',
+                            name: 'laroux.js (Alternative)',
                             fnc: function() {
                                 $l.dom.create('<div class="x">y</div>');
                             }
@@ -805,15 +848,17 @@
             {
                 name: 'Chrome',
                 color: chromeColor,
+                show: true,
                 values: {
-                    'laroux.js': 14268,
-                    'jQuery': 5856,
-                    'Zepto': 6242
+                    'laroux.js': 14932,
+                    'jQuery': 6398,
+                    'Zepto': 5951
                 }
             },
             {
                 name: 'Firefox',
                 color: firefoxColor,
+                show: true,
                 values: {
                     'laroux.js': 18946,
                     'jQuery': 5212,
@@ -823,6 +868,7 @@
             {
                 name: 'IE',
                 color: ieColor,
+                show: false,
                 values: {
                     'laroux.js': 5793,
                     'jQuery': 1029,
@@ -832,6 +878,7 @@
             {
                 name: 'Safari',
                 color: safariColor,
+                show: false,
                 values: {
                     'laroux.js': 96953,
                     'jQuery': 22014,
