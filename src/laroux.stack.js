@@ -20,11 +20,7 @@
         };
 
         this.get = function(key, defaultValue) {
-            if (typeof this.data[key] == 'undefined') {
-                return defaultValue;
-            }
-
-            return this.data[key];
+            return this.data[key] || defaultValue || null;
         };
 
         this.getRange = function(keys) {

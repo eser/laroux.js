@@ -189,7 +189,7 @@
 
         createFloatContainer: function() {
             if (!laroux.ui.floatContainer) {
-                laroux.ui.floatContainer = laroux.dom.createElement('DIV', {id: 'laroux_floatdiv'}, '');
+                laroux.ui.floatContainer = laroux.dom.createElement('DIV', {id: 'laroux_floatdiv'});
                 document.body.insertBefore(laroux.ui.floatContainer, document.body.firstChild);
             }
         },

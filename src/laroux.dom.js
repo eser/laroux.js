@@ -147,7 +147,7 @@
 
                     elem.setAttribute(key2, children[key2]);
                 }
-            } else if (typeof children == 'string') {
+            } else if (typeof children == 'string' && children.length > 0) {
                 laroux.dom.append(elem, children);
             }
 

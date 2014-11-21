@@ -1124,7 +1124,7 @@
 
                     elem.setAttribute(key2, children[key2]);
                 }
-            } else if (typeof children == 'string') {
+            } else if (typeof children == 'string' && children.length > 0) {
                 laroux.dom.append(elem, children);
             }
 
@@ -2002,11 +2002,7 @@
         };
 
         this.get = function(key, defaultValue) {
-            if (typeof this.data[key] == 'undefined') {
-                return defaultValue;
-            }
-
-            return this.data[key];
+            return this.data[key] || defaultValue || null;
         };
 
         this.getRange = function(keys) {
@@ -2069,11 +2065,7 @@
         insert: function(element, model, target, position, options) {
             var output = laroux.templates.apply(element, model, options);
 
-            if (typeof position == 'undefined') {
-                position = 'beforeend';
-            }
-
-            laroux.dom.insert(target, position, output);
+            laroux.dom.insert(target, position || 'beforeend', output);
         }
     };
 
@@ -2088,6 +2080,7 @@
         data: [],
 
         set: function(timer) {
+            timer.next = Date.now() + timer.timeout;
             laroux.timers.data.push(timer);
         },
 
@@ -2116,6 +2109,8 @@
         },
 
         ontick: function() {
+            var now = Date.now();
+
             var removeKeys = [];
             for (var key in laroux.timers.data) {
                 if (!laroux.timers.data.hasOwnProperty(key)) {
@@ -2124,17 +2119,11 @@
 
                 var keyObj = laroux.timers.data[key];
 
-                if (typeof keyObj.timeoutR == 'undefined') {
-                    keyObj.timeoutR = keyObj.timeout - 1;
-                } else {
-                    keyObj.timeoutR -= 1;
-                }
-
-                if (keyObj.timeoutR < 0) {
+                if (keyObj.next <= now) {
                     var result = keyObj.ontick(keyObj.state);
 
                     if (result !== false && typeof keyObj.reset != 'undefined' && keyObj.reset) {
-                        keyObj.timeoutR = keyObj.timeout;
+                        keyObj.next = now + keyObj.timeout;
                     } else {
                         removeKeys.unshift(key);
                     }
@@ -2152,7 +2141,7 @@
     };
 
     laroux.ready(function() {
-        setInterval(laroux.timers.ontick, 1);
+        setInterval(laroux.timers.ontick, 100);
     });
 
 })(this.laroux);
@@ -2429,7 +2418,7 @@
 
         createFloatContainer: function() {
             if (!laroux.ui.floatContainer) {
-                laroux.ui.floatContainer = laroux.dom.createElement('DIV', {id: 'laroux_floatdiv'}, '');
+                laroux.ui.floatContainer = laroux.dom.createElement('DIV', {id: 'laroux_floatdiv'});
                 document.body.insertBefore(laroux.ui.floatContainer, document.body.firstChild);
             }
         },
@@ -2450,51 +2439,35 @@
 
     // vars
     laroux.vars = {
+        cookiePath: '/',
+
         getCookie: function(name, defaultValue) {
             var re = new RegExp(encodeURIComponent(name) + '=[^;]+', 'i');
             var match = document.cookie.match(re);
             
             if (!match) {
-                if (typeof defaultValue != 'undefined') {
-                    return defaultValue;
-                }
-
-                return null;
+                return defaultValue || null;
             }
 
             return decodeURIComponent(match[0].split('=')[1]);
         },
 
-        setCookie: function(name, value, expires) {
+        setCookie: function(name, value, expires, path) {
             var expireValue = '';
             if (typeof expires != 'undefined' || expires !== null) {
                 expireValue = '; expires=' + expires.toGMTString();
             }
 
-            var pathValue = laroux.baseLocation;
-            if (pathValue.length === 0) {
-                pathValue = '/';
-            }
-
-            document.cookie = encodeURIComponent(name) + '=' + encodeURIComponent(value) + expireValue + '; path=' + pathValue;
+            document.cookie = encodeURIComponent(name) + '=' + encodeURIComponent(value) + expireValue + '; path=' + (path || laroux.vars.cookiePath);
         },
 
-        removeCookie: function(name) {
-            var pathValue = laroux.baseLocation;
-            if (pathValue.length === 0) {
-                pathValue = '/';
-            }
-
-            document.cookie = encodeURIComponent(name) + '=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=' + pathValue;
+        removeCookie: function(name, path) {
+            document.cookie = encodeURIComponent(name) + '=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=' + (path || laroux.vars.cookiePath);
         },
 
         getLocal: function(name, defaultValue) {
             if (typeof localStorage[name] == 'undefined') {
-                if (typeof defaultValue != 'undefined') {
-                    return defaultValue;
-                }
-
-                return null;
+                return defaultValue || null;
             }
 
             return JSON.parse(localStorage[name]);
@@ -2510,11 +2483,7 @@
 
         getSession: function(name, defaultValue) {
             if (typeof sessionStorage[name] == 'undefined') {
-                if (typeof defaultValue != 'undefined') {
-                    return defaultValue;
-                }
-
-                return null;
+                return defaultValue || null;
             }
 
             return JSON.parse(sessionStorage[name]);

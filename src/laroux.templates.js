@@ -22,11 +22,7 @@
         insert: function(element, model, target, position, options) {
             var output = laroux.templates.apply(element, model, options);
 
-            if (typeof position == 'undefined') {
-                position = 'beforeend';
-            }
-
-            laroux.dom.insert(target, position, output);
+            laroux.dom.insert(target, position || 'beforeend', output);
         }
     };
 

@@ -5,51 +5,35 @@
 
     // vars
     laroux.vars = {
+        cookiePath: '/',
+
         getCookie: function(name, defaultValue) {
             var re = new RegExp(encodeURIComponent(name) + '=[^;]+', 'i');
             var match = document.cookie.match(re);
             
             if (!match) {
-                if (typeof defaultValue != 'undefined') {
-                    return defaultValue;
-                }
-
-                return null;
+                return defaultValue || null;
             }
 
             return decodeURIComponent(match[0].split('=')[1]);
         },
 
-        setCookie: function(name, value, expires) {
+        setCookie: function(name, value, expires, path) {
             var expireValue = '';
             if (typeof expires != 'undefined' || expires !== null) {
                 expireValue = '; expires=' + expires.toGMTString();
             }
 
-            var pathValue = laroux.baseLocation;
-            if (pathValue.length === 0) {
-                pathValue = '/';
-            }
-
-            document.cookie = encodeURIComponent(name) + '=' + encodeURIComponent(value) + expireValue + '; path=' + pathValue;
+            document.cookie = encodeURIComponent(name) + '=' + encodeURIComponent(value) + expireValue + '; path=' + (path || laroux.vars.cookiePath);
         },
 
-        removeCookie: function(name) {
-            var pathValue = laroux.baseLocation;
-            if (pathValue.length === 0) {
-                pathValue = '/';
-            }
-
-            document.cookie = encodeURIComponent(name) + '=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=' + pathValue;
+        removeCookie: function(name, path) {
+            document.cookie = encodeURIComponent(name) + '=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=' + (path || laroux.vars.cookiePath);
         },
 
         getLocal: function(name, defaultValue) {
             if (typeof localStorage[name] == 'undefined') {
-                if (typeof defaultValue != 'undefined') {
-                    return defaultValue;
-                }
-
-                return null;
+                return defaultValue || null;
             }
 
             return JSON.parse(localStorage[name]);
@@ -65,11 +49,7 @@
 
         getSession: function(name, defaultValue) {
             if (typeof sessionStorage[name] == 'undefined') {
-                if (typeof defaultValue != 'undefined') {
-                    return defaultValue;
-                }
-
-                return null;
+                return defaultValue || null;
             }
 
             return JSON.parse(sessionStorage[name]);

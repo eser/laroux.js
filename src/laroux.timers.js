@@ -8,6 +8,7 @@
         data: [],
 
         set: function(timer) {
+            timer.next = Date.now() + timer.timeout;
             laroux.timers.data.push(timer);
         },
 
@@ -36,6 +37,8 @@
         },
 
         ontick: function() {
+            var now = Date.now();
+
             var removeKeys = [];
             for (var key in laroux.timers.data) {
                 if (!laroux.timers.data.hasOwnProperty(key)) {
@@ -44,17 +47,11 @@
 
                 var keyObj = laroux.timers.data[key];
 
-                if (typeof keyObj.timeoutR == 'undefined') {
-                    keyObj.timeoutR = keyObj.timeout - 1;
-                } else {
-                    keyObj.timeoutR -= 1;
-                }
-
-                if (keyObj.timeoutR < 0) {
+                if (keyObj.next <= now) {
                     var result = keyObj.ontick(keyObj.state);
 
                     if (result !== false && typeof keyObj.reset != 'undefined' && keyObj.reset) {
-                        keyObj.timeoutR = keyObj.timeout;
+                        keyObj.next = now + keyObj.timeout;
                     } else {
                         removeKeys.unshift(key);
                     }
@@ -72,7 +69,7 @@
     };
 
     laroux.ready(function() {
-        setInterval(laroux.timers.ontick, 1);
+        setInterval(laroux.timers.ontick, 100);
     });
 
 })(this.laroux);
