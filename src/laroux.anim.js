@@ -66,15 +66,15 @@
         remove: function(id) {
             var targetKey = null;
 
-            for (var key in laroux.anim.data) {
-                if (!laroux.anim.data.hasOwnProperty(key)) {
+            for (var item in laroux.anim.data) {
+                if (!laroux.anim.data.hasOwnProperty(item)) {
                     continue;
                 }
 
-                var keyObj = laroux.anim.data[key];
+                var currentItem = laroux.anim.data[item];
 
-                if (typeof keyObj.id != 'undefined' && keyObj.id == id) {
-                    targetKey = key;
+                if (typeof currentItem.id != 'undefined' && currentItem.id == id) {
+                    targetKey = item;
                     break;
                 }
             }
@@ -89,40 +89,40 @@
 
         onframe: function(timestamp) {
             var removeKeys = [];
-            for (var key in laroux.anim.data) {
-                if (!laroux.anim.data.hasOwnProperty(key)) {
+            for (var item in laroux.anim.data) {
+                if (!laroux.anim.data.hasOwnProperty(item)) {
                     continue;
                 }
 
-                var keyObj = laroux.anim.data[key];
-                if (keyObj.startTime === null) {
-                    keyObj.startTime = timestamp;
+                var currentItem = laroux.anim.data[item];
+                if (currentItem.startTime === null) {
+                    currentItem.startTime = timestamp;
                 }
 
-                var result = laroux.anim.step(keyObj, timestamp);
+                var result = laroux.anim.step(currentItem, timestamp);
 
                 if (result === false) {
-                    removeKeys.unshift(key);
-                } else if (timestamp > keyObj.startTime + keyObj.time) {
-                    if (keyObj.reset) {
-                        keyObj.startTime = timestamp;
+                    removeKeys.unshift(item);
+                } else if (timestamp > currentItem.startTime + currentItem.time) {
+                    if (currentItem.reset) {
+                        currentItem.startTime = timestamp;
                         if (newanim.object === document.body && newanim.property == 'scrollTop') {
-                            scrollTo(document.body, keyObj.from);
+                            scrollTo(document.body, currentItem.from);
                         } else {
-                            keyObj.object[keyObj.property] = keyObj.from;
+                            currentItem.object[currentItem.property] = currentItem.from;
                         }
                     } else {
-                        removeKeys.unshift(key);
+                        removeKeys.unshift(item);
                     }
                 }
             }
 
-            for (var key2 in removeKeys) {
-                if (!removeKeys.hasOwnProperty(key2)) {
+            for (var item2 in removeKeys) {
+                if (!removeKeys.hasOwnProperty(item2)) {
                     continue;
                 }
 
-                laroux.anim.data.splice(removeKeys[key2], 1);
+                laroux.anim.data.splice(removeKeys[item2], 1);
             }
 
             if (laroux.anim.data.length > 0) {

@@ -130,22 +130,22 @@
             var elem = document.createElement(element);
 
             if (typeof attributes == 'object') {
-                for (var key in attributes) {
-                    if (!attributes.hasOwnProperty(key)) {
+                for (var item in attributes) {
+                    if (!attributes.hasOwnProperty(item)) {
                         continue;
                     }
 
-                    elem.setAttribute(key, attributes[key]);
+                    elem.setAttribute(item, attributes[item]);
                 }
             }
 
             if (typeof children == 'object') {
-                for (var key2 in children) {
-                    if (!children.hasOwnProperty(key2)) {
+                for (var item2 in children) {
+                    if (!children.hasOwnProperty(item2)) {
                         continue;
                     }
 
-                    elem.setAttribute(key2, children[key2]);
+                    elem.setAttribute(item2, children[item2]);
                 }
             } else if (typeof children == 'string' && children.length > 0) {
                 laroux.dom.append(elem, children);

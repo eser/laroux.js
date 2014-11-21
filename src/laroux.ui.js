@@ -130,26 +130,24 @@
             selectedElements: [],
 
             onhidden: function(elements) {
-                laroux.css.setTransition(elements, ['opacity']);
                 laroux.css.setProperty(elements, {opacity: 0});
+                laroux.css.setTransition(elements, ['opacity']);
             },
 
             onreveal: function(elements) {
                 laroux.css.setProperty(elements, {opacity: 1});
             },
 
-            set: function(selector) {
-                laroux.ui.scrollView.selectedElements = laroux.helpers.merge(
-                    laroux.ui.scrollView.selectedElements,
-                    laroux.amap(
-                        laroux.dom.select(selector),
-                        function(element) {
-                            if (!laroux.css.inViewport(element)) {
-                                return element;
-                            }
-                        }
-                    )
-                );
+            set: function(elements) {
+                for (var item in elements) {
+                    if (!elements.hasOwnProperty(item)) {
+                        continue;
+                    }
+
+                    if (!laroux.css.inViewport(elements[item])) {
+                        laroux.ui.scrollView.selectedElements.push(elements[item]);
+                    }
+                }
 
                 laroux.ui.scrollView.onhidden(laroux.ui.scrollView.selectedElements);
                 laroux.dom.setEvent(window, 'scroll', laroux.ui.scrollView.reveal);
@@ -182,7 +180,7 @@
                 }
 
                 if (elements.length > 0) {
-                    laroux.ui.scrollView.onhidden(elements.length);
+                    laroux.ui.scrollView.onreveal(elements);
                 }
             }
         },

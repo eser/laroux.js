@@ -65,8 +65,8 @@
     };
 
     laroux.each = function(arr, fnc) {
-        for (var key in arr) {
-            if (fnc(key, arr[key]) === false) {
+        for (var item in arr) {
+            if (fnc(item, arr[item]) === false) {
                 break;
             }
         }
@@ -77,8 +77,8 @@
     laroux.map = function(arr, fnc) {
         var results = [];
 
-        for (var key in arr) {
-            var result = fnc(arr[key], key);
+        for (var item in arr) {
+            var result = fnc(arr[item], item);
             if (result === false) {
                 break;
             }

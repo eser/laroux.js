@@ -10,16 +10,16 @@
         },
 
         invoke: function(event, args) {
-            for (var key in laroux.events.delegates) {
-                if (!laroux.events.delegates.hasOwnProperty(key)) {
+            for (var item in laroux.events.delegates) {
+                if (!laroux.events.delegates.hasOwnProperty(item)) {
                     continue;
                 }
 
-                if (laroux.events.delegates[key].event != event) {
+                if (laroux.events.delegates[item].event != event) {
                     continue;
                 }
 
-                laroux.events.delegates[key].fnc(args);
+                laroux.events.delegates[item].fnc(args);
             }
         },
     };

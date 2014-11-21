@@ -227,8 +227,8 @@
 
         getKeys: function(obj) {
             var keys = Object.keys(obj);
-            for (var key in keys) {
-                yield keys[key];
+            for (var item in keys) {
+                yield keys[item];
             }
         } */
     };

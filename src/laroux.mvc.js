@@ -23,22 +23,22 @@
 
         scanElement: function(element, keys, nodes) {
             for (var i = 0, atts = element.attributes, m = atts.length; i < m; i++) {
-                for (var key1 in keys) {
-                    var findStr1 = '{{' + keys[key1] + '}}';
+                for (var item1 in keys) {
+                    var findStr1 = '{{' + keys[item1] + '}}';
 
                     if (atts[i].value.indexOf(findStr1) !== -1) {
-                        nodes.push({node: atts[i], key: keys[key1], value: atts[i].value});
+                        nodes.push({node: atts[i], key: keys[item1], value: atts[i].value});
                     }
                 }
             }
 
             for (var j = 0, chldrn = element.childNodes, n = chldrn.length; j < n; j++) {
-                for (var key2 in keys) {
-                    var findStr2 = '{{' + keys[key2] + '}}';
+                for (var item2 in keys) {
+                    var findStr2 = '{{' + keys[item2] + '}}';
 
                     if (chldrn[j].nodeType === 3) {
                         if (chldrn[j].textContent.indexOf(findStr2) !== -1) {
-                            nodes.push({node: chldrn[j], key: keys[key2], value: chldrn[j].textContent});
+                            nodes.push({node: chldrn[j], key: keys[item2], value: chldrn[j].textContent});
                         }
                         continue;
                     }

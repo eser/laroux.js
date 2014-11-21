@@ -15,15 +15,15 @@
         remove: function(id) {
             var targetKey = null;
 
-            for (var key in laroux.timers.data) {
-                if (!laroux.timers.data.hasOwnProperty(key)) {
+            for (var item in laroux.timers.data) {
+                if (!laroux.timers.data.hasOwnProperty(item)) {
                     continue;
                 }
 
-                var keyObj = laroux.timers.data[key];
+                var currentItem = laroux.timers.data[item];
 
-                if (typeof keyObj.id != 'undefined' && keyObj.id == id) {
-                    targetKey = key;
+                if (typeof currentItem.id != 'undefined' && currentItem.id == id) {
+                    targetKey = item;
                     break;
                 }
             }
@@ -40,30 +40,30 @@
             var now = Date.now();
 
             var removeKeys = [];
-            for (var key in laroux.timers.data) {
-                if (!laroux.timers.data.hasOwnProperty(key)) {
+            for (var item in laroux.timers.data) {
+                if (!laroux.timers.data.hasOwnProperty(item)) {
                     continue;
                 }
 
-                var keyObj = laroux.timers.data[key];
+                var currentItem = laroux.timers.data[item];
 
-                if (keyObj.next <= now) {
-                    var result = keyObj.ontick(keyObj.state);
+                if (currentItem.next <= now) {
+                    var result = currentItem.ontick(currentItem.state);
 
-                    if (result !== false && typeof keyObj.reset != 'undefined' && keyObj.reset) {
-                        keyObj.next = now + keyObj.timeout;
+                    if (result !== false && typeof currentItem.reset != 'undefined' && currentItem.reset) {
+                        currentItem.next = now + currentItem.timeout;
                     } else {
-                        removeKeys.unshift(key);
+                        removeKeys.unshift(item);
                     }
                 }
             }
 
-            for (var key2 in removeKeys) {
-                if (!removeKeys.hasOwnProperty(key2)) {
+            for (var item2 in removeKeys) {
+                if (!removeKeys.hasOwnProperty(item2)) {
                     continue;
                 }
 
-                laroux.timers.data.splice(removeKeys[key2], 1);
+                laroux.timers.data.splice(removeKeys[item2], 1);
             }
         }
     };

@@ -26,12 +26,12 @@
         this.getRange = function(keys) {
             var values = {};
 
-            for (var key in keys) {
-                if (!keys.hasOwnProperty(key)) {
+            for (var item in keys) {
+                if (!keys.hasOwnProperty(item)) {
                     continue;
                 }
 
-                values[keys[key]] = this.data[keys[key]];
+                values[keys[item]] = this.data[keys[item]];
             }
 
             return values;

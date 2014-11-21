@@ -11,13 +11,13 @@
         set: function(condition, fnc, state) {
             var conditions = laroux.helpers.getAsArray(condition);
 
-            for (var key in conditions) {
-                if (!conditions.hasOwnProperty(key)) {
+            for (var item in conditions) {
+                if (!conditions.hasOwnProperty(item)) {
                     continue;
                 }
 
-                if (laroux.triggers.list.indexOf(conditions[key]) == -1) {
-                    laroux.triggers.list.push(conditions[key]);
+                if (laroux.triggers.list.indexOf(conditions[item]) == -1) {
+                    laroux.triggers.list.push(conditions[item]);
                 }
             }
 
@@ -35,20 +35,20 @@
             }
 
             var removeKeys = [];
-            for (var key in laroux.triggers.delegates) {
-                if (!laroux.triggers.delegates.hasOwnProperty(key)) {
+            for (var item in laroux.triggers.delegates) {
+                if (!laroux.triggers.delegates.hasOwnProperty(item)) {
                     continue;
                 }
 
                 var count = 0;
-                var keyObj = laroux.triggers.delegates[key];
+                var currentItem = laroux.triggers.delegates[item];
 
-                for (var conditionKey in keyObj.conditions) {
-                    if (!keyObj.conditions.hasOwnProperty(conditionKey)) {
+                for (var conditionKey in currentItem.conditions) {
+                    if (!currentItem.conditions.hasOwnProperty(conditionKey)) {
                         continue;
                     }
 
-                    var conditionObj = keyObj.conditions[conditionKey];
+                    var conditionObj = currentItem.conditions[conditionKey];
 
                     if (laroux.triggers.list.indexOf(conditionObj) != -1) {
                         count++;
@@ -57,22 +57,22 @@
                 }
 
                 if (count === 0) {
-                    keyObj.fnc(
+                    currentItem.fnc(
                         {
-                            state: keyObj.state,
+                            state: currentItem.state,
                             args: laroux.helpers.getAsArray(args)
                         }
                     );
-                    removeKeys.unshift(key);
+                    removeKeys.unshift(item);
                 }
             }
 
-            for (var key2 in removeKeys) {
-                if (!removeKeys.hasOwnProperty(key2)) {
+            for (var item2 in removeKeys) {
+                if (!removeKeys.hasOwnProperty(item2)) {
                     continue;
                 }
 
-                laroux.triggers.delegates.splice(removeKeys[key2], 1);
+                laroux.triggers.delegates.splice(removeKeys[item2], 1);
             }
 
             // console.log('trigger name: ' + triggerName);
