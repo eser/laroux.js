@@ -135,10 +135,11 @@
             var frag = document.createDocumentFragment(),
                 temp = document.createElement('DIV');
 
-            laroux.dom.append(temp, html);
+            temp.insertAdjacentHTML('beforeend', html);
             while (temp.firstChild) {
                 frag.appendChild(temp.firstChild);
             }
+            temp.remove();
 
             return frag;
         },
@@ -270,7 +271,7 @@
 
         clear: function(element) {
             while (element.hasChildNodes()) {
-                element.removeChild(element.firstChild);
+                element.firstChild.remove();
             }
         },
 
@@ -297,9 +298,7 @@
         },
 
         remove: function(element) {
-            if (element.parentElement !== null) {
-                element.parentElement.removeChild(element);
-            }
+            element.remove();
         },
 
         cloneReturn: 0,
