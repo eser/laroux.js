@@ -1,5 +1,5 @@
-(function() {
-    "use strict";
+(function(global) {
+    'use strict';
 
     // core
     var laroux = function(selector, parent) {
@@ -15,7 +15,7 @@
         }
 
         /*
-        -- non-chrome optimization
+        // FIXME: non-chrome optimization
         var re = /^#([^\+\>\[\]\.# ]*)$/.exec(selector);
         if (re) {
             if (typeof parent == 'undefined') {
@@ -91,7 +91,7 @@
         var results = [];
 
         /*
-        -- non-chrome optimization
+        // FIXME: non-chrome optimization
         if (typeof arr.length != 'undefined') {
             for (var i = arr.length; i >= 0; i--) {
                 var result = fnc(arr[i], i);
@@ -150,8 +150,8 @@
     };
 
     // initialization
-    this.$l = this.laroux = laroux;
+    global.$l = global.laroux = laroux;
 
     document.addEventListener('DOMContentLoaded', laroux.contentEnd);
 
-}).call(this);
+})(this);

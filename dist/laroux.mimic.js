@@ -1,5 +1,5 @@
 (function(laroux) {
-    "use strict";
+    'use strict';
 
     // requires $l.css
     // requires $l.dom

@@ -1,5 +1,5 @@
 (function(laroux) {
-    "use strict";
+    'use strict';
 
     // requires $l.helpers
     // requires $l.triggers
@@ -12,6 +12,7 @@
 
         select: function(selector, parent) {
             var elements;
+
             if (typeof parent == 'undefined') {
                 elements = document.querySelectorAll(selector);
             } else {
@@ -23,6 +24,7 @@
 
         selectByClass: function(selector, parent) {
             var elements;
+
             if (typeof parent == 'undefined') {
                 elements = document.getElementsByClassName(selector);
             } else {
@@ -199,8 +201,9 @@
                     break;
                 }
             }
-        },
+        },/*,
 
+        // TODO: it's redundant for now
         loadImage: function() {
             var images = [];
 
@@ -216,6 +219,7 @@
 
         loadAsyncScript: function(path, triggerName, async) {
             var elem = document.createElement('script');
+
             elem.type = 'text/javascript';
             elem.async = (typeof async != 'undefined') ? async : true;
             elem.src = path;
@@ -243,6 +247,7 @@
 
         loadAsyncStyle: function(path, triggerName, async) {
             var elem = document.createElement('LINK');
+
             elem.type = 'text/css';
             elem.async = (typeof async != 'undefined') ? async : true;
             elem.href = path;
@@ -267,7 +272,7 @@
 
             var head = document.getElementsByTagName('head')[0];
             head.appendChild(elem);
-        },
+        },*/
 
         clear: function(element) {
             while (element.hasChildNodes()) {
@@ -327,9 +332,9 @@
             }
 
             return newElement;
-        } /*,
+        }/*,
 
-        // todo: it's redundant
+        // TODO: it's redundant for now
         applyOperations: function(element, operations) {
             for (var operation in operations) {
                 if (!operations.hasOwnProperty(operation)) {
@@ -396,8 +401,7 @@
                     }
                 }
             }
-        }
-        */
+        }*/
     };
 
 })(this.laroux);

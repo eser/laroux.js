@@ -1,5 +1,5 @@
 (function(laroux) {
-    "use strict";
+    'use strict';
 
     // requires $l.helpers
     // requires $l.css
@@ -35,7 +35,7 @@
             }
 
             if (typeof newanim.from == 'string') {
-                newanim.from = parseFloat(newanim.from);
+                newanim.from = Number(newanim.from);
             }
 
             if (typeof newanim.reset == 'undefined' || newanim.reset === null) {

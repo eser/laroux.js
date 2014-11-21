@@ -1,5 +1,5 @@
 (function(laroux) {
-    "use strict";
+    'use strict';
 
     // requires $l
     // requires $l.dom
@@ -105,7 +105,8 @@
                 }
 
                 laroux.ui.dynamicDates.updateDatesElements.forEach(function(obj) {
-                    var date = new Date(parseInt(obj.getAttribute('data-epoch'), 10) * 1000);
+                    // bitshifting (str >> 0) used instead of parseInt(str, 10)
+                    var date = new Date((obj.getAttribute('data-epoch') >> 0) * 1000);
 
                     laroux.dom.replace(
                         obj,
@@ -128,6 +129,15 @@
         scrollView: {
             selectedElements: [],
 
+            onhidden: function(elements) {
+                laroux.css.setTransition(elements, [ 'opacity' ]);
+                laroux.css.setProperty(elements, { opacity: 0 });
+            },
+
+            onreveal: function(elements) {
+                laroux.css.setProperty(elements, { opacity: 1 });
+            },
+
             set: function(selector) {
                 laroux.ui.scrollView.selectedElements = laroux.helpers.merge(
                     laroux.ui.scrollView.selectedElements,
@@ -141,20 +151,20 @@
                     )
                 );
 
-                laroux.css.setTransition(laroux.ui.scrollView.selectedElements, ['opacity']);
-                laroux.css.setProperty(laroux.ui.scrollView.selectedElements, { opacity: 0 });
-                laroux.dom.setEvent(window, 'scroll', laroux.ui.scrollView.onscroll);
+                laroux.ui.scrollView.onhidden(laroux.ui.scrollView.selectedElements);
+                laroux.dom.setEvent(window, 'scroll', laroux.ui.scrollView.reveal);
             },
 
-            onscroll: function() {
-                var removeKeys = [];
+            reveal: function() {
+                var removeKeys = [],
+                    elements = [];
 
                 laroux.each(
                     laroux.ui.scrollView.selectedElements,
                     function(i, element) {
                         if (laroux.css.inViewport(element)) {
                             removeKeys.unshift(i);
-                            element.style.opacity = 1;
+                            elements.push(element);
                         }
                     }
                 );
@@ -169,6 +179,10 @@
 
                 if (laroux.ui.scrollView.selectedElements.length === 0) {
                     laroux.dom.unsetEvent(window, 'scroll');
+                }
+
+                if (elements.length > 0) {
+                    laroux.ui.scrollView.onhidden(elements.length);
                 }
             }
         },

@@ -1,5 +1,5 @@
-(function() {
-    "use strict";
+(function(global) {
+    'use strict';
 
     // core
     var laroux = function(selector, parent) {
@@ -15,7 +15,7 @@
         }
 
         /*
-        -- non-chrome optimization
+        // FIXME: non-chrome optimization
         var re = /^#([^\+\>\[\]\.# ]*)$/.exec(selector);
         if (re) {
             if (typeof parent == 'undefined') {
@@ -91,7 +91,7 @@
         var results = [];
 
         /*
-        -- non-chrome optimization
+        // FIXME: non-chrome optimization
         if (typeof arr.length != 'undefined') {
             for (var i = arr.length; i >= 0; i--) {
                 var result = fnc(arr[i], i);
@@ -150,13 +150,13 @@
     };
 
     // initialization
-    this.$l = this.laroux = laroux;
+    global.$l = global.laroux = laroux;
 
     document.addEventListener('DOMContentLoaded', laroux.contentEnd);
 
-}).call(this);
+})(this);
 ;(function(laroux) {
-    "use strict";
+    'use strict';
 
     // requires $l
     // requires $l.events
@@ -470,7 +470,7 @@
 
 })(this.laroux);
 ;(function(laroux) {
-    "use strict";
+    'use strict';
 
     // requires $l.helpers
     // requires $l.css
@@ -506,7 +506,7 @@
             }
 
             if (typeof newanim.from == 'string') {
-                newanim.from = parseFloat(newanim.from);
+                newanim.from = Number(newanim.from);
             }
 
             if (typeof newanim.reset == 'undefined' || newanim.reset === null) {
@@ -619,8 +619,9 @@
         }
     };
 
-})(this.laroux);;(function(laroux) {
-    "use strict";
+})(this.laroux);
+;(function(laroux) {
+    'use strict';
 
     // requires $l.helpers
     // requires $l.dom
@@ -663,6 +664,7 @@
         // style features
         getProperty: function(element, styleName) {
             var style = getComputedStyle(element);
+
             styleName = laroux.helpers.antiCamelCase(styleName);
 
             return style.getPropertyValue(styleName);
@@ -694,13 +696,12 @@
         defaultTransition: '2s ease',
 
         setTransitionSingle: function(element, transition) {
-            var transitions = laroux.helpers.getAsArray(transition);
+            var transitions = laroux.helpers.getAsArray(transition),
+                style = getComputedStyle(element),
+                currentTransitions = style.getPropertyValue('transition') || style.getPropertyValue('-webkit-transition') ||
+                    style.getPropertyValue('-ms-transition') || '',
+                currentTransitionsArray;
 
-            var style = getComputedStyle(element);
-            var currentTransitions = style.getPropertyValue('transition') || style.getPropertyValue('-webkit-transition') ||
-                    style.getPropertyValue('-ms-transition') || '';
-
-            var currentTransitionsArray;
             if (currentTransitions.length > 0) {
                 currentTransitionsArray = currentTransitions.split(',');
             } else {
@@ -712,7 +713,8 @@
                     continue;
                 }
 
-                var styleName, transitionProperties,
+                var styleName,
+                    transitionProperties,
                     pos = transitions[item].indexOf(' ');
 
                 if (pos !== -1) {
@@ -775,9 +777,10 @@
         // measurement features
         // height of element without padding, margin and border
         height: function(element) {
-            var style = getComputedStyle(element);
+            var style = getComputedStyle(element),
+                height = style.getPropertyCSSValue('height');
 
-            return parseFloat(style.getPropertyValue('height'));
+            return height.getFloatValue(height.primitiveType);
         },
 
         // height of element with padding but without margin and border
@@ -791,18 +794,21 @@
                 return element.offsetHeight;
             }
 
-            var style = getComputedStyle(element);
-            var margins = parseFloat(style.getPropertyValue('margin-top')) +
-                parseFloat(style.getPropertyValue('margin-bottom'));
+            var style = getComputedStyle(element),
+                marginTop = style.getPropertyCSSValue('margin-top'),
+                marginBottom = style.getPropertyCSSValue('margin-bottom'),
+                margins = marginTop.getFloatValue(marginTop.primitiveType) +
+                    marginBottom.getFloatValue(marginBottom.primitiveType);
 
             return Math.ceil(element.offsetHeight + margins);
         },
 
         // width of element without padding, margin and border
         width: function(element) {
-            var style = getComputedStyle(element);
+            var style = getComputedStyle(element),
+                height = style.getPropertyCSSValue('width');
 
-            return parseFloat(style.getPropertyValue('width'));
+            return height.getFloatValue(height.primitiveType);
         },
 
         // width of element with padding but without margin and border
@@ -816,9 +822,11 @@
                 return element.offsetWidth;
             }
 
-            var style = getComputedStyle(element);
-            var margins = parseFloat(style.getPropertyValue('margin-left')) +
-                parseFloat(style.getPropertyValue('margin-right'));
+            var style = getComputedStyle(element),
+                marginLeft = style.getPropertyCSSValue('margin-left'),
+                marginRight = style.getPropertyCSSValue('margin-right'),
+                margins = marginLeft.getFloatValue(marginLeft.primitiveType) +
+                    marginRight.getFloatValue(marginRight.primitiveType);
 
             return Math.ceil(element.offsetWidth + margins);
         },
@@ -841,6 +849,7 @@
 
         inViewport: function(element) {
             var rect = element.getBoundingClientRect();
+
             return !(rect.bottom <= 0 || rect.top > window.innerHeight ||
                 rect.right <= 0 || rect.left > window.innerWidth);
         }
@@ -848,7 +857,7 @@
 
 })(this.laroux);
 ;(function(laroux) {
-    "use strict";
+    'use strict';
 
     // date
     laroux.date = {
@@ -988,7 +997,7 @@
 
 })(this.laroux);
 ;(function(laroux) {
-    "use strict";
+    'use strict';
 
     // requires $l.helpers
     // requires $l.triggers
@@ -1001,6 +1010,7 @@
 
         select: function(selector, parent) {
             var elements;
+
             if (typeof parent == 'undefined') {
                 elements = document.querySelectorAll(selector);
             } else {
@@ -1012,6 +1022,7 @@
 
         selectByClass: function(selector, parent) {
             var elements;
+
             if (typeof parent == 'undefined') {
                 elements = document.getElementsByClassName(selector);
             } else {
@@ -1124,10 +1135,11 @@
             var frag = document.createDocumentFragment(),
                 temp = document.createElement('DIV');
 
-            laroux.dom.append(temp, html);
+            temp.insertAdjacentHTML('beforeend', html);
             while (temp.firstChild) {
                 frag.appendChild(temp.firstChild);
             }
+            temp.remove();
 
             return frag;
         },
@@ -1187,8 +1199,9 @@
                     break;
                 }
             }
-        },
+        },/*,
 
+        // TODO: it's redundant for now
         loadImage: function() {
             var images = [];
 
@@ -1204,6 +1217,7 @@
 
         loadAsyncScript: function(path, triggerName, async) {
             var elem = document.createElement('script');
+
             elem.type = 'text/javascript';
             elem.async = (typeof async != 'undefined') ? async : true;
             elem.src = path;
@@ -1231,6 +1245,7 @@
 
         loadAsyncStyle: function(path, triggerName, async) {
             var elem = document.createElement('LINK');
+
             elem.type = 'text/css';
             elem.async = (typeof async != 'undefined') ? async : true;
             elem.href = path;
@@ -1255,11 +1270,11 @@
 
             var head = document.getElementsByTagName('head')[0];
             head.appendChild(elem);
-        },
+        },*/
 
         clear: function(element) {
             while (element.hasChildNodes()) {
-                element.removeChild(element.firstChild);
+                element.firstChild.remove();
             }
         },
 
@@ -1286,9 +1301,7 @@
         },
 
         remove: function(element) {
-            if (element.parentElement !== null) {
-                element.parentElement.removeChild(element);
-            }
+            element.remove();
         },
 
         cloneReturn: 0,
@@ -1317,9 +1330,9 @@
             }
 
             return newElement;
-        } /*,
+        }/*,
 
-        // todo: it's redundant
+        // TODO: it's redundant for now
         applyOperations: function(element, operations) {
             for (var operation in operations) {
                 if (!operations.hasOwnProperty(operation)) {
@@ -1386,13 +1399,12 @@
                     }
                 }
             }
-        }
-        */
+        }*/
     };
 
 })(this.laroux);
 ;(function(laroux) {
-    "use strict";
+    'use strict';
 
     // events
     laroux.events = {
@@ -1419,7 +1431,7 @@
 
 })(this.laroux);
 ;(function(laroux) {
-    "use strict";
+    'use strict';
 
     // forms
     laroux.forms = {
@@ -1628,7 +1640,7 @@
 
 })(this.laroux);
 ;(function(laroux) {
-    "use strict";
+    'use strict';
 
     // helpers
     laroux.helpers = {
@@ -1864,7 +1876,7 @@
 
 })(this.laroux);
 ;(function(laroux) {
-    "use strict";
+    'use strict';
 
     // requires $l.dom
     // requires $l.helpers
@@ -2010,7 +2022,7 @@
 
 })(this.laroux);
 ;(function(laroux) {
-    "use strict";
+    'use strict';
 
     // stack
     laroux.stack = function() {
@@ -2075,7 +2087,7 @@
 
 })(this.laroux);
 ;(function(laroux) {
-    "use strict";
+    'use strict';
 
     // requires $l.dom
 
@@ -2108,7 +2120,7 @@
 
 })(this.laroux);
 ;(function(laroux) {
-    "use strict";
+    'use strict';
 
     // requires $l
 
@@ -2186,7 +2198,7 @@
 
 })(this.laroux);
 ;(function(laroux) {
-    "use strict";
+    'use strict';
 
     // requires $l.helpers
 
@@ -2268,7 +2280,7 @@
 
 })(this.laroux);
 ;(function(laroux) {
-    "use strict";
+    'use strict';
 
     // requires $l
     // requires $l.dom
@@ -2374,7 +2386,8 @@
                 }
 
                 laroux.ui.dynamicDates.updateDatesElements.forEach(function(obj) {
-                    var date = new Date(parseInt(obj.getAttribute('data-epoch'), 10) * 1000);
+                    // bitshifting (str >> 0) used instead of parseInt(str, 10)
+                    var date = new Date((obj.getAttribute('data-epoch') >> 0) * 1000);
 
                     laroux.dom.replace(
                         obj,
@@ -2397,6 +2410,15 @@
         scrollView: {
             selectedElements: [],
 
+            onhidden: function(elements) {
+                laroux.css.setTransition(elements, [ 'opacity' ]);
+                laroux.css.setProperty(elements, { opacity: 0 });
+            },
+
+            onreveal: function(elements) {
+                laroux.css.setProperty(elements, { opacity: 1 });
+            },
+
             set: function(selector) {
                 laroux.ui.scrollView.selectedElements = laroux.helpers.merge(
                     laroux.ui.scrollView.selectedElements,
@@ -2410,20 +2432,20 @@
                     )
                 );
 
-                laroux.css.setTransition(laroux.ui.scrollView.selectedElements, ['opacity']);
-                laroux.css.setProperty(laroux.ui.scrollView.selectedElements, { opacity: 0 });
-                laroux.dom.setEvent(window, 'scroll', laroux.ui.scrollView.onscroll);
+                laroux.ui.scrollView.onhidden(laroux.ui.scrollView.selectedElements);
+                laroux.dom.setEvent(window, 'scroll', laroux.ui.scrollView.reveal);
             },
 
-            onscroll: function() {
-                var removeKeys = [];
+            reveal: function() {
+                var removeKeys = [],
+                    elements = [];
 
                 laroux.each(
                     laroux.ui.scrollView.selectedElements,
                     function(i, element) {
                         if (laroux.css.inViewport(element)) {
                             removeKeys.unshift(i);
-                            element.style.opacity = 1;
+                            elements.push(element);
                         }
                     }
                 );
@@ -2438,6 +2460,10 @@
 
                 if (laroux.ui.scrollView.selectedElements.length === 0) {
                     laroux.dom.unsetEvent(window, 'scroll');
+                }
+
+                if (elements.length > 0) {
+                    laroux.ui.scrollView.onhidden(elements.length);
                 }
             }
         },
@@ -2459,7 +2485,7 @@
 
 })(this.laroux);
 ;(function(laroux) {
-    "use strict";
+    'use strict';
 
     // requires $l
 

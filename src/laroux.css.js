@@ -1,5 +1,5 @@
 (function(laroux) {
-    "use strict";
+    'use strict';
 
     // requires $l.helpers
     // requires $l.dom
@@ -42,6 +42,7 @@
         // style features
         getProperty: function(element, styleName) {
             var style = getComputedStyle(element);
+
             styleName = laroux.helpers.antiCamelCase(styleName);
 
             return style.getPropertyValue(styleName);
@@ -73,13 +74,12 @@
         defaultTransition: '2s ease',
 
         setTransitionSingle: function(element, transition) {
-            var transitions = laroux.helpers.getAsArray(transition);
+            var transitions = laroux.helpers.getAsArray(transition),
+                style = getComputedStyle(element),
+                currentTransitions = style.getPropertyValue('transition') || style.getPropertyValue('-webkit-transition') ||
+                    style.getPropertyValue('-ms-transition') || '',
+                currentTransitionsArray;
 
-            var style = getComputedStyle(element);
-            var currentTransitions = style.getPropertyValue('transition') || style.getPropertyValue('-webkit-transition') ||
-                    style.getPropertyValue('-ms-transition') || '';
-
-            var currentTransitionsArray;
             if (currentTransitions.length > 0) {
                 currentTransitionsArray = currentTransitions.split(',');
             } else {
@@ -91,7 +91,8 @@
                     continue;
                 }
 
-                var styleName, transitionProperties,
+                var styleName,
+                    transitionProperties,
                     pos = transitions[item].indexOf(' ');
 
                 if (pos !== -1) {
@@ -154,9 +155,10 @@
         // measurement features
         // height of element without padding, margin and border
         height: function(element) {
-            var style = getComputedStyle(element);
+            var style = getComputedStyle(element),
+                height = style.getPropertyCSSValue('height');
 
-            return parseFloat(style.getPropertyValue('height'));
+            return height.getFloatValue(height.primitiveType);
         },
 
         // height of element with padding but without margin and border
@@ -170,18 +172,21 @@
                 return element.offsetHeight;
             }
 
-            var style = getComputedStyle(element);
-            var margins = parseFloat(style.getPropertyValue('margin-top')) +
-                parseFloat(style.getPropertyValue('margin-bottom'));
+            var style = getComputedStyle(element),
+                marginTop = style.getPropertyCSSValue('margin-top'),
+                marginBottom = style.getPropertyCSSValue('margin-bottom'),
+                margins = marginTop.getFloatValue(marginTop.primitiveType) +
+                    marginBottom.getFloatValue(marginBottom.primitiveType);
 
             return Math.ceil(element.offsetHeight + margins);
         },
 
         // width of element without padding, margin and border
         width: function(element) {
-            var style = getComputedStyle(element);
+            var style = getComputedStyle(element),
+                height = style.getPropertyCSSValue('width');
 
-            return parseFloat(style.getPropertyValue('width'));
+            return height.getFloatValue(height.primitiveType);
         },
 
         // width of element with padding but without margin and border
@@ -195,9 +200,11 @@
                 return element.offsetWidth;
             }
 
-            var style = getComputedStyle(element);
-            var margins = parseFloat(style.getPropertyValue('margin-left')) +
-                parseFloat(style.getPropertyValue('margin-right'));
+            var style = getComputedStyle(element),
+                marginLeft = style.getPropertyCSSValue('margin-left'),
+                marginRight = style.getPropertyCSSValue('margin-right'),
+                margins = marginLeft.getFloatValue(marginLeft.primitiveType) +
+                    marginRight.getFloatValue(marginRight.primitiveType);
 
             return Math.ceil(element.offsetWidth + margins);
         },
@@ -220,6 +227,7 @@
 
         inViewport: function(element) {
             var rect = element.getBoundingClientRect();
+
             return !(rect.bottom <= 0 || rect.top > window.innerHeight ||
                 rect.right <= 0 || rect.left > window.innerWidth);
         }
