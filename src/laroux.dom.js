@@ -121,7 +121,9 @@
             while (temp.firstChild) {
                 frag.appendChild(temp.firstChild);
             }
-            temp.remove();
+
+            // nulling out the reference, there is no obvious dispose method
+            temp = null;
 
             return frag;
         },
@@ -256,7 +258,7 @@
 
         clear: function(element) {
             while (element.hasChildNodes()) {
-                element.firstChild.remove();
+                element.removeChild(element.firstChild);
             }
         },
 
@@ -383,5 +385,14 @@
             }
         }*/
     };
+
+    // a fix for Internet Explorer
+    if (typeof Element.prototype.remove == 'undefined') {
+        Element.prototype.remove = function() {
+            if (this.parentElement !== null) {
+                this.parentElement.removeChild(this);
+            }
+        };
+    }
 
 })(this.laroux);
