@@ -383,7 +383,7 @@
             button,
             'click',
             function() {
-                $l.ui.popup.msgbox(500, 'test message');
+                $l.ui.popup.msgbox(2000, 'test message');
 
                 return false;
             }

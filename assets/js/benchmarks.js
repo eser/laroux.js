@@ -100,9 +100,9 @@
                 color: firefoxColor,
                 show: true,
                 values: {
-                    'laroux.js': 231524,
-                    'jQuery': 59402,
-                    'Zepto': 88427
+                    'laroux.js': 161405,
+                    'jQuery': 59934,
+                    'Zepto': 96625
                 }
             },
             {
@@ -110,9 +110,9 @@
                 color: ieColor,
                 show: false,
                 values: {
-                    'laroux.js': 223489,
-                    'jQuery': 147338,
-                    'Zepto': 78652
+                    'laroux.js': 233558,
+                    'jQuery': 152539,
+                    'Zepto': 83891
                 }
             },
             {
@@ -186,11 +186,11 @@
                 color: firefoxColor,
                 show: true,
                 values: {
-                    'laroux.js': 200722,
-                    'laroux.js (Alt.)': 421946,
-                    'laroux.js (Alt. 2)': 0,
-                    'jQuery': 286514,
-                    'Zepto': 74654
+                    'laroux.js': 454690,
+                    'laroux.js (Alt.)': 319715,
+                    'laroux.js (Alt. 2)': 119086560,
+                    'jQuery': 516144,
+                    'Zepto': 73711
                 }
             },
             {
@@ -198,11 +198,11 @@
                 color: ieColor,
                 show: false,
                 values: {
-                    'laroux.js': 309592,
-                    'laroux.js (Alt.)': 632975,
-                    'laroux.js (Alt. 2)': 0,
-                    'jQuery': 314907,
-                    'Zepto': 86235
+                    'laroux.js': 698106,
+                    'laroux.js (Alt.)': 651679,
+                    'laroux.js (Alt. 2)': 4505485,
+                    'jQuery': 298208,
+                    'Zepto': 88610
                 }
             },
             {
@@ -289,10 +289,10 @@
                 color: firefoxColor,
                 show: true,
                 values: {
-                    'laroux.js': 203644,
-                    'laroux.js (Alt.)': 121056,
-                    'jQuery': 44510,
-                    'Zepto': 71562
+                    'laroux.js': 168815,
+                    'laroux.js (Alt.)': 111615,
+                    'jQuery': 44314,
+                    'Zepto': 82399
                 }
             },
             {
@@ -300,10 +300,10 @@
                 color: ieColor,
                 show: false,
                 values: {
-                    'laroux.js': 199585,
-                    'laroux.js (Alt.)': 308762,
-                    'jQuery': 117656,
-                    'Zepto': 65597
+                    'laroux.js': 199811,
+                    'laroux.js (Alt.)': 321012,
+                    'jQuery': 123138,
+                    'Zepto': 70533
                 }
             },
             {
@@ -383,10 +383,10 @@
                 color: firefoxColor,
                 show: true,
                 values: {
-                    'laroux.js': 21242,
-                    'laroux.js (Alt.)': 18972,
-                    'jQuery': 25108,
-                    'Zepto': 24782
+                    'laroux.js': 18958,
+                    'laroux.js (Alt.)': 24862,
+                    'jQuery': 22002,
+                    'Zepto': 20270
                 }
             },
             {
@@ -394,10 +394,10 @@
                 color: ieColor,
                 show: false,
                 values: {
-                    'laroux.js': 237065,
-                    'laroux.js (Alt.)': 174020,
-                    'jQuery': 196511,
-                    'Zepto': 187453
+                    'laroux.js': 261119,
+                    'laroux.js (Alt.)': 287524,
+                    'jQuery': 200929,
+                    'Zepto': 195399
                 }
             },
             {
@@ -484,9 +484,9 @@
                 color: firefoxColor,
                 show: true,
                 values: {
-                    'laroux.js': 26740,
-                    'jQuery': 24509,
-                    'Zepto': 23855
+                    'laroux.js': 22096,
+                    'jQuery': 20598,
+                    'Zepto': 19909
                 }
             },
             {
@@ -494,9 +494,9 @@
                 color: ieColor,
                 show: false,
                 values: {
-                    'laroux.js': 259837,
-                    'jQuery': 189345,
-                    'Zepto': 187967
+                    'laroux.js': 265191,
+                    'jQuery': 189605,
+                    'Zepto': 193842
                 }
             },
             {
@@ -575,10 +575,10 @@
                 color: firefoxColor,
                 show: true,
                 values: {
-                    'laroux.js': 177761,
-                    'laroux.js (Alt.)': 443161,
-                    'jQuery': 648821,
-                    'Zepto': 644681
+                    'laroux.js': 192340,
+                    'laroux.js (Alt.)': 717126,
+                    'jQuery': 664320,
+                    'Zepto': 671392
                 }
             },
             {
@@ -586,10 +586,10 @@
                 color: ieColor,
                 show: false,
                 values: {
-                    'laroux.js': 1052153,
-                    'laroux.js (Alt.)': 1408633,
-                    'jQuery': 511160,
-                    'Zepto': 485873
+                    'laroux.js': 1068952,
+                    'laroux.js (Alt.)': 1698577,
+                    'jQuery': 560230,
+                    'Zepto': 510865
                 }
             },
             {
@@ -676,9 +676,9 @@
                 color: firefoxColor,
                 show: true,
                 values: {
-                    'laroux.js': 2701741,
-                    'jQuery': 525629,
-                    'Zepto': 521860
+                    'laroux.js': 2981061,
+                    'jQuery': 518294,
+                    'Zepto': 520718
                 }
             },
             {
@@ -686,9 +686,9 @@
                 color: ieColor,
                 show: false,
                 values: {
-                    'laroux.js': 1533039,
-                    'jQuery': 431474,
-                    'Zepto': 431442
+                    'laroux.js': 1599831,
+                    'jQuery': 469958,
+                    'Zepto': 463648
                 }
             },
             {
@@ -767,10 +767,10 @@
                 color: firefoxColor,
                 show: true,
                 values: {
-                    'laroux.js': 27208,
-                    'laroux.js (Alt.)': 19259,
-                    'jQuery': 10401,
-                    'Zepto': 10487
+                    'laroux.js': 25465,
+                    'laroux.js (Alt.)': 18202,
+                    'jQuery': 10451,
+                    'Zepto': 10263
                 }
             },
             {
@@ -778,10 +778,10 @@
                 color: ieColor,
                 show: false,
                 values: {
-                    'laroux.js': 8851,
-                    'laroux.js (Alt.)': 2797,
-                    'jQuery': 1389,
-                    'Zepto': 1394
+                    'laroux.js': 8977,
+                    'laroux.js (Alt.)': 2857,
+                    'jQuery': 1384,
+                    'Zepto': 1354
                 }
             },
             {
@@ -860,9 +860,9 @@
                 color: firefoxColor,
                 show: true,
                 values: {
-                    'laroux.js': 18946,
-                    'jQuery': 5212,
-                    'Zepto': 5078
+                    'laroux.js': 17317,
+                    'jQuery': 6902,
+                    'Zepto': 6614
                 }
             },
             {
@@ -870,9 +870,9 @@
                 color: ieColor,
                 show: false,
                 values: {
-                    'laroux.js': 5793,
-                    'jQuery': 1029,
-                    'Zepto': 1127
+                    'laroux.js': 4960,
+                    'jQuery': 1203,
+                    'Zepto': 1358
                 }
             },
             {
