@@ -20,7 +20,7 @@
 
         setCookie: function(name, value, expires, path) {
             var expireValue = '';
-            if (typeof expires != 'undefined' || expires !== null) {
+            if (typeof expires != 'undefined' && expires !== null) {
                 expireValue = '; expires=' + expires.toGMTString();
             }
 
