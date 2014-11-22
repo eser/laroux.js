@@ -20,8 +20,8 @@ So far, it has [Ajax](https://github.com/larukedi/laroux.js/wiki/ajax), [Anim](h
 - Complain about people who do not know the difference between jQuery and Javascript.
 - Love working with more compact, organized libraries with smaller sizes (~28K).
 - Want to be working with native DOM objects instead of wrappers.
-- Get pace with debug console's autocomplete/fluent typing.
-- Are not satisfied from other libraries' performances on mobile devices.
+- Want to leverage the debug console's autocomplete/fluent typing.
+- Are not satisfied with the performance of other libraries on mobile devices.
 
 
 ### Demos
@@ -35,7 +35,7 @@ See [wiki page](https://github.com/larukedi/laroux.js/wiki) for documentation.
 
 
 ### Installation
-Download the latest version for [releases page](https://github.com/larukedi/laroux.js/releases), and include `laroux.min.js` and `laroux.min.css` in your web project.
+Download the latest version from the [releases page](https://github.com/larukedi/laroux.js/releases), and include `laroux.min.js` and `laroux.min.css` in your web project.
 
 
 ### Sample Usage
@@ -59,7 +59,7 @@ $l.ready(function() {
 ```
 
 
-## For Developers Want To Contribute
+## For Developers Who Want To Contribute
 
 ### Installation
 
