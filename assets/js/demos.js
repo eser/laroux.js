@@ -223,7 +223,7 @@
                 $l.dom.append(text, $l.helpers.getUniqueId() + crlf);
 
                 $l.dom.append(text, '<div><strong>Query String Generation:</strong></div>');
-                $l.dom.append(text, $l.helpers.buildQueryString({ pageId: 5, showAll: 'yes' }) + crlf);
+                $l.dom.append(text, $l.helpers.buildQueryString({pageId: 5, showAll: 'yes'}) + crlf);
 
                 $l.dom.append(text, '<div><strong>Transform string into camel case:</strong></div>');
                 $l.dom.append(text, $l.helpers.camelCase('text-align') + crlf);
@@ -252,10 +252,10 @@
                 $l.dom.append(text, $l.helpers.getLength({id: 1, name: 'eser', count: 5}) + crlf);
 
                 $l.dom.append(text, '<div><strong>Getting elements with dot notation:</strong></div>');
-                $l.dom.append(text, $l.helpers.getElement({id: 1, child: { a: 1, b: 2 }}, 'child.a') + crlf);
+                $l.dom.append(text, $l.helpers.getElement({id: 1, child: {a: 1, b: 2}}, 'child.a') + crlf);
 
                 $l.dom.append(text, '<div><strong>Getting keys for dot notation:</strong></div>');
-                $l.dom.append(text, JSON.stringify($l.helpers.getKeysRecursive({id: 1, child: { a: 1, b: 2 }})) + crlf);
+                $l.dom.append(text, JSON.stringify($l.helpers.getKeysRecursive({id: 1, child: {a: 1, b: 2}})) + crlf);
 
                 return false;
             }
@@ -271,7 +271,7 @@
         // mvc - Simple Model Binding
         $l.ready(function() {
             var textbox = $l.id('textbox-mvc-simple');
-            var myModel = { name: '' };
+            var myModel = {name: ''};
 
             $l.mvc.bind('mvcsimple', myModel);
 
@@ -289,7 +289,7 @@
         // mvc - Model Binding with Controller
         $l.ready(function() {
             var textboxes = $l(['.textboxes-mvc-controller']);
-            var myModel = { a: 3, b: 5 };
+            var myModel = {a: 3, b: 5};
 
             var controller = function($model) {
                 $model.total = parseInt($model.a) + parseInt($model.b);
@@ -364,6 +364,61 @@
                         $l.dom.append(text, 'time\'s up');
                     }
                 });
+
+                return false;
+            }
+        );
+    });
+
+    // triggers - Set
+    $l.ready(function() {
+        var button1 = $l.id('button-triggers-set-1');
+        var button2 = $l.id('button-triggers-set-2');
+        var buttonReset = $l.id('button-triggers-set-reset');
+        var text = $l.id('text-triggers-set');
+
+        $l.dom.append(text, 'click both buttons in any order' + crlf);
+
+        var resetFunc = function() {
+            $l.triggers.set(
+                ['condition1', 'condition2'],
+                function() {
+                    $l.dom.append(text, 'all set' + crlf);
+                    $l.dom.attr(buttonReset, 'disabled', null);
+                }
+            );
+
+            $l.dom.attr(buttonReset, 'disabled', 'disabled');
+        };
+        resetFunc();
+
+        $l.dom.setEvent(
+            button1,
+            'click',
+            function() {
+                $l.dom.append(text, 'button1 clicked...' + crlf);
+                $l.triggers.ontrigger('condition1');
+
+                return false;
+            }
+        );
+
+        $l.dom.setEvent(
+            button2,
+            'click',
+            function() {
+                $l.dom.append(text, 'button2 clicked...' + crlf);
+                $l.triggers.ontrigger('condition2');
+
+                return false;
+            }
+        );
+
+        $l.dom.setEvent(
+            buttonReset,
+            'click',
+            function() {
+                resetFunc();
 
                 return false;
             }

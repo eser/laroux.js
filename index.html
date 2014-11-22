@@ -713,9 +713,57 @@ $l.timers.set({
             </div>
 
             <div class="example-area">
-                <div class="well">
-                    <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
-                    No examples yet, <a href="https://github.com/larukedi/laroux.js/wiki/triggers">see related wiki page for examples</a>
+                <h3>Setting a trigger</h3>
+                <div class="row">
+                    <div class="col-sm-4">
+                        <button id="button-triggers-set-1" class="btn btn-default">Button 1</button>
+                        <button id="button-triggers-set-2" class="btn btn-default">Button 2</button>
+                        <button id="button-triggers-set-reset" class="btn btn-default" disabled="disabled">Reset</button>
+                        <div id="text-triggers-set"></div>
+                    </div>
+                    <div class="col-sm-8">
+                        <h4>HTML</h4>
+                        <pre class="prettyprint">
+&lt;button id="button-triggers-set-1" class="btn btn-default"&gt;Button 1&lt;/button&gt;
+&lt;button id="button-triggers-set-2" class="btn btn-default"&gt;Button 2&lt;/button&gt;
+&lt;div id="text-triggers-set"&gt;&lt;/div&gt;
+                        </pre>
+
+                        <h4>Javascript</h4>
+                        <pre class="prettyprint">
+var text = $l.id('text-triggers-set');
+$l.dom.replace(text, 'click both buttons in any order&lt;br /&gt;');
+
+$l.triggers.set(
+    ['condition1', 'condition2'],
+    function() {
+        $l.dom.append(text, 'all set&lt;br /&gt;');
+    }
+);
+
+$l.dom.setEvent(
+    $l.id('button-triggers-set-1'),
+    'click',
+    function() {
+        $l.dom.append(text, 'button1 clicked...&lt;br /&gt;');
+        $l.triggers.ontrigger('condition1');
+
+        return false;
+    }
+);
+
+$l.dom.setEvent(
+    $l.id('button-triggers-set-2'),
+    'click',
+    function() {
+        $l.dom.append(text, 'button2 clicked...&lt;br /&gt;');
+        $l.triggers.ontrigger('condition2');
+
+        return false;
+    }
+);
+                        </pre>
+                    </div>
                 </div>
             </div>
 
