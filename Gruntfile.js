@@ -21,32 +21,58 @@ module.exports = function(grunt) {
                 },
                 src: [
                     'src/laroux.js',
+                    'src/laroux.wrapper.js',
                     'src/laroux.ajax.js',
-                    'src/laroux.anim.js',
                     'src/laroux.css.js',
-                    'src/laroux.date.js',
                     'src/laroux.dom.js',
                     'src/laroux.events.js',
                     'src/laroux.forms.js',
                     'src/laroux.helpers.js',
-                    'src/laroux.mvc.js',
-                    'src/laroux.stack.js',
-                    'src/laroux.templates.js',
                     'src/laroux.timers.js',
                     'src/laroux.triggers.js',
-                    'src/laroux.ui.js',
                     'src/laroux.vars.js'
                 ],
-                dest: 'dist/<%= pkg.name %>.js'
+                dest: 'dist/<%= pkg.name %>.base.js'
             },
-            mimicjs: {
+            extjs: {
                 options: {
                     separator: ';'
                 },
                 src: [
-                    'src/laroux.wrapper.js'
+                    'src/laroux.anim.js',
+                    'src/laroux.date.js',
+                    'src/laroux.mvc.js',
+                    'src/laroux.stack.js',
+                    'src/laroux.templates.js',
+                    'src/laroux.ui.js'
                 ],
-                dest: 'dist/<%= pkg.name %>.mimic.js'
+                dest: 'dist/<%= pkg.name %>.ext.js'
+            },
+            alljs: {
+                options: {
+                    separator: ';'
+                },
+                src: [
+                    'src/laroux.js',
+                    'src/laroux.wrapper.js',
+                    'src/laroux.ajax.js',
+                    'src/laroux.css.js',
+                    'src/laroux.dom.js',
+                    'src/laroux.events.js',
+                    'src/laroux.forms.js',
+                    'src/laroux.helpers.js',
+                    'src/laroux.timers.js',
+                    'src/laroux.triggers.js',
+                    'src/laroux.vars.js',
+
+                    'src/laroux.anim.js',
+                    'src/laroux.date.js',
+                    'src/laroux.mvc.js',
+                    'src/laroux.stack.js',
+                    'src/laroux.templates.js',
+                    'src/laroux.ui.js'
+                ],
+                dest: 'dist/<%= pkg.name %>.js'
             },
             css: {
                 src: [
@@ -61,12 +87,17 @@ module.exports = function(grunt) {
             },
             basejs: {
                 files: {
-                    'dist/<%= pkg.name %>.min.js': ['<%= concat.basejs.dest %>']
+                    'dist/<%= pkg.name %>.base.min.js': ['<%= concat.basejs.dest %>']
                 }
             },
-            mimicjs: {
+            extjs: {
                 files: {
-                    'dist/<%= pkg.name %>.mimic.min.js': ['<%= concat.mimicjs.dest %>']
+                    'dist/<%= pkg.name %>.ext.min.js': ['<%= concat.extjs.dest %>']
+                }
+            },
+            alljs: {
+                files: {
+                    'dist/<%= pkg.name %>.min.js': ['<%= concat.alljs.dest %>']
                 }
             }
         },
@@ -91,11 +122,11 @@ module.exports = function(grunt) {
         watch: {
             basejs: {
                 files: ['<%= concat.basejs.src %>'],
-                tasks: ['test', 'basejs']
+                tasks: ['test', 'basejs', 'alljs']
             },
-            mimicjs: {
-                files: ['<%= concat.mimicjs.src %>'],
-                tasks: ['test', 'mimicjs']
+            extjs: {
+                files: ['<%= concat.extjs.src %>'],
+                tasks: ['test', 'extjs', 'alljs']
             },
             less: {
                 files: ['src/**/*.less'],
@@ -113,9 +144,11 @@ module.exports = function(grunt) {
             all: {
                 src: [
                     'dist/<%= pkg.name %>.js',
-                    'dist/<%= pkg.name %>.mimic.js',
+                    'dist/<%= pkg.name %>.base.js',
+                    'dist/<%= pkg.name %>.ext.js',
                     'dist/<%= pkg.name %>.min.js',
-                    'dist/<%= pkg.name %>.mimic.min.js',
+                    'dist/<%= pkg.name %>.base.min.js',
+                    'dist/<%= pkg.name %>.ext.min.js',
                     'dist/<%= pkg.name %>.css',
                     'dist/<%= pkg.name %>.min.css'
                 ]
@@ -138,8 +171,9 @@ module.exports = function(grunt) {
 
     grunt.registerTask('test', ['jshint']);
     grunt.registerTask('basejs', ['concat:basejs', 'uglify:basejs']);
-    grunt.registerTask('mimicjs', ['concat:mimicjs', 'uglify:mimicjs']);
-    grunt.registerTask('js', ['basejs', 'mimicjs']);
+    grunt.registerTask('extjs', ['concat:extjs', 'uglify:extjs']);
+    grunt.registerTask('alljs', ['concat:alljs', 'uglify:alljs']);
+    grunt.registerTask('js', ['basejs', 'extjs', 'alljs']);
     grunt.registerTask('css', ['less:css', 'concat:css', 'cssmin:css']);
     grunt.registerTask('default', ['test', 'js', 'css', 'clean:temp']); // , 'copy'
 
