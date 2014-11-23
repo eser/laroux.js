@@ -38,16 +38,9 @@
     laroux.popupFunc = alert;
     laroux.readyPassed = false;
 
-    laroux.contentEnd = function() {
-        if (!laroux.readyPassed) {
-            laroux.events.invoke('contentEnd');
-            laroux.readyPassed = true;
-        }
-    };
-
     laroux.ready = function(fnc) {
         if (!laroux.readyPassed) {
-            laroux.events.add('contentEnd', fnc);
+            laroux.events.add('ContentLoaded', fnc);
             return;
         }
 
@@ -121,6 +114,14 @@
     // initialization
     global.$l = global.laroux = laroux;
 
-    document.addEventListener('DOMContentLoaded', laroux.contentEnd);
+    document.addEventListener(
+        'DOMContentLoaded',
+        function() {
+            if (!laroux.readyPassed) {
+                laroux.events.invoke('ContentLoaded');
+                laroux.readyPassed = true;
+            }
+        }
+    );
 
 })(this);
