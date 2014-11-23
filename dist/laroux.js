@@ -874,19 +874,11 @@
                 laroux.dom.eventHistory[element] = {};
             }
             if (eventname in laroux.dom.eventHistory[element]) {
-                if (element.removeEventListener) {
-                    element.removeEventListener(eventname, laroux.dom.eventHistory[element][eventname], false);
-                } else if (element.detachEvent) {
-                    element.detachEvent('on' + eventname, laroux.dom.eventHistory[element][eventname]);
-                }
+                element.removeEventListener(eventname, laroux.dom.eventHistory[element][eventname], false);
             }
             laroux.dom.eventHistory[element][eventname] = fncWrapper;
 
-            if (element.addEventListener) {
-                element.addEventListener(eventname, fncWrapper, false);
-            } else if (element.attachEvent) {
-                element.attachEvent('on' + eventname, fncWrapper);
-            }
+            element.addEventListener(eventname, fncWrapper, false);
         },
 
         unsetEvent: function(element, eventname) {
@@ -897,11 +889,7 @@
                     return;
                 }
                 if (eventname in laroux.dom.eventHistory[elements[i]][eventname]) {
-                    if (elements[i].removeEventListener) {
-                        elements[i].removeEventListener(eventname, laroux.dom.eventHistory[elements[i]][eventname], false);
-                    } else if (elements[i].detachEvent) {
-                        elements[i].detachEvent('on' + eventname, laroux.dom.eventHistory[elements[i]][eventname]);
-                    }
+                    elements[i].removeEventListener(eventname, laroux.dom.eventHistory[elements[i]][eventname], false);
                 }
                 delete laroux.dom.eventHistory[elements[i]][eventname];
             }
