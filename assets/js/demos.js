@@ -3,6 +3,10 @@
 
     var crlf = '<br />';
 
+    $l.ready(function() {
+        prettyPrint();
+    });
+
     // ajax - Making a GET request
     $l.ready(function() {
         var button = $l.id('button-ajax-get-request');

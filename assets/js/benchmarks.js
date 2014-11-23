@@ -81,6 +81,10 @@
         chart.render();
     }
 
+    $l.ready(function() {
+        prettyPrint();
+    });
+
     // Selectors by Tagname
     $l.ready(function() {
         var graph = $l.id('graph-selectors-tagname');

@@ -63,6 +63,8 @@
     }
 
     $l.ready(function() {
+        prettyPrint();
+
         $l.dom.setEvent(checkboxExecSnippetOnLoad, 'change', drawSnippet);
 
         $l.ajax.getJson(

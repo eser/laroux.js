@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <title>laroux.js - FAQ</title>
+        <meta name="description" content="" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+        <!-- Latest compiled and minified CSS -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" />
+        <link rel="stylesheet" href="assets/css/laroux.min.css" />
+        <link rel="stylesheet" href="assets/css/style.css" />
+
+        <link rel="shortcut icon" type="image/x-icon" href="favicon.ico" />
+        <link rel="icon" type="image/x-icon" href="favicon.ico" />
+    </head>
+    <body>
+
+        <div id="home" class="container">
+
+            <!-- Static navbar -->
+            <nav class="navbar navbar-default" role="navigation">
+                <div class="container-fluid">
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                            <span class="sr-only">Toggle navigation</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                        <a class="navbar-brand" href="./">laroux.js</a>
+                    </div>
+                    <div id="navbar" class="navbar-collapse collapse">
+                        <ul class="nav navbar-nav">
+                            <li><a href="./">Demos</a></li>
+                            <li><a href="./snippets.html">Snippets</a></li>
+                            <li><a href="./benchmarks.html">Benchmarks</a></li>
+                            <li class="active"><a href="./faq.html">FAQ</a></li>
+                        </ul>
+                        <ul class="nav navbar-nav navbar-right">
+                            <li><a href="https://github.com/larukedi/laroux.js">GitHub Repository</a></li>
+                        </ul>
+                    </div><!--/.nav-collapse -->
+                </div><!--/.container-fluid -->
+            </nav>
+
+            <!-- Main component for a primary marketing message or call to action -->
+            <div class="jumbotron">
+                <div class="row">
+                    <div class="col-md-3">
+                        <img src="assets/images/logo-medium.png" />
+                    </div>
+                    <div class="col-md-9">
+                        <h1>laroux.js 1.4</h1>
+                        <div class="lead">
+                            This project is a jQuery substitute for modern browsers and mobile devices. But instead of offering some wrappers and own dynamics, it simply provides helper functions to achieve the same objectives as jQuery or Zepto.
+                        </div>
+                    </div>
+                </div>
+                <p class="text-center">
+                    <a class="btn btn-primary" href="./snippets.html" role="button">Snippets &raquo;</a>
+                    <a class="btn btn-primary" href="./benchmarks.html" role="button">Benchmarks &raquo;</a>
+                    <a class="btn btn-primary" href="https://github.com/larukedi/laroux.js" role="button">GitHub &raquo;</a>
+                    <a class="btn btn-primary" href="https://github.com/larukedi/laroux.js/wiki" role="button">Wiki &raquo;</a>
+                    <a class="btn btn-success" href="https://github.com/larukedi/laroux.js/releases" role="button">Downloads &raquo;</a>
+                </p>
+            </div>
+
+            <blockquote>
+                <em>laroux.js</em> is right for you if you:<br />
+                <br />
+                <ul>
+                    <li>Complain about people who do not know the difference between jQuery and Javascript.</li>
+                    <li>Love working with more compact, organized libraries with smaller sizes (~30K).</li>
+                    <li>Want to be working with native DOM objects instead of wrappers.</li>
+                    <li>Want to leverage the debug console's autocomplete/fluent typing.</li>
+                    <li>Are not satisfied with the performance of other libraries on mobile devices.</li>
+                    <li>See <a href="faq.html">FAQ</a> for more.</li>
+                </ul>
+            </blockquote>
+
+        </div>
+
+        <script id="markdown-text" type="text/markdown">
+## General
+
+1) Isn't this reinventing the wheel?
+
+laroux.js is not a new *technology*, it's a new *product* that does the same job with a different mindset, and is better suited to certain requirements. Think of it like smartphones, in the end they all sit in your pocket and fetch your e-mail, but you probably have some strong opinions on why you chose what you chose.
+
+2) Why should I use this instead of jQuery?
+
+laroux.js has some significantly different design concerns and additional features, and it might better suit your coding style and project requirements:
+
+ * It's modern: laroux.js was designed from the ground-up with HTML5 and CSS3 in mind, and targeted for modern (including mobile) browsers. Well-embraced standards of today feel right at home.
+
+ * It's goal-oriented: laroux.js is designed to take the shortest path and get the job done. Abstraction is minimized by design and nothing is overengineered.
+
+ * Reads like Javascript: laroux.js doesn't work under layers of abstraction and its workflow is very similar to regular javascript. You can use laroux.js as much or as little as you want in your code without a complete overhaul. It's a set of shinier tools, not a new toolbox around which you have to change your habits.
+
+ * Wrappers not mandatory: laroux.js uses native DOM objects directly and doesn't use wrappers by default.
+
+ * Runs faster: laroux.js is optimized to yield [significantly better runtime performance](https://larukedi.github.io/laroux.js/benchmarks.html) on modern browsers. 
+
+ * You're in charge: laroux.js provides alternative methods with different trade-offs where possible, so you can tailor-code to your requirements. There's more than one way to skin a cat, and laroux.js assumes you know what you're doing.
+
+ * Small footprint: laroux.js trims the fat, weighing in at only ~22KB and only ~30KB with extensions.
+ 
+3) Is laroux.js a finished product? Is it truly 1.x?
+
+Starting off, my requirement list was narrow, so I deployed the first version that fulfilled that list and believed to be production-ready as 1.0. Of course the project is still missing stuff, like unit testing, more comprehensive continuous integration and wider community support.
+
+4) I've encountered some bugs/misnomers/mobile compatibility problems/etc. Are these intentional?
+
+Probably not. Since this is a community project, you can open an issue on GitHub and get it fixed by me or someone else from the community.
+
+5) Who makes the design decisions? Will that person always make the decisions?
+
+As the initiator of the project, decisions so far have been made by me (Eser Özvataf). Having said that, this is an open-source community project and it belongs to the community. I will gladly hand over project leadership and continue my contributions as a member of the community as long as leadership stays democratic and inclusive. 
+
+
+## Technical
+
+1) Does it support method chaining? / I don't like suggested convention, can I use a jQuery-like API instead?
+As of v1.4, laroux.js supports method chaining. See the [wiki page for details](https://github.com/larukedi/laroux.js/wiki/wrapper).
+
+2) Other products are cached on CDN and load just as fast. How does being small make it faster?
+
+The *runtime* performance increase is due to code optimization, not physical size. See the [benchmark results](https://larukedi.github.io/laroux.js/benchmarks.html).
+
+3) Why is there an `extend` method on `$l`?
+
+It's basically for plug-in support. 
+
+4) So why isn't extend used internally?
+
+The source code might seem modular by the physical structure but laroux.js isn't actually modular internally. It's tightly-coupled with its organs as a design choice. Due to this, each organ that stays in the controllable area assigns itself directly instead of using extend. With this method, the exact same job is done without any extra engineering, thanks to Javascript's interpretative properties.
+        </script>
+
+        <div class="container">
+            <div id="markdown-render-target"></div>
+
+            <div class="example-area">
+                <div class="well">
+                    To add your own demos to this page, please don't hesitate to send your pull requests to
+                    <a href="https://github.com/larukedi/laroux.js/tree/gh-pages">this site</a>, all you need to do is
+                    editing <code>index.html</code> and placing your scripts into <code>assets/js/demos.js</code> folder.
+                </div>
+            </div>
+
+            <footer>
+                <p>laroux.js GitHub Demo Page - Documented by <a href="http://eser.ozvataf.com/">Eser Ozvataf</a> and Onur Babacan 2014</p>
+            </footer>
+        </div>
+
+        <script src="assets/js/laroux.js"></script>
+        <script src="assets/js/marked.js"></script>
+        <script src="assets/js/faq.js"></script>
+    </body>
+</html>
