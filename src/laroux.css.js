@@ -243,4 +243,30 @@
         }
     };
 
+    // wrapper support
+    if (typeof laroux.wrapper != 'undefined') {
+        laroux.wrapper.register('hasClass', laroux.css.hasClass, laroux.wrapper.registerSingle);
+        laroux.wrapper.register('addClass', laroux.css.addClass, laroux.wrapper.registerBoth);
+        laroux.wrapper.register('removeClass', laroux.css.removeClass, laroux.wrapper.registerBoth);
+        laroux.wrapper.register('toggleClass', laroux.css.toggleClass, laroux.wrapper.registerBoth);
+        laroux.wrapper.register('getProperty', laroux.css.getProperty, laroux.wrapper.registerSingle);
+        laroux.wrapper.register('setProperty', laroux.css.setProperty, laroux.wrapper.registerBoth);
+        laroux.wrapper.register('setTransition', laroux.css.setTransition, laroux.wrapper.registerBoth);
+        laroux.wrapper.register('show', laroux.css.show, laroux.wrapper.registerBoth);
+        laroux.wrapper.register('hide', laroux.css.hide, laroux.wrapper.registerBoth);
+        laroux.wrapper.register('height', laroux.css.height, laroux.wrapper.registerSingle);
+        laroux.wrapper.register('innerHeight', laroux.css.innerHeight, laroux.wrapper.registerSingle);
+        laroux.wrapper.register('outerHeight', laroux.css.outerHeight, laroux.wrapper.registerSingle);
+        laroux.wrapper.register('width', laroux.css.width, laroux.wrapper.registerSingle);
+        laroux.wrapper.register('innerWidth', laroux.css.innerWidth, laroux.wrapper.registerSingle);
+        laroux.wrapper.register('outerWidth', laroux.css.outerWidth, laroux.wrapper.registerSingle);
+        laroux.wrapper.register('top', laroux.css.top, laroux.wrapper.registerSingle);
+        laroux.wrapper.register('left', laroux.css.left, laroux.wrapper.registerSingle);
+        laroux.wrapper.register('aboveTheTop', laroux.css.aboveTheTop, laroux.wrapper.registerSingle);
+        laroux.wrapper.register('belowTheFold', laroux.css.belowTheFold, laroux.wrapper.registerSingle);
+        laroux.wrapper.register('leftOfScreen', laroux.css.leftOfScreen, laroux.wrapper.registerSingle);
+        laroux.wrapper.register('rightOfScreen', laroux.css.rightOfScreen, laroux.wrapper.registerSingle);
+        laroux.wrapper.register('inViewport', laroux.css.inViewport, laroux.wrapper.registerSingle);
+    }
+
 })(this.laroux);

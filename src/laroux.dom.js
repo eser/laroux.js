@@ -386,6 +386,22 @@
         }*/
     };
 
+    // wrapper support
+    if (typeof laroux.wrapper != 'undefined') {
+        laroux.wrapper.register('attr', laroux.dom.attr, laroux.wrapper.registerSingle);
+        laroux.wrapper.register('data', laroux.dom.data, laroux.wrapper.registerSingle);
+        laroux.wrapper.register('on', laroux.dom.setEventSingle, laroux.wrapper.registerSingle);
+        laroux.wrapper.register('on', laroux.dom.setEvent, laroux.wrapper.registerArray);
+        laroux.wrapper.register('off', laroux.dom.unsetEvent, laroux.wrapper.registerBoth);
+        laroux.wrapper.register('clear', laroux.dom.clear, laroux.wrapper.registerSingle);
+        laroux.wrapper.register('insert', laroux.dom.insert, laroux.wrapper.registerSingle);
+        laroux.wrapper.register('prepend', laroux.dom.prepend, laroux.wrapper.registerSingle);
+        laroux.wrapper.register('append', laroux.dom.append, laroux.wrapper.registerSingle);
+        laroux.wrapper.register('replace', laroux.dom.replace, laroux.wrapper.registerSingle);
+        laroux.wrapper.register('replaceText', laroux.dom.replaceText, laroux.wrapper.registerSingle);
+        laroux.wrapper.register('remove', laroux.dom.remove, laroux.wrapper.registerSingle);
+    }
+
     // a fix for Internet Explorer
     if (typeof Element.prototype.remove == 'undefined') {
         Element.prototype.remove = function() {
