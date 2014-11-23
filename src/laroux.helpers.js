@@ -160,7 +160,7 @@
         },
 
         getLength: function(obj) {
-            if (typeof obj == 'object') {
+            if (obj.constructor === Object) {
                 if (obj.length !== undefined) {
                     return obj.length;
                 }
@@ -184,7 +184,7 @@
             for (var item in obj) {
                 keys.push(prefix + item);
 
-                if (obj[item] instanceof Object) {
+                if (obj[item].constructor === Object) {
                     laroux.helpers.getKeysRecursive(obj[item], delimiter, prefix + item + delimiter, keys);
                     continue;
                 }

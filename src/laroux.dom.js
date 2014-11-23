@@ -31,7 +31,7 @@
         },
 
         attr: function(element, attributes, value) {
-            if (value === undefined && !(attributes instanceof Object)) {
+            if (value === undefined && attributes.constructor !== Object) {
                 return element.getAttribute(attributes);
             }
 
@@ -58,7 +58,7 @@
         },
 
         data: function(element, datanames, value) {
-            if (value === undefined && !(datanames instanceof Object)) {
+            if (value === undefined && datanames.constructor !== Object) {
                 return element.getAttribute('data-' + datanames);
             }
 
@@ -147,7 +147,7 @@
         createElement: function(element, attributes, children) {
             var elem = document.createElement(element);
 
-            if (typeof attributes == 'object') {
+            if (attributes !== undefined && attributes.constructor === Object) {
                 for (var item in attributes) {
                     if (!attributes.hasOwnProperty(item)) {
                         continue;
@@ -157,16 +157,18 @@
                 }
             }
 
-            if (typeof children == 'object') {
-                for (var item2 in children) {
-                    if (!children.hasOwnProperty(item2)) {
-                        continue;
-                    }
+            if (children !== undefined) {
+                if (children.constructor === Object) {
+                    for (var item2 in children) {
+                        if (!children.hasOwnProperty(item2)) {
+                            continue;
+                        }
 
-                    elem.setAttribute(item2, children[item2]);
+                        elem.setAttribute(item2, children[item2]);
+                    }
+                } else if (/* typeof children == 'string' && */children.length > 0) {
+                    laroux.dom.append(elem, children);
                 }
-            } else if (typeof children == 'string' && children.length > 0) {
-                laroux.dom.append(elem, children);
             }
 
             return elem;

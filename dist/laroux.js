@@ -367,10 +367,14 @@
             };
 
             var url = options.url;
-            if (typeof options.getdata == 'object') {
-                var queryString = laroux.helpers.buildQueryString(options.getdata);
-                if (queryString.length > 0) {
-                    url += ((url.indexOf('?') < 0) ? '?' : '&') + queryString;
+            if (options.getdata !== undefined && options.getdata !== null) {
+                if (options.getdata.constructor === Object) {
+                    var queryString = laroux.helpers.buildQueryString(options.getdata);
+                    if (queryString.length > 0) {
+                        url += ((url.indexOf('?') < 0) ? '?' : '&') + queryString;
+                    }
+                } else {
+                    url += ((url.indexOf('?') < 0) ? '?' : '&') + options.getdata;
                 }
             }
 
@@ -408,21 +412,22 @@
                 console.log(e);
             }
 
-            var data = null;
-
-            if (options.postdata !== undefined) {
-                data = options.postdata;
-
-                if (options.postdatatype !== undefined) {
-                    if (options.postdatatype == 'json') {
-                        data = JSON.stringify(data);
-                    } else if (options.postdatatype == 'form') {
-                        data = laroux.helpers.buildFormData(options.postdata);
-                    }
-                }
+            if (options.postdata === undefined || options.postdata === null) {
+                xhr.send(null);
+                return;
             }
 
-            xhr.send(data);
+            switch (options.postdatatype) {
+                case 'json':
+                    xhr.send(JSON.stringify(options.postdata));
+                    break;
+                case 'form':
+                    xhr.send(laroux.helpers.buildFormData(options.postdata));
+                    break;
+                default:
+                    xhr.send(options.postdata);
+                    break;
+            }
         },
 
         get: function(path, values, successfnc, errorfnc) {
@@ -825,7 +830,7 @@
         },
 
         attr: function(element, attributes, value) {
-            if (value === undefined && !(attributes instanceof Object)) {
+            if (value === undefined && attributes.constructor !== Object) {
                 return element.getAttribute(attributes);
             }
 
@@ -852,7 +857,7 @@
         },
 
         data: function(element, datanames, value) {
-            if (value === undefined && !(datanames instanceof Object)) {
+            if (value === undefined && datanames.constructor !== Object) {
                 return element.getAttribute('data-' + datanames);
             }
 
@@ -941,7 +946,7 @@
         createElement: function(element, attributes, children) {
             var elem = document.createElement(element);
 
-            if (typeof attributes == 'object') {
+            if (attributes !== undefined && attributes.constructor === Object) {
                 for (var item in attributes) {
                     if (!attributes.hasOwnProperty(item)) {
                         continue;
@@ -951,16 +956,18 @@
                 }
             }
 
-            if (typeof children == 'object') {
-                for (var item2 in children) {
-                    if (!children.hasOwnProperty(item2)) {
-                        continue;
-                    }
+            if (children !== undefined) {
+                if (children.constructor === Object) {
+                    for (var item2 in children) {
+                        if (!children.hasOwnProperty(item2)) {
+                            continue;
+                        }
 
-                    elem.setAttribute(item2, children[item2]);
+                        elem.setAttribute(item2, children[item2]);
+                    }
+                } else if (/* typeof children == 'string' && */children.length > 0) {
+                    laroux.dom.append(elem, children);
                 }
-            } else if (typeof children == 'string' && children.length > 0) {
-                laroux.dom.append(elem, children);
             }
 
             return elem;
@@ -1620,7 +1627,7 @@
         },
 
         getLength: function(obj) {
-            if (typeof obj == 'object') {
+            if (obj.constructor === Object) {
                 if (obj.length !== undefined) {
                     return obj.length;
                 }
@@ -1644,7 +1651,7 @@
             for (var item in obj) {
                 keys.push(prefix + item);
 
-                if (obj[item] instanceof Object) {
+                if (obj[item].constructor === Object) {
                     laroux.helpers.getKeysRecursive(obj[item], delimiter, prefix + item + delimiter, keys);
                     continue;
                 }

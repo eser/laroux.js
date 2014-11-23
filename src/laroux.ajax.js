@@ -159,10 +159,14 @@
             };
 
             var url = options.url;
-            if (typeof options.getdata == 'object') {
-                var queryString = laroux.helpers.buildQueryString(options.getdata);
-                if (queryString.length > 0) {
-                    url += ((url.indexOf('?') < 0) ? '?' : '&') + queryString;
+            if (options.getdata !== undefined && options.getdata !== null) {
+                if (options.getdata.constructor === Object) {
+                    var queryString = laroux.helpers.buildQueryString(options.getdata);
+                    if (queryString.length > 0) {
+                        url += ((url.indexOf('?') < 0) ? '?' : '&') + queryString;
+                    }
+                } else {
+                    url += ((url.indexOf('?') < 0) ? '?' : '&') + options.getdata;
                 }
             }
 
@@ -200,21 +204,22 @@
                 console.log(e);
             }
 
-            var data = null;
-
-            if (options.postdata !== undefined) {
-                data = options.postdata;
-
-                if (options.postdatatype !== undefined) {
-                    if (options.postdatatype == 'json') {
-                        data = JSON.stringify(data);
-                    } else if (options.postdatatype == 'form') {
-                        data = laroux.helpers.buildFormData(options.postdata);
-                    }
-                }
+            if (options.postdata === undefined || options.postdata === null) {
+                xhr.send(null);
+                return;
             }
 
-            xhr.send(data);
+            switch (options.postdatatype) {
+                case 'json':
+                    xhr.send(JSON.stringify(options.postdata));
+                    break;
+                case 'form':
+                    xhr.send(laroux.helpers.buildFormData(options.postdata));
+                    break;
+                default:
+                    xhr.send(options.postdata);
+                    break;
+            }
         },
 
         get: function(path, values, successfnc, errorfnc) {
