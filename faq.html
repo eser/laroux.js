@@ -85,11 +85,11 @@
         <script id="markdown-text" type="text/markdown">
 ## General
 
-1) Isn't this reinventing the wheel?
+**1) Isn't this reinventing the wheel?**
 
 laroux.js is not a new *technology*, it's a new *product* that does the same job with a different mindset, and is better suited to certain requirements. Think of it like smartphones, in the end they all sit in your pocket and fetch your e-mail, but you probably have some strong opinions on why you chose what you chose.
 
-2) Why should I use this instead of jQuery?
+**2) Why should I use this instead of jQuery?**
 
 laroux.js has some significantly different design concerns and additional features, and it might better suit your coding style and project requirements:
 
@@ -107,33 +107,34 @@ laroux.js has some significantly different design concerns and additional featur
 
  * Small footprint: laroux.js trims the fat, weighing in at only ~22KB and only ~30KB with extensions.
  
-3) Is laroux.js a finished product? Is it truly 1.x?
+**3) Is laroux.js a finished product? Is it truly 1.x?**
 
 Starting off, my requirement list was narrow, so I deployed the first version that fulfilled that list and believed to be production-ready as 1.0. Of course the project is still missing stuff, like unit testing, more comprehensive continuous integration and wider community support.
 
-4) I've encountered some bugs/misnomers/mobile compatibility problems/etc. Are these intentional?
+**4) I've encountered some bugs/misnomers/mobile compatibility problems/etc. Are these intentional?**
 
 Probably not. Since this is a community project, you can open an issue on GitHub and get it fixed by me or someone else from the community.
 
-5) Who makes the design decisions? Will that person always make the decisions?
+**5) Who makes the design decisions? Will that person always make the decisions?**
 
 As the initiator of the project, decisions so far have been made by me (Eser Özvataf). Having said that, this is an open-source community project and it belongs to the community. I will gladly hand over project leadership and continue my contributions as a member of the community as long as leadership stays democratic and inclusive. 
 
 
 ## Technical
 
-1) Does it support method chaining? / I don't like suggested convention, can I use a jQuery-like API instead?
+**1) Does it support method chaining? / I don't like suggested convention, can I use a jQuery-like API instead?**
+
 As of v1.4, laroux.js supports method chaining. See the [wiki page for details](https://github.com/larukedi/laroux.js/wiki/wrapper).
 
-2) Other products are cached on CDN and load just as fast. How does being small make it faster?
+**2) Other products are cached on CDN and load just as fast. How does being small make it faster?**
 
 The *runtime* performance increase is due to code optimization, not physical size. See the [benchmark results](https://larukedi.github.io/laroux.js/benchmarks.html).
 
-3) Why is there an `extend` method on `$l`?
+**3) Why is there an `extend` method on `$l`?**
 
 It's basically for plug-in support. 
 
-4) So why isn't extend used internally?
+**4) So why isn't extend used internally?**
 
 The source code might seem modular by the physical structure but laroux.js isn't actually modular internally. It's tightly-coupled with its organs as a design choice. Due to this, each organ that stays in the controllable area assigns itself directly instead of using extend. With this method, the exact same job is done without any extra engineering, thanks to Javascript's interpretative properties.
         </script>
@@ -143,9 +144,9 @@ The source code might seem modular by the physical structure but laroux.js isn't
 
             <div class="example-area">
                 <div class="well">
-                    To add your own demos to this page, please don't hesitate to send your pull requests to
-                    <a href="https://github.com/larukedi/laroux.js/tree/gh-pages">this site</a>, all you need to do is
-                    editing <code>index.html</code> and placing your scripts into <code>assets/js/demos.js</code> folder.
+                    To edit this page, please don't hesitate to send your pull requests to
+                    <a href="https://github.com/larukedi/laroux.js/tree/gh-pages">this branch</a>, all you need to do is
+                    editing <code>faq.html</code> and placing your scripts into <code>assets/js/faq.js</code> file.
                 </div>
             </div>
 
