@@ -824,30 +824,58 @@
             return (parent || document).querySelector(selector);
         },
 
-        attr: function(element, attrname, value) {
-            if (value === undefined) {
-                return element.getAttribute(attrname);
+        attr: function(element, attributes, value) {
+            if (value === undefined && !(attributes instanceof Object)) {
+                return element.getAttribute(attributes);
             }
 
-            if (value === null) {
-                element.removeAttribute(attrname);
-                return;
+            var elements = laroux.helpers.getAsArray(element);
+            if (typeof attributes == 'string') {
+                var oldAttributes = attributes;
+                attributes = {};
+                attributes[oldAttributes] = value;
             }
 
-            element.setAttribute(attrname, value);
+            for (var attributeName in attributes) {
+                if (!attributes.hasOwnProperty(attributeName)) {
+                    continue;
+                }
+
+                for (var i = elements.length; i--; ) {
+                    if (attributes[attributeName] === null) {
+                        element.removeAttribute(attributeName);
+                    } else {
+                        element.setAttribute(attributeName, attributes[attributeName]);
+                    }
+                }
+            }
         },
 
-        data: function(element, dataname, value) {
-            if (value === undefined) {
-                return element.getAttribute('data-' + dataname);
+        data: function(element, datanames, value) {
+            if (value === undefined && !(datanames instanceof Object)) {
+                return element.getAttribute('data-' + datanames);
             }
 
-            if (value === null) {
-                element.removeAttribute('data-' + dataname);
-                return;
+            var elements = laroux.helpers.getAsArray(element);
+            if (typeof datanames == 'string') {
+                var oldDatanames = datanames;
+                datanames = {};
+                datanames[oldDatanames] = value;
             }
 
-            element.setAttribute('data-' + dataname, value);
+            for (var dataName in datanames) {
+                if (!datanames.hasOwnProperty(dataName)) {
+                    continue;
+                }
+
+                for (var i = elements.length; i--; ) {
+                    if (datanames[dataName] === null) {
+                        element.removeAttribute('data-' + dataName);
+                    } else {
+                        element.setAttribute('data-' + dataName, datanames[dataName]);
+                    }
+                }
+            }
         },
 
         eventHistory: {},
