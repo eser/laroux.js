@@ -6,7 +6,7 @@
 
 Even though keeping compactness is the primary concern of this library, it does contain lightweight versions of some concepts/components, including some UI helpers and MVC.
 
-So far, it has [Ajax](https://github.com/larukedi/laroux.js/wiki/ajax), [Anim](https://github.com/larukedi/laroux.js/wiki/anim), [CSS](https://github.com/larukedi/laroux.js/wiki/css), [Date](https://github.com/larukedi/laroux.js/wiki/date), [DOM](https://github.com/larukedi/laroux.js/wiki/dom), [Events](https://github.com/larukedi/laroux.js/wiki/events), [Forms](https://github.com/larukedi/laroux.js/wiki/forms), [Helpers](https://github.com/larukedi/laroux.js/wiki/helpers), [MVC](https://github.com/larukedi/laroux.js/wiki/mvc), [Stack](https://github.com/larukedi/laroux.js/wiki/stack), [Templates](https://github.com/larukedi/laroux.js/wiki/templates), [Timers](https://github.com/larukedi/laroux.js/wiki/timers), [Triggers](https://github.com/larukedi/laroux.js/wiki/triggers), [UI](https://github.com/larukedi/laroux.js/wiki/ui) and [Vars](https://github.com/larukedi/laroux.js/wiki/vars) components.
+So far, it has [Ajax](https://github.com/larukedi/laroux.js/wiki/ajax), [Anim](https://github.com/larukedi/laroux.js/wiki/anim), [CSS](https://github.com/larukedi/laroux.js/wiki/css), [Date](https://github.com/larukedi/laroux.js/wiki/date), [DOM](https://github.com/larukedi/laroux.js/wiki/dom), [Events](https://github.com/larukedi/laroux.js/wiki/events), [Forms](https://github.com/larukedi/laroux.js/wiki/forms), [Helpers](https://github.com/larukedi/laroux.js/wiki/helpers), [MVC](https://github.com/larukedi/laroux.js/wiki/mvc), [Stack](https://github.com/larukedi/laroux.js/wiki/stack), [Templates](https://github.com/larukedi/laroux.js/wiki/templates), [Timers](https://github.com/larukedi/laroux.js/wiki/timers), [Triggers](https://github.com/larukedi/laroux.js/wiki/triggers), [UI](https://github.com/larukedi/laroux.js/wiki/ui), [Vars](https://github.com/larukedi/laroux.js/wiki/vars) and [Wrapper](https://github.com/larukedi/laroux.js/wiki/wrapper) components.
 
 
 [![Build Status](https://travis-ci.org/larukedi/laroux.js.png?branch=master)](https://travis-ci.org/larukedi/laroux.js)
@@ -18,24 +18,30 @@ So far, it has [Ajax](https://github.com/larukedi/laroux.js/wiki/ajax), [Anim](h
 `laroux.js` is right for you if you:
 
 - Complain about people who do not know the difference between jQuery and Javascript.
-- Love working with more compact, organized libraries with smaller sizes (~28K).
+- Love working with more compact, organized libraries with smaller sizes (~30K).
 - Want to be working with native DOM objects instead of wrappers.
 - Want to leverage the debug console's autocomplete/fluent typing.
 - Are not satisfied with the performance of other libraries on mobile devices.
+- See [FAQ](https://larukedi.github.io/laroux.js/faq.html) for more.
 
 
-### Demos
+### Guides
 
-See [GitHub Page](https://larukedi.github.io/laroux.js/) for feature demonstrations and benchmarks.
-
-
-### Documentation
-
-See [wiki page](https://github.com/larukedi/laroux.js/wiki) for documentation.
+- [Basic documentation](https://github.com/larukedi/laroux.js/wiki)
+- [Feature demonstrations](https://larukedi.github.io/laroux.js/)
+- [Frequently asked questions](https://larukedi.github.io/laroux.js/faq.html)
+- [Code snippets](https://larukedi.github.io/laroux.js/snippets.html)
+- [Benchmark results](https://larukedi.github.io/laroux.js/benchmarks.html)
+- [Releases and changelogs](https://github.com/larukedi/laroux.js/releases)
 
 
 ### Installation
-Download the latest version from the [releases page](https://github.com/larukedi/laroux.js/releases), and include `laroux.min.js` and `laroux.min.css` in your web project.
+Download the latest version from the [releases page](https://github.com/larukedi/laroux.js/releases), and include `laroux.min.js` and `laroux.min.css` in your web project as shown below:
+
+```html
+<link rel="stylesheet" href="laroux.min.css" />
+<script src="laroux.min.js"></script>
+```
 
 
 ### Sample Usage
