@@ -58,7 +58,7 @@
         },
 
         updateApp: function(appObject, keys) {
-            if (typeof appObject.controller != 'undefined') {
+            if (appObject.controller !== undefined) {
                 appObject.controller(appObject.model);
             }
 
@@ -71,7 +71,7 @@
             for (var i1 in appObject.cachedNodes) {
                 var item1 = appObject.cachedNodes[i1];
 
-                if (typeof keys != 'undefined' && keys.indexOf(item1.key) === -1) {
+                if (keys !== undefined && keys.indexOf(item1.key) === -1) {
                     continue;
                 }
 
@@ -85,7 +85,7 @@
             for (var i2 in appObject.cachedNodes) {
                 var item2 = appObject.cachedNodes[i2];
 
-                if (typeof keys != 'undefined' && keys.indexOf(item2.key) === -1) {
+                if (keys !== undefined && keys.indexOf(item2.key) === -1) {
                     continue;
                 }
 
@@ -108,7 +108,7 @@
                         var selectedAppObject = laroux.mvc.appObjects[appObject];
 
                         if (selectedAppObject.model == changes[change].object) {
-                            if (typeof updates[selectedAppObject.app] == 'undefined') {
+                            if (!(selectedAppObject.app in updates)) {
                                 updates[selectedAppObject.app] = {app: selectedAppObject, keys: [changes[change].name]};
                             } else {
                                 updates[selectedAppObject.app].keys.push(changes[change].name);
@@ -124,7 +124,7 @@
         },
 
         bind: function(app, model, controller) {
-            if (typeof controller == 'undefined') {
+            if (controller === undefined) {
                 controller = window[app];
             }
 

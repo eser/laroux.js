@@ -161,7 +161,7 @@
 
         getLength: function(obj) {
             if (typeof obj == 'object') {
-                if (typeof obj.length != 'undefined') {
+                if (obj.length !== undefined) {
                     return obj.length;
                 }
 
@@ -172,11 +172,11 @@
         },
 
         getKeysRecursive: function(obj, delimiter, prefix, keys) {
-            if (typeof delimiter == 'undefined') {
+            if (delimiter === undefined) {
                 delimiter = '.';
             }
 
-            if (typeof prefix == 'undefined') {
+            if (prefix === undefined) {
                 prefix = '';
                 keys = [];
             }
@@ -194,11 +194,11 @@
         },
 
         getElement: function(obj, path, defaultValue, delimiter) {
-            if (typeof defaultValue == 'undefined') {
+            if (defaultValue === undefined) {
                 defaultValue = null;
             }
 
-            if (typeof delimiter == 'undefined') {
+            if (delimiter === undefined) {
                 delimiter = '.';
             }
 
@@ -213,7 +213,7 @@
                 rest = path.substring(pos + 1);
             }
 
-            if (typeof obj[key] == 'undefined') {
+            if (!(key in obj)) {
                 return null;
             }
 

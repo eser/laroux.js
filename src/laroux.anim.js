@@ -22,11 +22,11 @@
         set: function(newanim) {
             newanim.startTime = null;
 
-            if (typeof newanim.unit == 'undefined' || newanim.unit === null) {
+            if (newanim.unit === undefined || newanim.unit === null) {
                 newanim.unit = '';
             }
 
-            if (typeof newanim.from == 'undefined' || newanim.from === null) {
+            if (newanim.from === undefined || newanim.from === null) {
                 if (newanim.object === document.body && newanim.property == 'scrollTop') {
                     newanim.from = (document.documentElement && document.documentElement.scrollTop) || document.body.scrollTop;
                 } else {
@@ -38,11 +38,11 @@
                 newanim.from = Number(newanim.from);
             }
 
-            if (typeof newanim.reset == 'undefined' || newanim.reset === null) {
+            if (newanim.reset === undefined || newanim.reset === null) {
                 newanim.reset = false;
             }
 
-            // if (typeof newanim.id == 'undefined') {
+            // if (newanim.id === undefined) {
             //     newanim.id = laroux.helpers.getUniqueId();
             // }
 
@@ -53,7 +53,7 @@
         },
 
         setCss: function(newanim) {
-            if (typeof newanim.from == 'undefined' || newanim.from === null) {
+            if (newanim.from === undefined || newanim.from === null) {
                 newanim.from = laroux.css.getProperty(newanim.object, newanim.property);
             }
 
@@ -73,7 +73,7 @@
 
                 var currentItem = laroux.anim.data[item];
 
-                if (typeof currentItem.id != 'undefined' && currentItem.id == id) {
+                if (currentItem.id !== undefined && currentItem.id == id) {
                     targetKey = item;
                     break;
                 }

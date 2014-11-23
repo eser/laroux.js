@@ -31,7 +31,7 @@
         },
 
         attr: function(element, attrname, value) {
-            if (typeof value == 'undefined') {
+            if (value === undefined) {
                 return element.getAttribute(attrname);
             }
 
@@ -44,7 +44,7 @@
         },
 
         data: function(element, dataname, value) {
-            if (typeof value == 'undefined') {
+            if (value === undefined) {
                 return element.getAttribute('data-' + dataname);
             }
 
@@ -76,10 +76,10 @@
                 }
             };
 
-            if (typeof laroux.dom.eventHistory[element] == 'undefined') {
+            if (!(element in laroux.dom.eventHistory)) {
                 laroux.dom.eventHistory[element] = {};
             }
-            if (typeof laroux.dom.eventHistory[element][eventname] != 'undefined') {
+            if (eventname in laroux.dom.eventHistory[element]) {
                 if (element.removeEventListener) {
                     element.removeEventListener(eventname, laroux.dom.eventHistory[element][eventname], false);
                 } else if (element.detachEvent) {
@@ -99,10 +99,10 @@
             var elements = laroux.helpers.getAsArray(element);
 
             for (var i = elements.length; i--; ) {
-                if (typeof laroux.dom.eventHistory[elements[i]] == 'undefined') {
+                if (!(elements[i] in laroux.dom.eventHistory)) {
                     return;
                 }
-                if (typeof laroux.dom.eventHistory[elements[i]][eventname] != 'undefined') {
+                if (eventname in laroux.dom.eventHistory[elements[i]][eventname]) {
                     if (elements[i].removeEventListener) {
                         elements[i].removeEventListener(eventname, laroux.dom.eventHistory[elements[i]][eventname], false);
                     } else if (elements[i].detachEvent) {
@@ -161,14 +161,14 @@
             var count = element.options.length;
             element.options[count] = new Option(value, key);
 
-            if (typeof isDefault != 'undefined' && isDefault === true) {
+            if (isDefault === true) {
                 element.options.selectedIndex = count - 1;
             }
             */
 
             var option = document.createElement('OPTION');
             option.setAttribute('value', key);
-            if (typeof isDefault != 'undefined' && isDefault === true) {
+            if (isDefault === true) {
                 option.setAttribute('checked', 'checked');
             }
 
@@ -203,7 +203,7 @@
             var elem = document.createElement('script');
 
             elem.type = 'text/javascript';
-            elem.async = (typeof async != 'undefined') ? async : true;
+            elem.async = (async !== undefined) ? async : true;
             elem.src = path;
 
             var loaded = false;
@@ -214,7 +214,7 @@
 
                 elem.onload = elem.onreadystatechange = null;
                 loaded = true;
-                if (typeof triggerName != 'undefined' && triggerName !== null) {
+                if (triggerName) {
                     if (typeof triggerName == 'function') {
                         triggerName();
                     } else {
@@ -231,7 +231,7 @@
             var elem = document.createElement('LINK');
 
             elem.type = 'text/css';
-            elem.async = (typeof async != 'undefined') ? async : true;
+            elem.async = (async !== undefined) ? async : true;
             elem.href = path;
             elem.rel = 'stylesheet';
 
@@ -243,7 +243,7 @@
 
                 elem.onload = elem.onreadystatechange = null;
                 loaded = true;
-                if (typeof triggerName != 'undefined' && triggerName !== null) {
+                if (triggerName) {
                     if (typeof triggerName == 'function') {
                         triggerName();
                     } else {
@@ -296,15 +296,15 @@
         clone: function(element, type, container, target) {
             var newElement = element.cloneNode(true);
 
-            if (typeof container == 'undefined') {
+            if (container === undefined) {
                 container = element.parentNode;
             }
-            if (typeof target == 'undefined') {
+            if (target === undefined) {
                 target = element;
             }
 
-            if (typeof type != 'undefined' && type != laroux.dom.cloneReturn) {
-                if (typeof type == 'undefined' || type == laroux.dom.cloneAppend) {
+            if (type !== undefined && type != laroux.dom.cloneReturn) {
+                if (type == laroux.dom.cloneAppend) {
                     container.appendChild(newElement);
                 } else if (type == laroux.dom.cloneInsertAfter) {
                     container.insertBefore(newElement, target.nextSibling);
@@ -387,7 +387,7 @@
     };
 
     // wrapper support
-    if (typeof laroux.wrapper != 'undefined') {
+    if (laroux.wrapper !== undefined) {
         laroux.wrapper.register('attr', laroux.dom.attr, laroux.wrapper.registerSingle);
         laroux.wrapper.register('data', laroux.dom.data, laroux.wrapper.registerSingle);
         laroux.wrapper.register('on', laroux.dom.setEventSingle, laroux.wrapper.registerSingle);
@@ -403,7 +403,7 @@
     }
 
     // a fix for Internet Explorer
-    if (typeof Element.prototype.remove == 'undefined') {
+    if (Element.prototype.remove === undefined) {
         Element.prototype.remove = function() {
             if (this.parentElement !== null) {
                 this.parentElement.removeChild(this);

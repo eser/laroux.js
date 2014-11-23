@@ -29,7 +29,7 @@
         this.isArray = false;
 
         this.get = function(index) {
-            if (index === 0 || typeof(index) == 'undefined') {
+            if (index === 0 || index === undefined) {
                 return this.source;
             }
 
@@ -61,7 +61,7 @@
                 [this.source].concat(Array.prototype.slice.call(arguments))
             );
 
-            return (typeof result == 'undefined') ? this : result;
+            return (result === undefined) ? this : result;
         };
 
         switch (scope) {

@@ -22,7 +22,7 @@
 
                 var currentItem = laroux.timers.data[item];
 
-                if (typeof currentItem.id != 'undefined' && currentItem.id == id) {
+                if (currentItem.id !== undefined && currentItem.id == id) {
                     targetKey = item;
                     break;
                 }
@@ -50,7 +50,7 @@
                 if (currentItem.next <= now) {
                     var result = currentItem.ontick(currentItem.state);
 
-                    if (result !== false && typeof currentItem.reset != 'undefined' && currentItem.reset) {
+                    if (result !== false && currentItem.reset) {
                         currentItem.next = now + currentItem.timeout;
                     } else {
                         removeKeys.unshift(item);

@@ -22,11 +22,11 @@
         set: function(newanim) {
             newanim.startTime = null;
 
-            if (typeof newanim.unit == 'undefined' || newanim.unit === null) {
+            if (newanim.unit === undefined || newanim.unit === null) {
                 newanim.unit = '';
             }
 
-            if (typeof newanim.from == 'undefined' || newanim.from === null) {
+            if (newanim.from === undefined || newanim.from === null) {
                 if (newanim.object === document.body && newanim.property == 'scrollTop') {
                     newanim.from = (document.documentElement && document.documentElement.scrollTop) || document.body.scrollTop;
                 } else {
@@ -38,11 +38,11 @@
                 newanim.from = Number(newanim.from);
             }
 
-            if (typeof newanim.reset == 'undefined' || newanim.reset === null) {
+            if (newanim.reset === undefined || newanim.reset === null) {
                 newanim.reset = false;
             }
 
-            // if (typeof newanim.id == 'undefined') {
+            // if (newanim.id === undefined) {
             //     newanim.id = laroux.helpers.getUniqueId();
             // }
 
@@ -53,7 +53,7 @@
         },
 
         setCss: function(newanim) {
-            if (typeof newanim.from == 'undefined' || newanim.from === null) {
+            if (newanim.from === undefined || newanim.from === null) {
                 newanim.from = laroux.css.getProperty(newanim.object, newanim.property);
             }
 
@@ -73,7 +73,7 @@
 
                 var currentItem = laroux.anim.data[item];
 
-                if (typeof currentItem.id != 'undefined' && currentItem.id == id) {
+                if (currentItem.id !== undefined && currentItem.id == id) {
                     targetKey = item;
                     break;
                 }
@@ -205,7 +205,7 @@
                 return timespan + ' weeks';
             }
 
-            if (typeof limitWithWeeks != 'undefined' && limitWithWeeks === true) {
+            if (limitWithWeeks === true) {
                 return null;
             }
 
@@ -256,7 +256,7 @@
                 return timespanstring;
             }
 
-            if (typeof monthNames != 'undefined' && monthNames) {
+            if (monthNames) {
                 return leadingDate + ' ' + monthName + ' ' + fullYear;
             }
 
@@ -271,13 +271,13 @@
 
             var result;
 
-            if (typeof monthNames != 'undefined' && monthNames) {
+            if (monthNames) {
                 result = leadingDate + ' ' + monthName + ' ' + fullYear;
             } else {
                 result = leadingDate + '.' + leadingMonth + '.' + fullYear;
             }
 
-            if (typeof includeTime != 'undefined' && includeTime) {
+            if (includeTime) {
                 var leadingHour = ('0' + date.getHours()).substr(-2, 2);
                 var leadingMinute = ('0' + date.getMinutes()).substr(-2, 2);
 
@@ -349,7 +349,7 @@
         },
 
         updateApp: function(appObject, keys) {
-            if (typeof appObject.controller != 'undefined') {
+            if (appObject.controller !== undefined) {
                 appObject.controller(appObject.model);
             }
 
@@ -362,7 +362,7 @@
             for (var i1 in appObject.cachedNodes) {
                 var item1 = appObject.cachedNodes[i1];
 
-                if (typeof keys != 'undefined' && keys.indexOf(item1.key) === -1) {
+                if (keys !== undefined && keys.indexOf(item1.key) === -1) {
                     continue;
                 }
 
@@ -376,7 +376,7 @@
             for (var i2 in appObject.cachedNodes) {
                 var item2 = appObject.cachedNodes[i2];
 
-                if (typeof keys != 'undefined' && keys.indexOf(item2.key) === -1) {
+                if (keys !== undefined && keys.indexOf(item2.key) === -1) {
                     continue;
                 }
 
@@ -399,7 +399,7 @@
                         var selectedAppObject = laroux.mvc.appObjects[appObject];
 
                         if (selectedAppObject.model == changes[change].object) {
-                            if (typeof updates[selectedAppObject.app] == 'undefined') {
+                            if (!(selectedAppObject.app in updates)) {
                                 updates[selectedAppObject.app] = {app: selectedAppObject, keys: [changes[change].name]};
                             } else {
                                 updates[selectedAppObject.app].keys.push(changes[change].name);
@@ -415,7 +415,7 @@
         },
 
         bind: function(app, model, controller) {
-            if (typeof controller == 'undefined') {
+            if (controller === undefined) {
                 controller = window[app];
             }
 
@@ -483,7 +483,7 @@
         };
 
         this.exists = function(key) {
-            return (typeof this.data[key] != 'undefined');
+            return (key in this.data);
         };
 
         this.remove = function(key) {
@@ -593,7 +593,7 @@
             show: function(delay) {
                 laroux.ui.loading.killTimer();
 
-                if (typeof delay == 'undefined') {
+                if (delay === undefined) {
                     delay = laroux.ui.loading.defaultDelay;
                 }
 
@@ -614,7 +614,7 @@
                     laroux.dom.setEvent(window, 'load', laroux.ui.loading.hide);
                     laroux.dom.setEvent(window, 'beforeunload', laroux.ui.loading.show);
 
-                    if (typeof localStorage.loadingIndicator != 'undefined' && localStorage.loadingIndicator == 'true') {
+                    if (localStorage.loadingIndicator !== undefined && localStorage.loadingIndicator == 'true') {
                         laroux.ui.loading.show(0);
                     } else {
                         laroux.ui.loading.show();

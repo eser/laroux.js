@@ -54,7 +54,7 @@
                 return timespan + ' weeks';
             }
 
-            if (typeof limitWithWeeks != 'undefined' && limitWithWeeks === true) {
+            if (limitWithWeeks === true) {
                 return null;
             }
 
@@ -105,7 +105,7 @@
                 return timespanstring;
             }
 
-            if (typeof monthNames != 'undefined' && monthNames) {
+            if (monthNames) {
                 return leadingDate + ' ' + monthName + ' ' + fullYear;
             }
 
@@ -120,13 +120,13 @@
 
             var result;
 
-            if (typeof monthNames != 'undefined' && monthNames) {
+            if (monthNames) {
                 result = leadingDate + ' ' + monthName + ' ' + fullYear;
             } else {
                 result = leadingDate + '.' + leadingMonth + '.' + fullYear;
             }
 
-            if (typeof includeTime != 'undefined' && includeTime) {
+            if (includeTime) {
                 var leadingHour = ('0' + date.getHours()).substr(-2, 2);
                 var leadingMinute = ('0' + date.getMinutes()).substr(-2, 2);
 

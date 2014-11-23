@@ -66,7 +66,7 @@
             show: function(delay) {
                 laroux.ui.loading.killTimer();
 
-                if (typeof delay == 'undefined') {
+                if (delay === undefined) {
                     delay = laroux.ui.loading.defaultDelay;
                 }
 
@@ -87,7 +87,7 @@
                     laroux.dom.setEvent(window, 'load', laroux.ui.loading.hide);
                     laroux.dom.setEvent(window, 'beforeunload', laroux.ui.loading.show);
 
-                    if (typeof localStorage.loadingIndicator != 'undefined' && localStorage.loadingIndicator == 'true') {
+                    if (localStorage.loadingIndicator !== undefined && localStorage.loadingIndicator == 'true') {
                         laroux.ui.loading.show(0);
                     } else {
                         laroux.ui.loading.show();

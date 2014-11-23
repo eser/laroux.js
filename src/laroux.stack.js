@@ -46,7 +46,7 @@
         };
 
         this.exists = function(key) {
-            return (typeof this.data[key] != 'undefined');
+            return (key in this.data);
         };
 
         this.remove = function(key) {

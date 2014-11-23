@@ -133,7 +133,7 @@
         },
 
         show: function(element, transitionProperties) {
-            if (typeof transitionProperties != 'undefined') {
+            if (transitionProperties !== undefined) {
                 laroux.css.setTransition(element, 'opacity ' + transitionProperties);
             } else {
                 laroux.css.setTransition(element, 'opacity');
@@ -143,7 +143,7 @@
         },
 
         hide: function(element, transitionProperties) {
-            if (typeof transitionProperties != 'undefined') {
+            if (transitionProperties !== undefined) {
                 laroux.css.setTransition(element, 'opacity ' + transitionProperties);
             } else {
                 laroux.css.setTransition(element, 'opacity');
@@ -244,7 +244,7 @@
     };
 
     // wrapper support
-    if (typeof laroux.wrapper != 'undefined') {
+    if (laroux.wrapper !== undefined) {
         laroux.wrapper.register('hasClass', laroux.css.hasClass, laroux.wrapper.registerSingle);
         laroux.wrapper.register('addClass', laroux.css.addClass, laroux.wrapper.registerBoth);
         laroux.wrapper.register('removeClass', laroux.css.removeClass, laroux.wrapper.registerBoth);

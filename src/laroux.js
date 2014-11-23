@@ -13,7 +13,7 @@
         // FIXME: non-chrome optimization
         var re = /^#([^\+\>\[\]\.# ]*)$/.exec(selector);
         if (re) {
-            if (typeof parent == 'undefined') {
+            if (parent === undefined) {
                 return document.getElementById(re[1]);
             }
 
@@ -110,7 +110,7 @@
                 break;
             }
 
-            if (typeof result !== 'undefined') {
+            if (result !== undefined) {
                 results.unshift(result);
             }
         }

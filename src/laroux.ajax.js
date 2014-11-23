@@ -47,7 +47,7 @@
             }
 
             if (crossDomain) {
-                if (!('withCredentials' in laroux.ajax._xmlHttpRequestObject) && typeof XDomainRequest != 'undefined') {
+                if (!('withCredentials' in laroux.ajax._xmlHttpRequestObject) && XDomainRequest !== undefined) {
                     laroux.ajax.xDomainObject = true;
 
                     if (laroux.ajax._xDomainRequestObject === null) {
@@ -67,7 +67,7 @@
             var wrapperFunction = xhr.getResponseHeader('X-Response-Wrapper-Function');
             var response;
 
-            if (typeof options.datatype == 'undefined') {
+            if (options.datatype === undefined) {
                 response = xhr.responseText;
             } else if (options.datatype == 'json') {
                 response = JSON.parse(xhr.responseText);
@@ -80,7 +80,7 @@
                 response = xhr.responseText;
             }
 
-            if (wrapperFunction !== null && typeof laroux.ajax.wrappers.registry[wrapperFunction] != 'undefined') {
+            if (wrapperFunction && (wrapperFunction in laroux.ajax.wrappers.registry)) {
                 response = laroux.ajax.wrappers.registry[wrapperFunction](response);
             }
 
@@ -92,7 +92,7 @@
 
         makeRequest: function(options) {
             var cors = laroux.ajax.corsDefault;
-            if (typeof options.cors != 'undefined') {
+            if (options.cors !== undefined) {
                 cors = options.cors;
             }
 
@@ -100,11 +100,11 @@
             var timer = null;
             var n = 0;
 
-            if (typeof options.timeout != 'undefined') {
+            if (options.timeout !== undefined) {
                 timer = setTimeout(
                     function() {
                         xhr.abort();
-                        if (typeof options.timeoutFn != 'undefined') {
+                        if (options.timeoutFn !== undefined) {
                             options.timeoutFn(options.url);
                         }
                     },
@@ -125,7 +125,7 @@
                         try {
                             res = laroux.ajax._xhrResp(xhr, options);
                         } catch (e) {
-                            if (typeof options.error != 'undefined') {
+                            if (options.error !== undefined) {
                                 options.error(xhr, xhr.status, xhr.statusText);
                             }
 
@@ -134,26 +134,26 @@
                         }
 
                         if (isSuccess) {
-                            if (typeof options.success != 'undefined' && res !== null) {
+                            if (options.success !== undefined && res !== null) {
                                 options.success(res.response, res.wrapperFunc);
                             }
 
                             laroux.events.invoke('ajaxSuccess', [xhr, res.response, res.wrapperFunc, options]);
                         }
                     } else {
-                        if (typeof options.error != 'undefined') {
+                        if (options.error !== undefined) {
                             options.error(xhr, xhr.status, xhr.statusText);
                         }
 
                         laroux.events.invoke('ajaxError', [xhr, xhr.status, xhr.statusText, options]);
                     }
 
-                    if (typeof options.complete != 'undefined') {
+                    if (options.complete !== undefined) {
                         options.complete(xhr, xhr.statusText);
                     }
 
                     laroux.events.invoke('ajaxComplete', [xhr, xhr.statusText, options]);
-                } else if (typeof options.progress != 'undefined') {
+                } else if (options.progress !== undefined) {
                     options.progress(++n);
                 }
             };
@@ -166,7 +166,7 @@
                 }
             }
 
-            if (typeof options.jsonp != 'undefined') {
+            if (options.jsonp !== undefined) {
                 url += ((url.indexOf('?') < 0) ? '?' : '&') + 'jsonp=' + options.jsonp;
             }
 
@@ -177,7 +177,7 @@
             }
 
             try {
-                if (typeof options.xhrFields != 'undefined') {
+                if (options.xhrFields !== undefined) {
                     for (var i in options.xhrFields) {
                         if (!options.xhrFields.hasOwnProperty(i)) {
                             continue;
@@ -187,7 +187,7 @@
                     }
                 }
 
-                if (typeof options.headers != 'undefined') {
+                if (options.headers !== undefined) {
                     for (var j in options.headers) {
                         if (!options.headers.hasOwnProperty(j)) {
                             continue;
@@ -202,10 +202,10 @@
 
             var data = null;
 
-            if (typeof options.postdata != 'undefined') {
+            if (options.postdata !== undefined) {
                 data = options.postdata;
 
-                if (typeof options.postdatatype != 'undefined') {
+                if (options.postdatatype !== undefined) {
                     if (options.postdatatype == 'json') {
                         data = JSON.stringify(data);
                     } else if (options.postdatatype == 'form') {

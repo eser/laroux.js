@@ -5,7 +5,7 @@
     laroux.forms = {
         ajaxForm: function(formobj, fnc, fncBegin) {
             laroux.dom.setEvent(formobj, 'submit', function() {
-                if (typeof fncBegin != 'undefined') {
+                if (fncBegin !== undefined) {
                     fncBegin();
                 }
 
@@ -132,7 +132,7 @@
         toggleFormEditing: function(formobj, value) {
             var selection = formobj.querySelectorAll('*[name]');
 
-            if (typeof value == 'undefined') {
+            if (value === undefined) {
                 if (formobj.getAttribute('data-last-enabled') === null) {
                     formobj.setAttribute('data-last-enabled', 'enabled');
                     value = false;

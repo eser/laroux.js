@@ -20,7 +20,7 @@
 
         setCookie: function(name, value, expires, path) {
             var expireValue = '';
-            if (typeof expires != 'undefined' && expires !== null) {
+            if (expires) {
                 expireValue = '; expires=' + expires.toGMTString();
             }
 
@@ -32,7 +32,7 @@
         },
 
         getLocal: function(name, defaultValue) {
-            if (typeof localStorage[name] == 'undefined') {
+            if (!(name in localStorage)) {
                 return defaultValue || null;
             }
 
@@ -48,7 +48,7 @@
         },
 
         getSession: function(name, defaultValue) {
-            if (typeof sessionStorage[name] == 'undefined') {
+            if (!(name in sessionStorage)) {
                 return defaultValue || null;
             }
 
