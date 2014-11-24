@@ -20,6 +20,7 @@ module.exports = function(grunt) {
                     separator: ';'
                 },
                 src: [
+                    'src/laroux.backward.js',
                     'src/laroux.js',
                     'src/laroux.wrapper.js',
                     'src/laroux.ajax.js',
@@ -53,6 +54,7 @@ module.exports = function(grunt) {
                     separator: ';'
                 },
                 src: [
+                    'src/laroux.backward.js',
                     'src/laroux.js',
                     'src/laroux.wrapper.js',
                     'src/laroux.ajax.js',
