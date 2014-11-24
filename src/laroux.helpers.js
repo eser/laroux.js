@@ -145,13 +145,29 @@
             return JSON.parse(JSON.stringify(obj));
         },
 
+        toArray: function(obj) {
+            var length = obj.length,
+                items = new Array(length);
+
+            for (var i = 0; i < length; i++) {
+                items[i] = obj[i];
+            }
+
+            return items;
+        },
+
         getAsArray: function(obj) {
             var items;
 
             if (obj instanceof Array) {
                 items = obj;
             } else if (obj instanceof NodeList) {
-                items = Array.prototype.slice.call(obj);
+                var length = obj.length;
+
+                items = new Array(length);
+                for (var i = 0; i < length; i++) {
+                    items[i] = obj[i];
+                }
             } else {
                 items = [obj];
             }

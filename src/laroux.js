@@ -4,7 +4,7 @@
     // core
     var laroux = function(selector, parent) {
         if (selector instanceof Array) {
-            return Array.prototype.slice.call(
+            return laroux.helpers.toArray(
                 (parent || document).querySelectorAll(selector)
             );
         }
@@ -24,14 +24,33 @@
         return (parent || document).querySelector(selector);
     };
 
+    laroux.cached = {
+        single: {},
+        array: {},
+        id: {}
+    };
+
+    laroux.c = function(selector) {
+        if (selector instanceof Array) {
+            return laroux.cached.array[selector] || (
+                laroux.cached.array[selector] = laroux.helpers.toArray(
+                    document.querySelectorAll(selector)
+                )
+            );
+        }
+
+        return laroux.cached.single[selector] || (
+            laroux.cached.single[selector] = document.querySelector(selector)
+        );
+    };
+
     laroux.id = function(selector, parent) {
         return (parent || document).getElementById(selector);
     };
 
-    laroux.idcs = {};
     laroux.idc = function(selector) {
-        return laroux.idcs[selector] ||
-            (laroux.idcs[selector] = document.getElementById(selector));
+        return laroux.cached.id[selector] ||
+            (laroux.cached.id[selector] = document.getElementById(selector));
     };
 
     laroux.parent = global;
@@ -85,7 +104,7 @@
     };
 
     laroux.aeach = function(arr, fnc) {
-        for (var i = arr.length; i--; ) {
+        for (var i = 0, length = arr.length; i < length; i++) {
             if (fnc(i, arr[i]) === false) {
                 break;
             }
@@ -97,7 +116,7 @@
     laroux.amap = function(arr, fnc) {
         var results = [];
 
-        for (var i = arr.length; i--; ) {
+        for (var i = 0, length = arr.length; i < length; i++) {
             var result = fnc(arr[i], i);
             if (result === false) {
                 break;

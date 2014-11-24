@@ -4,7 +4,7 @@
     // core
     var laroux = function(selector, parent) {
         if (selector instanceof Array) {
-            return Array.prototype.slice.call(
+            return laroux.helpers.toArray(
                 (parent || document).querySelectorAll(selector)
             );
         }
@@ -24,14 +24,33 @@
         return (parent || document).querySelector(selector);
     };
 
+    laroux.cached = {
+        single: {},
+        array: {},
+        id: {}
+    };
+
+    laroux.c = function(selector) {
+        if (selector instanceof Array) {
+            return laroux.cached.array[selector] || (
+                laroux.cached.array[selector] = laroux.helpers.toArray(
+                    document.querySelectorAll(selector)
+                )
+            );
+        }
+
+        return laroux.cached.single[selector] || (
+            laroux.cached.single[selector] = document.querySelector(selector)
+        );
+    };
+
     laroux.id = function(selector, parent) {
         return (parent || document).getElementById(selector);
     };
 
-    laroux.idcs = {};
     laroux.idc = function(selector) {
-        return laroux.idcs[selector] ||
-            (laroux.idcs[selector] = document.getElementById(selector));
+        return laroux.cached.id[selector] ||
+            (laroux.cached.id[selector] = document.getElementById(selector));
     };
 
     laroux.parent = global;
@@ -85,7 +104,7 @@
     };
 
     laroux.aeach = function(arr, fnc) {
-        for (var i = arr.length; i--; ) {
+        for (var i = 0, length = arr.length; i < length; i++) {
             if (fnc(i, arr[i]) === false) {
                 break;
             }
@@ -97,7 +116,7 @@
     laroux.amap = function(arr, fnc) {
         var results = [];
 
-        for (var i = arr.length; i--; ) {
+        for (var i = 0, length = arr.length; i < length; i++) {
             var result = fnc(arr[i], i);
             if (result === false) {
                 break;
@@ -137,7 +156,7 @@
         if (selector instanceof Array) {
             selection = selector;
         } else if (selector instanceof NodeList) {
-            selection = Array.prototype.slice.call(selector);
+            selection = laroux.helpers.toArray(selector);
         } else if (selector instanceof Node) {
             selection = [selector];
         } else {
@@ -185,7 +204,7 @@
         var newFnc = function() {
             var result = fnc.apply(
                 this,
-                [this.source].concat(Array.prototype.slice.call(arguments))
+                [this.source].concat(laroux.helpers.toArray(arguments))
             );
 
             return (result === undefined) ? this : result;
@@ -541,7 +560,7 @@
         addClass: function(element, className) {
             var elements = laroux.helpers.getAsArray(element);
 
-            for (var i = elements.length; i--; ) {
+            for (var i = 0, length = elements.length; i < length; i++) {
                 elements[i].classList.add(className);
             }
         },
@@ -549,7 +568,7 @@
         removeClass: function(element, className) {
             var elements = laroux.helpers.getAsArray(element);
 
-            for (var i = elements.length; i--; ) {
+            for (var i = 0, length = elements.length; i < length; i++) {
                 elements[i].classList.remove(className);
             }
         },
@@ -557,7 +576,7 @@
         toggleClass: function(element, className) {
             var elements = laroux.helpers.getAsArray(element);
 
-            for (var i = elements.length; i--; ) {
+            for (var i = 0, length = elements.length; i < length; i++) {
                 if (elements[i].classList.contains(className)) {
                     elements[i].classList.remove(className);
                 } else {
@@ -591,7 +610,7 @@
 
                 var newStyleName = laroux.helpers.camelCase(styleName);
 
-                for (var i = elements.length; i--; ) {
+                for (var i = 0, length = elements.length; i < length; i++) {
                     elements[i].style[newStyleName] = properties[styleName];
                 }
             }
@@ -654,7 +673,7 @@
         setTransition: function(element, transition) {
             var elements = laroux.helpers.getAsArray(element);
 
-            for (var i = elements.length; i--; ) {
+            for (var i = 0, length = elements.length; i < length; i++) {
                 laroux.css.setTransitionSingle(elements[i], transition);
             }
         },
@@ -810,14 +829,20 @@
         },
 
         select: function(selector, parent) {
-            return Array.prototype.slice.call(
+            return laroux.helpers.toArray(
                 (parent || document).querySelectorAll(selector)
             );
         },
 
         selectByClass: function(selector, parent) {
-            return Array.prototype.slice.call(
+            return laroux.helpers.toArray(
                 (parent || document).getElementsByClassName(selector)
+            );
+        },
+
+        selectByTag: function(selector, parent) {
+            return laroux.helpers.toArray(
+                (parent || document).getElementsByTagName(selector)
             );
         },
 
@@ -846,7 +871,7 @@
                     continue;
                 }
 
-                for (var i = elements.length; i--; ) {
+                for (var i = 0, length = elements.length; i < length; i++) {
                     if (attributes[attributeName] === null) {
                         element.removeAttribute(attributeName);
                     } else {
@@ -873,7 +898,7 @@
                     continue;
                 }
 
-                for (var i = elements.length; i--; ) {
+                for (var i = 0, length = elements.length; i < length; i++) {
                     if (datanames[dataName] === null) {
                         element.removeAttribute('data-' + dataName);
                     } else {
@@ -887,7 +912,7 @@
         setEvent: function(element, eventname, fnc) {
             var elements = laroux.helpers.getAsArray(element);
 
-            for (var i = elements.length; i--; ) {
+            for (var i = 0, length = elements.length; i < length; i++) {
                 laroux.dom.setEventSingle(elements[i], eventname, fnc);
             }
         },
@@ -917,7 +942,7 @@
         unsetEvent: function(element, eventname) {
             var elements = laroux.helpers.getAsArray(element);
 
-            for (var i = elements.length; i--; ) {
+            for (var i = 0, length = elements.length; i < length; i++) {
                 if (!(elements[i] in laroux.dom.eventHistory)) {
                     return;
                 }
@@ -994,7 +1019,7 @@
         },
 
         selectByValue: function(element, value) {
-            for (var i = element.options.length; i--; ) {
+            for (var i = 0, length = element.options.length; i < length; i++) {
                 if (element.options[i].getAttribute('value') == value) {
                     element.selectedIndex = i;
                     break;
@@ -1006,7 +1031,7 @@
         loadImage: function() {
             var images = [];
 
-            for (var i = arguments.length; i--; ) {
+            for (var i = 0, length = arguments.length; i < length; i++) {
                 var image = document.createElement('IMG');
                 image.setAttribute('src', arguments[i]);
 
@@ -1612,13 +1637,29 @@
             return JSON.parse(JSON.stringify(obj));
         },
 
+        toArray: function(obj) {
+            var length = obj.length,
+                items = new Array(length);
+
+            for (var i = 0; i < length; i++) {
+                items[i] = obj[i];
+            }
+
+            return items;
+        },
+
         getAsArray: function(obj) {
             var items;
 
             if (obj instanceof Array) {
                 items = obj;
             } else if (obj instanceof NodeList) {
-                items = Array.prototype.slice.call(obj);
+                var length = obj.length;
+
+                items = new Array(length);
+                for (var i = 0; i < length; i++) {
+                    items[i] = obj[i];
+                }
             } else {
                 items = [obj];
             }

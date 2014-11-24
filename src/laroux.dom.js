@@ -11,14 +11,20 @@
         },
 
         select: function(selector, parent) {
-            return Array.prototype.slice.call(
+            return laroux.helpers.toArray(
                 (parent || document).querySelectorAll(selector)
             );
         },
 
         selectByClass: function(selector, parent) {
-            return Array.prototype.slice.call(
+            return laroux.helpers.toArray(
                 (parent || document).getElementsByClassName(selector)
+            );
+        },
+
+        selectByTag: function(selector, parent) {
+            return laroux.helpers.toArray(
+                (parent || document).getElementsByTagName(selector)
             );
         },
 
@@ -47,7 +53,7 @@
                     continue;
                 }
 
-                for (var i = elements.length; i--; ) {
+                for (var i = 0, length = elements.length; i < length; i++) {
                     if (attributes[attributeName] === null) {
                         element.removeAttribute(attributeName);
                     } else {
@@ -74,7 +80,7 @@
                     continue;
                 }
 
-                for (var i = elements.length; i--; ) {
+                for (var i = 0, length = elements.length; i < length; i++) {
                     if (datanames[dataName] === null) {
                         element.removeAttribute('data-' + dataName);
                     } else {
@@ -88,7 +94,7 @@
         setEvent: function(element, eventname, fnc) {
             var elements = laroux.helpers.getAsArray(element);
 
-            for (var i = elements.length; i--; ) {
+            for (var i = 0, length = elements.length; i < length; i++) {
                 laroux.dom.setEventSingle(elements[i], eventname, fnc);
             }
         },
@@ -118,7 +124,7 @@
         unsetEvent: function(element, eventname) {
             var elements = laroux.helpers.getAsArray(element);
 
-            for (var i = elements.length; i--; ) {
+            for (var i = 0, length = elements.length; i < length; i++) {
                 if (!(elements[i] in laroux.dom.eventHistory)) {
                     return;
                 }
@@ -195,7 +201,7 @@
         },
 
         selectByValue: function(element, value) {
-            for (var i = element.options.length; i--; ) {
+            for (var i = 0, length = element.options.length; i < length; i++) {
                 if (element.options[i].getAttribute('value') == value) {
                     element.selectedIndex = i;
                     break;
@@ -207,7 +213,7 @@
         loadImage: function() {
             var images = [];
 
-            for (var i = arguments.length; i--; ) {
+            for (var i = 0, length = arguments.length; i < length; i++) {
                 var image = document.createElement('IMG');
                 image.setAttribute('src', arguments[i]);
 

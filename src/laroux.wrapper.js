@@ -10,7 +10,7 @@
         if (selector instanceof Array) {
             selection = selector;
         } else if (selector instanceof NodeList) {
-            selection = Array.prototype.slice.call(selector);
+            selection = laroux.helpers.toArray(selector);
         } else if (selector instanceof Node) {
             selection = [selector];
         } else {
@@ -58,7 +58,7 @@
         var newFnc = function() {
             var result = fnc.apply(
                 this,
-                [this.source].concat(Array.prototype.slice.call(arguments))
+                [this.source].concat(laroux.helpers.toArray(arguments))
             );
 
             return (result === undefined) ? this : result;
