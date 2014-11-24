@@ -36,11 +36,11 @@ So far, it has [Ajax](https://github.com/larukedi/laroux.js/wiki/ajax), [Anim](h
 
 
 ### Installation
-Download the latest version from the [releases page](https://github.com/larukedi/laroux.js/releases), and include `laroux.min.js` and `laroux.min.css` in your web project as shown below:
+The latest version is always downloadable from [releases page](https://github.com/larukedi/laroux.js/releases), it's also hosted on [jsdelivr.com](http://www.jsdelivr.com/#!laroux.js) CDN. Including `laroux.min.js` and `laroux.min.css` would be enough to start using `laroux.js` in your web project. For example:
 
 ```html
-<link rel="stylesheet" href="laroux.min.css" />
-<script src="laroux.min.js"></script>
+<link rel="stylesheet" href="//cdn.jsdelivr.net/laroux.js/1.4/laroux.min.css" />
+<script src="//cdn.jsdelivr.net/laroux.js/1.4/laroux.min.js"></script>
 ```
 
 
