@@ -52,7 +52,7 @@
                         <img src="assets/images/logo-medium.png" />
                     </div>
                     <div class="col-md-9">
-                        <h1>laroux.js 1.4</h1>
+                        <h1>laroux.js 1.4a</h1>
                         <div class="lead">
                             This project is a jQuery substitute for modern browsers and mobile devices. But instead of offering some wrappers and own dynamics, it simply provides helper functions to achieve the same objectives as jQuery or Zepto.
                         </div>
@@ -117,7 +117,7 @@ Probably not. Since this is a community project, you can open an issue on GitHub
 
 **5) Who makes the design decisions? Will that person always make the decisions?**
 
-As the initiator of the project, decisions so far have been made by me (Eser Özvataf). Having said that, this is an open-source community project and it belongs to the community. I will gladly hand over project leadership and continue my contributions as a member of the community as long as leadership stays democratic and inclusive. 
+As the initiator of the project, decisions so far have been made by me (Eser Özvataf). Having said that, this is an open-source community project and it belongs to the community. I will gladly hand over project leadership and continue my contributions as a member of the community as long as leadership stays democratic and inclusive.
 
 
 ## Technical
@@ -137,6 +137,10 @@ It's basically for plug-in support.
 **4) So why isn't extend used internally?**
 
 The source code might seem modular by the physical structure but laroux.js isn't actually modular internally. It's tightly-coupled with its organs as a design choice. Due to this, each organ that stays in the controllable area assigns itself directly instead of using extend. With this method, the exact same job is done without any extra engineering, thanks to Javascript's interpretative properties.
+
+**5) Does it support Internet Explorer?**
+
+I tried to patch IE8+ to get it work with `laroux.js` and everything is OK for now. This patch is a single file (see [laroux.backward.js](https://github.com/larukedi/laroux.js/blob/master/src/laroux.backward.js)) which modifies base prototypes of browsers that doesn't support modern DOM and Javascript capabilities. Since it's a very hard task and not just for `laroux.js`'s itself, pull requests are always welcome.
         </script>
 
         <div class="container">
