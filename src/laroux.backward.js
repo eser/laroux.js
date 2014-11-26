@@ -1,13 +1,13 @@
 (function(global) {
     'use strict';
 
-    if (global.requestAnimationFrame === undefined) {
+    if (!('requestAnimationFrame' in global)) {
         global.requestAnimationFrame = function(callback) {
             setTimeout(function() { callback(Date.now()); }, 50);
         };
     }
 
-    if (global.getComputedStyle === undefined) {
+    if (!('getComputedStyle' in global)) {
         global.getComputedStyle = function(element) {
             this.element = element;
 
@@ -34,7 +34,7 @@
         };
     }
 
-    if (global.CSSPrimitiveValue === undefined) {
+    if (!('CSSPrimitiveValue' in global)) {
         global.CSSPrimitiveValue = function(element, prop) {
             this.element = element;
             this.prop = prop;
@@ -58,13 +58,13 @@
         };
     }
 
-    if (Event.prototype.preventDefault === undefined) {
+    if (!('preventDefault' in Event.prototype)) {
         Event.prototype.preventDefault = function() {
             this.returnValue = false;
         };
     }
 
-    if (Event.prototype.stopPropagation === undefined) {
+    if (!('stopPropagation' in Event.prototype)) {
         Event.prototype.stopPropagation = function() {
             this.cancelBubble = true;
         };
@@ -74,7 +74,7 @@
         Element = function() {};
     }
 
-    if (Element.prototype.addEventListener === undefined) {
+    if (!('addEventListener' in Element.prototype)) {
         var eventListeners = [];
 
         var addListener = function(eventname, callback) {
@@ -160,13 +160,13 @@
         });
     }
 
-    if (Element.prototype.getAttribute === undefined) {
+    if (!('getAttribute' in Element.prototype.getAttribute)) {
         Element.prototype.getAttribute = function(attribute) {
             return this.attributes[attribute];
         };
     }
 
-    if (Element.prototype.firstElementChild === undefined) {
+    if (!('firstElementChild' in Element.prototype)) {
         Object.defineProperty(Element.prototype, 'firstElementChild', {
             get: function() {
                 return this.children[0];
@@ -174,7 +174,7 @@
         });
     }
 
-    if (Element.prototype.classList === undefined) {
+    if (!('classList' in Element.prototype)) {
         Object.defineProperty(Element.prototype, 'classList', {
             get: function() {
                 var self = this;
@@ -212,17 +212,17 @@
         });
     }
 
-    if (String.prototype.trim === undefined) {
+    if (!('trim' in String.prototype)) {
         String.prototype.trim = function() {
             return this.replace(/^\s+|\s+$/g, '');
         };
     }
 
-    if (Object.observe === undefined) {
+    if (!('observe' in Object)) {
         Object.observe = function() {};
     }
 
-    if (Object.keys === undefined) {
+    if (!('keys' in Object)) {
         Object.keys = function(object) {
             var keys = [];
 
@@ -238,7 +238,7 @@
         };
     }
 
-    if (Object.prototype.forEach === undefined) {
+    if (!('forEach' in Object.prototype)) {
         Object.prototype.forEach = function(callback) {
             for (var item in this) {
                 if (!this.hasOwnProperty(item)) {
@@ -250,7 +250,7 @@
         };
     }
 
-    if (Object.prototype.map === undefined) {
+    if (!('map' in Object.prototype)) {
         Object.prototype.map = function(callback) {
             var results = [];
 
@@ -266,7 +266,7 @@
         };
     }
 
-    if (Array.prototype.forEach === undefined) {
+    if (!('forEach' in Array.prototype)) {
         Array.prototype.forEach = function(callback) {
             for (var i = 0; i < this.length; i++) {
                 callback.apply(this, [this[i], i, this]);
@@ -274,7 +274,7 @@
         };
     }
 
-    if (Array.prototype.map === undefined) {
+    if (!('map' in Array.prototype)) {
         Array.prototype.map = function(callback) {
             var results = [];
 
@@ -286,7 +286,7 @@
         };
     }
 
-    if (Array.prototype.indexOf === undefined) {
+    if (!('indexOf' in Array.prototype)) {
         Array.prototype.indexOf = function(object, start) {
             for (var i = (start || 0), length = this.length; i < length; i++) {
                 if (this[i] === object) {
