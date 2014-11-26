@@ -83,7 +83,7 @@
                 event.target = event.srcElement;
                 event.currentTarget = self;
 
-                // if (callback.handleEvent !== undefined) {
+                // if ('handleEvent' in callback) {
                 //     callback.handleEvent(event);
                 // } else {
                 //     callback.call(self, event);
@@ -160,9 +160,21 @@
         });
     }
 
-    if (!('getAttribute' in Element.prototype.getAttribute)) {
+    if (!('getAttribute' in Element.prototype)) {
         Element.prototype.getAttribute = function(attribute) {
-            return this.attributes[attribute];
+            return this.attributes[attribute].value;
+        };
+    }
+
+    if (!('setAttribute' in Element.prototype)) {
+        Element.prototype.setAttribute = function(attribute, value) {
+            this.attributes[attribute].value = value;
+        };
+    }
+
+    if (!('removeAttribute' in Element.prototype)) {
+        Element.prototype.removeAttribute = function(attribute) {
+            this.attributes.removeNamedItem(attribute);
         };
     }
 

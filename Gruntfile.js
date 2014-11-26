@@ -15,6 +15,15 @@ module.exports = function(grunt) {
             }
         },
         concat: {
+            backwardjs: {
+                options: {
+                    separator: ';'
+                },
+                src: [
+                    'src/laroux.backward.js'
+                ],
+                dest: 'dist/parts/<%= pkg.name %>.backward.js'
+            },
             basejs: {
                 options: {
                     separator: ';'
@@ -33,7 +42,7 @@ module.exports = function(grunt) {
                     'src/laroux.triggers.js',
                     'src/laroux.vars.js'
                 ],
-                dest: 'dist/<%= pkg.name %>.base.js'
+                dest: 'dist/parts/<%= pkg.name %>.base.js'
             },
             extjs: {
                 options: {
@@ -47,7 +56,7 @@ module.exports = function(grunt) {
                     'src/laroux.templates.js',
                     'src/laroux.ui.js'
                 ],
-                dest: 'dist/<%= pkg.name %>.ext.js'
+                dest: 'dist/parts/<%= pkg.name %>.ext.js'
             },
             alljs: {
                 options: {
@@ -55,6 +64,7 @@ module.exports = function(grunt) {
                 },
                 src: [
                     'src/laroux.backward.js',
+
                     'src/laroux.js',
                     'src/laroux.wrapper.js',
                     'src/laroux.ajax.js',
@@ -87,14 +97,19 @@ module.exports = function(grunt) {
             options: {
                 banner: '/*! <%= pkg.name %> <%= grunt.template.today("dd-mm-yyyy") %> */\n'
             },
+            backwardjs: {
+                files: {
+                    'dist/parts/<%= pkg.name %>.backward.min.js': ['<%= concat.backwardjs.dest %>']
+                }
+            },
             basejs: {
                 files: {
-                    'dist/<%= pkg.name %>.base.min.js': ['<%= concat.basejs.dest %>']
+                    'dist/parts/<%= pkg.name %>.base.min.js': ['<%= concat.basejs.dest %>']
                 }
             },
             extjs: {
                 files: {
-                    'dist/<%= pkg.name %>.ext.min.js': ['<%= concat.extjs.dest %>']
+                    'dist/parts/<%= pkg.name %>.ext.min.js': ['<%= concat.extjs.dest %>']
                 }
             },
             alljs: {
@@ -122,6 +137,10 @@ module.exports = function(grunt) {
             files: ['Gruntfile.js', 'src/**/*.js']
         },
         watch: {
+            backwardjs: {
+                files: ['<%= concat.backwardjs.src %>'],
+                tasks: ['test', 'backwardjs', 'alljs']
+            },
             basejs: {
                 files: ['<%= concat.basejs.src %>'],
                 tasks: ['test', 'basejs', 'alljs']
@@ -146,11 +165,13 @@ module.exports = function(grunt) {
             all: {
                 src: [
                     'dist/<%= pkg.name %>.js',
-                    'dist/<%= pkg.name %>.base.js',
-                    'dist/<%= pkg.name %>.ext.js',
+                    'dist/parts/<%= pkg.name %>.backward.js',
+                    'dist/parts/<%= pkg.name %>.base.js',
+                    'dist/parts/<%= pkg.name %>.ext.js',
                     'dist/<%= pkg.name %>.min.js',
-                    'dist/<%= pkg.name %>.base.min.js',
-                    'dist/<%= pkg.name %>.ext.min.js',
+                    'dist/parts/<%= pkg.name %>.backward.min.js',
+                    'dist/parts/<%= pkg.name %>.base.min.js',
+                    'dist/parts/<%= pkg.name %>.ext.min.js',
                     'dist/<%= pkg.name %>.css',
                     'dist/<%= pkg.name %>.min.css'
                 ]
@@ -172,10 +193,11 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-clean');
 
     grunt.registerTask('test', ['jshint']);
+    grunt.registerTask('backwardjs', ['concat:backwardjs', 'uglify:backwardjs']);
     grunt.registerTask('basejs', ['concat:basejs', 'uglify:basejs']);
     grunt.registerTask('extjs', ['concat:extjs', 'uglify:extjs']);
     grunt.registerTask('alljs', ['concat:alljs', 'uglify:alljs']);
-    grunt.registerTask('js', ['basejs', 'extjs', 'alljs']);
+    grunt.registerTask('js', ['backwardjs', 'basejs', 'extjs', 'alljs']);
     grunt.registerTask('css', ['less:css', 'concat:css', 'cssmin:css']);
     grunt.registerTask('default', ['test', 'js', 'css', 'clean:temp']); // , 'copy'
 
