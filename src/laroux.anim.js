@@ -107,7 +107,8 @@
                     if (currentItem.reset) {
                         currentItem.startTime = timestamp;
                         if (newanim.object === document.body && newanim.property == 'scrollTop') {
-                            scrollTo(document.body, currentItem.from);
+                            scrollTo(0, currentItem.from);
+                            // setTimeout(function() { scrollTo(0, currentItem.from); }, 1);
                         } else {
                             currentItem.object[currentItem.property] = currentItem.from;
                         }
@@ -141,7 +142,8 @@
             ) + newanim.unit;
 
             if (newanim.object === document.body && newanim.property == 'scrollTop') {
-                scrollTo(document.body, value);
+                scrollTo(0, value);
+                // setTimeout(function() { scrollTo(0, value); }, 1);
             } else {
                 newanim.object[newanim.property] = value;
             }

@@ -12,6 +12,10 @@
             var apps = laroux.dom.select('*[lr-app]');
 
             for (var app in apps) {
+                if (!apps.hasOwnProperty(app)) {
+                    continue;
+                }
+
                 laroux.mvc.appObjects.push({
                     app: apps[app].getAttribute('lr-app'),
                     element: apps[app],
@@ -24,6 +28,10 @@
         scanElement: function(element, keys, nodes) {
             for (var i = 0, atts = element.attributes, m = atts.length; i < m; i++) {
                 for (var item1 in keys) {
+                    if (!keys.hasOwnProperty(item1)) {
+                        continue;
+                    }
+
                     var findStr1 = '{{' + keys[item1] + '}}';
 
                     if (atts[i].value.indexOf(findStr1) !== -1) {
@@ -34,6 +42,10 @@
 
             for (var j = 0, chldrn = element.childNodes, n = chldrn.length; j < n; j++) {
                 for (var item2 in keys) {
+                    if (!keys.hasOwnProperty(item2)) {
+                        continue;
+                    }
+
                     var findStr2 = '{{' + keys[item2] + '}}';
 
                     if (chldrn[j].nodeType === 3) {
@@ -52,6 +64,10 @@
 
         update: function() {
             for (var appObject in laroux.mvc.appObjects) {
+                if (!laroux.mvc.appObjects.hasOwnProperty(appObject)) {
+                    continue;
+                }
+
                 var selectedappObject = laroux.mvc.appObjects[appObject];
                 laroux.mvc.updateApp(selectedappObject);
             }
@@ -69,6 +85,10 @@
             }
 
             for (var i1 in appObject.cachedNodes) {
+                if (!appObject.cachedNodes.hasOwnProperty(i1)) {
+                    continue;
+                }
+
                 var item1 = appObject.cachedNodes[i1];
 
                 if (keys !== undefined && keys.indexOf(item1.key) === -1) {
@@ -83,6 +103,10 @@
             }
 
             for (var i2 in appObject.cachedNodes) {
+                if (!appObject.cachedNodes.hasOwnProperty(i2)) {
+                    continue;
+                }
+
                 var item2 = appObject.cachedNodes[i2];
 
                 if (keys !== undefined && keys.indexOf(item2.key) === -1) {
@@ -103,8 +127,16 @@
         observer: function(changes) {
             var updates = {};
             for (var change in changes) {
+                if (!changes.hasOwnProperty(change)) {
+                    continue;
+                }
+
                 if (changes[change].type == 'update') {
                     for (var appObject in laroux.mvc.appObjects) {
+                        if (!laroux.mvc.appObjects.hasOwnProperty(appObject)) {
+                            continue;
+                        }
+
                         var selectedAppObject = laroux.mvc.appObjects[appObject];
 
                         if (selectedAppObject.model == changes[change].object) {
@@ -119,6 +151,10 @@
             }
 
             for (var update in updates) {
+                if (!updates.hasOwnProperty(update)) {
+                    continue;
+                }
+
                 laroux.mvc.updateApp(updates[update].app, updates[update].keys);
             }
         },
@@ -129,6 +165,10 @@
             }
 
             for (var appObject in laroux.mvc.appObjects) {
+                if (!laroux.mvc.appObjects.hasOwnProperty(appObject)) {
+                    continue;
+                }
+
                 var selectedAppObject = laroux.mvc.appObjects[appObject];
 
                 if (selectedAppObject.app == app) {
