@@ -5,12 +5,18 @@
 
     // templates
     laroux.templates = {
+        method: 'compile',
         engine: null,
 
         load: function(element, options) {
-            var content = element.innerHTML;
+            var content;
+            if (chldrn[j].nodeType === 3) {
+                content = element.textContent;
+            } else {
+                content = element.nodeValue;
+            }
 
-            return laroux.templates.engine.compile(content, options);
+            return laroux.templates.engine[laroux.templates.method](content, options);
         },
 
         apply: function(element, model, options) {
@@ -23,6 +29,12 @@
             var output = laroux.templates.apply(element, model, options);
 
             laroux.dom.insert(target, position || 'beforeend', output);
+        },
+
+        replace: function(element, model, target, options) {
+            var output = laroux.templates.apply(element, model, options);
+
+            laroux.dom.replace(target, output);
         }
     };
 
