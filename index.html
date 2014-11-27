@@ -53,7 +53,7 @@
                         <img src="assets/images/logo-medium.png" />
                     </div>
                     <div class="col-md-9">
-                        <h1>laroux.js 1.4b</h1>
+                        <h1>laroux.js 1.4c</h1>
                         <div class="lead">
                             This project is a jQuery substitute for modern browsers and mobile devices. But instead of offering some wrappers and own dynamics, it simply provides helper functions to achieve the same objectives as jQuery or Zepto.
                         </div>
@@ -592,6 +592,35 @@ $l.dom.setEvent(
         return false;
     }
 );
+                        </pre>
+                    </div>
+
+
+                <h3>Model Binding in two-way</h3>
+                <div class="row">
+                    <div class="col-sm-4">
+                        <div lr-app="mvctwoway">
+                            <input id="textbox-mvc-twoway" type="text" name="text" value="initial" lr-bind="text" />
+                            <input id="button-mvc-twoway" type="button" value="Set" lr-bind="text" lr-value="clicked" />
+                            Value: <span>{{text}}</span>
+                        </div>
+                    </div>
+                    <div class="col-sm-8">
+                        <h4>HTML</h4>
+                        <pre class="prettyprint">
+&lt;div lr-app="mvctwoway"&gt;
+    &lt;input id="textbox-mvc-twoway" type="text" name="text" value="initial" lr-bind="text" /&gt;
+    &lt;input id="button-mvc-twoway" type="button" value="Set" lr-bind="text" lr-value="clicked" /&gt;
+    Value: <span>{{text}}</span>
+&lt;/div&gt;
+                        </pre>
+
+                        <h4>Javascript</h4>
+                        <pre class="prettyprint">
+var myModel = { text: null };
+
+$l.mvc.init();
+$l.mvc.bind('mvctwoway', myModel);
                         </pre>
                     </div>
                 </div>

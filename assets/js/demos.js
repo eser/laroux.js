@@ -311,6 +311,14 @@
                 }
             );
         });
+
+
+        // mvc - Model Binding in two-way
+        $l.ready(function() {
+            var myModel = { text: null };
+
+            $l.mvc.bind('mvctwoway', myModel);
+        });
     }
 
     // stack - Examples
