@@ -90,7 +90,7 @@
             }
         },
 
-        eventHistory: {},
+        eventHistory: [],
         setEvent: function(element, eventname, fnc) {
             var elements = laroux.helpers.getAsArray(element);
 
@@ -104,34 +104,27 @@
                 if (fnc(e, element) === false) {
                     if (e.preventDefault) {
                         e.preventDefault();
-                    } else if (window.event) {
-                        window.event.returnValue = false;
+                    } else {
+                        laroux.parent.event.returnValue = false;
                     }
                 }
             };
 
-            if (!(element in laroux.dom.eventHistory)) {
-                laroux.dom.eventHistory[element] = {};
-            }
-            if (eventname in laroux.dom.eventHistory[element]) {
-                element.removeEventListener(eventname, laroux.dom.eventHistory[element][eventname], false);
-            }
-            laroux.dom.eventHistory[element][eventname] = fncWrapper;
-
+            laroux.dom.eventHistory.push({element: element, eventname: eventname, fnc: fnc, fncWrapper: fncWrapper});
             element.addEventListener(eventname, fncWrapper, false);
         },
 
-        unsetEvent: function(element, eventname) {
+        unsetEvent: function(element, eventname, fnc) {
             var elements = laroux.helpers.getAsArray(element);
 
-            for (var i = 0, length = elements.length; i < length; i++) {
-                if (!(elements[i] in laroux.dom.eventHistory)) {
-                    return;
+            for (var i1 = 0, length1 = elements.length; i1 < length1; i1++) {
+                for (var i2 = 0, length2 = laroux.dom.eventHistory; i2 < length2; i2++) {
+                    var item = laroux.dom.eventHistory[i2];
+                    if (item.element === element && item.eventname === eventname && item.fnc === fnc) {
+                        elements[i1].removeEventListener(eventname, item.fncWrapper, false);
+                        delete laroux.dom.eventHistory[i2];
+                    }
                 }
-                if (eventname in laroux.dom.eventHistory[elements[i]][eventname]) {
-                    elements[i].removeEventListener(eventname, laroux.dom.eventHistory[elements[i]][eventname], false);
-                }
-                delete laroux.dom.eventHistory[elements[i]][eventname];
             }
         },
 

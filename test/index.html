@@ -23,7 +23,7 @@
         <script>
             function deneme($scope) {
 
-                console.log($scope.hello);
+                // console.log($scope.hello);
 
             }
 
@@ -32,7 +32,7 @@
                 $l.ui.init();
 
                 var movingObject = $l('#moving-object');
-                $l.css.setProperty(movingObject, { position: 'absolute', backgroundColor: 'red', left: '150px' });
+                $l.css.setProperty(movingObject, { position: 'absolute', backgroundColor: 'red', left: '450px' });
                 // $l.anim.setCss({ object: movingObject, property: 'top', from: 50, to: 200, time: 2000, unit: 'px', reset: true });
                 // $l.anim.setCss({ object: movingObject, property: 'font-size', from: null, to: 30, time: 1200, unit: 'pt', reset: true });
                 $l.css.setTransition(movingObject, [ 'background-color 3s ease', 'padding 3s ease' ]);
@@ -61,7 +61,6 @@
                     'click',
                     function() {
                         newApp.hello = 'selam';
-                        newApp.x.y = 'whoops';
                     }
                 )
             });
@@ -76,7 +75,12 @@
         <div lr-app="deneme">
             {{hello}}
 
-            <span style="color: {{favoritecolor}};">{{name}} {{x.y}}</span>
+            <span style="color: {{favoritecolor}};">{{name}}</span>
+            <span>{{x.y}}</span>
+
+            <input type="text" lr-bind="name" />
+
+            <input id="clickme" type="button" value="Change Bound" />
         </div>
 
         <div id="late-content">

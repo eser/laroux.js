@@ -224,7 +224,7 @@
         },
 
         belowTheFold: function(element) {
-            return element.getBoundingClientRect().top > window.innerHeight;
+            return element.getBoundingClientRect().top > laroux.parent.innerHeight;
         },
 
         leftOfScreen: function(element) {
@@ -232,14 +232,14 @@
         },
 
         rightOfScreen: function(element) {
-            return element.getBoundingClientRect().left > window.innerWidth;
+            return element.getBoundingClientRect().left > laroux.parent.innerWidth;
         },
 
         inViewport: function(element) {
             var rect = element.getBoundingClientRect();
 
-            return !(rect.bottom <= 0 || rect.top > window.innerHeight ||
-                rect.right <= 0 || rect.left > window.innerWidth);
+            return !(rect.bottom <= 0 || rect.top > laroux.parent.innerHeight ||
+                rect.right <= 0 || rect.left > laroux.parent.innerWidth);
         }
     };
 

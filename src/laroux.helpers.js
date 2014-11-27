@@ -198,9 +198,13 @@
             }
 
             for (var item in obj) {
+                if (!obj.hasOwnProperty(item)) {
+                    continue;
+                }
+
                 keys.push(prefix + item);
 
-                if (obj[item].constructor === Object) {
+                if (obj[item] !== null && obj[item].constructor === Object) {
                     laroux.helpers.getKeysRecursive(obj[item], delimiter, prefix + item + delimiter, keys);
                     continue;
                 }

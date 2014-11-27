@@ -142,7 +142,7 @@
                 }
             }
 
-            for (var selected = 0; selected < selection.length; selected++) {
+            for (var selected = 0, length = selection.length; selected < length; selected++) {
                 if (!laroux.forms.isFormField(selection[selected])) {
                     continue;
                 }
@@ -171,7 +171,7 @@
             var formdata = new FormData();
             var selection = formobj.querySelectorAll('*[name]');
 
-            for (var selected = 0; selected < selection.length; selected++) {
+            for (var selected = 0, length = selection.length; selected < length; selected++) {
                 var value = laroux.forms.getFormFieldValue(selection[selected]);
 
                 if (value !== null) {
@@ -186,7 +186,7 @@
             var values = {};
             var selection = formobj.querySelectorAll('*[name]');
 
-            for (var selected = 0; selected < selection.length; selected++) {
+            for (var selected = 0, length = selection.length; selected < length; selected++) {
                 var value = laroux.forms.getFormFieldValue(selection[selected]);
 
                 if (value !== null) {
@@ -200,7 +200,7 @@
         deserialize: function(formobj, data) {
             var selection = formobj.querySelectorAll('*[name]');
 
-            for (var selected = 0; selected < selection.length; selected++) {
+            for (var selected = 0, length = selection.length; selected < length; selected++) {
                 laroux.forms.setFormFieldValue(selection[selected], data[selection[selected].getAttribute('name')]);
             }
         }

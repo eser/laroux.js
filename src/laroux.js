@@ -78,6 +78,10 @@
 
     laroux.each = function(arr, fnc) {
         for (var item in arr) {
+            if (!arr.hasOwnProperty(item)) {
+                continue;
+            }
+
             if (fnc(item, arr[item]) === false) {
                 break;
             }
@@ -90,6 +94,10 @@
         var results = [];
 
         for (var item in arr) {
+            if (!arr.hasOwnProperty(item)) {
+                continue;
+            }
+
             var result = fnc(arr[item], item);
             if (result === false) {
                 break;

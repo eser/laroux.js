@@ -138,14 +138,12 @@
                 laroux.css.setProperty(elements, {opacity: 1});
             },
 
-            set: function(elements) {
-                for (var item in elements) {
-                    if (!elements.hasOwnProperty(item)) {
-                        continue;
-                    }
+            set: function(element) {
+                var elements = laroux.helpers.getAsArray(element);
 
-                    if (!laroux.css.inViewport(elements[item])) {
-                        laroux.ui.scrollView.selectedElements.push(elements[item]);
+                for (var i = 0, length = elements.length; i < length; i++) {
+                    if (!laroux.css.inViewport(elements[i])) {
+                        laroux.ui.scrollView.selectedElements.push(elements[i]);
                     }
                 }
 
@@ -176,7 +174,7 @@
                 }
 
                 if (laroux.ui.scrollView.selectedElements.length === 0) {
-                    laroux.dom.unsetEvent(window, 'scroll');
+                    laroux.dom.unsetEvent(window, 'scroll', laroux.ui.scrollView.reveal);
                 }
 
                 if (elements.length > 0) {
