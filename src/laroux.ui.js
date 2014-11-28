@@ -104,7 +104,12 @@
                     laroux.ui.dynamicDates.updateDatesElements = laroux.dom.select('*[data-epoch]');
                 }
 
-                laroux.ui.dynamicDates.updateDatesElements.forEach(function(obj) {
+                for (var item in laroux.ui.dynamicDates.updateDatesElements) {
+                    if (!laroux.ui.dynamicDates.updateDatesElements.hasOwnProperty(item)) {
+                        continue;
+                    }
+
+                    var obj = laroux.ui.dynamicDates.updateDatesElements[item];
                     // bitshifting (str >> 0) used instead of parseInt(str, 10)
                     var date = new Date((obj.getAttribute('data-epoch') >> 0) * 1000);
 
@@ -114,7 +119,7 @@
                     );
 
                     obj.setAttribute('title', laroux.date.getLongDateString(date));
-                });
+                }
             },
 
             init: function() {

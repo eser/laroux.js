@@ -116,11 +116,15 @@
             var index = 0;
             var shuffled = [];
 
-            obj.forEach(function(value) {
+            for (var item in obj) {
+                if (!obj.hasOwnProperty(item)) {
+                    continue;
+                }
+
                 var rand = laroux.helpers.random(0, index);
                 shuffled[index++] = shuffled[rand];
-                shuffled[rand] = value;
-            });
+                shuffled[rand] = obj[item];
+            }
 
             return shuffled;
         },

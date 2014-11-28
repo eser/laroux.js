@@ -76,9 +76,9 @@
         }
     };
 
-    laroux.each = function(arr, fnc) {
+    laroux.each = function(arr, fnc, testOwnProperties) {
         for (var item in arr) {
-            if (!arr.hasOwnProperty(item)) {
+            if (testOwnProperties && !arr.hasOwnProperty(item)) {
                 continue;
             }
 
@@ -90,11 +90,11 @@
         return arr;
     };
 
-    laroux.map = function(arr, fnc) {
+    laroux.map = function(arr, fnc, testOwnProperties) {
         var results = [];
 
         for (var item in arr) {
-            if (!arr.hasOwnProperty(item)) {
+            if (testOwnProperties && !arr.hasOwnProperty(item)) {
                 continue;
             }
 
