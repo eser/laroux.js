@@ -156,55 +156,80 @@
 
     // date
     laroux.date = {
+        shortDateFormat: 'dd.MMM.yyyy',
+        longDateFormat: 'dd.MMMM.yyyy',
+        timeFormat: 'HH:mm',
+
+        monthsShort: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+        monthsLong: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+
+        strings: {
+            now:     'now',
+            later:   'later',
+            seconds: 'seconds',
+            aminute: 'a minute',
+            minutes: 'minutes',
+            ahour:   'a hour',
+            hours:   'hours',
+            aday:    'a day',
+            days:    'days',
+            aweek:   'a week',
+            weeks:   'weeks',
+            amonth:  'a month',
+            months:  'months',
+            ayear:   'a year',
+            years:   'years'
+        },
+
         parseEpoch: function(timespan, limitWithWeeks) {
             if (timespan <= 3000) {
-                return 'now';
+                return laroux.date.strings.now;
             }
 
             if (timespan < 60*1000) {
                 timespan = Math.ceil(timespan / 1000);
 
-                return timespan + ' seconds';
+                return timespan + ' ' + laroux.date.strings.seconds;
             }
 
             if (timespan < 60*60*1000) {
                 timespan = Math.ceil(timespan / (60*1000));
 
                 if (timespan == 1) {
-                    return 'a minute';
+                    return laroux.date.strings.aminute;
                 }
 
-                return timespan + ' minutes';
+                return timespan + ' ' + laroux.date.strings.minutes;
             }
 
             if (timespan < 24*60*60*1000) {
                 timespan = Math.ceil(timespan / (60*60*1000));
 
                 if (timespan == 1) {
-                    return 'an hour';
+                    return laroux.date.strings.ahour;
                 }
 
-                return timespan + ' hours';
+                return timespan + ' ' + laroux.date.strings.hours;
             }
 
             if (timespan < 7*24*60*60*1000) {
                 timespan = Math.ceil(timespan / (24*60*60*1000));
 
                 if (timespan == 1) {
-                    return 'a day';
+                    return laroux.date.strings.aday;
                 }
 
-                return timespan + ' days';
+                return timespan + ' ' + laroux.date.strings.days;
             }
 
             if (timespan < 4*7*24*60*60*1000) {
                 timespan = Math.ceil(timespan / (7*24*60*60*1000));
 
                 if (timespan == 1) {
-                    return 'a week';
+                    return laroux.date.strings.aweek;
                 }
 
-                return timespan + ' weeks';
+                return timespan + ' ' + laroux.date.strings.weeks;
             }
 
             if (limitWithWeeks === true) {
@@ -215,29 +240,66 @@
                 timespan = Math.ceil(timespan / (30*24*60*60*1000));
 
                 if (timespan == 1) {
-                    return 'a month';
+                    return laroux.date.strings.amonth;
                 }
 
-                return timespan + ' months';
+                return timespan + ' ' + laroux.date.strings.months;
             }
 
             timespan = Math.ceil(timespan / (365*24*60*60*1000));
 
             if (timespan == 1) {
-                return 'a year';
+                return laroux.date.strings.ayear;
             }
 
-            return timespan + ' years';
+            return timespan + ' ' + laroux.date.strings.years;
         },
 
-        monthsShort: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-        getDateString: function(date, monthNames) {
-            var now = Date.now();
+        getCustomDateString: function(format, date) {
+            var now = date || new Date(),
+                day = now.getDate(),
+                leadingDay = ('0' + day).substr(-2, 2),
+                month = now.getMonth() + 1,
+                leadingMonth = ('0' + month).substr(-2, 2),
+                monthNameShort = laroux.date.monthsShort[now.getMonth()],
+                monthNameLong = laroux.date.monthsLong[now.getMonth()];
 
-            var leadingDate = ('0' + date.getDate()).substr(-2, 2);
-            var leadingMonth = ('0' + (date.getMonth() + 1)).substr(-2, 2);
-            var monthName = laroux.date.monthsShort[date.getMonth()];
-            var fullYear = date.getFullYear();
+            return format.replace('yyyy', now.getFullYear())
+                            .replace('yy', now.getYear())
+                            .replace('MMMM', monthNameLong)
+                            .replace('MMM', monthNameShort)
+                            .replace('MM', leadingMonth)
+                            .replace('M', month)
+                            .replace('dd', leadingDay)
+                            .replace('d', day);
+        },
+
+        getCustomTimeString: function(format, date) {
+            var now = date || new Date(),
+                militaryHour = now.getHours(),
+                leadingMilitaryHour = ('0' + militaryHour).substr(-2, 2),
+                hour = ((militaryHour % 12) > 0) ? militaryHour % 12 : 12,
+                leadingHour = ('0' + hour).substr(-2, 2),
+                minute = now.getMinutes(),
+                leadingMinute = ('0' + minute).substr(-2, 2),
+                second = now.getSeconds(),
+                leadingSecond = ('0' + second).substr(-2, 2),
+                ampm = (hour >= 12) ? 'pm' : 'am';
+
+            return format.replace('hh', leadingHour)
+                            .replace('h', hour)
+                            .replace('HH', leadingMilitaryHour)
+                            .replace('H', militaryHour)
+                            .replace('mm', leadingMinute)
+                            .replace('m', minute)
+                            .replace('ss', leadingSecond)
+                            .replace('s', second)
+                            .replace('tt', ampm)
+                            .replace('t', ampm.substr(0, 1));
+        },
+
+        getDateString: function(date, includeTime) {
+            var now = Date.now();
 
             // timespan
             var timespan = now - date.getTime();
@@ -252,41 +314,33 @@
             var timespanstring = laroux.date.parseEpoch(timespan, true);
             if (timespanstring !== null) {
                 if (future) {
-                    return timespanstring + ' later';
+                    return timespanstring + ' ' + laroux.date.strings.later;
                 }
 
                 return timespanstring;
             }
 
-            if (monthNames) {
-                return leadingDate + ' ' + monthName + ' ' + fullYear;
-            }
-
-            return leadingDate + '.' + leadingMonth + '.' + fullYear;
+            return laroux.date.getShortDateString(date, includeTime);
         },
 
-        getLongDateString: function(date, monthNames, includeTime) {
-            var leadingDate = ('0' + date.getDate()).substr(-2, 2);
-            var leadingMonth = ('0' + (date.getMonth() + 1)).substr(-2, 2);
-            var monthName = laroux.date.monthsShort[date.getMonth()];
-            var fullYear = date.getFullYear();
-
-            var result;
-
-            if (monthNames) {
-                result = leadingDate + ' ' + monthName + ' ' + fullYear;
-            } else {
-                result = leadingDate + '.' + leadingMonth + '.' + fullYear;
-            }
-
+        getShortDateString: function(date, includeTime) {
             if (includeTime) {
-                var leadingHour = ('0' + date.getHours()).substr(-2, 2);
-                var leadingMinute = ('0' + date.getMinutes()).substr(-2, 2);
-
-                result += ' ' + leadingHour + ':' + leadingMinute;
+                return laroux.date.getCustomDateString(laroux.date.shortDateFormat, date) +
+                    ' ' +
+                    laroux.date.getCustomTimeString(laroux.date.timeFormat, date);
             }
 
-            return result;
+            return laroux.date.getCustomDateString(laroux.date.shortDateFormat, date);
+        },
+
+        getLongDateString: function(date, includeTime) {
+            if (includeTime) {
+                return laroux.date.getCustomDateString(laroux.date.longDateFormat, date) +
+                    ' ' +
+                    laroux.date.getCustomTimeString(laroux.date.timeFormat, date);
+            }
+
+            return laroux.date.getCustomDateString(laroux.date.longDateFormat, date);
         }
     };
 
@@ -310,7 +364,7 @@
                     element: apps[i],
                     model: {},
                     cachedNodes: null,
-                    setBoundElements: null
+                    boundElements: null
                 });
             }
         },
@@ -402,7 +456,7 @@
             var bindId = element.getAttribute('lr-bind-id');
 
             var selectedApp = laroux.mvc.appObjects[appId];
-            var selectedBind = selectedApp.setBoundElements[bindId];
+            var selectedBind = selectedApp.boundElements[bindId];
 
             // Object.unobserve(selectedApp.model, laroux.mvc.observer);
             selectedApp.model[selectedBind.key] = laroux.mvc.getRelatedValue(element);
@@ -417,7 +471,7 @@
                         key: atts[i].value
                     };
 
-                    appObject.setBoundElements.push(boundElement);
+                    appObject.boundElements.push(boundElement);
                 }
 
                 for (var item1 in keys) {
@@ -471,12 +525,12 @@
             }
 
             if (appObject.cachedNodes === null) {
-                for (var i1 in appObject.setBoundElements) {
-                    if (!appObject.setBoundElements.hasOwnProperty(i1)) {
+                for (var i1 in appObject.boundElements) {
+                    if (!appObject.boundElements.hasOwnProperty(i1)) {
                         continue;
                     }
 
-                    var item1 = appObject.setBoundElements[i1];
+                    var item1 = appObject.boundElements[i1];
 
                     laroux.dom.unsetEvent(
                         item1.element,
@@ -488,16 +542,16 @@
                 }
 
                 appObject.cachedNodes = [];
-                appObject.setBoundElements = [];
+                appObject.boundElements = [];
                 var objectKeys = laroux.helpers.getKeysRecursive(appObject.model);
                 laroux.mvc.scanElements(appObject.element, objectKeys, appObject);
 
-                for (var i2 in appObject.setBoundElements) {
-                    if (!appObject.setBoundElements.hasOwnProperty(i2)) {
+                for (var i2 in appObject.boundElements) {
+                    if (!appObject.boundElements.hasOwnProperty(i2)) {
                         continue;
                     }
 
-                    var item2 = appObject.setBoundElements[i2];
+                    var item2 = appObject.boundElements[i2];
                     var value = laroux.mvc.getRelatedValue(item2.element, true);
                     if (value !== null) {
                         appObject.model[item2.key] = value;
@@ -552,12 +606,12 @@
                 }
             }
 
-            for (var i5 in appObject.setBoundElements) {
-                if (!appObject.setBoundElements.hasOwnProperty(i5)) {
+            for (var i5 in appObject.boundElements) {
+                if (!appObject.boundElements.hasOwnProperty(i5)) {
                     continue;
                 }
 
-                var item5 = appObject.setBoundElements[i5];
+                var item5 = appObject.boundElements[i5];
 
                 if (keys !== undefined && keys.indexOf(item5.key) === -1) {
                     continue;
@@ -829,7 +883,12 @@
                     laroux.ui.dynamicDates.updateDatesElements = laroux.dom.select('*[data-epoch]');
                 }
 
-                laroux.ui.dynamicDates.updateDatesElements.forEach(function(obj) {
+                for (var item in laroux.ui.dynamicDates.updateDatesElements) {
+                    if (!laroux.ui.dynamicDates.updateDatesElements.hasOwnProperty(item)) {
+                        continue;
+                    }
+
+                    var obj = laroux.ui.dynamicDates.updateDatesElements[item];
                     // bitshifting (str >> 0) used instead of parseInt(str, 10)
                     var date = new Date((obj.getAttribute('data-epoch') >> 0) * 1000);
 
@@ -839,7 +898,7 @@
                     );
 
                     obj.setAttribute('title', laroux.date.getLongDateString(date));
-                });
+                }
             },
 
             init: function() {

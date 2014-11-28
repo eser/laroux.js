@@ -389,9 +389,9 @@
         }
     };
 
-    laroux.each = function(arr, fnc) {
+    laroux.each = function(arr, fnc, testOwnProperties) {
         for (var item in arr) {
-            if (!arr.hasOwnProperty(item)) {
+            if (testOwnProperties && !arr.hasOwnProperty(item)) {
                 continue;
             }
 
@@ -403,11 +403,11 @@
         return arr;
     };
 
-    laroux.map = function(arr, fnc) {
+    laroux.map = function(arr, fnc, testOwnProperties) {
         var results = [];
 
         for (var item in arr) {
-            if (!arr.hasOwnProperty(item)) {
+            if (testOwnProperties && !arr.hasOwnProperty(item)) {
                 continue;
             }
 
@@ -1922,11 +1922,15 @@
             var index = 0;
             var shuffled = [];
 
-            obj.forEach(function(value) {
+            for (var item in obj) {
+                if (!obj.hasOwnProperty(item)) {
+                    continue;
+                }
+
                 var rand = laroux.helpers.random(0, index);
                 shuffled[index++] = shuffled[rand];
-                shuffled[rand] = value;
-            });
+                shuffled[rand] = obj[item];
+            }
 
             return shuffled;
         },
