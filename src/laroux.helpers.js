@@ -109,12 +109,12 @@
         },
 
         column: function(obj, key) {
-            return obj.map(function(value) { return value[key]; });
+            return laroux.map(obj, function(value) { return value[key]; }, true);
         },
 
         shuffle: function(obj) {
-            var index = 0;
-            var shuffled = [];
+            var index = 0,
+                shuffled = [];
 
             for (var item in obj) {
                 if (!obj.hasOwnProperty(item)) {
@@ -129,16 +129,23 @@
             return shuffled;
         },
 
-        merge: function(obj1, obj2) {
-            var tmp = obj1;
+        merge: function() {
+            var target = Array.prototype.shift.call(arguments),
+                tmp = target,
+                isArray = tmp instanceof Array;
 
-            if (tmp instanceof Array) {
-                return tmp.concat(obj2);
-            }
+            for (var item in arguments) {
+                if (isArray) {
+                    tmp = tmp.concat(arguments[item]);
+                    continue;
+                }
 
-            for (var attr in obj2) {
-                if (!tmp.hasOwnProperty(attr)) {
-                    tmp[attr] = obj2[attr];
+                for (var attr in arguments[item]) {
+                    if (!arguments[item].hasOwnProperty(attr)) {
+                        continue;
+                    }
+
+                    tmp[attr] = arguments[item][attr];
                 }
             }
 
