@@ -46,6 +46,17 @@
             return data;
         },
 
+        replaceAll: function(text, dictionary) {
+            var re = new RegExp(Object.keys(dictionary).join('|'), 'g');
+
+            return text.replace(
+                re,
+                function(match) {
+                    return dictionary[match];
+                }
+            );
+        },
+
         camelCase: function(value) {
             var flag = false;
             var output = '';

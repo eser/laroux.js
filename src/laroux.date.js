@@ -3,8 +3,8 @@
 
     // date
     laroux.date = {
-        shortDateFormat: 'dd.MMM.yyyy',
-        longDateFormat: 'dd.MMMM.yyyy',
+        shortDateFormat: 'dd.MM.yyyy',
+        longDateFormat: 'dd MMMM yyyy',
         timeFormat: 'HH:mm',
 
         monthsShort: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
@@ -13,6 +13,7 @@
         strings: {
             now:     'now',
             later:   'later',
+            ago:     'ago',
             seconds: 'seconds',
             aminute: 'a minute',
             minutes: 'minutes',
@@ -29,10 +30,6 @@
         },
 
         parseEpoch: function(timespan, limitWithWeeks) {
-            if (timespan <= 3000) {
-                return laroux.date.strings.now;
-            }
-
             if (timespan < 60*1000) {
                 timespan = Math.ceil(timespan / 1000);
 
@@ -103,91 +100,120 @@
         },
 
         getCustomDateString: function(format, date) {
-            var now = date || new Date(),
-                day = now.getDate(),
-                leadingDay = ('0' + day).substr(-2, 2),
-                month = now.getMonth() + 1,
-                leadingMonth = ('0' + month).substr(-2, 2),
-                monthNameShort = laroux.date.monthsShort[now.getMonth()],
-                monthNameLong = laroux.date.monthsLong[now.getMonth()];
+            var now = date || new Date();
 
-            return format.replace('yyyy', now.getFullYear())
-                            .replace('yy', now.getYear())
-                            .replace('MMMM', monthNameLong)
-                            .replace('MMM', monthNameShort)
-                            .replace('MM', leadingMonth)
-                            .replace('M', month)
-                            .replace('dd', leadingDay)
-                            .replace('d', day);
-        },
+            return format.replace(
+                /yyyy|yy|MMMM|MMM|MM|M|dd|d|hh|h|HH|H|mm|m|ss|s|tt|t/g,
+                function(match) {
+                    switch (match) {
+                        case 'yyyy':
+                            return now.getFullYear();
 
-        getCustomTimeString: function(format, date) {
-            var now = date || new Date(),
-                militaryHour = now.getHours(),
-                leadingMilitaryHour = ('0' + militaryHour).substr(-2, 2),
-                hour = ((militaryHour % 12) > 0) ? militaryHour % 12 : 12,
-                leadingHour = ('0' + hour).substr(-2, 2),
-                minute = now.getMinutes(),
-                leadingMinute = ('0' + minute).substr(-2, 2),
-                second = now.getSeconds(),
-                leadingSecond = ('0' + second).substr(-2, 2),
-                ampm = (hour >= 12) ? 'pm' : 'am';
+                        case 'yy':
+                            return now.getYear();
 
-            return format.replace('hh', leadingHour)
-                            .replace('h', hour)
-                            .replace('HH', leadingMilitaryHour)
-                            .replace('H', militaryHour)
-                            .replace('mm', leadingMinute)
-                            .replace('m', minute)
-                            .replace('ss', leadingSecond)
-                            .replace('s', second)
-                            .replace('tt', ampm)
-                            .replace('t', ampm.substr(0, 1));
-        },
+                        case 'MMMM':
+                            return laroux.date.monthsLong[now.getMonth()];
 
-        getDateString: function(date, includeTime) {
-            var now = Date.now();
+                        case 'MMM':
+                            return laroux.date.monthsShort[now.getMonth()];
 
-            // timespan
-            var timespan = now - date.getTime();
-            var future;
-            if (timespan < 0) {
-                future = true;
-                timespan = Math.abs(timespan);
-            } else {
-                future = false;
-            }
+                        case 'MM':
+                            return ('0' + (now.getMonth() + 1)).substr(-2, 2);
 
-            var timespanstring = laroux.date.parseEpoch(timespan, true);
-            if (timespanstring !== null) {
-                if (future) {
-                    return timespanstring + ' ' + laroux.date.strings.later;
+                        case 'M':
+                            return now.getMonth() + 1;
+
+                        case 'dd':
+                            return ('0' + now.getDate()).substr(-2, 2);
+
+                        case 'd':
+                            return now.getDate();
+
+                        case 'hh':
+                            var hour = now.getHours();
+                            return ('0' + (((hour % 12) > 0) ? hour % 12 : 12)).substr(-2, 2);
+
+                        case 'h':
+                            var hour = now.getHours();
+                            return ((hour % 12) > 0) ? hour % 12 : 12;
+
+                        case 'HH':
+                            return ('0' + now.getHours()).substr(-2, 2);
+
+                        case 'H':
+                            return now.getHours();
+
+                        case 'mm':
+                            return ('0' + now.getMinutes()).substr(-2, 2);
+
+                        case 'm':
+                            return now.getMinutes();
+
+                        case 'ss':
+                            return ('0' + now.getSeconds()).substr(-2, 2);
+
+                        case 's':
+                            return now.getSeconds();
+
+                        case 'tt':
+                            if (now.getHours() >= 12) {
+                                return 'pm';
+                            }
+
+                            return 'am';
+
+                        case 't':
+                            if (now.getHours() >= 12) {
+                                return 'p';
+                            }
+
+                            return 'a';
+                    }
+
+                    return match;
                 }
+            );
+        },
 
-                return timespanstring;
+        getDateDiffString: function(date) {
+            var now = Date.now(),
+                timespan = now - date.getTime(),
+                absTimespan = Math.abs(timespan),
+                past = (timespan > 0);
+
+            if (absTimespan <= 3000) {
+                return laroux.date.strings.now;
             }
 
-            return laroux.date.getShortDateString(date, includeTime);
+            var timespanstring = laroux.date.parseEpoch(absTimespan, true);
+            if (timespanstring !== null) {
+                return timespanstring +
+                    ' ' +
+                    (past ?
+                        laroux.date.strings.ago :
+                        laroux.date.strings.later);
+            }
+
+            return laroux.date.getShortDateString(date, true);
         },
 
         getShortDateString: function(date, includeTime) {
-            if (includeTime) {
-                return laroux.date.getCustomDateString(laroux.date.shortDateFormat, date) +
-                    ' ' +
-                    laroux.date.getCustomTimeString(laroux.date.timeFormat, date);
-            }
-
-            return laroux.date.getCustomDateString(laroux.date.shortDateFormat, date);
+            return laroux.date.getCustomDateString(
+                includeTime ?
+                    laroux.date.shortDateFormat + ' ' + laroux.date.timeFormat :
+                    laroux.date.shortDateFormat,
+                date
+            );
         },
 
         getLongDateString: function(date, includeTime) {
-            if (includeTime) {
-                return laroux.date.getCustomDateString(laroux.date.longDateFormat, date) +
-                    ' ' +
-                    laroux.date.getCustomTimeString(laroux.date.timeFormat, date);
-            }
-
-            return laroux.date.getCustomDateString(laroux.date.longDateFormat, date);
+            return laroux.date.getCustomDateString(
+                includeTime ?
+                    laroux.date.longDateFormat + ' ' + laroux.date.timeFormat :
+                    laroux.date.longDateFormat,
+                date
+            );
         }
     };
 
