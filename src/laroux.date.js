@@ -131,12 +131,12 @@
                             return now.getDate();
 
                         case 'hh':
-                            var hour = now.getHours();
-                            return ('0' + (((hour % 12) > 0) ? hour % 12 : 12)).substr(-2, 2);
+                            var hour1 = now.getHours();
+                            return ('0' + (((hour1 % 12) > 0) ? hour1 % 12 : 12)).substr(-2, 2);
 
                         case 'h':
-                            var hour = now.getHours();
-                            return ((hour % 12) > 0) ? hour % 12 : 12;
+                            var hour2 = now.getHours();
+                            return ((hour2 % 12) > 0) ? hour2 % 12 : 12;
 
                         case 'HH':
                             return ('0' + now.getHours()).substr(-2, 2);

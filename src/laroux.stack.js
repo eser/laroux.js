@@ -2,11 +2,31 @@
     'use strict';
 
     // stack
-    laroux.stack = function() {
+    laroux.stack = function(data) {
         this.data = {};
 
         this.add = function(key, value) {
-            this.data[key] = value;
+            switch (typeof value) {
+                case 'function':
+                    this[key] = value;
+                    break;
+
+                // case 'object':
+                //     break;
+
+                default:
+                    this.data[key] = value;
+
+                    Object.defineProperty(
+                        this,
+                        key,
+                        {
+                            get: function() { return this.data[key]; },
+                            set: function(newValue) { this.data[key] = newValue; this.onupdate(); }
+                        }
+                    );
+                    break;
+            }
         };
 
         this.addRange = function(values) {
@@ -15,7 +35,7 @@
                     continue;
                 }
 
-                this.data[valueKey] = values[valueKey];
+                this.add(valueKey, values[valueKey]);
             }
         };
 
@@ -50,12 +70,31 @@
         };
 
         this.remove = function(key) {
+            if (key in this.data) {
+                delete this[key];
+            }
+
             delete this.data[key];
         };
 
         this.clear = function() {
+            for (var item in this.data) {
+                if (!this.data.hasOwnProperty(item)) {
+                    continue;
+                }
+
+                delete this[item];
+            }
+
             this.data = {};
         };
+
+        this.onupdate = function() {
+        };
+
+        if (data) {
+            this.addRange(data);
+        }
     };
 
 })(this.laroux);
