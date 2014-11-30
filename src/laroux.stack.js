@@ -2,27 +2,47 @@
     'use strict';
 
     // stack
-    laroux.stack = function(data) {
-        this.data = {};
+    laroux.stack = function(data, depth, top) {
+        this._data = {};
+        this._depth = depth;
+        this._top = top || this;
 
         this.add = function(key, value) {
-            switch (typeof value) {
+            var type = typeof value;
+            switch (type) {
                 case 'function':
                     this[key] = value;
                     break;
 
-                // case 'object':
-                //     break;
-
                 default:
-                    this.data[key] = value;
+                    if (type == 'object') {
+                        this._data[key] = new laroux.stack(
+                            value,
+                            this._depth ?
+                                this._depth + '.' + key :
+                                key,
+                            this._top
+                        );
+                    } else {
+                        this._data[key] = value;
+                    }
 
                     Object.defineProperty(
                         this,
                         key,
                         {
-                            get: function() { return this.data[key]; },
-                            set: function(newValue) { this.data[key] = newValue; this.onupdate(); }
+                            get: function() {
+                                return this._data[key];
+                            },
+                            set: function(newValue) {
+                                var oldValue = this._data[key];
+                                if (this._data[key] === newValue) {
+                                    return;
+                                }
+
+                                this._data[key] = newValue;
+                                this._top.onupdate(this, key, oldValue, newValue);
+                            }
                         }
                     );
                     break;
@@ -40,7 +60,7 @@
         };
 
         this.get = function(key, defaultValue) {
-            return this.data[key] || defaultValue || null;
+            return this._data[key] || defaultValue || null;
         };
 
         this.getRange = function(keys) {
@@ -51,45 +71,45 @@
                     continue;
                 }
 
-                values[keys[item]] = this.data[keys[item]];
+                values[keys[item]] = this._data[keys[item]];
             }
 
             return values;
         };
 
         this.keys = function() {
-            return Object.keys(this.data);
+            return Object.keys(this._data);
         };
 
         this.length = function() {
-            return Object.keys(this.data).length;
+            return Object.keys(this._data).length;
         };
 
         this.exists = function(key) {
-            return (key in this.data);
+            return (key in this._data);
         };
 
         this.remove = function(key) {
-            if (key in this.data) {
+            if (key in this._data) {
                 delete this[key];
             }
 
-            delete this.data[key];
+            delete this._data[key];
         };
 
         this.clear = function() {
-            for (var item in this.data) {
-                if (!this.data.hasOwnProperty(item)) {
+            for (var item in this._data) {
+                if (!this._data.hasOwnProperty(item)) {
                     continue;
                 }
 
                 delete this[item];
             }
 
-            this.data = {};
+            this._data = {};
         };
 
-        this.onupdate = function() {
+        this.onupdate = function(scope, key, oldValue, newValue) {
         };
 
         if (data) {
