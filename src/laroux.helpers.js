@@ -46,6 +46,11 @@
             return data;
         },
 
+        format: function() {
+            var args = arguments;
+            return Array.prototype.shift.call(args).replace(/%s/g, function() { return Array.prototype.shift.call(args); });
+        },
+
         replaceAll: function(text, dictionary) {
             var re = new RegExp(Object.keys(dictionary).join('|'), 'g');
 
