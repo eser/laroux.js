@@ -5,24 +5,33 @@
 
     // templates
     laroux.templates = {
-        method: 'compile',
-        engine: null,
+        engines: {
+            hogan: function(template, model, options) {
+                var compiled = Hogan.compile(template, options);
+                return compiled.render(model);
+            },
 
-        load: function(element, options) {
+            lodash: function(template, model, options) {
+                var compiled = _.template(template, null, options);
+                return compiled(model);
+            }
+        },
+        engine: 'hogan',
+
+        apply: function(element, model, options) {
             var content;
+
             if (chldrn[j].nodeType === 3) {
                 content = element.textContent;
             } else {
                 content = element.nodeValue;
             }
 
-            return laroux.templates.engine[laroux.templates.method](content, options);
-        },
-
-        apply: function(element, model, options) {
-            var template = laroux.templates.load(element, options);
-
-            return template.render(model);
+            return laroux.templates.engines[laroux.templates.engine](
+                content,
+                model,
+                options
+            );
         },
 
         insert: function(element, model, target, position, options) {
