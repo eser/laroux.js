@@ -250,6 +250,7 @@
         };
     }
 
+    /*
     if (!('forEach' in Object.prototype)) {
         Object.prototype.forEach = function(callback) {
             for (var item in this) {
@@ -297,6 +298,7 @@
             return results;
         };
     }
+    */
 
     if (!('indexOf' in Array.prototype)) {
         Array.prototype.indexOf = function(object, start) {
@@ -379,13 +381,30 @@
         fnc();
     };
 
-    laroux.extend = function(obj) {
-        for (var name in obj) {
-            if (laroux.hasOwnProperty(name)) {
-                continue;
-            }
+    laroux.extend = function() {
+        Array.prototype.unshift.call(arguments, laroux);
+        laroux.extendObject.apply(this, arguments);
+    };
 
-            laroux[name] = obj[name];
+    laroux.extendObject = function() {
+        var target = Array.prototype.shift.call(arguments),
+            isArray = target instanceof Array;
+
+        for (var item in arguments) {
+            for (var name in arguments[item]) {
+                // if (isArray) {
+                //     target.push(arguments[item][name]);
+                //     continue;
+                // }
+
+                /* target[name].constructor === Object */
+                if (target.hasOwnProperty(name) && target[name] instanceof Object) {
+                    laroux.extendObject(target[name], arguments[item][name]);
+                    continue;
+                }
+
+                target[name] = arguments[item][name];
+            }
         }
     };
 
@@ -403,7 +422,7 @@
         return arr;
     };
 
-    laroux.map = function(arr, fnc, testOwnProperties) {
+    laroux.map = function(arr, fnc, dontSkipReturns, testOwnProperties) {
         var results = [];
 
         for (var item in arr) {
@@ -416,7 +435,7 @@
                 break;
             }
 
-            if (typeof result !== 'undefined') {
+            if (!dontSkipReturns && typeof result !== 'undefined') {
                 results.push(result);
             }
         }
@@ -639,14 +658,10 @@
         },
 
         makeRequest: function(options) {
-            var cors = laroux.ajax.corsDefault;
-            if (options.cors !== undefined) {
-                cors = options.cors;
-            }
-
-            var xhr = laroux.ajax._xhr(cors);
-            var timer = null;
-            var n = 0;
+            var cors = options.cors || laroux.ajax.corsDefault,
+                xhr = laroux.ajax._xhr(cors),
+                timer = null,
+                n = 0;
 
             if (options.timeout !== undefined) {
                 timer = setTimeout(
@@ -739,14 +754,22 @@
                     }
                 }
 
-                if (options.headers !== undefined) {
-                    for (var j in options.headers) {
-                        if (!options.headers.hasOwnProperty(j)) {
-                            continue;
-                        }
+                var headers = options.headers || {};
 
-                        xhr.setRequestHeader(j, options.headers[j]);
+                if (!cors) {
+                    headers['X-Requested-With'] = 'XMLHttpRequest';
+
+                    if (options.wrapper) {
+                        headers['X-Wrapper-Function'] = 'laroux.js';
                     }
+                }
+
+                for (var j in headers) {
+                    if (!headers.hasOwnProperty(j)) {
+                        continue;
+                    }
+
+                    xhr.setRequestHeader(j, headers[j]);
                 }
             } catch(e) {
                 console.log(e);
@@ -770,83 +793,74 @@
             }
         },
 
-        get: function(path, values, successfnc, errorfnc) {
+        get: function(path, values, successfnc, errorfnc, cors) {
             laroux.ajax.makeRequest({
                 type: 'GET',
                 url: path,
                 datatype: 'html',
                 getdata: values,
-                headers: {
-                    'X-Requested-With': 'XMLHttpRequest',
-                    'X-Wrapper-Function': 'laroux.js'
-                },
+                wrapper: true,
+                cors: cors || laroux.ajax.corsDefault,
                 success: successfnc,
                 error: errorfnc
             });
         },
 
-        getJson: function(path, values, successfnc, errorfnc) {
+        getJson: function(path, values, successfnc, errorfnc, cors) {
             laroux.ajax.makeRequest({
                 type: 'GET',
                 url: path,
                 datatype: 'json',
                 getdata: values,
-                headers: {
-                    'X-Requested-With': 'XMLHttpRequest',
-                    'X-Wrapper-Function': 'laroux.js'
-                },
+                wrapper: true,
+                cors: cors || laroux.ajax.corsDefault,
                 success: successfnc,
                 error: errorfnc
             });
         },
 
-        getJsonP: function(path, values, method, successfnc, errorfnc) {
+        getJsonP: function(path, values, method, successfnc, errorfnc, cors) {
             laroux.ajax.makeRequest({
                 type: 'GET',
                 url: path,
                 datatype: 'script',
                 getdata: values,
                 jsonp: method,
-                headers: {
-                    'X-Requested-With': 'XMLHttpRequest'
-                },
+                wrapper: false,
+                cors: cors || laroux.ajax.corsDefault,
                 success: successfnc,
                 error: errorfnc
             });
         },
 
-        getScript: function(path, values, successfnc, errorfnc) {
+        getScript: function(path, values, successfnc, errorfnc, cors) {
             laroux.ajax.makeRequest({
                 type: 'GET',
                 url: path,
                 datatype: 'script',
                 getdata: values,
-                headers: {
-                    'X-Requested-With': 'XMLHttpRequest'
-                },
+                wrapper: false,
+                cors: cors || laroux.ajax.corsDefault,
                 success: successfnc,
                 error: errorfnc
             });
         },
 
-        post: function(path, values, successfnc, errorfnc) {
+        post: function(path, values, successfnc, errorfnc, cors) {
             laroux.ajax.makeRequest({
                 type: 'POST',
                 url: path,
                 datatype: 'json',
                 postdata: values,
                 postdatatype: 'form',
-                headers: {
-                    // 'Content-Type': 'multipart/formdata; charset=UTF-8',
-                    'X-Requested-With': 'XMLHttpRequest',
-                    'X-Wrapper-Function': 'laroux.js'
-                },
+                wrapper: true,
+                cors: cors || laroux.ajax.corsDefault,
                 success: successfnc,
                 error: errorfnc
             });
         },
 
-        postJson: function(path, values, successfnc, errorfnc) {
+        postJson: function(path, values, successfnc, errorfnc, cors) {
             laroux.ajax.makeRequest({
                 type: 'POST',
                 url: path,
@@ -854,10 +868,10 @@
                 postdata: values,
                 postdatatype: 'json',
                 headers: {
-                    'Content-Type': 'application/json; charset=UTF-8',
-                    'X-Requested-With': 'XMLHttpRequest',
-                    'X-Wrapper-Function': 'laroux.js'
+                    'Content-Type': 'application/json; charset=UTF-8'
                 },
+                wrapper: true,
+                cors: cors || laroux.ajax.corsDefault,
                 success: successfnc,
                 error: errorfnc
             });
@@ -1852,6 +1866,17 @@
             return data;
         },
 
+        replaceAll: function(text, dictionary) {
+            var re = new RegExp(Object.keys(dictionary).join('|'), 'g');
+
+            return text.replace(
+                re,
+                function(match) {
+                    return dictionary[match];
+                }
+            );
+        },
+
         camelCase: function(value) {
             var flag = false;
             var output = '';
@@ -1915,12 +1940,12 @@
         },
 
         column: function(obj, key) {
-            return obj.map(function(value) { return value[key]; });
+            return laroux.map(obj, function(value) { return value[key]; }, true);
         },
 
         shuffle: function(obj) {
-            var index = 0;
-            var shuffled = [];
+            var index = 0,
+                shuffled = [];
 
             for (var item in obj) {
                 if (!obj.hasOwnProperty(item)) {
@@ -1935,16 +1960,23 @@
             return shuffled;
         },
 
-        merge: function(obj1, obj2) {
-            var tmp = obj1;
+        merge: function() {
+            var target = Array.prototype.shift.call(arguments),
+                tmp = target,
+                isArray = tmp instanceof Array;
 
-            if (tmp instanceof Array) {
-                return tmp.concat(obj2);
-            }
+            for (var item in arguments) {
+                if (isArray) {
+                    tmp = tmp.concat(arguments[item]);
+                    continue;
+                }
 
-            for (var attr in obj2) {
-                if (!tmp.hasOwnProperty(attr)) {
-                    tmp[attr] = obj2[attr];
+                for (var attr in arguments[item]) {
+                    if (!arguments[item].hasOwnProperty(attr)) {
+                        continue;
+                    }
+
+                    tmp[attr] = arguments[item][attr];
                 }
             }
 
@@ -2446,8 +2478,8 @@
 
     // date
     laroux.date = {
-        shortDateFormat: 'dd.MMM.yyyy',
-        longDateFormat: 'dd.MMMM.yyyy',
+        shortDateFormat: 'dd.MM.yyyy',
+        longDateFormat: 'dd MMMM yyyy',
         timeFormat: 'HH:mm',
 
         monthsShort: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
@@ -2456,6 +2488,7 @@
         strings: {
             now:     'now',
             later:   'later',
+            ago:     'ago',
             seconds: 'seconds',
             aminute: 'a minute',
             minutes: 'minutes',
@@ -2472,10 +2505,6 @@
         },
 
         parseEpoch: function(timespan, limitWithWeeks) {
-            if (timespan <= 3000) {
-                return laroux.date.strings.now;
-            }
-
             if (timespan < 60*1000) {
                 timespan = Math.ceil(timespan / 1000);
 
@@ -2546,91 +2575,120 @@
         },
 
         getCustomDateString: function(format, date) {
-            var now = date || new Date(),
-                day = now.getDate(),
-                leadingDay = ('0' + day).substr(-2, 2),
-                month = now.getMonth() + 1,
-                leadingMonth = ('0' + month).substr(-2, 2),
-                monthNameShort = laroux.date.monthsShort[now.getMonth()],
-                monthNameLong = laroux.date.monthsLong[now.getMonth()];
+            var now = date || new Date();
 
-            return format.replace('yyyy', now.getFullYear())
-                            .replace('yy', now.getYear())
-                            .replace('MMMM', monthNameLong)
-                            .replace('MMM', monthNameShort)
-                            .replace('MM', leadingMonth)
-                            .replace('M', month)
-                            .replace('dd', leadingDay)
-                            .replace('d', day);
-        },
+            return format.replace(
+                /yyyy|yy|MMMM|MMM|MM|M|dd|d|hh|h|HH|H|mm|m|ss|s|tt|t/g,
+                function(match) {
+                    switch (match) {
+                        case 'yyyy':
+                            return now.getFullYear();
 
-        getCustomTimeString: function(format, date) {
-            var now = date || new Date(),
-                militaryHour = now.getHours(),
-                leadingMilitaryHour = ('0' + militaryHour).substr(-2, 2),
-                hour = ((militaryHour % 12) > 0) ? militaryHour % 12 : 12,
-                leadingHour = ('0' + hour).substr(-2, 2),
-                minute = now.getMinutes(),
-                leadingMinute = ('0' + minute).substr(-2, 2),
-                second = now.getSeconds(),
-                leadingSecond = ('0' + second).substr(-2, 2),
-                ampm = (hour >= 12) ? 'pm' : 'am';
+                        case 'yy':
+                            return now.getYear();
 
-            return format.replace('hh', leadingHour)
-                            .replace('h', hour)
-                            .replace('HH', leadingMilitaryHour)
-                            .replace('H', militaryHour)
-                            .replace('mm', leadingMinute)
-                            .replace('m', minute)
-                            .replace('ss', leadingSecond)
-                            .replace('s', second)
-                            .replace('tt', ampm)
-                            .replace('t', ampm.substr(0, 1));
-        },
+                        case 'MMMM':
+                            return laroux.date.monthsLong[now.getMonth()];
 
-        getDateString: function(date, includeTime) {
-            var now = Date.now();
+                        case 'MMM':
+                            return laroux.date.monthsShort[now.getMonth()];
 
-            // timespan
-            var timespan = now - date.getTime();
-            var future;
-            if (timespan < 0) {
-                future = true;
-                timespan = Math.abs(timespan);
-            } else {
-                future = false;
-            }
+                        case 'MM':
+                            return ('0' + (now.getMonth() + 1)).substr(-2, 2);
 
-            var timespanstring = laroux.date.parseEpoch(timespan, true);
-            if (timespanstring !== null) {
-                if (future) {
-                    return timespanstring + ' ' + laroux.date.strings.later;
+                        case 'M':
+                            return now.getMonth() + 1;
+
+                        case 'dd':
+                            return ('0' + now.getDate()).substr(-2, 2);
+
+                        case 'd':
+                            return now.getDate();
+
+                        case 'hh':
+                            var hour1 = now.getHours();
+                            return ('0' + (((hour1 % 12) > 0) ? hour1 % 12 : 12)).substr(-2, 2);
+
+                        case 'h':
+                            var hour2 = now.getHours();
+                            return ((hour2 % 12) > 0) ? hour2 % 12 : 12;
+
+                        case 'HH':
+                            return ('0' + now.getHours()).substr(-2, 2);
+
+                        case 'H':
+                            return now.getHours();
+
+                        case 'mm':
+                            return ('0' + now.getMinutes()).substr(-2, 2);
+
+                        case 'm':
+                            return now.getMinutes();
+
+                        case 'ss':
+                            return ('0' + now.getSeconds()).substr(-2, 2);
+
+                        case 's':
+                            return now.getSeconds();
+
+                        case 'tt':
+                            if (now.getHours() >= 12) {
+                                return 'pm';
+                            }
+
+                            return 'am';
+
+                        case 't':
+                            if (now.getHours() >= 12) {
+                                return 'p';
+                            }
+
+                            return 'a';
+                    }
+
+                    return match;
                 }
+            );
+        },
 
-                return timespanstring;
+        getDateDiffString: function(date) {
+            var now = Date.now(),
+                timespan = now - date.getTime(),
+                absTimespan = Math.abs(timespan),
+                past = (timespan > 0);
+
+            if (absTimespan <= 3000) {
+                return laroux.date.strings.now;
             }
 
-            return laroux.date.getShortDateString(date, includeTime);
+            var timespanstring = laroux.date.parseEpoch(absTimespan, true);
+            if (timespanstring !== null) {
+                return timespanstring +
+                    ' ' +
+                    (past ?
+                        laroux.date.strings.ago :
+                        laroux.date.strings.later);
+            }
+
+            return laroux.date.getShortDateString(date, true);
         },
 
         getShortDateString: function(date, includeTime) {
-            if (includeTime) {
-                return laroux.date.getCustomDateString(laroux.date.shortDateFormat, date) +
-                    ' ' +
-                    laroux.date.getCustomTimeString(laroux.date.timeFormat, date);
-            }
-
-            return laroux.date.getCustomDateString(laroux.date.shortDateFormat, date);
+            return laroux.date.getCustomDateString(
+                includeTime ?
+                    laroux.date.shortDateFormat + ' ' + laroux.date.timeFormat :
+                    laroux.date.shortDateFormat,
+                date
+            );
         },
 
         getLongDateString: function(date, includeTime) {
-            if (includeTime) {
-                return laroux.date.getCustomDateString(laroux.date.longDateFormat, date) +
-                    ' ' +
-                    laroux.date.getCustomTimeString(laroux.date.timeFormat, date);
-            }
-
-            return laroux.date.getCustomDateString(laroux.date.longDateFormat, date);
+            return laroux.date.getCustomDateString(
+                includeTime ?
+                    laroux.date.longDateFormat + ' ' + laroux.date.timeFormat :
+                    laroux.date.longDateFormat,
+                date
+            );
         }
     };
 
@@ -2969,25 +3027,78 @@
     'use strict';
 
     // stack
-    laroux.stack = function() {
-        this.data = {};
+    laroux.stack = function(data, depth, top) {
+        this._data = {};
+        this._depth = depth;
+        this._top = top || this;
 
-        this.add = function(key, value) {
-            this.data[key] = value;
+        this.set = function(key, value) {
+            // delete this[key];
+
+            var type = typeof value;
+            switch (type) {
+                case 'function':
+                    this._data[key] = value;
+
+                    Object.defineProperty(
+                        this,
+                        key,
+                        {
+                            get: function() {
+                                return this._data[key]();
+                            }
+                        }
+                    );
+                    break;
+
+                default:
+                    if (type == 'object') {
+                        this._data[key] = new laroux.stack(
+                            value,
+                            this._depth ?
+                                this._depth + '.' + key :
+                                key,
+                            this._top
+                        );
+                    } else {
+                        this._data[key] = value;
+                    }
+
+                    Object.defineProperty(
+                        this,
+                        key,
+                        {
+                            get: function() {
+                                return this._data[key];
+                            },
+                            set: function(newValue) {
+                                var oldValue = this._data[key];
+                                if (this._data[key] === newValue) {
+                                    return;
+                                }
+
+                                // this.set(this, key, newValue);
+                                this._data[key] = newValue;
+                                this._top.onupdate(this, key, oldValue, newValue);
+                            }
+                        }
+                    );
+                    break;
+            }
         };
 
-        this.addRange = function(values) {
+        this.setRange = function(values) {
             for (var valueKey in values) {
                 if (!values.hasOwnProperty(valueKey)) {
                     continue;
                 }
 
-                this.data[valueKey] = values[valueKey];
+                this.set(valueKey, values[valueKey]);
             }
         };
 
         this.get = function(key, defaultValue) {
-            return this.data[key] || defaultValue || null;
+            return this[key] || defaultValue || null;
         };
 
         this.getRange = function(keys) {
@@ -2998,31 +3109,50 @@
                     continue;
                 }
 
-                values[keys[item]] = this.data[keys[item]];
+                values[keys[item]] = this[keys[item]];
             }
 
             return values;
         };
 
         this.keys = function() {
-            return Object.keys(this.data);
+            return Object.keys(this._data);
         };
 
         this.length = function() {
-            return Object.keys(this.data).length;
+            return Object.keys(this._data).length;
         };
 
         this.exists = function(key) {
-            return (key in this.data);
+            return (key in this._data);
         };
 
         this.remove = function(key) {
-            delete this.data[key];
+            if (key in this._data) {
+                delete this[key];
+            }
+
+            delete this._data[key];
         };
 
         this.clear = function() {
-            this.data = {};
+            for (var item in this._data) {
+                if (!this._data.hasOwnProperty(item)) {
+                    continue;
+                }
+
+                delete this[item];
+            }
+
+            this._data = {};
         };
+
+        this.onupdate = function(scope, key, oldValue, newValue) {
+        };
+
+        if (data) {
+            this.setRange(data);
+        }
     };
 
 })(this.laroux);

@@ -77,10 +77,10 @@
 
         for (var item in arguments) {
             for (var name in arguments[item]) {
-                if (isArray) {
-                    target.push(arguments[item][name]);
-                    continue;
-                }
+                // if (isArray) {
+                //     target.push(arguments[item][name]);
+                //     continue;
+                // }
 
                 /* target[name].constructor === Object */
                 if (target.hasOwnProperty(name) && target[name] instanceof Object) {

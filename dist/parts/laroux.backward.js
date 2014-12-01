@@ -250,6 +250,7 @@
         };
     }
 
+    /*
     if (!('forEach' in Object.prototype)) {
         Object.prototype.forEach = function(callback) {
             for (var item in this) {
@@ -297,6 +298,7 @@
             return results;
         };
     }
+    */
 
     if (!('indexOf' in Array.prototype)) {
         Array.prototype.indexOf = function(object, start) {
