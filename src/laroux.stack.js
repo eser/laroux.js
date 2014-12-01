@@ -7,11 +7,23 @@
         this._depth = depth;
         this._top = top || this;
 
-        this.add = function(key, value) {
+        this.set = function(key, value) {
+            // delete this[key];
+
             var type = typeof value;
             switch (type) {
                 case 'function':
-                    this[key] = value;
+                    this._data[key] = value;
+
+                    Object.defineProperty(
+                        this,
+                        key,
+                        {
+                            get: function() {
+                                return this._data[key]();
+                            }
+                        }
+                    );
                     break;
 
                 default:
@@ -40,6 +52,7 @@
                                     return;
                                 }
 
+                                // this.set(this, key, newValue);
                                 this._data[key] = newValue;
                                 this._top.onupdate(this, key, oldValue, newValue);
                             }
@@ -49,18 +62,18 @@
             }
         };
 
-        this.addRange = function(values) {
+        this.setRange = function(values) {
             for (var valueKey in values) {
                 if (!values.hasOwnProperty(valueKey)) {
                     continue;
                 }
 
-                this.add(valueKey, values[valueKey]);
+                this.set(valueKey, values[valueKey]);
             }
         };
 
         this.get = function(key, defaultValue) {
-            return this._data[key] || defaultValue || null;
+            return this[key] || defaultValue || null;
         };
 
         this.getRange = function(keys) {
@@ -71,7 +84,7 @@
                     continue;
                 }
 
-                values[keys[item]] = this._data[keys[item]];
+                values[keys[item]] = this[keys[item]];
             }
 
             return values;
@@ -113,7 +126,7 @@
         };
 
         if (data) {
-            this.addRange(data);
+            this.setRange(data);
         }
     };
 

@@ -91,14 +91,10 @@
         },
 
         makeRequest: function(options) {
-            var cors = laroux.ajax.corsDefault;
-            if (options.cors !== undefined) {
-                cors = options.cors;
-            }
-
-            var xhr = laroux.ajax._xhr(cors);
-            var timer = null;
-            var n = 0;
+            var cors = options.cors || laroux.ajax.corsDefault,
+                xhr = laroux.ajax._xhr(cors),
+                timer = null,
+                n = 0;
 
             if (options.timeout !== undefined) {
                 timer = setTimeout(
@@ -191,14 +187,22 @@
                     }
                 }
 
-                if (options.headers !== undefined) {
-                    for (var j in options.headers) {
-                        if (!options.headers.hasOwnProperty(j)) {
-                            continue;
-                        }
+                var headers = options.headers || {};
 
-                        xhr.setRequestHeader(j, options.headers[j]);
+                if (!cors) {
+                    headers['X-Requested-With'] = 'XMLHttpRequest';
+
+                    if (options.wrapper) {
+                        headers['X-Wrapper-Function'] = 'laroux.js';
                     }
+                }
+
+                for (var j in headers) {
+                    if (!headers.hasOwnProperty(j)) {
+                        continue;
+                    }
+
+                    xhr.setRequestHeader(j, headers[j]);
                 }
             } catch(e) {
                 console.log(e);
@@ -222,83 +226,74 @@
             }
         },
 
-        get: function(path, values, successfnc, errorfnc) {
+        get: function(path, values, successfnc, errorfnc, cors) {
             laroux.ajax.makeRequest({
                 type: 'GET',
                 url: path,
                 datatype: 'html',
                 getdata: values,
-                headers: {
-                    'X-Requested-With': 'XMLHttpRequest',
-                    'X-Wrapper-Function': 'laroux.js'
-                },
+                wrapper: true,
+                cors: cors || laroux.ajax.corsDefault,
                 success: successfnc,
                 error: errorfnc
             });
         },
 
-        getJson: function(path, values, successfnc, errorfnc) {
+        getJson: function(path, values, successfnc, errorfnc, cors) {
             laroux.ajax.makeRequest({
                 type: 'GET',
                 url: path,
                 datatype: 'json',
                 getdata: values,
-                headers: {
-                    'X-Requested-With': 'XMLHttpRequest',
-                    'X-Wrapper-Function': 'laroux.js'
-                },
+                wrapper: true,
+                cors: cors || laroux.ajax.corsDefault,
                 success: successfnc,
                 error: errorfnc
             });
         },
 
-        getJsonP: function(path, values, method, successfnc, errorfnc) {
+        getJsonP: function(path, values, method, successfnc, errorfnc, cors) {
             laroux.ajax.makeRequest({
                 type: 'GET',
                 url: path,
                 datatype: 'script',
                 getdata: values,
                 jsonp: method,
-                headers: {
-                    'X-Requested-With': 'XMLHttpRequest'
-                },
+                wrapper: false,
+                cors: cors || laroux.ajax.corsDefault,
                 success: successfnc,
                 error: errorfnc
             });
         },
 
-        getScript: function(path, values, successfnc, errorfnc) {
+        getScript: function(path, values, successfnc, errorfnc, cors) {
             laroux.ajax.makeRequest({
                 type: 'GET',
                 url: path,
                 datatype: 'script',
                 getdata: values,
-                headers: {
-                    'X-Requested-With': 'XMLHttpRequest'
-                },
+                wrapper: false,
+                cors: cors || laroux.ajax.corsDefault,
                 success: successfnc,
                 error: errorfnc
             });
         },
 
-        post: function(path, values, successfnc, errorfnc) {
+        post: function(path, values, successfnc, errorfnc, cors) {
             laroux.ajax.makeRequest({
                 type: 'POST',
                 url: path,
                 datatype: 'json',
                 postdata: values,
                 postdatatype: 'form',
-                headers: {
-                    // 'Content-Type': 'multipart/formdata; charset=UTF-8',
-                    'X-Requested-With': 'XMLHttpRequest',
-                    'X-Wrapper-Function': 'laroux.js'
-                },
+                wrapper: true,
+                cors: cors || laroux.ajax.corsDefault,
                 success: successfnc,
                 error: errorfnc
             });
         },
 
-        postJson: function(path, values, successfnc, errorfnc) {
+        postJson: function(path, values, successfnc, errorfnc, cors) {
             laroux.ajax.makeRequest({
                 type: 'POST',
                 url: path,
@@ -306,10 +301,10 @@
                 postdata: values,
                 postdatatype: 'json',
                 headers: {
-                    'Content-Type': 'application/json; charset=UTF-8',
-                    'X-Requested-With': 'XMLHttpRequest',
-                    'X-Wrapper-Function': 'laroux.js'
+                    'Content-Type': 'application/json; charset=UTF-8'
                 },
+                wrapper: true,
+                cors: cors || laroux.ajax.corsDefault,
                 success: successfnc,
                 error: errorfnc
             });
