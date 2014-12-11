@@ -120,12 +120,26 @@
                 break;
             }
 
-            if (!dontSkipReturns && typeof result !== 'undefined') {
+            if (!dontSkipReturns && result !== undefined) {
                 results.push(result);
             }
         }
 
         return results;
+    };
+
+    laroux.index = function(arr, value, testOwnProperties) {
+        for (var item in arr) {
+            if (testOwnProperties && !arr.hasOwnProperty(item)) {
+                continue;
+            }
+
+            if (arr[item] === object) {
+                return item;
+            }
+        }
+
+        return null;
     };
 
     laroux.aeach = function(arr, fnc) {
@@ -138,7 +152,7 @@
         return arr;
     };
 
-    laroux.amap = function(arr, fnc) {
+    laroux.amap = function(arr, fnc, dontSkipReturns) {
         var results = [];
 
         for (var i = 0, length = arr.length; i < length; i++) {
@@ -147,7 +161,7 @@
                 break;
             }
 
-            if (result !== undefined) {
+            if (!dontSkipReturns && result !== undefined) {
                 results.unshift(result);
             }
         }
@@ -155,7 +169,22 @@
         return results;
     };
 
+    laroux.aindex = function(arr, value, start) {
+        for (var i = (start || 0), length = arr.length; i < length; i++) {
+            if (arr[i] === object) {
+                return i;
+            }
+        }
+
+        return -1;
+    };
+
     // initialization
+    // if (typeof module !== 'undefined' && module.exports !== undefined) {
+    //     module.exports = laroux;
+    // } else {
+    //     global.$l = global.laroux = laroux;
+    // }
     global.$l = global.laroux = laroux;
 
     document.addEventListener(

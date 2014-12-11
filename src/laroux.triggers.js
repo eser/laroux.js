@@ -16,7 +16,7 @@
                     continue;
                 }
 
-                if (laroux.triggers.list.indexOf(conditions[item]) == -1) {
+                if (laroux.aindex(laroux.triggers.list, conditions[item]) === -1) {
                     laroux.triggers.list.push(conditions[item]);
                 }
             }
@@ -29,8 +29,8 @@
         },
 
         ontrigger: function(triggerName, args) {
-            var eventIdx = laroux.triggers.list.indexOf(triggerName);
-            if (eventIdx != -1) {
+            var eventIdx = laroux.aindex(laroux.triggers.list, triggerName);
+            if (eventIdx !== -1) {
                 laroux.triggers.list.splice(eventIdx, 1);
             }
 
@@ -50,7 +50,7 @@
 
                     var conditionObj = currentItem.conditions[conditionKey];
 
-                    if (laroux.triggers.list.indexOf(conditionObj) != -1) {
+                    if (laroux.aindex(laroux.triggers.list, conditionObj) !== -1) {
                         count++;
                         // break;
                     }

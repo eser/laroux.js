@@ -298,7 +298,6 @@
             return results;
         };
     }
-    */
 
     if (!('indexOf' in Array.prototype)) {
         Array.prototype.indexOf = function(object, start) {
@@ -311,5 +310,6 @@
             return -1;
         };
     }
+    */
 
 })(this);

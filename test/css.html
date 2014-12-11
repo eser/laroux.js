@@ -11,7 +11,7 @@
 
         <script>
             $l.ready(function() {
-                var $bar = $l('.bar');
+                var $bar = $l.id('bar');
                 window.$bar = $bar;
 
                 console.log([
@@ -29,12 +29,12 @@
         </script>
 
         <style>
-            .bar{background-color:red; border:5px solid black; margin:5px; padding:20px; max-width:300px;}
+            #bar { background-color: red; border: 5px solid black; margin: 5px; padding: 20px; max-width: 300px; }
         </style>
     </head>
     <body>
 
-        <div class="bar">
+        <div id="bar">
             bar
         </div>
 
