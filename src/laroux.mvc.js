@@ -227,7 +227,7 @@
 
                 var item3 = appObject.cachedNodes[i3];
 
-                if (keys !== undefined && keys.indexOf(item3.key) === -1) {
+                if (keys !== undefined && laroux.aindex(keys, item3.key) === -1) {
                     continue;
                 }
 
@@ -245,7 +245,7 @@
 
                 var item4 = appObject.cachedNodes[i4];
 
-                if (keys !== undefined && keys.indexOf(item4.key) === -1) {
+                if (keys !== undefined && laroux.aindex(keys, item4.key) === -1) {
                     continue;
                 }
 
@@ -266,7 +266,7 @@
 
                 var item5 = appObject.boundElements[i5];
 
-                if (keys !== undefined && keys.indexOf(item5.key) === -1) {
+                if (keys !== undefined && laroux.aindex(keys, item5.key) === -1) {
                     continue;
                 }
 

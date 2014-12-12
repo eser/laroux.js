@@ -6,20 +6,60 @@
     // templates
     laroux.templates = {
         engines: {
-            hogan: function(template, model, options) {
-                var compiled = Hogan.compile(template, options);
-                return compiled.render(model);
+            hogan: {
+                compile: function(template, options) {
+                    return Hogan.compile(template, options);
+                },
+
+                render: function(compiled, model) {
+                    return compiled.render(model);
+                }
             },
 
-            lodash: function(template, model, options) {
-                var compiled = _.template(template, null, options);
-                return compiled(model);
+            mustache: {
+                compile: function(template, options) {
+                    return Mustache.compile(template, options);
+                },
+
+                render: function(compiled, model) {
+                    return compiled(model);
+                }
+            },
+
+            handlebars: {
+                compile: function(template, options) {
+                    return Handlebars.compile(template, options);
+                },
+
+                render: function(compiled, model) {
+                    return compiled(model);
+                }
+            },
+
+            lodash: {
+                compile: function(template, options) {
+                    return _.compile(template, null, options);
+                },
+
+                render: function(compiled, model) {
+                    return compiled(model);
+                }
+            },
+
+            underscore: {
+                compile: function(template, options) {
+                    return _.compile(template, null, options);
+                },
+
+                render: function(compiled, model) {
+                    return compiled(model);
+                }
             }
         },
         engine: 'hogan',
 
         apply: function(element, model, options) {
-            var content;
+            var content, engine = laroux.templates.engines[laroux.templates.engine];
 
             if (chldrn[j].nodeType === 3) {
                 content = element.textContent;
@@ -27,11 +67,8 @@
                 content = element.nodeValue;
             }
 
-            return laroux.templates.engines[laroux.templates.engine](
-                content,
-                model,
-                options
-            );
+            var compiled = engine.compile(content, options);
+            return engine.render(compiled, model);
         },
 
         insert: function(element, model, target, position, options) {
