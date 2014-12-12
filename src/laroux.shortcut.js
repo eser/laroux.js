@@ -111,7 +111,7 @@
                 }
 
                 var element = event.target || event.srcElement;
-                if (element.nodeType === 3) {
+                if (element.nodeType === 3 || element.nodeType === 11) {
                     element = element.parentNode;
                 }
 

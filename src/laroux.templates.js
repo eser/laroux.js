@@ -6,6 +6,26 @@
     // templates
     laroux.templates = {
         engines: {
+            plain: {
+                compile: function(template, options) {
+                    return [template, options];
+                },
+
+                render: function(compiled, model) {
+                    var result = compiled[0];
+
+                    for (var item in model) {
+                        if (!model.hasOwnProperty(item)) {
+                            continue;
+                        }
+
+                        result = result.replace('{{' + item + '}}', model[item]);
+                    }
+
+                    return result;
+                }
+            },
+
             hogan: {
                 compile: function(template, options) {
                     return Hogan.compile(template, options);
@@ -56,12 +76,12 @@
                 }
             }
         },
-        engine: 'hogan',
+        engine: 'plain',
 
         apply: function(element, model, options) {
             var content, engine = laroux.templates.engines[laroux.templates.engine];
 
-            if (chldrn[j].nodeType === 3) {
+            if (element.nodeType === 3 || element.nodeType === 11) {
                 content = element.textContent;
             } else {
                 content = element.nodeValue;

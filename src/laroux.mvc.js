@@ -148,7 +148,7 @@
 
                     var findStr2 = '{{' + keys[item2] + '}}';
 
-                    if (chldrn[j].nodeType === 3) {
+                    if (chldrn[j].nodeType === 3 || chldrn[j].nodeType === 11) {
                         if (chldrn[j].textContent.indexOf(findStr2) !== -1) {
                             appObject.cachedNodes.push({node: chldrn[j], key: keys[item2], value: chldrn[j].textContent});
                         }
