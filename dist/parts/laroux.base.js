@@ -298,7 +298,6 @@
             return results;
         };
     }
-    */
 
     if (!('indexOf' in Array.prototype)) {
         Array.prototype.indexOf = function(object, start) {
@@ -311,6 +310,7 @@
             return -1;
         };
     }
+    */
 
 })(this);
 ;(function(global) {
@@ -435,12 +435,26 @@
                 break;
             }
 
-            if (!dontSkipReturns && typeof result !== 'undefined') {
+            if (!dontSkipReturns && result !== undefined) {
                 results.push(result);
             }
         }
 
         return results;
+    };
+
+    laroux.index = function(arr, value, testOwnProperties) {
+        for (var item in arr) {
+            if (testOwnProperties && !arr.hasOwnProperty(item)) {
+                continue;
+            }
+
+            if (arr[item] === object) {
+                return item;
+            }
+        }
+
+        return null;
     };
 
     laroux.aeach = function(arr, fnc) {
@@ -453,7 +467,7 @@
         return arr;
     };
 
-    laroux.amap = function(arr, fnc) {
+    laroux.amap = function(arr, fnc, dontSkipReturns) {
         var results = [];
 
         for (var i = 0, length = arr.length; i < length; i++) {
@@ -462,7 +476,7 @@
                 break;
             }
 
-            if (result !== undefined) {
+            if (!dontSkipReturns && result !== undefined) {
                 results.unshift(result);
             }
         }
@@ -470,7 +484,22 @@
         return results;
     };
 
+    laroux.aindex = function(arr, value, start) {
+        for (var i = (start || 0), length = arr.length; i < length; i++) {
+            if (arr[i] === object) {
+                return i;
+            }
+        }
+
+        return -1;
+    };
+
     // initialization
+    // if (typeof module !== 'undefined' && module.exports !== undefined) {
+    //     module.exports = laroux;
+    // } else {
+    //     global.$l = global.laroux = laroux;
+    // }
     global.$l = global.laroux = laroux;
 
     document.addEventListener(
@@ -1271,14 +1300,43 @@
             var elements = laroux.helpers.getAsArray(element);
 
             for (var i1 = 0, length1 = elements.length; i1 < length1; i1++) {
-                for (var i2 = 0, length2 = laroux.dom.eventHistory; i2 < length2; i2++) {
+                for (var i2 = 0, length2 = laroux.dom.eventHistory.length; i2 < length2; i2++) {
                     var item = laroux.dom.eventHistory[i2];
-                    if (item.element === element && item.eventname === eventname && item.fnc === fnc) {
-                        elements[i1].removeEventListener(eventname, item.fncWrapper, false);
-                        delete laroux.dom.eventHistory[i2];
+
+                    if (item === undefined) {
+                        continue;
                     }
+
+                    if (item.element !== elements[i1]) {
+                        continue;
+                    }
+
+                    if (eventname !== undefined && item.eventname !== eventname) {
+                        continue;
+                    }
+
+                    if (fnc !== undefined && item.fnc !== fnc) {
+                        continue;
+                    }
+
+                    item.element.removeEventListener(item.eventname, item.fncWrapper, false);
+                    delete laroux.dom.eventHistory[i2];
                 }
             }
+        },
+
+        dispatchEvent: function(element, eventname, data) {
+            var customEvent = document.createEvent('Event');
+            for (var item in data) {
+                if (!data.hasOwnProperty(item)) {
+                    continue;
+                }
+
+                customEvent[item] = data[item];
+            }
+
+            customEvent.initEvent(eventname, true, true);
+            element.dispatchEvent(customEvent);
         },
 
         create: function(html) {
@@ -2104,6 +2162,154 @@
 ;(function(laroux) {
     'use strict';
 
+    // requires $l.dom
+    // requires $l.forms
+
+    // keys
+    laroux.keys = {
+        keyName: function(keycode) {
+            keycode = keycode.toLowerCase();
+
+            switch (keycode) {
+                case 'backspace':
+                    return 8;
+
+                case 'tab':
+                    return 9;
+
+                case 'enter':
+                case 'return':
+                    return 13;
+
+                case 'esc':
+                case 'escape':
+                    return 27;
+
+                case 'space':
+                    return 32;
+
+                case 'pgup':
+                    return 33;
+
+                case 'pgdn':
+                    return 34;
+
+                case 'end':
+                    return 35;
+
+                case 'home':
+                    return 36;
+
+                case 'left':
+                    return 37;
+
+                case 'up':
+                    return 38;
+
+                case 'right':
+                    return 39;
+
+                case 'down':
+                    return 40;
+
+                case 'insert':
+                    return 45;
+
+                case 'delete':
+                    return 46;
+
+                case 'f1':
+                    return 112;
+
+                case 'f2':
+                    return 113;
+
+                case 'f3':
+                    return 114;
+
+                case 'f4':
+                    return 115;
+
+                case 'f5':
+                    return 116;
+
+                case 'f6':
+                    return 117;
+
+                case 'f7':
+                    return 118;
+
+                case 'f8':
+                    return 119;
+
+                case 'f9':
+                    return 120;
+
+                case 'f10':
+                    return 121;
+
+                case 'f11':
+                    return 122;
+
+                case 'f12':
+                    return 123;
+
+                case ',':
+                    return 188;
+
+                case '.':
+                    return 190;
+            }
+
+            return String.fromCharCode(keycode);
+        },
+
+        // {target, key, shift, ctrl, alt, disableInputs, fnc}
+        assign: function(options) {
+            var wrapper = function(event) {
+                if (!event) {
+                    event = window.event;
+                }
+
+                var element = event.target || event.srcElement;
+                if (element.nodeType === 3 || element.nodeType === 11) {
+                    element = element.parentNode;
+                }
+
+                if (options.disableInputs && laroux.forms.isFormField(element)) {
+                    return;
+                }
+
+                if (options.shift && !event.shiftKey) {
+                    return;
+                }
+
+                if (options.ctrl && !event.ctrlKey) {
+                    return;
+                }
+
+                if (options.alt && !event.altKey) {
+                    return;
+                }
+
+                var key = laroux.keys.keyName(options.key);
+                if (key !== (event.keyCode || event.which)) {
+                    return;
+                }
+
+                options.fnc(event);
+
+                return false;
+            };
+
+            laroux.dom.setEvent(options.target || document, 'keydown', wrapper);
+        }
+    };
+
+})(this.laroux);
+;(function(laroux) {
+    'use strict';
+
     // requires $l
 
     // timers
@@ -2179,6 +2385,143 @@
 ;(function(laroux) {
     'use strict';
 
+    // requires $l.dom
+
+    // touch - partially taken from 'tocca.js' project
+    //         can be found at: https://github.com/GianlucaGuarini/Tocca.js
+    laroux.touch = {
+        touchStarted: null,
+        swipeTreshold: 80,
+        precision: 30,
+        tapCount: 0,
+        tapTreshold: 200,
+        longTapTreshold: 800,
+        tapTimer: null,
+        pos: null,
+        cached: null,
+
+        events: {
+            start: ['touchstart', 'pointerdown', 'MSPointerDown', 'mousedown'],
+            end: ['touchend', 'pointerup', 'MSPointerUp', 'mouseup'],
+            move: ['touchmove', 'pointermove', 'MSPointerMove', 'mousemove']
+        },
+
+        locatePointer: function(event) {
+            if (event.targetTouches) {
+                event = event.targetTouches[0];
+            }
+
+            laroux.touch.pos = [event.pageX, event.pageY];
+        },
+
+        onstart: function(event) {
+            laroux.touch.locatePointer(event);
+            laroux.touch.cached = [laroux.touch.pos[0], laroux.touch.pos[1]];
+            laroux.touch.touchStarted = Date.now();
+            laroux.touch.tapCount++;
+
+            var fnc = function() {
+                if (
+                    laroux.touch.cached[0] >= laroux.touch.pos[0] - laroux.touch.precision &&
+                    laroux.touch.cached[0] <= laroux.touch.pos[0] + laroux.touch.precision &&
+                    laroux.touch.cached[1] >= laroux.touch.pos[1] - laroux.touch.precision &&
+                    laroux.touch.cached[1] <= laroux.touch.pos[1] + laroux.touch.precision
+                ) {
+                    if (laroux.touch.touchStarted === null) {
+                        laroux.dom.dispatchEvent(
+                            event.target,
+                            (laroux.touch.tapCount === 2) ? 'dbltap' : 'tap',
+                            {
+                                innerEvent: event,
+                                x: laroux.touch.pos[0],
+                                y: laroux.touch.pos[1],
+                            }
+                        );
+
+                        laroux.touch.tapCount = 0;
+                        return;
+                    }
+
+                    if (Date.now() - laroux.touch.touchStarted > laroux.touch.longTapTreshold) {
+                        laroux.dom.dispatchEvent(
+                            event.target,
+                            'longtap',
+                            {
+                                innerEvent: event,
+                                x: laroux.touch.pos[0],
+                                y: laroux.touch.pos[1],
+                            }
+                        );
+
+                        laroux.touch.touchStarted = null;
+                        laroux.touch.tapCount = 0;
+                        return;
+                    }
+
+                    laroux.tapTimer = setTimeout(fnc, laroux.touch.tapTreshold);
+                    return;
+                }
+
+                laroux.touch.tapCount = 0;
+            };
+
+            clearTimeout(laroux.tapTimer);
+            laroux.tapTimer = setTimeout(fnc, laroux.touch.tapTreshold);
+        },
+
+        onend: function(event) {
+            var delta = [
+                    laroux.touch.pos[0] - laroux.touch.cached[0],
+                    laroux.touch.pos[1] - laroux.touch.cached[1]
+                ],
+                data = {
+                    innerEvent: event,
+                    x: laroux.touch.pos[0],
+                    y: laroux.touch.pos[1],
+                    distance: {
+                        x: Math.abs(delta[0]),
+                        y: Math.abs(delta[1])
+                    }
+                };
+
+            laroux.touch.touchStarted = null;
+
+            if (delta[0] <= -laroux.touch.swipeTreshold) {
+                laroux.dom.dispatchEvent(event.target, 'swiperight', data);
+            }
+
+            if (delta[0] >= laroux.touch.swipeTreshold) {
+                laroux.dom.dispatchEvent(event.target, 'swipeleft', data);
+            }
+
+            if (delta[1] <= -laroux.touch.swipeTreshold) {
+                laroux.dom.dispatchEvent(event.target, 'swipedown', data);
+            }
+
+            if (delta[1] >= laroux.touch.swipeTreshold) {
+                laroux.dom.dispatchEvent(event.target, 'swipeup', data);
+            }
+        }
+    };
+
+    laroux.ready(function() {
+        var events = [
+            0,
+            (navigator.msPointerEnabled) ? 2 : 1,
+            3
+        ];
+
+        for (var i = 0, length = events.length; i < length; i++) {
+            laroux.dom.setEventSingle(document, laroux.touch.events.start[events[i]], laroux.touch.onstart);
+            laroux.dom.setEventSingle(document, laroux.touch.events.end[events[i]], laroux.touch.onend);
+            laroux.dom.setEventSingle(document, laroux.touch.events.move[events[i]], laroux.touch.locatePointer);
+        }
+    });
+
+})(this.laroux);
+;(function(laroux) {
+    'use strict';
+
     // requires $l.helpers
 
     // triggers
@@ -2194,7 +2537,7 @@
                     continue;
                 }
 
-                if (laroux.triggers.list.indexOf(conditions[item]) == -1) {
+                if (laroux.aindex(laroux.triggers.list, conditions[item]) === -1) {
                     laroux.triggers.list.push(conditions[item]);
                 }
             }
@@ -2207,8 +2550,8 @@
         },
 
         ontrigger: function(triggerName, args) {
-            var eventIdx = laroux.triggers.list.indexOf(triggerName);
-            if (eventIdx != -1) {
+            var eventIdx = laroux.aindex(laroux.triggers.list, triggerName);
+            if (eventIdx !== -1) {
                 laroux.triggers.list.splice(eventIdx, 1);
             }
 
@@ -2228,7 +2571,7 @@
 
                     var conditionObj = currentItem.conditions[conditionKey];
 
-                    if (laroux.triggers.list.indexOf(conditionObj) != -1) {
+                    if (laroux.aindex(laroux.triggers.list, conditionObj) !== -1) {
                         count++;
                         // break;
                     }

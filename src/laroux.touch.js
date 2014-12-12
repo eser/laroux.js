@@ -75,7 +75,10 @@
                     }
 
                     laroux.tapTimer = setTimeout(fnc, laroux.touch.tapTreshold);
+                    return;
                 }
+
+                laroux.touch.tapCount = 0;
             };
 
             clearTimeout(laroux.tapTimer);

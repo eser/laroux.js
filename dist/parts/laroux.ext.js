@@ -521,7 +521,7 @@
 
                     var findStr2 = '{{' + keys[item2] + '}}';
 
-                    if (chldrn[j].nodeType === 3) {
+                    if (chldrn[j].nodeType === 3 || chldrn[j].nodeType === 11) {
                         if (chldrn[j].textContent.indexOf(findStr2) !== -1) {
                             appObject.cachedNodes.push({node: chldrn[j], key: keys[item2], value: chldrn[j].textContent});
                         }
@@ -600,7 +600,7 @@
 
                 var item3 = appObject.cachedNodes[i3];
 
-                if (keys !== undefined && keys.indexOf(item3.key) === -1) {
+                if (keys !== undefined && laroux.aindex(keys, item3.key) === -1) {
                     continue;
                 }
 
@@ -618,7 +618,7 @@
 
                 var item4 = appObject.cachedNodes[i4];
 
-                if (keys !== undefined && keys.indexOf(item4.key) === -1) {
+                if (keys !== undefined && laroux.aindex(keys, item4.key) === -1) {
                     continue;
                 }
 
@@ -639,7 +639,7 @@
 
                 var item5 = appObject.boundElements[i5];
 
-                if (keys !== undefined && keys.indexOf(item5.key) === -1) {
+                if (keys !== undefined && laroux.aindex(keys, item5.key) === -1) {
                     continue;
                 }
 
@@ -757,7 +757,7 @@
 
                                 // this.set(this, key, newValue);
                                 this._data[key] = newValue;
-                                this._top.onupdate(this, key, oldValue, newValue);
+                                this._top.onupdate({scope: this, key: key, oldValue: oldValue, newValue: newValue});
                             }
                         }
                     );
@@ -825,7 +825,7 @@
             this._data = {};
         };
 
-        this.onupdate = function(scope, key, oldValue, newValue) {
+        this.onupdate = function(event) {
         };
 
         if (data) {
@@ -842,32 +842,89 @@
     // templates
     laroux.templates = {
         engines: {
-            hogan: function(template, model, options) {
-                var compiled = Hogan.compile(template, options);
-                return compiled.render(model);
+            plain: {
+                compile: function(template, options) {
+                    return [template, options];
+                },
+
+                render: function(compiled, model) {
+                    var result = compiled[0];
+
+                    for (var item in model) {
+                        if (!model.hasOwnProperty(item)) {
+                            continue;
+                        }
+
+                        result = result.replace('{{' + item + '}}', model[item]);
+                    }
+
+                    return result;
+                }
             },
 
-            lodash: function(template, model, options) {
-                var compiled = _.template(template, null, options);
-                return compiled(model);
+            hogan: {
+                compile: function(template, options) {
+                    return Hogan.compile(template, options);
+                },
+
+                render: function(compiled, model) {
+                    return compiled.render(model);
+                }
+            },
+
+            mustache: {
+                compile: function(template, options) {
+                    return Mustache.compile(template, options);
+                },
+
+                render: function(compiled, model) {
+                    return compiled(model);
+                }
+            },
+
+            handlebars: {
+                compile: function(template, options) {
+                    return Handlebars.compile(template, options);
+                },
+
+                render: function(compiled, model) {
+                    return compiled(model);
+                }
+            },
+
+            lodash: {
+                compile: function(template, options) {
+                    return _.compile(template, null, options);
+                },
+
+                render: function(compiled, model) {
+                    return compiled(model);
+                }
+            },
+
+            underscore: {
+                compile: function(template, options) {
+                    return _.compile(template, null, options);
+                },
+
+                render: function(compiled, model) {
+                    return compiled(model);
+                }
             }
         },
-        engine: 'hogan',
+        engine: 'plain',
 
         apply: function(element, model, options) {
-            var content;
+            var content, engine = laroux.templates.engines[laroux.templates.engine];
 
-            if (chldrn[j].nodeType === 3) {
+            if (element.nodeType === 3 || element.nodeType === 11) {
                 content = element.textContent;
             } else {
                 content = element.nodeValue;
             }
 
-            return laroux.templates.engines[laroux.templates.engine](
-                content,
-                model,
-                options
-            );
+            var compiled = engine.compile(content, options);
+            return engine.render(compiled, model);
         },
 
         insert: function(element, model, target, position, options) {
