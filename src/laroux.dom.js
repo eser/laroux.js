@@ -118,12 +118,27 @@
             var elements = laroux.helpers.getAsArray(element);
 
             for (var i1 = 0, length1 = elements.length; i1 < length1; i1++) {
-                for (var i2 = 0, length2 = laroux.dom.eventHistory; i2 < length2; i2++) {
+                for (var i2 = 0, length2 = laroux.dom.eventHistory.length; i2 < length2; i2++) {
                     var item = laroux.dom.eventHistory[i2];
-                    if (item.element === element && item.eventname === eventname && item.fnc === fnc) {
-                        elements[i1].removeEventListener(eventname, item.fncWrapper, false);
-                        delete laroux.dom.eventHistory[i2];
+
+                    if (item === undefined) {
+                        continue;
                     }
+
+                    if (item.element !== elements[i1]) {
+                        continue;
+                    }
+
+                    if (eventname !== undefined && item.eventname !== eventname) {
+                        continue;
+                    }
+
+                    if (fnc !== undefined && item.fnc !== fnc) {
+                        continue;
+                    }
+
+                    item.element.removeEventListener(item.eventname, item.fncWrapper, false);
+                    delete laroux.dom.eventHistory[i2];
                 }
             }
         },
