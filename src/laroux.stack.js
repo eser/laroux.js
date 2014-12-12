@@ -54,7 +54,7 @@
 
                                 // this.set(this, key, newValue);
                                 this._data[key] = newValue;
-                                this._top.onupdate(this, key, oldValue, newValue);
+                                this._top.onupdate({scope: this, key: key, oldValue: oldValue, newValue: newValue});
                             }
                         }
                     );
@@ -122,7 +122,7 @@
             this._data = {};
         };
 
-        this.onupdate = function(scope, key, oldValue, newValue) {
+        this.onupdate = function(event) {
         };
 
         if (data) {
