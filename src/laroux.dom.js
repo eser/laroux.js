@@ -143,6 +143,20 @@
             }
         },
 
+        dispatchEvent: function(element, eventname, data) {
+            var customEvent = document.createEvent('Event');
+            for (var item in data) {
+                if (!data.hasOwnProperty(item)) {
+                    continue;
+                }
+
+                customEvent[item] = data[item];
+            }
+
+            customEvent.initEvent(eventname, true, true);
+            element.dispatchEvent(customEvent);
+        },
+
         create: function(html) {
             var frag = document.createDocumentFragment(),
                 temp = document.createElement('DIV');

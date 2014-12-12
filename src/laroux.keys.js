@@ -4,8 +4,8 @@
     // requires $l.dom
     // requires $l.forms
 
-    // shortcut
-    laroux.shortcut = {
+    // keys
+    laroux.keys = {
         keyName: function(keycode) {
             keycode = keycode.toLowerCase();
 
@@ -131,7 +131,7 @@
                     return;
                 }
 
-                var key = laroux.shortcut.keyName(options.key);
+                var key = laroux.keys.keyName(options.key);
                 if (key !== (event.keyCode || event.which)) {
                     return;
                 }

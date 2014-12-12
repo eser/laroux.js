@@ -10,11 +10,12 @@
         <script src="../src/laroux.events.js"></script>
         <script src="../src/laroux.forms.js"></script>
         <script src="../src/laroux.helpers.js"></script>
+        <script src="../src/laroux.keys.js"></script>
         <script src="../src/laroux.mvc.js"></script>
-        <script src="../src/laroux.shortcut.js"></script>
         <script src="../src/laroux.stack.js"></script>
         <script src="../src/laroux.templates.js"></script>
         <script src="../src/laroux.timers.js"></script>
+        <script src="../src/laroux.touch.js"></script>
         <script src="../src/laroux.triggers.js"></script>
         <script src="../src/laroux.ui.js"></script>
         <script src="../src/laroux.vars.js"></script>
@@ -33,11 +34,27 @@
                 $l.ui.init();
 
                 var movingObject = $l('#moving-object');
-                $l.css.setProperty(movingObject, { position: 'absolute', backgroundColor: 'red', left: '450px' });
+                $l.css.setProperty(movingObject, { position: 'absolute', backgroundColor: 'red', left: '450px', userSelect: 'none', webkitUserSelect: 'none' });
                 // $l.anim.setCss({ object: movingObject, property: 'top', from: 50, to: 200, time: 2000, unit: 'px', reset: true });
                 // $l.anim.setCss({ object: movingObject, property: 'font-size', from: null, to: 30, time: 1200, unit: 'pt', reset: true });
                 $l.css.setTransition(movingObject, [ 'background-color 3s ease', 'padding 3s ease' ]);
                 $l.css.setProperty(movingObject, { 'background-color': 'silver', 'padding': '50px' });
+
+                $l.dom.setEvent(
+                    movingObject,
+                    'dbltap',
+                    function(event) {
+                        console.log(event);
+                    }
+                );
+
+                $l.dom.setEvent(
+                    movingObject,
+                    'longtap',
+                    function(event) {
+                        console.log('long', event);
+                    }
+                );
 
                 // $l.ajax.getScript(
                 //     'test.js',

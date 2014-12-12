@@ -38,7 +38,9 @@ module.exports = function(grunt) {
                     'src/laroux.events.js',
                     'src/laroux.forms.js',
                     'src/laroux.helpers.js',
+                    'src/laroux.keys.js',
                     'src/laroux.timers.js',
+                    'src/laroux.touch.js',
                     'src/laroux.triggers.js',
                     'src/laroux.vars.js'
                 ],
