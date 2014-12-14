@@ -27,6 +27,7 @@
                     break;
 
                 default:
+                    /*
                     if (type == 'object') {
                         this._data[key] = new laroux.stack(
                             value,
@@ -38,6 +39,8 @@
                     } else {
                         this._data[key] = value;
                     }
+                    */
+                    this._data[key] = value;
 
                     Object.defineProperty(
                         this,

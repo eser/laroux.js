@@ -42,9 +42,17 @@
 
                 $l.dom.setEvent(
                     movingObject,
+                    'tap',
+                    function(event) {
+                        console.log('tap', event);
+                    }
+                );
+
+                $l.dom.setEvent(
+                    movingObject,
                     'dbltap',
                     function(event) {
-                        console.log(event);
+                        console.log('dbltap', event);
                     }
                 );
 
@@ -52,7 +60,7 @@
                     movingObject,
                     'longtap',
                     function(event) {
-                        console.log('long', event);
+                        console.log('longtap', event);
                     }
                 );
 
@@ -69,10 +77,16 @@
                 //     }
                 // );
 
-                var newApp = { hello: 'merhaba', name: 'eser', favoritecolor: 'darkorange', x: { y: 'nice' } };
+                var newApp = new $l.stack({
+                    hello: 'merhaba',
+                    name: 'eser',
+                    favoritecolor: 'darkorange',
+                    x: {
+                        y: 'nice'
+                    }
+                });
 
-                $l.mvc.init();
-                $l.mvc.bind('deneme', newApp);
+                $l.mvc.init($l.id('deneme'), newApp);
 
                 $l.dom.setEvent(
                     $l('#clickme'),
@@ -90,15 +104,15 @@
 
         <div id="moving-object">MOVE</div>
 
-        <div lr-app="deneme">
-            {{hello}}
+        <div id="deneme">
+            <span lr-bind="content: hello"></span>
 
-            <span style="color: {{favoritecolor}};">{{name}}</span>
-            <span>{{x.y}}</span>
+            <span lr-bind="style.color: favoritecolor, content: name"></span>
+            <span lr-bind="content: x.y"></span>
 
-            <input type="text" lr-bind="name" />
+            <input type="text" lr-event="change" lr-bind="value: name" />
 
-            <input id="clickme" type="button" value="Change Bound" />
+            <input id="clickme" type="button" value="Change Bound" lr-event="click" lr-bind="value: name" lr-value="eser" />
         </div>
 
         <div id="late-content">

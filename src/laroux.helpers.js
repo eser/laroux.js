@@ -231,7 +231,7 @@
 
                 keys.push(prefix + item);
 
-                if (obj[item] !== null && obj[item].constructor === Object) {
+                if (obj[item] !== undefined && obj[item] !== null && obj[item].constructor === Object) {
                     laroux.helpers.getKeysRecursive(obj[item], delimiter, prefix + item + delimiter, keys);
                     continue;
                 }
