@@ -48,15 +48,10 @@
             laroux.mvc.update(appKey);
 
             var fnc = function(ev, elem) {
-                var setFields = elem.getAttribute('lr-set');
-                if (setFields === null) {
-                    return;
-                }
-
-                var binding = laroux.mvc.bindStringParser(setFields);
+                var binding = laroux.mvc.bindStringParser(elem.getAttribute('lr-event'));
                 // laroux.mvc.pauseUpdate = true;
                 for (var item in binding) {
-                    if (!binding.hasOwnProperty(item)) {
+                    if (item === null || !binding.hasOwnProperty(item)) {
                         continue;
                     }
 
@@ -74,7 +69,7 @@
             for (var i = 0, length = app.eventElements.length; i < length; i++) {
                 laroux.dom.setEvent(
                     app.eventElements[i].element,
-                    app.eventElements[i].event,
+                    app.eventElements[i].binding[null],
                     fnc
                 );
             }
@@ -83,26 +78,28 @@
         scanElements: function(app, element) {
             for (var i = 0, atts = element.attributes, m = atts.length; i < m; i++) {
                 if (atts[i].name == 'lr-bind') {
-                    var binding = laroux.mvc.bindStringParser(atts[i].value);
+                    var binding1 = laroux.mvc.bindStringParser(atts[i].value);
 
-                    for (var item in binding) {
-                        if (!binding.hasOwnProperty(item)) {
+                    for (var item in binding1) {
+                        if (!binding1.hasOwnProperty(item)) {
                             continue;
                         }
 
-                        if (app.boundElements[binding[item]] === undefined) {
-                            app.boundElements[binding[item]] = [];
+                        if (app.boundElements[binding1[item]] === undefined) {
+                            app.boundElements[binding1[item]] = [];
                         }
 
-                        app.boundElements[binding[item]].push({
+                        app.boundElements[binding1[item]].push({
                             element: element,
                             target: item
                         });
                     }
                 } else if (atts[i].name == 'lr-event') {
+                    var binding2 = laroux.mvc.bindStringParser(atts[i].value);
+
                     app.eventElements.push({
                         element: element,
-                        event: atts[i].value
+                        binding: binding2
                     });
                 }
             }
@@ -129,9 +126,7 @@
                 var boundElement = app.boundElements[keys[i]];
 
                 for (var j = 0, length2 = boundElement.length; j < length2; j++) {
-                    if (boundElement[j].target == 'content') {
-                        boundElement[j].element.textContent = laroux.helpers.getElement(app.model, keys[i]);
-                    } else if (boundElement[j].target.substring(0, 6) == 'style.') {
+                    if (boundElement[j].target.substring(0, 6) == 'style.') {
                         boundElement[j].element.style[boundElement[j].target.substring(6)] = laroux.helpers.getElement(app.model, keys[i]);
                     } else if (boundElement[j].target.substring(0, 5) == 'attr.') {
                         // FIXME removeAttribute on null value?

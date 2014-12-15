@@ -105,17 +105,17 @@
         <div id="moving-object">MOVE</div>
 
         <div id="deneme">
-            <span lr-bind="content: hello"></span>
+            <span lr-bind="prop.textContent: hello"></span>
 
-            <span lr-bind="style.color: favoritecolor, content: name"></span>
-            <span lr-bind="content: x.y"></span>
+            <span lr-bind="style.color: favoritecolor, prop.textContent: name"></span>
+            <span lr-bind="prop.textContent: x.y"></span>
 
-            <input type="text" lr-event="keyup" lr-bind="prop.value: name" lr-set="name: prop.value" />
+            <input type="text" lr-event="keyup, name: prop.value" lr-bind="prop.value: name" />
 
             <br />
 
             <input id="clickme" type="button" value="Change Bound I" />
-            <input type="button" value="Change Bound II" lr-event="click" lr-set="hello: 'halo', favoritecolor: 'green'" />
+            <input type="button" value="Change Bound II" lr-event="click, hello: 'halo', favoritecolor: 'green'" />
         </div>
 
     </body>
