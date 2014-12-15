@@ -48,3 +48,15 @@
 .snippet-area {
     margin: 30px 0 50px 0;
 }
+
+h1, h2, h3, h4, h5, h6, blockquote, .lead {
+    font-family: 'Roboto';
+}
+
+h1 {
+    font-weight: 700;
+}
+
+ul {
+    list-style-image: url(../images/bullet.png);
+}

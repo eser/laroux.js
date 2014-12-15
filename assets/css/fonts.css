@@ -1,0 +1,19 @@
+@font-face {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 300;
+  src:  local('Roboto Light'),
+  		local('Roboto-Light'),
+  		url(../fonts/Roboto-Light.woff2) format('woff2'),
+  		url(../fonts/Roboto-Light.woff) format('woff');
+}
+
+@font-face {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 700;
+  src: local('Roboto Bold'),
+       local('Roboto-Bold'),
+       url(../fonts/Roboto-Bold.woff2) format('woff2'),
+       url(../fonts/Roboto-Bold.woff) format('woff');
+}
