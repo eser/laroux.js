@@ -267,8 +267,8 @@ $l.dom.append(text, $l.date.getLongDateString(now) + '&lt;br /&gt;');
 $l.dom.append(text, '&lt;div&gt;&lt;strong&gt;Long Date + month names:&lt;/strong&gt;&lt;/div&gt;');
 $l.dom.append(text, $l.date.getLongDateString(now, true) + '&lt;br /&gt;');
 
-$l.dom.append(text, '&lt;div&gt;&lt;strong&gt;Long Date + month names + time:&lt;/strong&gt;&lt;/div&gt;');
-$l.dom.append(text, $l.date.getLongDateString(now, true, true) + '&lt;br /&gt;');
+$l.dom.append(text, '&lt;div&gt;&lt;strong&gt;Custom Date:&lt;/strong&gt;&lt;/div&gt;');
+$l.dom.append(text, $l.date.getCustomDateString('dd/MM/yyyy HH:ss', now) + '&lt;br /&gt;');
                         </pre>
                     </div>
                 </div>
@@ -521,7 +521,7 @@ $l.dom.append(text, JSON.stringify($l.helpers.getKeysRecursive({id: 1, child: { 
                 <div class="row">
                     <div class="col-sm-4">
                         <div id="mvcsimple">
-                            Name: <input id="textbox-mvc-simple" type="text" value="" />
+                            Name: <input id="textbox-mvc-simple" type="text" value="" placeholder="Enter text" />
                             <br />
                             Entered: <span lr-bind="prop.textContent: name"></span>
                         </div>
@@ -530,7 +530,7 @@ $l.dom.append(text, JSON.stringify($l.helpers.getKeysRecursive({id: 1, child: { 
                         <h4>HTML</h4>
                         <pre class="prettyprint">
 &lt;div id="mvcsimple"&gt;
-    Name: &lt;input id="textbox-mvc-simple" type="text" value="" /&gt;
+    Name: &lt;input id="textbox-mvc-simple" type="text" value="" placeholder="Enter text" /&gt;
     &lt;br /&gt;
     Entered: &lt;span lr-bind="prop.textContent: name"&gt;
 &lt;/div&gt;

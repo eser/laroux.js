@@ -133,8 +133,8 @@
                 $l.dom.append(text, '<div><strong>Long Date + month names:</strong></div>');
                 $l.dom.append(text, $l.date.getLongDateString(now, true) + crlf);
 
-                $l.dom.append(text, '<div><strong>Long Date + month names + time:</strong></div>');
-                $l.dom.append(text, $l.date.getLongDateString(now, true, true) + crlf);
+                $l.dom.append(text, '<div><strong>Custom Date:</strong></div>');
+                $l.dom.append(text, $l.date.getCustomDateString('dd/MM/yyyy HH:ss', now) + crlf);
 
                 return false;
             }
