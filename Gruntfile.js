@@ -29,7 +29,6 @@ module.exports = function(grunt) {
                     separator: ';'
                 },
                 src: [
-                    'src/laroux.backward.js',
                     'src/laroux.js',
                     'src/laroux.wrapper.js',
                     'src/laroux.ajax.js',
@@ -38,9 +37,7 @@ module.exports = function(grunt) {
                     'src/laroux.events.js',
                     'src/laroux.forms.js',
                     'src/laroux.helpers.js',
-                    'src/laroux.keys.js',
                     'src/laroux.timers.js',
-                    'src/laroux.touch.js',
                     'src/laroux.triggers.js',
                     'src/laroux.vars.js'
                 ],
@@ -53,9 +50,11 @@ module.exports = function(grunt) {
                 src: [
                     'src/laroux.anim.js',
                     'src/laroux.date.js',
+                    'src/laroux.keys.js',
                     'src/laroux.mvc.js',
                     'src/laroux.stack.js',
                     'src/laroux.templates.js',
+                    'src/laroux.touch.js',
                     'src/laroux.ui.js'
                 ],
                 dest: 'dist/parts/<%= pkg.name %>.ext.js'
