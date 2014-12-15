@@ -110,15 +110,13 @@
             <span lr-bind="style.color: favoritecolor, content: name"></span>
             <span lr-bind="content: x.y"></span>
 
-            <input type="text" lr-event="change" lr-bind="value: name" />
+            <input type="text" lr-event="keyup" lr-bind="prop.value: name" lr-set="name: prop.value" />
 
-            <input id="clickme" type="button" value="Change Bound" lr-event="click" lr-bind="value: name" lr-value="eser" />
+            <br />
+
+            <input id="clickme" type="button" value="Change Bound I" />
+            <input type="button" value="Change Bound II" lr-event="click" lr-set="hello: 'halo', favoritecolor: 'green'" />
         </div>
-
-        <div id="late-content">
-        </div>
-
-        <input id="clickme" type="button" value="Change" />
 
     </body>
 </html>
