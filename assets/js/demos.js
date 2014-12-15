@@ -302,7 +302,7 @@
     // mvc - Model Binding in two-way
     $l.ready(function() {
         var myModel = new $l.stack({
-            text: null
+            text: 'initial'
         });
 
         $l.mvc.init('mvctwoway', myModel);

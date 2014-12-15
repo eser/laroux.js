@@ -522,7 +522,7 @@ $l.dom.append(text, JSON.stringify($l.helpers.getKeysRecursive({id: 1, child: { 
                         <div id="mvcsimple">
                             Name: <input id="textbox-mvc-simple" type="text" value="" />
                             <br />
-                            Entered: <span lr-bind="content: name"></span>
+                            Entered: <span lr-bind="prop.textContent: name"></span>
                         </div>
                     </div>
                     <div class="col-sm-8">
@@ -531,7 +531,7 @@ $l.dom.append(text, JSON.stringify($l.helpers.getKeysRecursive({id: 1, child: { 
 &lt;div id="mvcsimple"&gt;
     Name: &lt;input id="textbox-mvc-simple" type="text" value="" /&gt;
     &lt;br /&gt;
-    Entered: &lt;span lr-bind="content: name"&gt;
+    Entered: &lt;span lr-bind="prop.textContent: name"&gt;
 &lt;/div&gt;
                         </pre>
 
@@ -560,20 +560,20 @@ $l.dom.setEvent(
                 <div class="row">
                     <div class="col-sm-4">
                         <div id="mvccalculation">
-                            A: <input type="text" name="a" value="3" size="3" lr-event="keyup" lr-set="a: prop.value" />
-                            B: <input type="text" name="b" value="5" size="3" lr-event="keyup" lr-set="b: prop.value" />
+                            A: <input type="text" name="a" value="3" size="3" lr-event="keyup, a: prop.value" />
+                            B: <input type="text" name="b" value="5" size="3" lr-event="keyup, b: prop.value" />
                             <br />
-                            Total: <span lr-bind="content: total"></span>
+                            Total: <span lr-bind="prop.textContent: total"></span>
                         </div>
                     </div>
                     <div class="col-sm-8">
                         <h4>HTML</h4>
                         <pre class="prettyprint">
 &lt;div id="mvccalculation"&gt;
-    A: &lt;input type="text" name="a" value="3" size="3" lr-event="keyup" lr-set="a: prop.value" /&gt;
-    B: &lt;input type="text" name="b" value="5" size="3" lr-event="keyup" lr-set="b: prop.value" /&gt;
+    A: &lt;input type="text" name="a" value="3" size="3" lr-event="keyup, a: prop.value" /&gt;
+    B: &lt;input type="text" name="b" value="5" size="3" lr-event="keyup, b: prop.value" /&gt;
     &lt;br /&gt;
-    Total: &lt;span lr-bind="content: total"&gt;&lt;/span&gt;
+    Total: &lt;span lr-bind="prop.textContent: total"&gt;&lt;/span&gt;
 &lt;/div&gt;
                         </pre>
 
@@ -596,27 +596,27 @@ $l.mvc.init('mvccalculation', myModel);
                 <div class="row">
                     <div class="col-sm-4">
                         <div id="mvctwoway">
-                            <input type="text" name="text" value="initial" lr-bind="prop.value: text" lr-event="keyup" lr-set="text: prop.value" />
-                            <input type="button" value="Set" lr-event="click" lr-set="text: 'clicked'" />
+                            <input type="text" name="text" lr-bind="prop.value: text" lr-event="keyup, text: prop.value" />
+                            <input type="button" value="Set" lr-event="click, text: 'clicked'" />
                             <br />
-                            Value: <span lr-bind="content: text"></span>
+                            Value: <span lr-bind="prop.textContent: text"></span>
                         </div>
                     </div>
                     <div class="col-sm-8">
                         <h4>HTML</h4>
                         <pre class="prettyprint">
 &lt;div id="mvctwoway"&gt;
-    &lt;input type="text" name="text" value="initial" lr-bind="prop.value: text" lr-event="keyup" lr-set="text: prop.value" /&gt;
-    &lt;input type="button" value="Set" lr-event="click" lr-set="text: 'clicked'" /&gt;
+    &lt;input type="text" name="text" lr-bind="prop.value: text" lr-event="keyup, text: prop.value" /&gt;
+    &lt;input type="button" value="Set" lr-event="click, text: 'clicked'" /&gt;
     &lt;br /&gt;
-    Value: &lt;span lr-bind="content: text"&gt;&lt;/span&gt;
+    Value: &lt;span lr-bind="prop.textContent: text"&gt;&lt;/span&gt;
 &lt;/div&gt;
                         </pre>
 
                         <h4>Javascript</h4>
                         <pre class="prettyprint">
 var myModel = new $l.stack({
-    text: null
+    text: 'initial'
 });
 
 $l.mvc.init('mvctwoway', myModel);
