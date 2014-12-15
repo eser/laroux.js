@@ -122,10 +122,10 @@
                 $l.dom.append(text, $l.date.parseEpoch(now.getTime() - yesterday.getTime()));
 
                 $l.dom.append(text, '<div><strong>Short Date:</strong></div>');
-                $l.dom.append(text, $l.date.getDateString(now) + crlf);
+                $l.dom.append(text, $l.date.getShortDateString(now) + crlf);
 
                 $l.dom.append(text, '<div><strong>Short Date + month names:</strong></div>');
-                $l.dom.append(text, $l.date.getDateString(now, true) + crlf);
+                $l.dom.append(text, $l.date.getShortDateString(now, true) + crlf);
 
                 $l.dom.append(text, '<div><strong>Long Date:</strong></div>');
                 $l.dom.append(text, $l.date.getLongDateString(now) + crlf);
@@ -266,60 +266,47 @@
         );
     });
 
-    // mvc
-    if (typeof Object.observe != 'undefined') {
-        $l.ready(function() {
-            $l.mvc.init();
+    // mvc - Simple Model Binding
+    $l.ready(function() {
+        var textbox = $l.id('textbox-mvc-simple');
+        var myModel = new $l.stack({
+            name: ''
         });
 
-        // mvc - Simple Model Binding
-        $l.ready(function() {
-            var textbox = $l.id('textbox-mvc-simple');
-            var myModel = {name: ''};
+        $l.mvc.init('mvcsimple', myModel);
 
-            $l.mvc.bind('mvcsimple', myModel);
+        $l.dom.setEvent(
+            textbox,
+            'keyup',
+            function(ev, element) {
+                myModel.name = element.value;
 
-            $l.dom.setEvent(
-                textbox,
-                'keyup',
-                function(ev, element) {
-                    myModel.name = element.value;
+                return false;
+            }
+        );
+    });
 
-                    return false;
-                }
-            );
+    // mvc - Model Binding with Controller
+    $l.ready(function() {
+        var myModel = new $l.stack({
+            a: 3,
+            b: 5,
+            total: function() {
+                return parseInt(this.a) + parseInt(this.b);
+            }
         });
 
-        // mvc - Model Binding with Controller
-        $l.ready(function() {
-            var textboxes = $l(['.textboxes-mvc-controller']);
-            var myModel = {a: 3, b: 5};
+        $l.mvc.init('mvccontroller', myModel);
+    });
 
-            var controller = function($model) {
-                $model.total = parseInt($model.a) + parseInt($model.b);
-            };
-
-            $l.mvc.bind('mvccontroller', myModel, controller);
-
-            $l.dom.setEvent(
-                textboxes,
-                'keyup',
-                function(ev, element) {
-                    myModel[element.getAttribute('name')] = element.value;
-
-                    return false;
-                }
-            );
+    // mvc - Model Binding in two-way
+    $l.ready(function() {
+        var myModel = new $l.stack({
+            text: null
         });
 
-
-        // mvc - Model Binding in two-way
-        $l.ready(function() {
-            var myModel = { text: null };
-
-            $l.mvc.bind('mvctwoway', myModel);
-        });
-    }
+        $l.mvc.init('mvctwoway', myModel);
+    });
 
     // stack - Examples
     $l.ready(function() {
@@ -331,8 +318,8 @@
             'click',
             function() {
                 var stack = new $l.stack();
-                stack.add('id', 1);
-                stack.addRange({count: 15, name: 'eser'});
+                stack.set('id', 1);
+                stack.setRange({count: 15, name: 'eser'});
 
                 $l.dom.clear(text);
 
@@ -352,7 +339,7 @@
                 $l.dom.append(text, JSON.stringify(stack.exists('name')) + crlf);
 
                 $l.dom.append(text, '<div><strong>All data:</strong></div>');
-                $l.dom.append(text, JSON.stringify(stack.data) + crlf);
+                $l.dom.append(text, JSON.stringify(stack._data) + crlf);
 
                 return false;
             }

@@ -255,10 +255,10 @@ $l.dom.append(text, '&lt;div&gt;&lt;strong&gt;From yesterday to today:&lt;/stron
 $l.dom.append(text, $l.date.parseEpoch(now.getTime() - yesterday.getTime()));
 
 $l.dom.append(text, '&lt;div&gt;&lt;strong&gt;Short Date:&lt;/strong&gt;&lt;/div&gt;');
-$l.dom.append(text, $l.date.getDateString(now) + '&lt;br /&gt;');
+$l.dom.append(text, $l.date.getShortDateString(now) + '&lt;br /&gt;');
 
 $l.dom.append(text, '&lt;div&gt;&lt;strong&gt;Short Date + month names:&lt;/strong&gt;&lt;/div&gt;');
-$l.dom.append(text, $l.date.getDateString(now, true) + '&lt;br /&gt;');
+$l.dom.append(text, $l.date.getShortDateString(now, true) + '&lt;br /&gt;');
 
 $l.dom.append(text, '&lt;div&gt;&lt;strong&gt;Long Date:&lt;/strong&gt;&lt;/div&gt;');
 $l.dom.append(text, $l.date.getLongDateString(now) + '&lt;br /&gt;');
@@ -519,26 +519,29 @@ $l.dom.append(text, JSON.stringify($l.helpers.getKeysRecursive({id: 1, child: { 
                 <h3>Simple Model Binding</h3>
                 <div class="row">
                     <div class="col-sm-4">
-                        Name: <input id="textbox-mvc-simple" type="text" value="" />
-                        <div lr-app="mvcsimple">
-                            Entered: {{name}}
+                        <div id="mvcsimple">
+                            Name: <input id="textbox-mvc-simple" type="text" value="" />
+                            <br />
+                            Entered: <span lr-bind="content: name"></span>
                         </div>
                     </div>
                     <div class="col-sm-8">
                         <h4>HTML</h4>
                         <pre class="prettyprint">
-Name: &lt;input id="textbox-mvc-simple" type="text" value="" /&gt;
-&lt;div lr-app="mvcsimple"&gt;
-    Entered: {{name}}
+&lt;div id="mvcsimple"&gt;
+    Name: &lt;input id="textbox-mvc-simple" type="text" value="" /&gt;
+    &lt;br /&gt;
+    Entered: &lt;span lr-bind="content: name"&gt;
 &lt;/div&gt;
                         </pre>
 
                         <h4>Javascript</h4>
                         <pre class="prettyprint">
-var myModel = { name: '' };
+var myModel = new $l.stack({
+    name: ''
+});
 
-$l.mvc.init();
-$l.mvc.bind('mvcsimple', myModel);
+$l.mvc.init('mvcsimple', myModel);
 
 $l.dom.setEvent(
     $l.id('textbox-mvc-simple'),
@@ -556,42 +559,35 @@ $l.dom.setEvent(
                 <h3>Model Binding with Controller</h3>
                 <div class="row">
                     <div class="col-sm-4">
-                        A: <input class="textboxes-mvc-controller" type="text" name="a" value="3" size="3" />
-                        B: <input class="textboxes-mvc-controller" type="text" name="b" value="5" size="3" />
-                        <div lr-app="mvccontroller">
-                            Total: {{total}}
+                        <div id="mvccontroller">
+                            A: <input type="text" name="a" value="3" size="3" lr-event="keyup" lr-set="a: prop.value" />
+                            B: <input type="text" name="b" value="5" size="3" lr-event="keyup" lr-set="b: prop.value" />
+                            <br />
+                            Total: <span lr-bind="content: total"></span>
                         </div>
                     </div>
                     <div class="col-sm-8">
                         <h4>HTML</h4>
                         <pre class="prettyprint">
-A: &lt;input class="textboxes-mvc-controller" type="text" name="a" value="3" size="3" /&gt;
-B: &lt;input class="textboxes-mvc-controller" type="text" name="b" value="5" size="3" /&gt;
-&lt;div lr-app="mvccontroller"&gt;
-    Total: {{total}}
+&lt;div id="mvccontroller"&gt;
+    A: &lt;input type="text" name="a" value="3" size="3" lr-event="keyup" lr-set="a: prop.value" /&gt;
+    B: &lt;input type="text" name="b" value="5" size="3" lr-event="keyup" lr-set="b: prop.value" /&gt;
+    &lt;br /&gt;
+    Total: &lt;span lr-bind="content: total"&gt;&lt;/span&gt;
 &lt;/div&gt;
                         </pre>
 
                         <h4>Javascript</h4>
                         <pre class="prettyprint">
-function mvccontroller($model) {
-    $model.total = parseInt($model.a) + parseInt($model.b);
-}
-
-var myModel = { a: 3, b: 5 };
-
-$l.mvc.init();
-$l.mvc.bind('mvccontroller', myModel);
-
-$l.dom.setEvent(
-    $l(['.textboxes-mvc-controller']),
-    'keyup',
-    function(ev, element) {
-        myModel[element.getAttribute('name')] = element.value;
-
-        return false;
+var myModel = new $l.stack({
+    a: 3,
+    b: 5,
+    total: function() {
+        return parseInt(this.a) + parseInt(this.b);
     }
-);
+});
+
+$l.mvc.init('mvccontroller', myModel);
                         </pre>
                     </div>
 
@@ -599,28 +595,31 @@ $l.dom.setEvent(
                 <h3>Model Binding in two-way</h3>
                 <div class="row">
                     <div class="col-sm-4">
-                        <div lr-app="mvctwoway">
-                            <input id="textbox-mvc-twoway" type="text" name="text" value="initial" lr-bind="text" />
-                            <input id="button-mvc-twoway" type="button" value="Set" lr-bind="text" lr-value="clicked" />
-                            Value: <span>{{text}}</span>
+                        <div id="mvctwoway">
+                            <input type="text" name="text" value="initial" lr-bind="prop.value: text" lr-event="keyup" lr-set="text: prop.value" />
+                            <input type="button" value="Set" lr-event="click" lr-set="text: 'clicked'" />
+                            <br />
+                            Value: <span lr-bind="content: text"></span>
                         </div>
                     </div>
                     <div class="col-sm-8">
                         <h4>HTML</h4>
                         <pre class="prettyprint">
-&lt;div lr-app="mvctwoway"&gt;
-    &lt;input id="textbox-mvc-twoway" type="text" name="text" value="initial" lr-bind="text" /&gt;
-    &lt;input id="button-mvc-twoway" type="button" value="Set" lr-bind="text" lr-value="clicked" /&gt;
-    Value: <span>{{text}}</span>
+&lt;div id="mvctwoway"&gt;
+    &lt;input type="text" name="text" value="initial" lr-bind="prop.value: text" lr-event="keyup" lr-set="text: prop.value" /&gt;
+    &lt;input type="button" value="Set" lr-event="click" lr-set="text: 'clicked'" /&gt;
+    &lt;br /&gt;
+    Value: &lt;span lr-bind="content: text"&gt;&lt;/span&gt;
 &lt;/div&gt;
                         </pre>
 
                         <h4>Javascript</h4>
                         <pre class="prettyprint">
-var myModel = { text: null };
+var myModel = new $l.stack({
+    text: null
+});
 
-$l.mvc.init();
-$l.mvc.bind('mvctwoway', myModel);
+$l.mvc.init('mvctwoway', myModel);
                         </pre>
                     </div>
                 </div>
@@ -651,8 +650,8 @@ $l.mvc.bind('mvctwoway', myModel);
                         <h4>Javascript</h4>
                         <pre class="prettyprint">
 var stack = new $l.stack();
-stack.add('id', 1);
-stack.addRange({count: 15, name: 'eser'});
+stack.set('id', 1);
+stack.setRange({count: 15, name: 'eser'});
 
 $l.dom.clear(text);
 
@@ -672,7 +671,7 @@ $l.dom.append(text, '&lt;div&gt;&lt;strong&gt;Check if it has element with key \
 $l.dom.append(text, JSON.stringify(stack.exists('name')) + '&lt;br /&gt;');
 
 $l.dom.append(text, '&lt;div&gt;&lt;strong&gt;All data:&lt;/strong&gt;&lt;/div&gt;');
-$l.dom.append(text, JSON.stringify(stack.data) + '&lt;br /&gt;');
+$l.dom.append(text, JSON.stringify(stack._data) + '&lt;br /&gt;');
 
                         </pre>
                     </div>
