@@ -3,6 +3,7 @@
 
     // requires $l.dom
     // requires $l.helpers
+    // requires $l.stack
 
     // mvc
     laroux.mvc = {
@@ -10,11 +11,19 @@
         pauseUpdate: false,
 
         init: function(element, model) {
+            if (element.constructor === String) {
+                element = laroux.dom.selectById(element);
+            }
+
+            // if (model.constructor !== laroux.stack) {
+            //     model = new laroux.stack(model);
+            // }
+
             var appKey = element.getAttribute('id');
 
             model.onupdate = function(event) {
                 if (!laroux.mvc.pauseUpdate) {
-                    laroux.mvc.update(appKey, [event.key]);
+                    laroux.mvc.update(appKey); // , [event.key]
                 }
             };
 
@@ -44,7 +53,7 @@
                     return;
                 }
 
-                var binding = laroux.mvc.bindStringParser(setFields)
+                var binding = laroux.mvc.bindStringParser(setFields);
                 // laroux.mvc.pauseUpdate = true;
                 for (var item in binding) {
                     if (!binding.hasOwnProperty(item)) {

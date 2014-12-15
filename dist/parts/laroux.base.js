@@ -486,7 +486,7 @@
 
     laroux.aindex = function(arr, value, start) {
         for (var i = (start || 0), length = arr.length; i < length; i++) {
-            if (arr[i] === object) {
+            if (arr[i] === value) {
                 return i;
             }
         }
@@ -2109,7 +2109,7 @@
 
                 keys.push(prefix + item);
 
-                if (obj[item] !== null && obj[item].constructor === Object) {
+                if (obj[item] !== undefined && obj[item] !== null && obj[item].constructor === Object) {
                     laroux.helpers.getKeysRecursive(obj[item], delimiter, prefix + item + delimiter, keys);
                     continue;
                 }

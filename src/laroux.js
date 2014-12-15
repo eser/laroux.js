@@ -171,7 +171,7 @@
 
     laroux.aindex = function(arr, value, start) {
         for (var i = (start || 0), length = arr.length; i < length; i++) {
-            if (arr[i] === object) {
+            if (arr[i] === value) {
                 return i;
             }
         }
