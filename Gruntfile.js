@@ -80,9 +80,11 @@ module.exports = function(grunt) {
 
                     'src/laroux.anim.js',
                     'src/laroux.date.js',
+                    'src/laroux.keys.js',
                     'src/laroux.mvc.js',
                     'src/laroux.stack.js',
                     'src/laroux.templates.js',
+                    'src/laroux.touch.js',
                     'src/laroux.ui.js'
                 ],
                 dest: 'dist/<%= pkg.name %>.js'
