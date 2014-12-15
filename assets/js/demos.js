@@ -286,7 +286,7 @@
         );
     });
 
-    // mvc - Model Binding with Controller
+    // mvc - Model Binding with Calculation
     $l.ready(function() {
         var myModel = new $l.stack({
             a: 3,
@@ -296,7 +296,7 @@
             }
         });
 
-        $l.mvc.init('mvccontroller', myModel);
+        $l.mvc.init('mvccalculation', myModel);
     });
 
     // mvc - Model Binding in two-way

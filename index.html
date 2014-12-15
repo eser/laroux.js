@@ -53,7 +53,7 @@
                         <img src="assets/images/logo-medium.png" />
                     </div>
                     <div class="col-md-9">
-                        <h1>laroux.js 1.4c</h1>
+                        <h1>laroux.js 1.5 preview</h1>
                         <div class="lead">
                             This project is a jQuery substitute for modern browsers and mobile devices. But instead of offering some wrappers and own dynamics, it simply provides helper functions to achieve the same objectives as jQuery or Zepto.
                         </div>
@@ -556,10 +556,10 @@ $l.dom.setEvent(
                     </div>
                 </div>
 
-                <h3>Model Binding with Controller</h3>
+                <h3>Model Binding with Calculation</h3>
                 <div class="row">
                     <div class="col-sm-4">
-                        <div id="mvccontroller">
+                        <div id="mvccalculation">
                             A: <input type="text" name="a" value="3" size="3" lr-event="keyup" lr-set="a: prop.value" />
                             B: <input type="text" name="b" value="5" size="3" lr-event="keyup" lr-set="b: prop.value" />
                             <br />
@@ -569,7 +569,7 @@ $l.dom.setEvent(
                     <div class="col-sm-8">
                         <h4>HTML</h4>
                         <pre class="prettyprint">
-&lt;div id="mvccontroller"&gt;
+&lt;div id="mvccalculation"&gt;
     A: &lt;input type="text" name="a" value="3" size="3" lr-event="keyup" lr-set="a: prop.value" /&gt;
     B: &lt;input type="text" name="b" value="5" size="3" lr-event="keyup" lr-set="b: prop.value" /&gt;
     &lt;br /&gt;
@@ -587,7 +587,7 @@ var myModel = new $l.stack({
     }
 });
 
-$l.mvc.init('mvccontroller', myModel);
+$l.mvc.init('mvccalculation', myModel);
                         </pre>
                     </div>
 
