@@ -17,34 +17,75 @@
         <link rel="shortcut icon" type="image/x-icon" href="favicon.ico" />
         <link rel="icon" type="image/x-icon" href="favicon.ico" />
     </head>
-    <body>
+    <body id="home">
 
-        <div id="home" class="container">
-
+        <div class="container">
             <!-- Static navbar -->
             <nav class="navbar navbar-default" role="navigation">
-                <div class="container-fluid">
-                    <div class="navbar-header">
-                        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-                            <span class="sr-only">Toggle navigation</span>
-                            <span class="icon-bar"></span>
-                            <span class="icon-bar"></span>
-                            <span class="icon-bar"></span>
-                        </button>
-                        <a class="navbar-brand" href="./">laroux.js</a>
-                    </div>
-                    <div id="navbar" class="navbar-collapse collapse">
-                        <ul class="nav navbar-nav">
-                            <li class="active"><a href="./">Demos</a></li>
-                            <li><a href="./snippets.html">Snippets</a></li>
-                            <li><a href="./benchmarks.html">Benchmarks</a></li>
-                            <li><a href="./faq.html">FAQ</a></li>
-                        </ul>
-                        <ul class="nav navbar-nav navbar-right">
-                            <li><a href="https://github.com/larukedi/laroux.js">GitHub Repository</a></li>
-                        </ul>
-                    </div><!--/.nav-collapse -->
-                </div><!--/.container-fluid -->
+                <div class="navbar-collapse">
+                    <ul class="nav navbar-nav">
+                        <li id="dropdown-toggle-element" class="dropdown mega-dropdown">
+                            <a href="#" id="dropdown-toggle-button" class="dropdown-toggle" data-toggle="dropdown">laroux.js <span class="glyphicon glyphicon-chevron-down pull-right"></span></a>
+                            <ul class="dropdown-menu mega-dropdown-menu row">
+                                <li class="col-sm-3">
+                                    <ul>
+                                        <li class="dropdown-header">Stable Version</li>
+                                    </ul>
+
+                                    <div class="box-large vertical-spaces">
+                                        <h2>1.4c</h2>
+                                    </div>
+
+                                    <button data-href="https://github.com/larukedi/laroux.js/releases/latest" class="btn btn-primary btn-href">Download</button>
+                                    <button data-href="https://github.com/larukedi/laroux.js/releases" class="btn btn-default btn-href">All Releases</button>
+                                </li>
+                                <li class="col-sm-3">
+                                    <ul>
+                                        <li class="dropdown-header">Base Components</li>
+                                        <li><a href="https://github.com/larukedi/laroux.js/wiki/ajax">Ajax</a></li>
+                                        <li><a href="https://github.com/larukedi/laroux.js/wiki/css">CSS</a></li>
+                                        <li><a href="https://github.com/larukedi/laroux.js/wiki/dom">DOM</a></li>
+                                        <li><a href="https://github.com/larukedi/laroux.js/wiki/events">Events</a></li>
+                                        <li><a href="https://github.com/larukedi/laroux.js/wiki/forms">Forms</a></li>
+                                        <li><a href="https://github.com/larukedi/laroux.js/wiki/helpers">Helpers</a></li>
+                                        <li><a href="https://github.com/larukedi/laroux.js/wiki/timers">Timers</a></li>
+                                    </ul>
+                                </li>
+                                <li class="col-sm-3">
+                                    <ul>
+                                        <li><a href="https://github.com/larukedi/laroux.js/wiki/triggers">Triggers</a></li>
+                                        <li><a href="https://github.com/larukedi/laroux.js/wiki/vars">Vars</a></li>
+                                        <li class="divider"></li>
+                                        <li class="dropdown-header">Extended</li>
+                                        <li><a href="https://github.com/larukedi/laroux.js/wiki/anim">Anim</a></li>
+                                        <li><a href="https://github.com/larukedi/laroux.js/wiki/date">Date</a></li>
+                                        <li><a href="https://github.com/larukedi/laroux.js/wiki/keys">Keys</a></li>
+                                        <li><a href="https://github.com/larukedi/laroux.js/wiki/mvc">MVC</a></li>
+                                    </ul>
+                                </li>
+                                <li class="col-sm-3">
+                                    <ul>
+                                        <li><a href="https://github.com/larukedi/laroux.js/wiki/stack">Stack</a></li>
+                                        <li><a href="https://github.com/larukedi/laroux.js/wiki/templates">Templates</a></li>
+                                        <li><a href="https://github.com/larukedi/laroux.js/wiki/touch">Touch</a></li>
+                                        <li><a href="https://github.com/larukedi/laroux.js/wiki/ui">UI</a></li>
+                                        <li><a href="https://github.com/larukedi/laroux.js/wiki/wrapper">Wrapper</a></li>
+                                        <li class="divider"></li>
+                                        <li class="dropdown-header">Need Help?</li>
+                                        <li><a href="https://github.com/larukedi/laroux.js/issues">GitHub Issues <span class="glyphicon glyphicon-chevron-right pull-right"></span></a></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+                        <li><a href="./">Demos</a></li>
+                        <li><a href="./snippets.html">Snippets</a></li>
+                        <li><a href="./benchmarks.html">Benchmarks</a></li>
+                        <li><a href="./faq.html">FAQ</a></li>
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><a href="https://github.com/larukedi/laroux.js">GitHub Repository</a></li>
+                    </ul>
+                </div>
             </nav>
 
             <!-- Main component for a primary marketing message or call to action -->
@@ -1032,7 +1073,8 @@ $l.dom.setEvent(
         </div>
 
         <script src="assets/js/prettify.min.js"></script>
-        <script src="assets/js/laroux.js"></script>
+        <script src="assets/js/laroux.min.js"></script>
+        <script src="assets/js/common.js"></script>
         <script src="assets/js/demos.js"></script>
     </body>
 </html>
