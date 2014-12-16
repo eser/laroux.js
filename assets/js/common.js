@@ -1,3 +1,13 @@
+function cycleElements(elements, className) {
+    for (var i = 0, length = elements.length; i < length; i++) {
+        if (elements[i].classList.contains(className)) {
+            elements[i].classList.remove(className);
+            elements[(i + 1) % length].classList.add(className);
+            return;
+        }
+    }
+}
+
 (function() {
     'use strict';
 
@@ -23,6 +33,15 @@
                 return false;
             }
         );
+
+        var slides = $l(['#slider .slide']);
+        $l.timers.set({
+            timeout: 6000,
+            reset: true,
+            ontick: function() {
+                cycleElements(slides, 'active');
+            }
+        });
     });
 
 })();
