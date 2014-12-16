@@ -37,7 +37,13 @@ So far, it has [Ajax](https://github.com/larukedi/laroux.js/wiki/ajax), [Anim](h
 
 
 ### Installation
-The latest version is always downloadable from [releases page](https://github.com/larukedi/laroux.js/releases), [laroux.min.js](//rawgit.com/larukedi/laroux.js/master/dist/laroux.min.js) and [laroux.min.css](//rawgit.com/larukedi/laroux.js/master/dist/laroux.min.css) also be found on `rawgit.com`. Including `laroux.min.js` and `laroux.min.css` would be enough to start using `laroux.js` in your web project. For example:
+The latest version is always downloadable from [releases page](https://github.com/larukedi/laroux.js/releases).
+
+
+The required files ([laroux.min.js](//rawgit.com/larukedi/laroux.js/master/dist/laroux.min.js) and [laroux.min.css](//rawgit.com/larukedi/laroux.js/master/dist/laroux.min.css)) can also be found at `rawgit.com`.
+
+
+Including these files would be enough to start using `laroux.js` in your web project. For example:
 
 ```html
 <link rel="stylesheet" href="//rawgit.com/larukedi/laroux.js/master/dist/laroux.min.css" />
