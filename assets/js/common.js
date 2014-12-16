@@ -1,13 +1,3 @@
-function cycleElements(elements, className) {
-    for (var i = 0, length = elements.length; i < length; i++) {
-        if (elements[i].classList.contains(className)) {
-            elements[i].classList.remove(className);
-            elements[(i + 1) % length].classList.add(className);
-            return;
-        }
-    }
-}
-
 (function() {
     'use strict';
 
@@ -36,10 +26,10 @@ function cycleElements(elements, className) {
 
         var slides = $l(['#slider .slide']);
         $l.timers.set({
-            timeout: 6000,
+            timeout: 8000,
             reset: true,
             ontick: function() {
-                cycleElements(slides, 'active');
+                $l.css.cycleClass(slides, 'active');
             }
         });
     });
