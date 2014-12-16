@@ -39,6 +39,16 @@
             }
         },
 
+        cycleClass: function(elements, className) {
+            for (var i = 0, length = elements.length; i < length; i++) {
+                if (elements[i].classList.contains(className)) {
+                    elements[i].classList.remove(className);
+                    elements[(i + 1) % length].classList.add(className);
+                    return;
+                }
+            }
+        },
+
         // style features
         getProperty: function(element, styleName) {
             var style = getComputedStyle(element);
