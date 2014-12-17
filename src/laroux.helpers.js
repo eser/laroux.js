@@ -261,7 +261,7 @@
             }
 
             if (!(key in obj)) {
-                return null;
+                return defaultValue;
             }
 
             if (rest === null || rest.length === 0) {
