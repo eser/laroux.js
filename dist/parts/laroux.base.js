@@ -1680,6 +1680,10 @@
                         .replace(/[\r\n]/g, '&#13;');
         },
 
+        spliceString: function(value, index, count, add) {
+            return value.slice(0, index) + (add || '') + value.slice(index + count);
+        },
+
         random: function(min, max) {
             return min + Math.floor(Math.random() * (max - min + 1));
         },
