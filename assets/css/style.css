@@ -166,6 +166,10 @@ ul {
     margin-top: 30px;
 }
 
+#slider {
+    height: 310px;
+}
+
 #slider:before, #slider:after {
     content: '';
     position: absolute;
