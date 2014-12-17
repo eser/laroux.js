@@ -23,12 +23,6 @@
         <link rel="stylesheet" href="../dist/laroux.css" />
 
         <script>
-            function deneme($scope) {
-
-                // console.log($scope.hello);
-
-            }
-
             $l.ready(function() {
                 $l.ui.loading.elementSelector = '#loading';
                 $l.ui.init();
@@ -95,6 +89,14 @@
                         newApp.hello = 'selam';
                     }
                 )
+
+                var st = new $l.stack();
+                st.set('key', 'value');
+                console.log(st.key);
+                // st.remove('key');
+                st.clear();
+                // console.log(st._data);
+                console.log(st.key);
             });
         </script>
     </head>

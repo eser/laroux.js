@@ -707,7 +707,7 @@
         this._top = top || this;
 
         this.set = function(key, value) {
-            // delete this[key];
+            // delete this._data[key];
 
             var type = typeof value;
             switch (type) {
@@ -718,6 +718,7 @@
                         this,
                         key,
                         {
+                            configurable: true,
                             get: function() {
                                 return this._data[key]();
                             }
@@ -745,6 +746,7 @@
                         this,
                         key,
                         {
+                            configurable: true,
                             get: function() {
                                 return this._data[key];
                             },
@@ -807,9 +809,8 @@
         this.remove = function(key) {
             if (key in this._data) {
                 delete this[key];
+                delete this._data[key];
             }
-
-            delete this._data[key];
         };
 
         this.clear = function() {
@@ -819,6 +820,7 @@
                 }
 
                 delete this[item];
+                delete this._data[item];
             }
 
             this._data = {};
