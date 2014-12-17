@@ -346,6 +346,23 @@
         );
     });
 
+    // templates - Examples
+    $l.ready(function() {
+        var button = $l.id('button-templates-example');
+        var text = $l.id('text-templates-example');
+        var script = $l.id('script-templates-example');
+
+        $l.dom.setEvent(
+            button,
+            'click',
+            function() {
+                var model = { name: { first: 'Jane', last: 'Doe' }, age: 25 };
+                $l.templates.replace(script, model, text);
+                return false;
+            }
+        );
+    });
+
     // timers - Set
     $l.ready(function() {
         var button = $l.id('button-timers-set');

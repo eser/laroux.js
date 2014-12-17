@@ -735,9 +735,33 @@ $l.dom.append(text, JSON.stringify(stack._data) + '&lt;br /&gt;');
             </div>
 
             <div class="example-area">
-                <div class="well">
-                    <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
-                    No examples yet, <a href="https://github.com/larukedi/laroux.js/wiki/templates">see related wiki page for examples</a>
+                <h3>Plain Example</h3>
+                <div class="row">
+                    <div class="col-sm-4">
+                        <button id="button-templates-example" class="btn btn-default">Execute</button>
+                        <script id="script-templates-example" type="text/plain-template">
+                            Name: {{name.first}} Age: {{age}}
+                        </script>
+                        <div id="text-templates-example"></div>
+                    </div>
+                    <div class="col-sm-8">
+                        <h4>HTML</h4>
+                        <pre class="prettyprint">
+&lt;script id="script-templates-example" type="text/plain-template"&gt;
+    Name: {{name.first}} Age: {{age}}
+&lt;/script&gt;
+&lt;div id="text-templates-example"&gt;&lt;/div&gt;
+                        </pre>
+
+                        <h4>Javascript</h4>
+                        <pre class="prettyprint">
+var text = $l.id('text-templates-example');
+var script = $l.id('script-templates-example');
+
+var model = { name: { first: 'Jane', last: 'Doe' }, age: 25 };
+$l.templates.replace(script, model, text);
+                        </pre>
+                    </div>
                 </div>
             </div>
 
@@ -1077,7 +1101,7 @@ $l.dom.setEvent(
         </div>
 
         <script src="assets/js/prettify.min.js"></script>
-        <script src="assets/js/laroux.min.js"></script>
+        <script src="assets/js/laroux.js"></script>
         <script src="assets/js/common.js"></script>
         <script src="assets/js/demos.js"></script>
     </body>
