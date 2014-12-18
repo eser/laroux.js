@@ -555,6 +555,45 @@ $l.dom.append(text, JSON.stringify($l.helpers.getKeysRecursive({id: 1, child: { 
 
             <div class="row header-row">
                 <div class="col-sm-6">
+                    <h2 class="nomargin">Keys Examples</h2>
+                </div>
+                <div class="col-sm-6 text-right">
+                    <a class="btn btn-sm btn-default" href="https://github.com/larukedi/laroux.js/wiki/keys" role="button">Wiki Page</a>
+                </div>
+            </div>
+
+            <div class="example-area">
+                <h3>Keys</h3>
+                <div class="row">
+                    <div class="col-sm-4">
+                        <button id="button-keys-assign" class="btn btn-default">Assign F7</button>
+                        <div id="text-keys-assign"></div>
+                    </div>
+                    <div class="col-sm-8">
+                        <h4>HTML</h4>
+                        <pre class="prettyprint">
+&lt;div id="text-keys-assign"&gt;&lt;/div&gt;
+                        </pre>
+
+                        <h4>Javascript</h4>
+                        <pre class="prettyprint">
+var text = $l.id('text-keys-assign');
+var pressCount = 0;
+
+$l.keys.assign({
+    target: document,
+    key: 'f7',
+    fnc: function() {
+        $l.dom.replace(text, 'pressed: ' + ++pressCount);
+    }
+});
+                        </pre>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row header-row">
+                <div class="col-sm-6">
                     <h2 class="nomargin">MVC Examples</h2>
                 </div>
                 <div class="col-sm-6 text-right">
@@ -767,6 +806,45 @@ $l.templates.replace(script, model, text);
 
             <div class="row header-row">
                 <div class="col-sm-6">
+                    <h2 class="nomargin">Timers Examples</h2>
+                </div>
+                <div class="col-sm-6 text-right">
+                    <a class="btn btn-sm btn-default" href="https://github.com/larukedi/laroux.js/wiki/timers" role="button">Wiki Page</a>
+                </div>
+            </div>
+
+            <div class="example-area">
+                <h3>Setting a timer</h3>
+                <div class="row">
+                    <div class="col-sm-4">
+                        <button id="button-timers-set" class="btn btn-default">Set Timer</button>
+                        <div id="text-timers-set"></div>
+                    </div>
+                    <div class="col-sm-8">
+                        <h4>HTML</h4>
+                        <pre class="prettyprint">
+&lt;div id="text-timers-set"&gt;&lt;/div&gt;
+                        </pre>
+
+                        <h4>Javascript</h4>
+                        <pre class="prettyprint">
+var text = $l.id('text-timers-set');
+$l.dom.replace(text, 'waiting...&lt;br /&gt;');
+
+$l.timers.set({
+    'timeout': 500,
+    'reset': false,
+    'ontick': function() {
+        $l.dom.append(text, 'time\'s up');
+    }
+});
+                        </pre>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row header-row">
+                <div class="col-sm-6">
                     <h2 class="nomargin">Touch Examples</h2>
                 </div>
                 <div class="col-sm-6 text-right">
@@ -820,45 +898,6 @@ $l.dom.setEvent(
         target.appendChild(createdElement);
     }
 );
-                        </pre>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row header-row">
-                <div class="col-sm-6">
-                    <h2 class="nomargin">Timers Examples</h2>
-                </div>
-                <div class="col-sm-6 text-right">
-                    <a class="btn btn-sm btn-default" href="https://github.com/larukedi/laroux.js/wiki/timers" role="button">Wiki Page</a>
-                </div>
-            </div>
-
-            <div class="example-area">
-                <h3>Setting a timer</h3>
-                <div class="row">
-                    <div class="col-sm-4">
-                        <button id="button-timers-set" class="btn btn-default">Set Timer</button>
-                        <div id="text-timers-set"></div>
-                    </div>
-                    <div class="col-sm-8">
-                        <h4>HTML</h4>
-                        <pre class="prettyprint">
-&lt;div id="text-timers-set"&gt;&lt;/div&gt;
-                        </pre>
-
-                        <h4>Javascript</h4>
-                        <pre class="prettyprint">
-var text = $l.id('text-timers-set');
-$l.dom.replace(text, 'waiting...&lt;br /&gt;');
-
-$l.timers.set({
-    'timeout': 500,
-    'reset': false,
-    'ontick': function() {
-        $l.dom.append(text, 'time\'s up');
-    }
-});
                         </pre>
                     </div>
                 </div>

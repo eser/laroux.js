@@ -266,6 +266,31 @@
         );
     });
 
+    // keys - Assign a key
+    $l.ready(function() {
+        var button = $l.id('button-keys-assign');
+        var text = $l.id('text-keys-assign');
+        var pressCount = 0;
+
+        $l.dom.setEvent(
+            button,
+            'click',
+            function(ev, element) {
+                $l.dom.replace(text, 'Key is assigned, press F7 to trigger the event');
+
+                $l.keys.assign({
+                    target: document,
+                    key: 'f7',
+                    fnc: function() {
+                        $l.dom.replace(text, 'pressed: ' + ++pressCount);
+                    }
+                });
+
+                return false;
+            }
+        );
+    });
+
     // mvc - Simple Model Binding
     $l.ready(function() {
         var textbox = $l.id('textbox-mvc-simple');
@@ -363,6 +388,29 @@
         );
     });
 
+    // timers - Set
+    $l.ready(function() {
+        var button = $l.id('button-timers-set');
+        var text = $l.id('text-timers-set');
+
+        $l.dom.setEvent(
+            button,
+            'click',
+            function() {
+                $l.dom.replace(text, 'waiting...' + crlf);
+                $l.timers.set({
+                    'timeout': 500,
+                    'reset': false,
+                    'ontick': function() {
+                        $l.dom.append(text, 'time\'s up');
+                    }
+                });
+
+                return false;
+            }
+        );
+    });
+
     // touch - Touch Events
     $l.ready(function() {
         var box = $l.id('div-touch-events');
@@ -392,29 +440,6 @@
             function(event) {
                 var createdElement = $l.dom.createElement('LI', { }, 'longtap');
                 target.appendChild(createdElement);
-            }
-        );
-    });
-
-    // timers - Set
-    $l.ready(function() {
-        var button = $l.id('button-timers-set');
-        var text = $l.id('text-timers-set');
-
-        $l.dom.setEvent(
-            button,
-            'click',
-            function() {
-                $l.dom.replace(text, 'waiting...' + crlf);
-                $l.timers.set({
-                    'timeout': 500,
-                    'reset': false,
-                    'ontick': function() {
-                        $l.dom.append(text, 'time\'s up');
-                    }
-                });
-
-                return false;
             }
         );
     });
