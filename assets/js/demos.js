@@ -363,6 +363,39 @@
         );
     });
 
+    // touch - Touch Events
+    $l.ready(function() {
+        var box = $l.id('div-touch-events');
+        var target = $l.id('target-touch-events');
+
+        $l.dom.setEvent(
+            box,
+            'tap',
+            function(event) {
+                var createdElement = $l.dom.createElement('LI', { }, 'tap');
+                target.appendChild(createdElement);
+            }
+        );
+
+        $l.dom.setEvent(
+            box,
+            'dbltap',
+            function(event) {
+                var createdElement = $l.dom.createElement('LI', { }, 'dbltap');
+                target.appendChild(createdElement);
+            }
+        );
+
+        $l.dom.setEvent(
+            box,
+            'longtap',
+            function(event) {
+                var createdElement = $l.dom.createElement('LI', { }, 'longtap');
+                target.appendChild(createdElement);
+            }
+        );
+    });
+
     // timers - Set
     $l.ready(function() {
         var button = $l.id('button-timers-set');

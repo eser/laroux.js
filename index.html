@@ -767,6 +767,66 @@ $l.templates.replace(script, model, text);
 
             <div class="row header-row">
                 <div class="col-sm-6">
+                    <h2 class="nomargin">Touch Examples</h2>
+                </div>
+                <div class="col-sm-6 text-right">
+                    <a class="btn btn-sm btn-default" href="https://github.com/larukedi/laroux.js/wiki/touch" role="button">Wiki Page</a>
+                </div>
+            </div>
+
+            <div class="example-area">
+                <h3>Touch Events</h3>
+                <div class="row">
+                    <div class="col-sm-4">
+                        Try Tap, Double Tap or Long Tap on the box
+                        <div class="box" id="div-touch-events"></div>
+                        <ul id="target-touch-events"></ul>
+                    </div>
+                    <div class="col-sm-8">
+                        <h4>HTML</h4>
+                        <pre class="prettyprint">
+&lt;div class="box" id="div-touch-events"&gt;&lt;/div&gt;
+&lt;ul id="target-touch-events"&gt;&lt;/ul&gt;
+                        </pre>
+
+                        <h4>Javascript</h4>
+                        <pre class="prettyprint">
+var box = $l.id('div-touch-events');
+var target = $l.id('target-touch-events');
+
+$l.dom.setEvent(
+    box,
+    'tap',
+    function(event) {
+        var createdElement = $l.dom.createElement('LI', { }, 'tap');
+        target.appendChild(createdElement);
+    }
+);
+
+$l.dom.setEvent(
+    box,
+    'dbltap',
+    function(event) {
+        var createdElement = $l.dom.createElement('LI', { }, 'dbltap');
+        target.appendChild(createdElement);
+    }
+);
+
+$l.dom.setEvent(
+    box,
+    'longtap',
+    function(event) {
+        var createdElement = $l.dom.createElement('LI', { }, 'longtap');
+        target.appendChild(createdElement);
+    }
+);
+                        </pre>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row header-row">
+                <div class="col-sm-6">
                     <h2 class="nomargin">Timers Examples</h2>
                 </div>
                 <div class="col-sm-6 text-right">
