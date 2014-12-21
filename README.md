@@ -1,6 +1,7 @@
 # laroux.js
 
 [![laroux.js logo](https://larukedi.github.io/laroux.js/assets/images/logo-medium.png)](https://larukedi.github.io/laroux.js/)
+[![Coverage Status](https://coveralls.io/repos/larukedi/laroux.js/badge.png?branch=master)](https://coveralls.io/r/larukedi/laroux.js?branch=master)
 
 [This project](https://github.com/larukedi/laroux.js) is a jQuery substitute for modern browsers and mobile devices. But instead of offering some wrappers and own dynamics, it simply provides helper functions to achieve the same objectives as jQuery or Zepto.
 

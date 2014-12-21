@@ -10,7 +10,11 @@
 
 ## Supporters
 
-* Burak Babir
 * Sevket Bulamaz - @sevket
+* Burak Babir
 * Yalcin Ceylan - @yali4
 * Huseyin Mert - @hmert
+
+## Resources
+
+* Fatih Acet's Testing & CI Guide - @fatihacet (http://fatihacet.com/fe-ci/)
