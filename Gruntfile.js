@@ -137,7 +137,12 @@ module.exports = function(grunt) {
                     document: true
                 }
             },
-            files: ['Gruntfile.js', 'src/**/*.js']
+            files: ['Gruntfile.js', 'src/**/*.js', 'tests/**/*.js']
+        },
+        karma: {
+            tests: {
+                configFile: 'karma.conf.js'
+            }
         },
         watch: {
             backwardjs: {
@@ -191,11 +196,12 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-cssmin');
     grunt.loadNpmTasks('grunt-contrib-jshint');
+    grunt.loadNpmTasks('grunt-karma');
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-contrib-clean');
 
-    grunt.registerTask('test', ['jshint']);
+    grunt.registerTask('test', ['jshint', 'karma']);
     grunt.registerTask('backwardjs', ['concat:backwardjs', 'uglify:backwardjs']);
     grunt.registerTask('basejs', ['concat:basejs', 'uglify:basejs']);
     grunt.registerTask('extjs', ['concat:extjs', 'uglify:extjs']);

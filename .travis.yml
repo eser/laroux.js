@@ -2,3 +2,14 @@ language: node_js
 
 node_js:
   - 0.10
+
+install:
+- npm -d install
+- npm install -g grunt-cli
+- npm install -g grunt
+
+script:
+- grunt test
+
+after_script:
+- cat ./dist/coverage/**/lcov.info | ./node_modules/coveralls/bin/coveralls.js
