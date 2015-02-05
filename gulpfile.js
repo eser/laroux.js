@@ -114,7 +114,12 @@
         return gulp.src('./build/js/**/*.js')
             .pipe(gulp.dest('./dist'))
             .pipe(sourcemaps.init())
-            .pipe(uglify())
+            .pipe(uglify({
+                mangle: {
+                    except: ['laroux']
+                },
+                preserveComments: false
+            ))
             .pipe(rename({ suffix: '.min' }))
             .pipe(sourcemaps.write('./'))
             .pipe(gulp.dest('./dist'));
