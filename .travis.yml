@@ -5,11 +5,11 @@ node_js:
 
 install:
 - npm -d install
-- npm install -g grunt-cli
-- npm install -g grunt
+- npm install -g gulp
 
 script:
-- grunt test
+- gulp lint
+- gulp test
 
 after_script:
 - cat ./dist/coverage/**/lcov.info | ./node_modules/coveralls/bin/coveralls.js
