@@ -22,7 +22,7 @@
             "url": "http://eser.ozvataf.com/"
         }
     ],
-    "main": "lib/laroux.js",
+    "main": "dist/laroux.js",
     "repository": {
         "type": "git",
         "url": "https://github.com/larukedi/laroux.js.git"

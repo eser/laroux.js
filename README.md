@@ -79,7 +79,7 @@ $l.ready(function() {
 
 **Alternative 1: Zip Package**
 
-Download [the package](https://github.com/larukedi/laroux.js/archive/master.zip) and launch `npm install`.
+Download [the package](https://github.com/larukedi/laroux.js/archive/master.zip) and launch `npm install && gulp`.
 
 **Alternative 2: Git**
 
@@ -88,6 +88,7 @@ On Terminal or Command Prompt:
 git clone https://github.com/larukedi/laroux.js project
 cd project
 npm install
+gulp
 ```
 
 

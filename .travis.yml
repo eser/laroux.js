@@ -5,7 +5,6 @@ node_js:
 
 install:
 - npm -d install
-- npm install -g gulp
 
 script:
 - gulp lint
