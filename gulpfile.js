@@ -110,7 +110,7 @@
     gulp.task('test', function () {
         return gulp.src(testFiles)
             .pipe(karma({
-                configFile: __dirname + '/karma.conf.js',
+                configFile: __dirname + '/config/karma.conf.js',
                 action: 'run'
             }))
             .on('error', function (err) {
