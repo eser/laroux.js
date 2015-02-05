@@ -1,6 +1,6 @@
 /* Stylesheet for laroux.ui.js
 ----------------------------------------------------------*/
-#laroux_floatdiv
+.larouxFloatDiv
 {
     font-size: 14px;
 
@@ -11,7 +11,7 @@
 
     width: 100%;
 }
-.laroux_msgbox
+.larouxMsgBox
 {
     font: 14px sans-serif;
 
@@ -26,14 +26,14 @@
     background-color: #f0f0f0;
     box-shadow: 3px 3px 5px #000;
 }
-.laroux_msgbox h3
+.larouxMsgBox h3
 {
     font-size: 14px;
     font-weight: bold;
 
     margin: 0 0 4px 0;
 }
-.laroux_fade
+.larouxFade
 {
     -webkit-transition: opacity .25s ease-in-out;
        -moz-transition: opacity .25s ease-in-out;

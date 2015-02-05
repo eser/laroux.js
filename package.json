@@ -22,7 +22,7 @@
             "url": "http://eser.ozvataf.com/"
         }
     ],
-    "main": "laroux",
+    "main": "lib/laroux.js",
     "repository": {
         "type": "git",
         "url": "https://github.com/larukedi/laroux.js.git"
@@ -36,6 +36,7 @@
         "karma-phantomjs-launcher": "~0.1.4",
         "gulp": "~3.8.10",
         "gulp-jshint": "~1.9.2",
+        "gulp-recess": "~.1.1.1",
         "gulp-karma": "~0.0.4",
         "gulp-less": "~2.0.1",
         "gulp-concat": "~2.4.3",

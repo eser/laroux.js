@@ -13,6 +13,7 @@
         csscomb = require('gulp-csscomb'),
         cssmin = require('gulp-cssmin'),
         uglify = require('gulp-uglify'),
+        recess = require('gulp-recess'),
 
         buildFiles = {
             backward: [
@@ -71,20 +72,35 @@
             './tests/**/*.js'
         ],
 
-        lintFiles = [
-            './gulpfile.js',
-            './src/**/*.js',
-            './tests/**/*.js'
-        ],
+        lintFiles = {
+            js: [
+                './gulpfile.js',
+                './src/**/*.js',
+                './tests/**/*.js'
+            ],
+            css: [
+                './src/**/*.less'
+            ]
+        },
 
         lessFiles = [
             './src/**/*.less'
         ];
 
-    gulp.task('lint', function () {
-        return gulp.src(lintFiles)
+    gulp.task('lint:js', function () {
+        return gulp.src(lintFiles.js)
             .pipe(jshint())
             .pipe(jshint.reporter('default', { verbose: true }))
+            .on('error', function (err) {
+                // Make sure failed tests cause gulp to exit non-zero
+                throw err;
+            });
+    });
+
+    gulp.task('lint:css', function () {
+        return gulp.src(lintFiles.css)
+            .pipe(recess())
+            .pipe(recess.reporter())
             .on('error', function (err) {
                 // Make sure failed tests cause gulp to exit non-zero
                 throw err;
@@ -103,7 +119,7 @@
             });
     });
 
-    gulp.task('css', function () {
+    gulp.task('css:dist', function () {
         return gulp.src(lessFiles)
             .pipe(less({
                 strictMath: true
@@ -119,31 +135,31 @@
     gulp.task('js:backward', function () {
         return gulp.src(buildFiles.backward)
             .pipe(concat('laroux.backward.js'))
-            .pipe(gulp.dest('./dist/parts'))
+            .pipe(gulp.dest('./build/js'))
             .pipe(uglify())
             .pipe(rename({ suffix: '.min' }))
-            .pipe(gulp.dest('./dist/parts'));
+            .pipe(gulp.dest('./build/js'));
     });
 
     gulp.task('js:base', function () {
         return gulp.src(buildFiles.base)
             .pipe(concat('laroux.base.js'))
-            .pipe(gulp.dest('./dist/parts'))
+            .pipe(gulp.dest('./build/js'))
             .pipe(uglify())
             .pipe(rename({ suffix: '.min' }))
-            .pipe(gulp.dest('./dist/parts'));
+            .pipe(gulp.dest('./build/js'));
     });
 
     gulp.task('js:ext', function () {
         return gulp.src(buildFiles.base)
             .pipe(concat('laroux.ext.js'))
-            .pipe(gulp.dest('./dist/parts'))
+            .pipe(gulp.dest('./build/js'))
             .pipe(uglify())
             .pipe(rename({ suffix: '.min' }))
-            .pipe(gulp.dest('./dist/parts'));
+            .pipe(gulp.dest('./build/js'));
     });
 
-    gulp.task('js', function () {
+    gulp.task('js:dist', function () {
         return gulp.src(buildFiles.all)
             .pipe(concat('laroux.js'))
             .pipe(gulp.dest('./dist'))
@@ -152,7 +168,8 @@
             .pipe(gulp.dest('./dist'));
     });
 
-    gulp.task('default', function () {
-        // place code for your default task here
-    });
+    gulp.task('lint', ['lint:js', 'lint:css']);
+    gulp.task('js', ['lint:js', 'js:backward', 'js:base', 'js:ext', 'js:dist']);
+    gulp.task('css', ['lint:css', 'css:dist']);
+    gulp.task('default', ['css', 'js', 'test']);
 }());

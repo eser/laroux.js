@@ -22,7 +22,7 @@ module.exports = function (config) {
         singleRun: true,
         coverageReporter: {
             type: 'lcov',
-            dir: 'dist/coverage/'
+            dir: 'build/coverage/'
         }
     });
 };

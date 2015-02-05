@@ -21,7 +21,7 @@
 
             msgbox: function (timeout, message) {
                 var id = laroux.helpers.getUniqueId(),
-                    obj = laroux.ui.popup.createBox(id, 'laroux_msgbox', message);
+                    obj = laroux.ui.popup.createBox(id, 'larouxMsgBox', message);
                 laroux.ui.floatContainer.appendChild(obj);
 
                 laroux.css.setProperty(obj, {opacity: 1});
@@ -188,7 +188,7 @@
 
         createFloatContainer: function () {
             if (!laroux.ui.floatContainer) {
-                laroux.ui.floatContainer = laroux.dom.createElement('DIV', {id: 'laroux_floatdiv'});
+                laroux.ui.floatContainer = laroux.dom.createElement('DIV', {'class': 'larouxFloatDiv'});
                 document.body.insertBefore(laroux.ui.floatContainer, document.body.firstChild);
             }
         },

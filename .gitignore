@@ -1,3 +1,2 @@
-*.sublime-project
-dist/coverage/*
+build/coverage/*
 node_modules/*
