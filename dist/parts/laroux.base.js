@@ -198,7 +198,8 @@
     );
 
 }(this));
-;/*global NodeList, Node */
+
+/*global NodeList, Node */
 (function (laroux) {
     'use strict';
 
@@ -280,7 +281,8 @@
     };
 
 }(this.laroux));
-;(function (laroux) {
+
+(function (laroux) {
     'use strict';
 
     // requires $l
@@ -597,7 +599,8 @@
     };
 
 }(this.laroux));
-;(function (laroux) {
+
+(function (laroux) {
     'use strict';
 
     // requires $l.helpers
@@ -879,7 +882,8 @@
     }
 
 }(this.laroux));
-;(function (laroux) {
+
+(function (laroux) {
     'use strict';
 
     // requires $l.helpers
@@ -1339,7 +1343,8 @@
     }
 
 }(this.laroux));
-;(function (laroux) {
+
+(function (laroux) {
     'use strict';
 
     // events
@@ -1366,7 +1371,8 @@
     };
 
 }(this.laroux));
-;(function (laroux) {
+
+(function (laroux) {
     'use strict';
 
     // forms
@@ -1575,7 +1581,8 @@
     };
 
 }(this.laroux));
-;(function (laroux) {
+
+(function (laroux) {
     'use strict';
 
     // helpers
@@ -1863,7 +1870,8 @@
     };
 
 }(this.laroux));
-;(function (laroux) {
+
+(function (laroux) {
     'use strict';
 
     // requires $l
@@ -1938,7 +1946,8 @@
     });
 
 }(this.laroux));
-;(function (laroux) {
+
+(function (laroux) {
     'use strict';
 
     // requires $l.helpers
@@ -2020,7 +2029,8 @@
     };
 
 }(this.laroux));
-;(function (laroux) {
+
+(function (laroux) {
     'use strict';
 
     // requires $l

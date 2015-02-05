@@ -1,4 +1,4 @@
-(function(laroux) {
+(function (laroux) {
     'use strict';
 
     // date
@@ -32,4 +32,4 @@
         }
     });
 
-})(this.laroux);
+}(this.laroux));

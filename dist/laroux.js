@@ -312,7 +312,8 @@
     */
 
 }(this));
-;(function (global) {
+
+(function (global) {
     'use strict';
 
     // core
@@ -512,7 +513,8 @@
     );
 
 }(this));
-;/*global NodeList, Node */
+
+/*global NodeList, Node */
 (function (laroux) {
     'use strict';
 
@@ -594,7 +596,8 @@
     };
 
 }(this.laroux));
-;(function (laroux) {
+
+(function (laroux) {
     'use strict';
 
     // requires $l
@@ -911,7 +914,8 @@
     };
 
 }(this.laroux));
-;(function (laroux) {
+
+(function (laroux) {
     'use strict';
 
     // requires $l.helpers
@@ -1193,7 +1197,8 @@
     }
 
 }(this.laroux));
-;(function (laroux) {
+
+(function (laroux) {
     'use strict';
 
     // requires $l.helpers
@@ -1653,7 +1658,8 @@
     }
 
 }(this.laroux));
-;(function (laroux) {
+
+(function (laroux) {
     'use strict';
 
     // events
@@ -1680,7 +1686,8 @@
     };
 
 }(this.laroux));
-;(function (laroux) {
+
+(function (laroux) {
     'use strict';
 
     // forms
@@ -1889,7 +1896,8 @@
     };
 
 }(this.laroux));
-;(function (laroux) {
+
+(function (laroux) {
     'use strict';
 
     // helpers
@@ -2177,7 +2185,8 @@
     };
 
 }(this.laroux));
-;(function (laroux) {
+
+(function (laroux) {
     'use strict';
 
     // requires $l
@@ -2252,7 +2261,8 @@
     });
 
 }(this.laroux));
-;(function (laroux) {
+
+(function (laroux) {
     'use strict';
 
     // requires $l.helpers
@@ -2334,7 +2344,8 @@
     };
 
 }(this.laroux));
-;(function (laroux) {
+
+(function (laroux) {
     'use strict';
 
     // requires $l
@@ -2401,7 +2412,8 @@
     };
 
 }(this.laroux));
-;(function (laroux) {
+
+(function (laroux) {
     'use strict';
 
     // requires $l.helpers
@@ -2554,7 +2566,8 @@
     };
 
 }(this.laroux));
-;(function (laroux) {
+
+(function (laroux) {
     'use strict';
 
     // date
@@ -2768,7 +2781,8 @@
     };
 
 }(this.laroux));
-;(function (laroux) {
+
+(function (laroux) {
     'use strict';
 
     // requires $l.dom
@@ -2916,7 +2930,8 @@
     };
 
 }(this.laroux));
-;(function (laroux) {
+
+(function (laroux) {
     'use strict';
 
     // requires $l.dom
@@ -3095,7 +3110,8 @@
     };
 
 }(this.laroux));
-;/*jslint nomen: true */
+
+/*jslint nomen: true */
 (function (laroux) {
     'use strict';
 
@@ -3234,7 +3250,8 @@
     };
 
 }(this.laroux));
-;(function (laroux) {
+
+(function (laroux) {
     'use strict';
 
     // requires $l.dom
@@ -3350,7 +3367,8 @@
     };
 
 }(this.laroux));
-;(function (laroux) {
+
+(function (laroux) {
     'use strict';
 
     // requires $l.dom
@@ -3486,7 +3504,8 @@
     });
 
 }(this.laroux));
-;(function (laroux) {
+
+(function (laroux) {
     'use strict';
 
     // requires $l

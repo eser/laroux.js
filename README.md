@@ -94,7 +94,7 @@ npm install
 ### Requirements
 
 * NPM (https://npmjs.org)
-* Grunt (http://gruntjs.com)
+* Gulp (http://gulpjs.com)
 
 
 ## License
