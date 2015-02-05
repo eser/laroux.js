@@ -60,7 +60,7 @@
 
                             // this.set(this, key, newValue);
                             this._data[key] = newValue;
-                            this._top.onupdate({scope: this, key: key, oldValue: oldValue, newValue: newValue});
+                            this._top.onupdate({ scope: this, key: key, oldValue: oldValue, newValue: newValue });
                         }
                     }
                 );

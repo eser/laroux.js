@@ -6,7 +6,7 @@
         delegates: [],
 
         add: function (event, fnc) {
-            laroux.events.delegates.push({event: event, fnc: fnc});
+            laroux.events.delegates.push({ event: event, fnc: fnc });
         },
 
         invoke: function (event, args) {
@@ -21,7 +21,7 @@
 
                 laroux.events.delegates[item].fnc(args);
             }
-        },
+        }
     };
 
 }(this.laroux));

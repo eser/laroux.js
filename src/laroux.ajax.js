@@ -87,8 +87,8 @@
             }
 
             return {
-                'response': response,
-                'wrapperFunc': wrapperFunction
+                response: response,
+                wrapperFunc: wrapperFunction
             };
         },
 
@@ -207,7 +207,7 @@
 
                     xhr.setRequestHeader(j, headers[j]);
                 }
-            } catch(e) {
+            } catch (e) {
                 console.log(e);
             }
 

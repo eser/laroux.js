@@ -149,7 +149,7 @@
                 laroux.css.setTransition(element, 'opacity');
             }
 
-            laroux.css.setProperty(element, {opacity: 1});
+            laroux.css.setProperty(element, { opacity: 1 });
         },
 
         hide: function (element, transitionProperties) {
@@ -159,7 +159,7 @@
                 laroux.css.setTransition(element, 'opacity');
             }
 
-            laroux.css.setProperty(element, {opacity: 0});
+            laroux.css.setProperty(element, { opacity: 0 });
         },
 
         // measurement features

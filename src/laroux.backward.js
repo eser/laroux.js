@@ -95,7 +95,7 @@
                 if (eventname !== 'DOMContentLoaded') {
                     this.attachEvent('on' + eventname, wrapper);
                 }
-                eventListeners.push({object: this, type: eventname, listener: callback, wrapper: wrapper});
+                eventListeners.push({ object: this, type: eventname, listener: callback, wrapper: wrapper });
             },
             removeListener = function (eventname, callback) {
                 for (var i = 0, length = eventListeners.length; i < length; i++) {

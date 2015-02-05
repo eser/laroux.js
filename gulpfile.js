@@ -6,6 +6,7 @@
     var packageJSON = require('./package'),
         gulp = require('gulp'),
         jshint = require('gulp-jshint'),
+        jscs = require('gulp-jscs'),
         karma = require('gulp-karma'),
         less = require('gulp-less'),
         concat = require('gulp-concat'),
@@ -14,59 +15,11 @@
         cssmin = require('gulp-cssmin'),
         uglify = require('gulp-uglify'),
         recess = require('gulp-recess'),
+        browserify = require('browserify'),
+        es6ify = require('es6ify'),
+        source = require('vinyl-source-stream'),
 
-        buildFiles = {
-            backward: [
-                './src/laroux.backward.js'
-            ],
-            base: [
-                './src/laroux.js',
-                './src/laroux.wrapper.js',
-                './src/laroux.ajax.js',
-                './src/laroux.css.js',
-                './src/laroux.dom.js',
-                './src/laroux.events.js',
-                './src/laroux.forms.js',
-                './src/laroux.helpers.js',
-                './src/laroux.timers.js',
-                './src/laroux.triggers.js',
-                './src/laroux.vars.js'
-            ],
-            ext: [
-                './src/laroux.anim.js',
-                './src/laroux.date.js',
-                './src/laroux.keys.js',
-                './src/laroux.mvc.js',
-                './src/laroux.stack.js',
-                './src/laroux.templates.js',
-                './src/laroux.touch.js',
-                './src/laroux.ui.js'
-            ],
-            all: [
-                './src/laroux.backward.js',
-
-                './src/laroux.js',
-                './src/laroux.wrapper.js',
-                './src/laroux.ajax.js',
-                './src/laroux.css.js',
-                './src/laroux.dom.js',
-                './src/laroux.events.js',
-                './src/laroux.forms.js',
-                './src/laroux.helpers.js',
-                './src/laroux.timers.js',
-                './src/laroux.triggers.js',
-                './src/laroux.vars.js',
-
-                './src/laroux.anim.js',
-                './src/laroux.date.js',
-                './src/laroux.keys.js',
-                './src/laroux.mvc.js',
-                './src/laroux.stack.js',
-                './src/laroux.templates.js',
-                './src/laroux.touch.js',
-                './src/laroux.ui.js'
-            ]
-        },
+        jsFile = './src/laroux.js',
 
         testFiles = [
             './tests/**/*.js'
@@ -89,8 +42,9 @@
 
     gulp.task('lint:js', function () {
         return gulp.src(lintFiles.js)
-            .pipe(jshint())
+            .pipe(jshint('./config/.jshintrc'))
             .pipe(jshint.reporter('default', { verbose: true }))
+            .pipe(jscs('./config/.jscsrc'))
             .on('error', function (err) {
                 // Make sure failed tests cause gulp to exit non-zero
                 throw err;
@@ -132,36 +86,18 @@
             .pipe(gulp.dest('./dist'));
     });
 
-    gulp.task('js:backward', function () {
-        return gulp.src(buildFiles.backward)
-            .pipe(concat('laroux.backward.js'))
-            .pipe(gulp.dest('./build/js'))
-            .pipe(uglify())
-            .pipe(rename({ suffix: '.min' }))
-            .pipe(gulp.dest('./build/js'));
-    });
-
-    gulp.task('js:base', function () {
-        return gulp.src(buildFiles.base)
-            .pipe(concat('laroux.base.js'))
-            .pipe(gulp.dest('./build/js'))
-            .pipe(uglify())
-            .pipe(rename({ suffix: '.min' }))
-            .pipe(gulp.dest('./build/js'));
-    });
-
-    gulp.task('js:ext', function () {
-        return gulp.src(buildFiles.base)
-            .pipe(concat('laroux.ext.js'))
-            .pipe(gulp.dest('./build/js'))
-            .pipe(uglify())
-            .pipe(rename({ suffix: '.min' }))
+    gulp.task('js:browserify', function () {
+        return browserify({ debug: true })
+            .add(es6ify.runtime)
+            .require(require.resolve(jsFile), { entry: true })
+            .transform(es6ify.configure(/^(?!.*node_modules)+.+\.js$/))
+            .bundle()
+            .pipe(source('laroux.js'))
             .pipe(gulp.dest('./build/js'));
     });
 
     gulp.task('js:dist', function () {
-        return gulp.src(buildFiles.all)
-            .pipe(concat('laroux.js'))
+        return gulp.src('./build/js/**/*.js')
             .pipe(gulp.dest('./dist'))
             .pipe(uglify())
             .pipe(rename({ suffix: '.min' }))
@@ -169,7 +105,7 @@
     });
 
     gulp.task('lint', ['lint:js', 'lint:css']);
-    gulp.task('js', ['lint:js', 'js:backward', 'js:base', 'js:ext', 'js:dist']);
+    gulp.task('js', ['lint:js', 'js:browserify', 'js:dist']);
     gulp.task('css', ['lint:css', 'css:dist']);
     gulp.task('default', ['css', 'js', 'test']);
 }());

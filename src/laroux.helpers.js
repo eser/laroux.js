@@ -274,15 +274,7 @@
             }
 
             return laroux.helpers.getElement(obj[key], rest, defaultValue, delimiter);
-        },
-        /* for javascript 1.7 or later,
-
-        getKeys: function (obj) {
-            var keys = Object.keys(obj);
-            for (var item in keys) {
-                yield keys[item];
-            }
-        } */
+        }
     };
 
 }(this.laroux));

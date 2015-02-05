@@ -110,7 +110,7 @@
                 }
             };
 
-            laroux.dom.eventHistory.push({element: element, eventname: eventname, fnc: fnc, fncWrapper: fncWrapper});
+            laroux.dom.eventHistory.push({ element: element, eventname: eventname, fnc: fnc, fncWrapper: fncWrapper });
             element.addEventListener(eventname, fncWrapper, false);
         },
 

@@ -10,7 +10,7 @@
         getCookie: function (name, defaultValue) {
             var re = new RegExp(encodeURIComponent(name) + '=[^;]+', 'i'),
                 match = document.cookie.match(re);
-            
+
             if (!match) {
                 return defaultValue || null;
             }
