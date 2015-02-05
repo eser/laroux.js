@@ -5,6 +5,7 @@
 
     var packageJSON = require('./package'),
         gulp = require('gulp'),
+        sourcemaps = require('gulp-sourcemaps'),
         jshint = require('gulp-jshint'),
         jscs = require('gulp-jscs'),
         karma = require('gulp-karma'),
@@ -12,7 +13,7 @@
         concat = require('gulp-concat'),
         rename = require('gulp-rename'),
         csscomb = require('gulp-csscomb'),
-        cssmin = require('gulp-cssmin'),
+        minifyCSS = require('gulp-minify-css'),
         uglify = require('gulp-uglify'),
         recess = require('gulp-recess'),
         browserify = require('browserify'),
@@ -76,13 +77,26 @@
     gulp.task('css:dist', function () {
         return gulp.src(lessFiles)
             .pipe(less({
-                strictMath: true
+                strictMath: true,
+                compress: false,
+                yuicompress: false,
+                optimization: 0
             }))
             .pipe(concat('laroux.css'))
-            .pipe(csscomb())
+            .pipe(csscomb({ configPath: __dirname + '/config/.csscomb.json', verbose: true }))
             .pipe(gulp.dest('./dist'))
-            .pipe(cssmin())
+            .pipe(sourcemaps.init())
+            .pipe(minifyCSS({
+                advanced: false,
+                compatibility: 'ie8',
+                keepSpecialComments: 0,
+                processImport: false,
+                // rebase: true,
+                // relativeTo: '',
+                shorthandCompacting: true
+            }))
             .pipe(rename({ suffix: '.min' }))
+            .pipe(sourcemaps.write('.'))
             .pipe(gulp.dest('./dist'));
     });
 
@@ -99,8 +113,10 @@
     gulp.task('js:dist', function () {
         return gulp.src('./build/js/**/*.js')
             .pipe(gulp.dest('./dist'))
+            .pipe(sourcemaps.init())
             .pipe(uglify())
             .pipe(rename({ suffix: '.min' }))
+            .pipe(sourcemaps.write('./'))
             .pipe(gulp.dest('./dist'));
     });
 
