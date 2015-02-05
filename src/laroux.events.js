@@ -1,15 +1,15 @@
-(function(laroux) {
+(function (laroux) {
     'use strict';
 
     // events
     laroux.events = {
         delegates: [],
 
-        add: function(event, fnc) {
+        add: function (event, fnc) {
             laroux.events.delegates.push({event: event, fnc: fnc});
         },
 
-        invoke: function(event, args) {
+        invoke: function (event, args) {
             for (var item in laroux.events.delegates) {
                 if (!laroux.events.delegates.hasOwnProperty(item)) {
                     continue;
@@ -24,4 +24,4 @@
         },
     };
 
-})(this.laroux);
+}(this.laroux));

@@ -1,4 +1,4 @@
-(function(laroux) {
+(function (laroux) {
     'use strict';
 
     // requires $l.dom
@@ -22,7 +22,7 @@
             move: ['touchmove', 'pointermove', 'MSPointerMove', 'mousemove']
         },
 
-        locatePointer: function(event) {
+        locatePointer: function (event) {
             if (event.targetTouches) {
                 event = event.targetTouches[0];
             }
@@ -30,19 +30,18 @@
             laroux.touch.pos = [event.pageX, event.pageY];
         },
 
-        onstart: function(event) {
+        onstart: function (event) {
             laroux.touch.locatePointer(event);
             laroux.touch.cached = [laroux.touch.pos[0], laroux.touch.pos[1]];
             laroux.touch.touchStarted = Date.now();
+            /*jslint plusplus: true */
             laroux.touch.tapCount++;
 
-            var fnc = function() {
-                if (
-                    laroux.touch.cached[0] >= laroux.touch.pos[0] - laroux.touch.precision &&
-                    laroux.touch.cached[0] <= laroux.touch.pos[0] + laroux.touch.precision &&
-                    laroux.touch.cached[1] >= laroux.touch.pos[1] - laroux.touch.precision &&
-                    laroux.touch.cached[1] <= laroux.touch.pos[1] + laroux.touch.precision
-                ) {
+            var fnc = function () {
+                if (laroux.touch.cached[0] >= laroux.touch.pos[0] - laroux.touch.precision &&
+                        laroux.touch.cached[0] <= laroux.touch.pos[0] + laroux.touch.precision &&
+                        laroux.touch.cached[1] >= laroux.touch.pos[1] - laroux.touch.precision &&
+                        laroux.touch.cached[1] <= laroux.touch.pos[1] + laroux.touch.precision) {
                     if (laroux.touch.touchStarted === null) {
                         laroux.dom.dispatchEvent(
                             event.target,
@@ -50,7 +49,7 @@
                             {
                                 innerEvent: event,
                                 x: laroux.touch.pos[0],
-                                y: laroux.touch.pos[1],
+                                y: laroux.touch.pos[1]
                             }
                         );
 
@@ -65,7 +64,7 @@
                             {
                                 innerEvent: event,
                                 x: laroux.touch.pos[0],
-                                y: laroux.touch.pos[1],
+                                y: laroux.touch.pos[1]
                             }
                         );
 
@@ -85,7 +84,7 @@
             laroux.tapTimer = setTimeout(fnc, laroux.touch.tapTreshold);
         },
 
-        onend: function(event) {
+        onend: function (event) {
             var delta = [
                     laroux.touch.pos[0] - laroux.touch.cached[0],
                     laroux.touch.pos[1] - laroux.touch.cached[1]
@@ -120,7 +119,7 @@
         }
     };
 
-    laroux.ready(function() {
+    laroux.ready(function () {
         var events = [
             0,
             (navigator.msPointerEnabled) ? 2 : 1,
@@ -134,4 +133,4 @@
         }
     });
 
-})(this.laroux);
+}(this.laroux));

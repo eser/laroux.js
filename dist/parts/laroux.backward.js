@@ -1,24 +1,25 @@
-(function(global) {
+/*global Event, Element */
+(function (global) {
     'use strict';
 
     if (!('requestAnimationFrame' in global)) {
-        global.requestAnimationFrame = function(callback) {
-            setTimeout(function() { callback(Date.now()); }, 50);
+        global.requestAnimationFrame = function (callback) {
+            setTimeout(function () { callback(Date.now()); }, 50);
         };
     }
 
     if (!('getComputedStyle' in global)) {
-        global.getComputedStyle = function(element) {
+        global.getComputedStyle = function (element) {
             this.element = element;
 
-            this.getPropertyValue = function(prop) {
+            this.getPropertyValue = function (prop) {
                 var re = /(\-([a-z]){1})/g;
-                if (prop == 'float') {
+                if (prop === 'float') {
                     prop = 'styleFloat';
                 }
 
                 if (re.test(prop)) {
-                    prop = prop.replace(re, function() {
+                    prop = prop.replace(re, function () {
                         return arguments[2].toUpperCase();
                     });
                 }
@@ -26,8 +27,8 @@
                 return this.element.currentStyle[prop] || null;
             };
 
-            this.getPropertyCSSValue = function(prop) {
-                return new CSSPrimitiveValue(this.element, prop);
+            this.getPropertyCSSValue = function (prop) {
+                return new global.CSSPrimitiveValue(this.element, prop);
             };
 
             return this;
@@ -35,20 +36,21 @@
     }
 
     if (!('CSSPrimitiveValue' in global)) {
-        global.CSSPrimitiveValue = function(element, prop) {
+        global.CSSPrimitiveValue = function (element, prop) {
             this.element = element;
             this.prop = prop;
             this.primitiveType = 0;
 
-            this.getFloatValue = function(primitiveType) {
-                var re = /(\-([a-z]){1})/g;
-                var prop = this.prop;
-                if (prop == 'float') {
+            this.getFloatValue = function (primitiveType) {
+                var re = /(\-([a-z]){1})/g,
+                    prop = this.prop;
+
+                if (prop === 'float') {
                     prop = 'styleFloat';
                 }
 
                 if (re.test(prop)) {
-                    prop = prop.replace(re, function() {
+                    prop = prop.replace(re, function () {
                         return arguments[2].toUpperCase();
                     });
                 }
@@ -59,63 +61,60 @@
     }
 
     if (!('preventDefault' in Event.prototype)) {
-        Event.prototype.preventDefault = function() {
+        Event.prototype.preventDefault = function () {
             this.returnValue = false;
         };
     }
 
     if (!('stopPropagation' in Event.prototype)) {
-        Event.prototype.stopPropagation = function() {
+        Event.prototype.stopPropagation = function () {
             this.cancelBubble = true;
         };
     }
 
     if (Element === undefined) {
-        Element = function() {};
+        global.Element = function () {};
     }
 
     if (!('addEventListener' in Element.prototype)) {
-        var eventListeners = [];
+        var eventListeners = [],
+            addListener = function (eventname, callback) {
+                var self = this,
+                    wrapper = function (event) {
+                        event.target = event.srcElement;
+                        event.currentTarget = self;
 
-        var addListener = function(eventname, callback) {
-            var self = this;
-            var wrapper = function(event) {
-                event.target = event.srcElement;
-                event.currentTarget = self;
+                        // if ('handleEvent' in callback) {
+                        //     callback.handleEvent(event);
+                        // } else {
+                        //     callback.call(self, event);
+                        // }
+                        callback(self, event);
+                    };
 
-                // if ('handleEvent' in callback) {
-                //     callback.handleEvent(event);
-                // } else {
-                //     callback.call(self, event);
-                // }
-                callback(self, event);
-            };
-
-            if (eventname != 'DOMContentLoaded') {
-                this.attachEvent('on' + eventname, wrapper);
-            }
-            eventListeners.push({object: this, type: eventname, listener: callback, wrapper: wrapper});
-        };
-
-        var removeListener = function(eventname, callback) {
-            for (var i = 0, length = eventListeners.length; i < length; i++) {
-                var eventListener = eventListeners[i];
-
-                if (eventListener.object === this && eventListener.type === eventname && eventListener.listener === callback) {
-                    if (eventname != 'DOMContentLoaded') {
-                        this.detachEvent('on' + eventname, eventListener.wrapper);
-                    }
-
-                    eventListeners.splice(i, 1);
-                    break;
+                if (eventname !== 'DOMContentLoaded') {
+                    this.attachEvent('on' + eventname, wrapper);
                 }
-            }
-        };
+                eventListeners.push({object: this, type: eventname, listener: callback, wrapper: wrapper});
+            },
+            removeListener = function (eventname, callback) {
+                for (var i = 0, length = eventListeners.length; i < length; i++) {
+                    var eventListener = eventListeners[i];
 
-        var dispatchEvent = function(event) {
-            var eventObject = document.createEventObject();
-            this.fireEvent('on' + event.type, eventObject);
-        };
+                    if (eventListener.object === this && eventListener.type === eventname && eventListener.listener === callback) {
+                        if (eventname != 'DOMContentLoaded') {
+                            this.detachEvent('on' + eventname, eventListener.wrapper);
+                        }
+
+                        eventListeners.splice(i, 1);
+                        break;
+                    }
+                }
+            },
+            dispatchEvent = function (event) {
+                var eventObject = document.createEventObject();
+                this.fireEvent('on' + event.type, eventObject);
+            };
 
         Element.prototype.addEventListener = addListener;
         Element.prototype.removeEventListener = removeListener;
@@ -133,7 +132,7 @@
             Window.prototype.dispatchEvent = dispatchEvent;
         }
 
-        document.attachEvent('onreadystatechange', function() {
+        document.attachEvent('onreadystatechange', function () {
             if (document.readyState == 'complete') {
                 var eventObject = document.createEventObject();
                 // eventObject.srcElement = window;
@@ -151,36 +150,36 @@
         var innerText = Object.getOwnPropertyDescriptor(Element.prototype, 'innerText');
 
         Object.defineProperty(Element.prototype, 'textContent', {
-            get: function() {
+            get: function () {
                 return innerText.get.call(this);
             },
-            set: function(value) {
+            set: function (value) {
                 return innerText.set.call(this, value);
             }
         });
     }
 
     if (!('getAttribute' in Element.prototype)) {
-        Element.prototype.getAttribute = function(attribute) {
+        Element.prototype.getAttribute = function (attribute) {
             return this.attributes[attribute].value;
         };
     }
 
     if (!('setAttribute' in Element.prototype)) {
-        Element.prototype.setAttribute = function(attribute, value) {
+        Element.prototype.setAttribute = function (attribute, value) {
             this.attributes[attribute].value = value;
         };
     }
 
     if (!('removeAttribute' in Element.prototype)) {
-        Element.prototype.removeAttribute = function(attribute) {
+        Element.prototype.removeAttribute = function (attribute) {
             this.attributes.removeNamedItem(attribute);
         };
     }
 
     if (!('firstElementChild' in Element.prototype)) {
         Object.defineProperty(Element.prototype, 'firstElementChild', {
-            get: function() {
+            get: function () {
                 return this.children[0];
             }
         });
@@ -188,22 +187,22 @@
 
     if (!('classList' in Element.prototype)) {
         Object.defineProperty(Element.prototype, 'classList', {
-            get: function() {
+            get: function () {
                 var self = this;
 
                 return {
-                    add: function(className) {
+                    add: function (className) {
                         self.className = self.className.trim() + ' ' + className;
                     },
 
-                    remove: function(className) {
+                    remove: function (className) {
                         self.className = self.className.replace(
                             new RegExp('(^|\\b)' + className.split(' ').join('|') + '(\\b|$)', 'gi'),
                             ' '
                         );
                     },
 
-                    contains: function(className) {
+                    contains: function (className) {
                         return (new RegExp('(^| )' + className + '( |$)', 'gi').test(self.className));
                     }
                 };
@@ -215,27 +214,27 @@
         var nodeValue = Object.getOwnPropertyDescriptor(Text.prototype, 'nodeValue');
 
         Object.defineProperty(Text.prototype, 'textContent', {
-            get: function() {
+            get: function () {
                 return nodeValue.get.call(this);
             },
-            set: function(value) {
+            set: function (value) {
                 return nodeValue.set.call(this, value);
             }
         });
     }
 
     if (!('trim' in String.prototype)) {
-        String.prototype.trim = function() {
+        String.prototype.trim = function () {
             return this.replace(/^\s+|\s+$/g, '');
         };
     }
 
     if (!('observe' in Object)) {
-        Object.observe = function() {};
+        Object.observe = function () {};
     }
 
     if (!('keys' in Object)) {
-        Object.keys = function(object) {
+        Object.keys = function (object) {
             var keys = [];
 
             for (var item in object) {
@@ -252,7 +251,7 @@
 
     /*
     if (!('forEach' in Object.prototype)) {
-        Object.prototype.forEach = function(callback) {
+        Object.prototype.forEach = function (callback) {
             for (var item in this) {
                 if (!this.hasOwnProperty(item)) {
                     continue;
@@ -264,7 +263,7 @@
     }
 
     if (!('map' in Object.prototype)) {
-        Object.prototype.map = function(callback) {
+        Object.prototype.map = function (callback) {
             var results = [];
 
             for (var item in this) {
@@ -280,7 +279,7 @@
     }
 
     if (!('forEach' in Array.prototype)) {
-        Array.prototype.forEach = function(callback) {
+        Array.prototype.forEach = function (callback) {
             for (var i = 0; i < this.length; i++) {
                 callback.apply(this, [this[i], i, this]);
             }
@@ -288,7 +287,7 @@
     }
 
     if (!('map' in Array.prototype)) {
-        Array.prototype.map = function(callback) {
+        Array.prototype.map = function (callback) {
             var results = [];
 
             for (var i = 0; i < this.length; i++) {
@@ -300,7 +299,7 @@
     }
 
     if (!('indexOf' in Array.prototype)) {
-        Array.prototype.indexOf = function(object, start) {
+        Array.prototype.indexOf = function (object, start) {
             for (var i = (start || 0), length = this.length; i < length; i++) {
                 if (this[i] === object) {
                     return i;
@@ -312,4 +311,4 @@
     }
     */
 
-})(this);
+}(this));

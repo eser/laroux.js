@@ -1,8 +1,8 @@
-(function(global) {
+(function (global) {
     'use strict';
 
     // core
-    var laroux = function(selector, parent) {
+    var laroux = function (selector, parent) {
         if (selector instanceof Array) {
             return laroux.helpers.toArray(
                 (parent || document).querySelectorAll(selector)
@@ -30,7 +30,7 @@
         id: {}
     };
 
-    laroux.c = function(selector) {
+    laroux.c = function (selector) {
         if (selector instanceof Array) {
             return laroux.cached.array[selector] || (
                 laroux.cached.array[selector] = laroux.helpers.toArray(
@@ -44,20 +44,20 @@
         );
     };
 
-    laroux.id = function(selector, parent) {
+    laroux.id = function (selector, parent) {
         return (parent || document).getElementById(selector);
     };
 
-    laroux.idc = function(selector) {
+    laroux.idc = function (selector) {
         return laroux.cached.id[selector] ||
             (laroux.cached.id[selector] = document.getElementById(selector));
     };
 
     laroux.parent = global;
-    laroux.popupFunc = alert;
+    laroux.popupFunc = global.alert;
     laroux.readyPassed = false;
 
-    laroux.ready = function(fnc) {
+    laroux.ready = function (fnc) {
         if (!laroux.readyPassed) {
             laroux.events.add('ContentLoaded', fnc);
             return;
@@ -66,12 +66,12 @@
         fnc();
     };
 
-    laroux.extend = function() {
+    laroux.extend = function () {
         Array.prototype.unshift.call(arguments, laroux);
         laroux.extendObject.apply(this, arguments);
     };
 
-    laroux.extendObject = function() {
+    laroux.extendObject = function () {
         var target = Array.prototype.shift.call(arguments),
             isArray = target instanceof Array;
 
@@ -93,7 +93,7 @@
         }
     };
 
-    laroux.each = function(arr, fnc, testOwnProperties) {
+    laroux.each = function (arr, fnc, testOwnProperties) {
         for (var item in arr) {
             if (testOwnProperties && !arr.hasOwnProperty(item)) {
                 continue;
@@ -107,7 +107,7 @@
         return arr;
     };
 
-    laroux.map = function(arr, fnc, dontSkipReturns, testOwnProperties) {
+    laroux.map = function (arr, fnc, dontSkipReturns, testOwnProperties) {
         var results = [];
 
         for (var item in arr) {
@@ -128,7 +128,7 @@
         return results;
     };
 
-    laroux.index = function(arr, value, testOwnProperties) {
+    laroux.index = function (arr, value, testOwnProperties) {
         for (var item in arr) {
             if (testOwnProperties && !arr.hasOwnProperty(item)) {
                 continue;
@@ -142,7 +142,7 @@
         return null;
     };
 
-    laroux.aeach = function(arr, fnc) {
+    laroux.aeach = function (arr, fnc) {
         for (var i = 0, length = arr.length; i < length; i++) {
             if (fnc(i, arr[i]) === false) {
                 break;
@@ -152,7 +152,7 @@
         return arr;
     };
 
-    laroux.amap = function(arr, fnc, dontSkipReturns) {
+    laroux.amap = function (arr, fnc, dontSkipReturns) {
         var results = [];
 
         for (var i = 0, length = arr.length; i < length; i++) {
@@ -169,7 +169,7 @@
         return results;
     };
 
-    laroux.aindex = function(arr, value, start) {
+    laroux.aindex = function (arr, value, start) {
         for (var i = (start || 0), length = arr.length; i < length; i++) {
             if (arr[i] === value) {
                 return i;
@@ -189,7 +189,7 @@
 
     document.addEventListener(
         'DOMContentLoaded',
-        function() {
+        function () {
             if (!laroux.readyPassed) {
                 laroux.events.invoke('ContentLoaded');
                 laroux.readyPassed = true;
@@ -197,14 +197,15 @@
         }
     );
 
-})(this);
-;(function(laroux) {
+}(this));
+;/*global NodeList, Node */
+(function (laroux) {
     'use strict';
 
     // requires $l.dom
 
     // wrapper
-    laroux.wrapper = function(selector, parent) {
+    laroux.wrapper = function (selector, parent) {
         var selection;
 
         if (selector instanceof Array) {
@@ -224,11 +225,11 @@
         return new laroux.wrapper.arrayTemplate(selection);
     };
 
-    laroux.wrapper.singleTemplate = function(element) {
+    laroux.wrapper.singleTemplate = function (element) {
         this.source = element;
         this.isArray = false;
 
-        this.get = function(index) {
+        this.get = function (index) {
             if (index === 0 || index === undefined) {
                 return this.source;
             }
@@ -236,16 +237,16 @@
             return undefined;
         };
 
-        this.find = function(selector) {
+        this.find = function (selector) {
             return laroux.wrapper(selector, this.source);
         };
     };
 
-    laroux.wrapper.arrayTemplate = function(elements) {
+    laroux.wrapper.arrayTemplate = function (elements) {
         this.source = elements;
         this.isArray = true;
 
-        this.get = function(index) {
+        this.get = function (index) {
             return this.source[index];
         };
     };
@@ -254,8 +255,8 @@
     laroux.wrapper.registerSingle = 1;
     laroux.wrapper.registerArray = 2;
 
-    laroux.wrapper.register = function(name, fnc, scope) {
-        var newFnc = function() {
+    laroux.wrapper.register = function (name, fnc, scope) {
+        var newFnc = function () {
             var result = fnc.apply(
                 this,
                 [this.source].concat(laroux.helpers.toArray(arguments))
@@ -265,21 +266,21 @@
         };
 
         switch (scope) {
-            case laroux.wrapper.registerSingle:
-                laroux.wrapper.singleTemplate.prototype[name] = newFnc;
-                break;
-            case laroux.wrapper.registerArray:
-                laroux.wrapper.arrayTemplate.prototype[name] = newFnc;
-                break;
-            default:
-                laroux.wrapper.singleTemplate.prototype[name] = newFnc;
-                laroux.wrapper.arrayTemplate.prototype[name] = newFnc;
-                break;
+        case laroux.wrapper.registerSingle:
+            laroux.wrapper.singleTemplate.prototype[name] = newFnc;
+            break;
+        case laroux.wrapper.registerArray:
+            laroux.wrapper.arrayTemplate.prototype[name] = newFnc;
+            break;
+        default:
+            laroux.wrapper.singleTemplate.prototype[name] = newFnc;
+            laroux.wrapper.arrayTemplate.prototype[name] = newFnc;
+            break;
         }
     };
 
-})(this.laroux);
-;(function(laroux) {
+}(this.laroux));
+;(function (laroux) {
     'use strict';
 
     // requires $l
@@ -293,7 +294,7 @@
 
         wrappers: {
             registry: {
-                'laroux.js': function(data) {
+                'laroux.js': function (data) {
                     if (!data.isSuccess) {
                         laroux.popupFunc('Error: ' + data.errorMessage);
                         return;
@@ -301,10 +302,11 @@
 
                     var obj;
 
-                    if (data.format == 'json') {
+                    if (data.format === 'json') {
                         obj = JSON.parse(data.object);
-                    } else if (data.format == 'script') {
-                        /* jshint evil:true */
+                    } else if (data.format === 'script') {
+                        /*jshint evil:true */
+                        /*jslint evil:true */
                         obj = eval(data.object);
                     } else { // if (data.format == 'xml') {
                         obj = data.object;
@@ -314,48 +316,49 @@
                 }
             },
 
-            set: function(name, fnc) {
+            set: function (name, fnc) {
                 laroux.ajax.wrappers.registry[name] = fnc;
             }
         },
 
         xDomainObject: false,
-        _xmlHttpRequestObject: null,
-        _xDomainRequestObject: null,
-        _xhr: function(crossDomain) {
-            if (laroux.ajax._xmlHttpRequestObject === null) {
-                laroux.ajax._xmlHttpRequestObject = new XMLHttpRequest();
+        xmlHttpRequestObject: null,
+        xDomainRequestObject: null,
+        xhr: function (crossDomain) {
+            if (laroux.ajax.xmlHttpRequestObject === null) {
+                laroux.ajax.xmlHttpRequestObject = new XMLHttpRequest();
             }
 
             if (crossDomain) {
-                if (!('withCredentials' in laroux.ajax._xmlHttpRequestObject) && XDomainRequest !== undefined) {
+                if (!('withCredentials' in laroux.ajax.xmlHttpRequestObject) && ('XDomainRequest' in laroux.parent)) {
                     laroux.ajax.xDomainObject = true;
 
-                    if (laroux.ajax._xDomainRequestObject === null) {
-                        laroux.ajax._xDomainRequestObject = new XDomainRequest();
+                    if (laroux.ajax.xDomainRequestObject === null) {
+                        laroux.ajax.xDomainRequestObject = new laroux.parent.XDomainRequest();
                     }
 
-                    return laroux.ajax._xDomainRequestObject;
+                    return laroux.ajax.xDomainRequestObject;
                 }
             } else {
                 laroux.ajax.xDomainObject = false;
             }
 
-            return laroux.ajax._xmlHttpRequestObject;
+            return laroux.ajax.xmlHttpRequestObject;
         },
 
-        _xhrResp: function(xhr, options) {
-            var wrapperFunction = xhr.getResponseHeader('X-Response-Wrapper-Function');
-            var response;
+        xhrResp: function (xhr, options) {
+            var wrapperFunction = xhr.getResponseHeader('X-Response-Wrapper-Function'),
+                response;
 
             if (options.datatype === undefined) {
                 response = xhr.responseText;
-            } else if (options.datatype == 'json') {
+            } else if (options.datatype === 'json') {
                 response = JSON.parse(xhr.responseText);
-            } else if (options.datatype == 'script') {
-                /* jshint evil:true */
+            } else if (options.datatype === 'script') {
+                /*jshint evil:true */
+                /*jslint evil:true */
                 response = eval(xhr.responseText);
-            } else if (options.datatype == 'xml') {
+            } else if (options.datatype === 'xml') {
                 response = xhr.responseXML;
             } else {
                 response = xhr.responseText;
@@ -371,15 +374,16 @@
             };
         },
 
-        makeRequest: function(options) {
+        makeRequest: function (options) {
             var cors = options.cors || laroux.ajax.corsDefault,
-                xhr = laroux.ajax._xhr(cors),
+                xhr = laroux.ajax.xhr(cors),
+                url = options.url,
                 timer = null,
                 n = 0;
 
             if (options.timeout !== undefined) {
                 timer = setTimeout(
-                    function() {
+                    function () {
                         xhr.abort();
                         if (options.timeoutFn !== undefined) {
                             options.timeoutFn(options.url);
@@ -389,18 +393,18 @@
                 );
             }
 
-            xhr.onreadystatechange = function() {
-                if (xhr.readyState == 4) {
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4) {
                     if (timer !== null) {
                         clearTimeout(timer);
                     }
 
                     if (xhr.status < 300) {
-                        var res = null;
-                        var isSuccess = true;
+                        var res = null,
+                            isSuccess = true;
 
                         try {
-                            res = laroux.ajax._xhrResp(xhr, options);
+                            res = laroux.ajax.xhrResp(xhr, options);
                         } catch (e) {
                             if (options.error !== undefined) {
                                 options.error(xhr, xhr.status, xhr.statusText);
@@ -431,11 +435,11 @@
 
                     laroux.events.invoke('ajaxComplete', [xhr, xhr.statusText, options]);
                 } else if (options.progress !== undefined) {
+                    /*jslint plusplus: true */
                     options.progress(++n);
                 }
             };
 
-            var url = options.url;
             if (options.getdata !== undefined && options.getdata !== null) {
                 if (options.getdata.constructor === Object) {
                     var queryString = laroux.helpers.buildQueryString(options.getdata);
@@ -507,7 +511,7 @@
             }
         },
 
-        get: function(path, values, successfnc, errorfnc, cors) {
+        get: function (path, values, successfnc, errorfnc, cors) {
             laroux.ajax.makeRequest({
                 type: 'GET',
                 url: path,
@@ -520,7 +524,7 @@
             });
         },
 
-        getJson: function(path, values, successfnc, errorfnc, cors) {
+        getJson: function (path, values, successfnc, errorfnc, cors) {
             laroux.ajax.makeRequest({
                 type: 'GET',
                 url: path,
@@ -533,7 +537,7 @@
             });
         },
 
-        getJsonP: function(path, values, method, successfnc, errorfnc, cors) {
+        getJsonP: function (path, values, method, successfnc, errorfnc, cors) {
             laroux.ajax.makeRequest({
                 type: 'GET',
                 url: path,
@@ -547,7 +551,7 @@
             });
         },
 
-        getScript: function(path, values, successfnc, errorfnc, cors) {
+        getScript: function (path, values, successfnc, errorfnc, cors) {
             laroux.ajax.makeRequest({
                 type: 'GET',
                 url: path,
@@ -560,7 +564,7 @@
             });
         },
 
-        post: function(path, values, successfnc, errorfnc, cors) {
+        post: function (path, values, successfnc, errorfnc, cors) {
             laroux.ajax.makeRequest({
                 type: 'POST',
                 url: path,
@@ -574,7 +578,7 @@
             });
         },
 
-        postJson: function(path, values, successfnc, errorfnc, cors) {
+        postJson: function (path, values, successfnc, errorfnc, cors) {
             laroux.ajax.makeRequest({
                 type: 'POST',
                 url: path,
@@ -592,8 +596,8 @@
         }
     };
 
-})(this.laroux);
-;(function(laroux) {
+}(this.laroux));
+;(function (laroux) {
     'use strict';
 
     // requires $l.helpers
@@ -602,11 +606,11 @@
     // css
     laroux.css = {
         // class features
-        hasClass: function(element, className) {
+        hasClass: function (element, className) {
             return element.classList.contains(className);
         },
 
-        addClass: function(element, className) {
+        addClass: function (element, className) {
             var elements = laroux.helpers.getAsArray(element);
 
             for (var i = 0, length = elements.length; i < length; i++) {
@@ -614,7 +618,7 @@
             }
         },
 
-        removeClass: function(element, className) {
+        removeClass: function (element, className) {
             var elements = laroux.helpers.getAsArray(element);
 
             for (var i = 0, length = elements.length; i < length; i++) {
@@ -622,7 +626,7 @@
             }
         },
 
-        toggleClass: function(element, className) {
+        toggleClass: function (element, className) {
             var elements = laroux.helpers.getAsArray(element);
 
             for (var i = 0, length = elements.length; i < length; i++) {
@@ -634,7 +638,7 @@
             }
         },
 
-        cycleClass: function(elements, className) {
+        cycleClass: function (elements, className) {
             for (var i = 0, length = elements.length; i < length; i++) {
                 if (elements[i].classList.contains(className)) {
                     elements[i].classList.remove(className);
@@ -645,7 +649,7 @@
         },
 
         // style features
-        getProperty: function(element, styleName) {
+        getProperty: function (element, styleName) {
             var style = getComputedStyle(element);
 
             styleName = laroux.helpers.antiCamelCase(styleName);
@@ -653,7 +657,7 @@
             return style.getPropertyValue(styleName);
         },
 
-        setProperty: function(element, properties, value) {
+        setProperty: function (element, properties, value) {
             var elements = laroux.helpers.getAsArray(element);
 
             if (typeof properties == 'string') {
@@ -678,7 +682,7 @@
         // transition features
         defaultTransition: '2s ease',
 
-        setTransitionSingle: function(element, transition) {
+        setTransitionSingle: function (element, transition) {
             var transitions = laroux.helpers.getAsArray(transition),
                 style = getComputedStyle(element),
                 currentTransitions = style.getPropertyValue('transition') || style.getPropertyValue('-webkit-transition') ||
@@ -729,7 +733,7 @@
             element.style.msTransition = value;
         },
 
-        setTransition: function(element, transition) {
+        setTransition: function (element, transition) {
             var elements = laroux.helpers.getAsArray(element);
 
             for (var i = 0, length = elements.length; i < length; i++) {
@@ -737,7 +741,7 @@
             }
         },
 
-        show: function(element, transitionProperties) {
+        show: function (element, transitionProperties) {
             if (transitionProperties !== undefined) {
                 laroux.css.setTransition(element, 'opacity ' + transitionProperties);
             } else {
@@ -747,7 +751,7 @@
             laroux.css.setProperty(element, {opacity: 1});
         },
 
-        hide: function(element, transitionProperties) {
+        hide: function (element, transitionProperties) {
             if (transitionProperties !== undefined) {
                 laroux.css.setTransition(element, 'opacity ' + transitionProperties);
             } else {
@@ -759,7 +763,7 @@
 
         // measurement features
         // height of element without padding, margin and border
-        height: function(element) {
+        height: function (element) {
             var style = getComputedStyle(element),
                 height = style.getPropertyCSSValue('height');
 
@@ -767,12 +771,12 @@
         },
 
         // height of element with padding but without margin and border
-        innerHeight: function(element) {
+        innerHeight: function (element) {
             return element.clientHeight;
         },
 
         // height of element with padding and border but margin optional
-        outerHeight: function(element, includeMargin) {
+        outerHeight: function (element, includeMargin) {
             if (includeMargin || false) {
                 return element.offsetHeight;
             }
@@ -787,7 +791,7 @@
         },
 
         // width of element without padding, margin and border
-        width: function(element) {
+        width: function (element) {
             var style = getComputedStyle(element),
                 height = style.getPropertyCSSValue('width');
 
@@ -795,12 +799,12 @@
         },
 
         // width of element with padding but without margin and border
-        innerWidth: function(element) {
+        innerWidth: function (element) {
             return element.clientWidth;
         },
 
         // width of element with padding and border but margin optional
-        outerWidth: function(element, includeMargin) {
+        outerWidth: function (element, includeMargin) {
             if (includeMargin || false) {
                 return element.offsetWidth;
             }
@@ -814,33 +818,33 @@
             return Math.ceil(element.offsetWidth + margins);
         },
 
-        top: function(element) {
+        top: function (element) {
             return element.getBoundingClientRect().top +
                 ((document.documentElement && document.documentElement.scrollTop) || document.body.scrollTop);
         },
 
-        left: function(element) {
+        left: function (element) {
             return element.getBoundingClientRect().left +
                 ((document.documentElement && document.documentElement.scrollLeft) || document.body.scrollLeft);
         },
 
-        aboveTheTop: function(element) {
+        aboveTheTop: function (element) {
             return element.getBoundingClientRect().bottom <= 0;
         },
 
-        belowTheFold: function(element) {
+        belowTheFold: function (element) {
             return element.getBoundingClientRect().top > laroux.parent.innerHeight;
         },
 
-        leftOfScreen: function(element) {
+        leftOfScreen: function (element) {
             return element.getBoundingClientRect().right <= 0;
         },
 
-        rightOfScreen: function(element) {
+        rightOfScreen: function (element) {
             return element.getBoundingClientRect().left > laroux.parent.innerWidth;
         },
 
-        inViewport: function(element) {
+        inViewport: function (element) {
             var rect = element.getBoundingClientRect();
 
             return !(rect.bottom <= 0 || rect.top > laroux.parent.innerHeight ||
@@ -874,8 +878,8 @@
         laroux.wrapper.register('inViewport', laroux.css.inViewport, laroux.wrapper.registerSingle);
     }
 
-})(this.laroux);
-;(function(laroux) {
+}(this.laroux));
+;(function (laroux) {
     'use strict';
 
     // requires $l.helpers
@@ -883,43 +887,43 @@
 
     // dom
     laroux.dom = {
-        docprop: function(propName) {
+        docprop: function (propName) {
             return document.documentElement.classList.contains(propName);
         },
 
-        select: function(selector, parent) {
+        select: function (selector, parent) {
             return laroux.helpers.toArray(
                 (parent || document).querySelectorAll(selector)
             );
         },
 
-        selectByClass: function(selector, parent) {
+        selectByClass: function (selector, parent) {
             return laroux.helpers.toArray(
                 (parent || document).getElementsByClassName(selector)
             );
         },
 
-        selectByTag: function(selector, parent) {
+        selectByTag: function (selector, parent) {
             return laroux.helpers.toArray(
                 (parent || document).getElementsByTagName(selector)
             );
         },
 
-        selectById: function(selector, parent) {
+        selectById: function (selector, parent) {
             return (parent || document).getElementById(selector);
         },
 
-        selectSingle: function(selector, parent) {
+        selectSingle: function (selector, parent) {
             return (parent || document).querySelector(selector);
         },
 
-        attr: function(element, attributes, value) {
+        attr: function (element, attributes, value) {
             if (value === undefined && attributes.constructor !== Object) {
                 return element.getAttribute(attributes);
             }
 
             var elements = laroux.helpers.getAsArray(element);
-            if (typeof attributes == 'string') {
+            if (typeof attributes === 'string') {
                 var oldAttributes = attributes;
                 attributes = {};
                 attributes[oldAttributes] = value;
@@ -940,7 +944,7 @@
             }
         },
 
-        data: function(element, datanames, value) {
+        data: function (element, datanames, value) {
             if (value === undefined && datanames.constructor !== Object) {
                 return element.getAttribute('data-' + datanames);
             }
@@ -968,7 +972,7 @@
         },
 
         eventHistory: [],
-        setEvent: function(element, eventname, fnc) {
+        setEvent: function (element, eventname, fnc) {
             var elements = laroux.helpers.getAsArray(element);
 
             for (var i = 0, length = elements.length; i < length; i++) {
@@ -976,8 +980,8 @@
             }
         },
 
-        setEventSingle: function(element, eventname, fnc) {
-            var fncWrapper = function(e) {
+        setEventSingle: function (element, eventname, fnc) {
+            var fncWrapper = function (e) {
                 if (fnc(e, element) === false) {
                     if (e.preventDefault) {
                         e.preventDefault();
@@ -991,7 +995,7 @@
             element.addEventListener(eventname, fncWrapper, false);
         },
 
-        unsetEvent: function(element, eventname, fnc) {
+        unsetEvent: function (element, eventname, fnc) {
             var elements = laroux.helpers.getAsArray(element);
 
             for (var i1 = 0, length1 = elements.length; i1 < length1; i1++) {
@@ -1020,7 +1024,7 @@
             }
         },
 
-        dispatchEvent: function(element, eventname, data) {
+        dispatchEvent: function (element, eventname, data) {
             var customEvent = document.createEvent('Event');
             for (var item in data) {
                 if (!data.hasOwnProperty(item)) {
@@ -1034,7 +1038,7 @@
             element.dispatchEvent(customEvent);
         },
 
-        create: function(html) {
+        create: function (html) {
             var frag = document.createDocumentFragment(),
                 temp = document.createElement('DIV');
 
@@ -1049,7 +1053,7 @@
             return frag;
         },
 
-        createElement: function(element, attributes, children) {
+        createElement: function (element, attributes, children) {
             var elem = document.createElement(element);
 
             if (attributes !== undefined && attributes.constructor === Object) {
@@ -1079,7 +1083,7 @@
             return elem;
         },
 
-        createOption: function(element, key, value, isDefault) {
+        createOption: function (element, key, value, isDefault) {
             /* old behaviour, does not support optgroups as parents.
             var count = element.options.length;
             element.options[count] = new Option(value, key);
@@ -1099,7 +1103,7 @@
             element.appendChild(option);
         },
 
-        selectByValue: function(element, value) {
+        selectByValue: function (element, value) {
             for (var i = 0, length = element.options.length; i < length; i++) {
                 if (element.options[i].getAttribute('value') == value) {
                     element.selectedIndex = i;
@@ -1109,7 +1113,7 @@
         },/*,
 
         // TODO: it's redundant for now
-        loadImage: function() {
+        loadImage: function () {
             var images = [];
 
             for (var i = 0, length = arguments.length; i < length; i++) {
@@ -1122,7 +1126,7 @@
             return images;
         },
 
-        loadAsyncScript: function(path, triggerName, async) {
+        loadAsyncScript: function (path, triggerName, async) {
             var elem = document.createElement('script');
 
             elem.type = 'text/javascript';
@@ -1130,7 +1134,7 @@
             elem.src = path;
 
             var loaded = false;
-            elem.onload = elem.onreadystatechange = function() {
+            elem.onload = elem.onreadystatechange = function () {
                 if ((elem.readyState && elem.readyState !== 'complete' && elem.readyState !== 'loaded') || loaded) {
                     return false;
                 }
@@ -1150,7 +1154,7 @@
             head.appendChild(elem);
         },
 
-        loadAsyncStyle: function(path, triggerName, async) {
+        loadAsyncStyle: function (path, triggerName, async) {
             var elem = document.createElement('LINK');
 
             elem.type = 'text/css';
@@ -1159,7 +1163,7 @@
             elem.rel = 'stylesheet';
 
             var loaded = false;
-            elem.onload = elem.onreadystatechange = function() {
+            elem.onload = elem.onreadystatechange = function () {
                 if ((elem.readyState && elem.readyState !== 'complete' && elem.readyState !== 'loaded') || loaded) {
                     return false;
                 }
@@ -1179,35 +1183,35 @@
             head.appendChild(elem);
         },*/
 
-        clear: function(element) {
+        clear: function (element) {
             while (element.hasChildNodes()) {
                 element.removeChild(element.firstChild);
             }
         },
 
-        insert: function(element, position, content) {
+        insert: function (element, position, content) {
             element.insertAdjacentHTML(position, content);
         },
 
-        prepend: function(element, content) {
+        prepend: function (element, content) {
             element.insertAdjacentHTML('afterbegin', content);
         },
 
-        append: function(element, content) {
+        append: function (element, content) {
             element.insertAdjacentHTML('beforeend', content);
         },
 
-        replace: function(element, content) {
+        replace: function (element, content) {
             laroux.dom.clear(element);
             element.insertAdjacentHTML('afterbegin', content);
         },
 
-        replaceText: function(element, content) {
+        replaceText: function (element, content) {
             // laroux.dom.clear(element);
             element.textContent = content;
         },
 
-        remove: function(element) {
+        remove: function (element) {
             element.remove();
         },
 
@@ -1216,7 +1220,7 @@
         cloneInsertAfter: 2,
         cloneInsertBefore: 3,
 
-        clone: function(element, type, container, target) {
+        clone: function (element, type, container, target) {
             var newElement = element.cloneNode(true);
 
             if (container === undefined) {
@@ -1240,7 +1244,7 @@
         }/*,
 
         // TODO: it's redundant for now
-        applyOperations: function(element, operations) {
+        applyOperations: function (element, operations) {
             for (var operation in operations) {
                 if (!operations.hasOwnProperty(operation)) {
                     continue;
@@ -1327,26 +1331,26 @@
 
     // a fix for Internet Explorer
     if (Element.prototype.remove === undefined) {
-        Element.prototype.remove = function() {
+        Element.prototype.remove = function () {
             if (this.parentElement !== null) {
                 this.parentElement.removeChild(this);
             }
         };
     }
 
-})(this.laroux);
-;(function(laroux) {
+}(this.laroux));
+;(function (laroux) {
     'use strict';
 
     // events
     laroux.events = {
         delegates: [],
 
-        add: function(event, fnc) {
+        add: function (event, fnc) {
             laroux.events.delegates.push({event: event, fnc: fnc});
         },
 
-        invoke: function(event, args) {
+        invoke: function (event, args) {
             for (var item in laroux.events.delegates) {
                 if (!laroux.events.delegates.hasOwnProperty(item)) {
                     continue;
@@ -1361,14 +1365,14 @@
         },
     };
 
-})(this.laroux);
-;(function(laroux) {
+}(this.laroux));
+;(function (laroux) {
     'use strict';
 
     // forms
     laroux.forms = {
-        ajaxForm: function(formobj, fnc, fncBegin) {
-            laroux.dom.setEvent(formobj, 'submit', function() {
+        ajaxForm: function (formobj, fnc, fncBegin) {
+            laroux.dom.setEvent(formobj, 'submit', function () {
                 if (fncBegin !== undefined) {
                     fncBegin();
                 }
@@ -1383,45 +1387,45 @@
             });
         },
 
-        isFormField: function(element) {
-            if (element.tagName == 'SELECT') {
+        isFormField: function (element) {
+            if (element.tagName === 'SELECT') {
                 return true;
             }
 
-            if (element.tagName == 'INPUT') {
+            if (element.tagName === 'INPUT') {
                 var type = element.getAttribute('type').toUpperCase();
 
-                if (type == 'FILE' || type == 'CHECKBOX' || type == 'RADIO' || type == 'TEXT' || type == 'PASSWORD' || type == 'HIDDEN') {
+                if (type === 'FILE' || type === 'CHECKBOX' || type === 'RADIO' || type === 'TEXT' || type === 'PASSWORD' || type === 'HIDDEN') {
                     return true;
                 }
 
                 return false;
             }
 
-            if (element.tagName == 'TEXTAREA') {
+            if (element.tagName === 'TEXTAREA') {
                 return true;
             }
 
             return false;
         },
 
-        getFormFieldValue: function(element) {
+        getFormFieldValue: function (element) {
             if (element.disabled === true) {
                 return null;
             }
 
-            if (element.tagName == 'SELECT') {
+            if (element.tagName === 'SELECT') {
                 return element.options[element.selectedIndex].value;
             }
 
-            if (element.tagName == 'INPUT') {
+            if (element.tagName === 'INPUT') {
                 var type = element.getAttribute('type').toUpperCase();
 
-                if (type == 'FILE') {
+                if (type === 'FILE') {
                     return element.files[0];
                 }
 
-                if (type == 'CHECKBOX' || type == 'RADIO') {
+                if (type === 'CHECKBOX' || type === 'RADIO') {
                     if (element.checked) {
                         return element.value;
                     }
@@ -1429,26 +1433,26 @@
                     return null;
                 }
 
-                if (type == 'TEXT' || type == 'PASSWORD' || type == 'HIDDEN') {
+                if (type === 'TEXT' || type === 'PASSWORD' || type === 'HIDDEN') {
                     return element.value;
                 }
 
                 return null;
             }
 
-            if (element.tagName == 'TEXTAREA') {
+            if (element.tagName === 'TEXTAREA') {
                 return element.value;
             }
 
             return null;
         },
 
-        setFormFieldValue: function(element, value) {
+        setFormFieldValue: function (element, value) {
             if (element.disabled === true) {
                 return;
             }
 
-            if (element.tagName == 'SELECT') {
+            if (element.tagName === 'SELECT') {
                 for (var option in element.options) {
                     if (!element.options.hasOwnProperty(option)) {
                         continue;
@@ -1493,7 +1497,7 @@
             }
         },
 
-        toggleFormEditing: function(formobj, value) {
+        toggleFormEditing: function (formobj, value) {
             var selection = formobj.querySelectorAll('*[name]');
 
             if (value === undefined) {
@@ -1531,7 +1535,7 @@
             }
         },
 
-        serializeFormData: function(formobj) {
+        serializeFormData: function (formobj) {
             var formdata = new FormData();
             var selection = formobj.querySelectorAll('*[name]');
 
@@ -1546,7 +1550,7 @@
             return formdata;
         },
 
-        serialize: function(formobj) {
+        serialize: function (formobj) {
             var values = {};
             var selection = formobj.querySelectorAll('*[name]');
 
@@ -1561,7 +1565,7 @@
             return values;
         },
 
-        deserialize: function(formobj, data) {
+        deserialize: function (formobj, data) {
             var selection = formobj.querySelectorAll('*[name]');
 
             for (var selected = 0, length = selection.length; selected < length; selected++) {
@@ -1570,21 +1574,22 @@
         }
     };
 
-})(this.laroux);
-;(function(laroux) {
+}(this.laroux));
+;(function (laroux) {
     'use strict';
 
     // helpers
     laroux.helpers = {
         uniqueId: 0,
 
-        getUniqueId: function() {
+        getUniqueId: function () {
+            /*jslint plusplus: true */
             return 'uid-' + (++laroux.helpers.uniqueId);
         },
 
-        buildQueryString: function(values, rfc3986) {
-            var uri = '';
-            var regEx = /%20/g;
+        buildQueryString: function (values, rfc3986) {
+            var uri = '',
+                regEx = /%20/g;
 
             for (var name in values) {
                 if (!values.hasOwnProperty(name)) {
@@ -1603,7 +1608,7 @@
             return uri.substr(1);
         },
 
-        buildFormData: function(values) {
+        buildFormData: function (values) {
             var data = new FormData();
 
             for (var name in values) {
@@ -1619,23 +1624,23 @@
             return data;
         },
 
-        format: function() {
+        format: function () {
             var args = arguments;
-            return Array.prototype.shift.call(args).replace(/%s/g, function() { return Array.prototype.shift.call(args); });
+            return Array.prototype.shift.call(args).replace(/%s/g, function () { return Array.prototype.shift.call(args); });
         },
 
-        replaceAll: function(text, dictionary) {
+        replaceAll: function (text, dictionary) {
             var re = new RegExp(Object.keys(dictionary).join('|'), 'g');
 
             return text.replace(
                 re,
-                function(match) {
+                function (match) {
                     return dictionary[match];
                 }
             );
         },
 
-        camelCase: function(value) {
+        camelCase: function (value) {
             var flag = false;
             var output = '';
 
@@ -1653,7 +1658,7 @@
             return output;
         },
 
-        antiCamelCase: function(value) {
+        antiCamelCase: function (value) {
             var output = '';
 
             for (var j = 0; j < value.length; j++) {
@@ -1669,7 +1674,7 @@
             return output;
         },
 
-        quoteAttr: function(value) {
+        quoteAttr: function (value) {
             return value.replace(/&/g, '&amp;')
                         .replace(/'/g, '&apos;')
                         .replace(/"/g, '&quot;')
@@ -1680,18 +1685,18 @@
                         .replace(/[\r\n]/g, '&#13;');
         },
 
-        spliceString: function(value, index, count, add) {
+        spliceString: function (value, index, count, add) {
             return value.slice(0, index) + (add || '') + value.slice(index + count);
         },
 
-        random: function(min, max) {
+        random: function (min, max) {
             return min + Math.floor(Math.random() * (max - min + 1));
         },
 
-        find: function(obj, iterator, context) {
+        find: function (obj, iterator, context) {
             var result;
 
-            obj.some(function(value, index, list) {
+            obj.some(function (value, index, list) {
                 if (iterator.call(context, value, index, list)) {
                     result = value;
                     return true;
@@ -1701,11 +1706,11 @@
             return result;
         },
 
-        column: function(obj, key) {
-            return laroux.map(obj, function(value) { return value[key]; }, true);
+        column: function (obj, key) {
+            return laroux.map(obj, function (value) { return value[key]; }, true);
         },
 
-        shuffle: function(obj) {
+        shuffle: function (obj) {
             var index = 0,
                 shuffled = [];
 
@@ -1722,7 +1727,7 @@
             return shuffled;
         },
 
-        merge: function() {
+        merge: function () {
             var target = Array.prototype.shift.call(arguments),
                 tmp = target,
                 isArray = tmp instanceof Array;
@@ -1745,11 +1750,11 @@
             return tmp;
         },
 
-        duplicate: function(obj) {
+        duplicate: function (obj) {
             return JSON.parse(JSON.stringify(obj));
         },
 
-        toArray: function(obj) {
+        toArray: function (obj) {
             var length = obj.length,
                 items = new Array(length);
 
@@ -1760,7 +1765,7 @@
             return items;
         },
 
-        getAsArray: function(obj) {
+        getAsArray: function (obj) {
             var items;
 
             if (obj instanceof Array) {
@@ -1779,7 +1784,7 @@
             return items;
         },
 
-        getLength: function(obj) {
+        getLength: function (obj) {
             if (obj.constructor === Object) {
                 if (obj.length !== undefined) {
                     return obj.length;
@@ -1791,7 +1796,7 @@
             return -1;
         },
 
-        getKeysRecursive: function(obj, delimiter, prefix, keys) {
+        getKeysRecursive: function (obj, delimiter, prefix, keys) {
             if (delimiter === undefined) {
                 delimiter = '.';
             }
@@ -1817,7 +1822,7 @@
             return keys;
         },
 
-        getElement: function(obj, path, defaultValue, delimiter) {
+        getElement: function (obj, path, defaultValue, delimiter) {
             if (defaultValue === undefined) {
                 defaultValue = null;
             }
@@ -1849,7 +1854,7 @@
         },
         /* for javascript 1.7 or later,
 
-        getKeys: function(obj) {
+        getKeys: function (obj) {
             var keys = Object.keys(obj);
             for (var item in keys) {
                 yield keys[item];
@@ -1857,8 +1862,8 @@
         } */
     };
 
-})(this.laroux);
-;(function(laroux) {
+}(this.laroux));
+;(function (laroux) {
     'use strict';
 
     // requires $l
@@ -1867,12 +1872,12 @@
     laroux.timers = {
         data: [],
 
-        set: function(timer) {
+        set: function (timer) {
             timer.next = Date.now() + timer.timeout;
             laroux.timers.data.push(timer);
         },
 
-        remove: function(id) {
+        remove: function (id) {
             var targetKey = null;
 
             for (var item in laroux.timers.data) {
@@ -1896,7 +1901,7 @@
             return false;
         },
 
-        ontick: function() {
+        ontick: function () {
             var now = Date.now();
 
             var removeKeys = [];
@@ -1928,12 +1933,12 @@
         }
     };
 
-    laroux.ready(function() {
+    laroux.ready(function () {
         setInterval(laroux.timers.ontick, 100);
     });
 
-})(this.laroux);
-;(function(laroux) {
+}(this.laroux));
+;(function (laroux) {
     'use strict';
 
     // requires $l.helpers
@@ -1943,7 +1948,7 @@
         delegates: [],
         list: [],
 
-        set: function(condition, fnc, state) {
+        set: function (condition, fnc, state) {
             var conditions = laroux.helpers.getAsArray(condition);
 
             for (var item in conditions) {
@@ -1963,7 +1968,7 @@
             });
         },
 
-        ontrigger: function(triggerName, args) {
+        ontrigger: function (triggerName, args) {
             var eventIdx = laroux.aindex(laroux.triggers.list, triggerName);
             if (eventIdx !== -1) {
                 laroux.triggers.list.splice(eventIdx, 1);
@@ -2014,8 +2019,8 @@
         }
     };
 
-})(this.laroux);
-;(function(laroux) {
+}(this.laroux));
+;(function (laroux) {
     'use strict';
 
     // requires $l
@@ -2024,9 +2029,9 @@
     laroux.vars = {
         cookiePath: '/',
 
-        getCookie: function(name, defaultValue) {
-            var re = new RegExp(encodeURIComponent(name) + '=[^;]+', 'i');
-            var match = document.cookie.match(re);
+        getCookie: function (name, defaultValue) {
+            var re = new RegExp(encodeURIComponent(name) + '=[^;]+', 'i'),
+                match = document.cookie.match(re);
             
             if (!match) {
                 return defaultValue || null;
@@ -2035,7 +2040,7 @@
             return decodeURIComponent(match[0].split('=')[1]);
         },
 
-        setCookie: function(name, value, expires, path) {
+        setCookie: function (name, value, expires, path) {
             var expireValue = '';
             if (expires) {
                 expireValue = '; expires=' + expires.toGMTString();
@@ -2044,11 +2049,11 @@
             document.cookie = encodeURIComponent(name) + '=' + encodeURIComponent(value) + expireValue + '; path=' + (path || laroux.vars.cookiePath);
         },
 
-        removeCookie: function(name, path) {
+        removeCookie: function (name, path) {
             document.cookie = encodeURIComponent(name) + '=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=' + (path || laroux.vars.cookiePath);
         },
 
-        getLocal: function(name, defaultValue) {
+        getLocal: function (name, defaultValue) {
             if (!(name in localStorage)) {
                 return defaultValue || null;
             }
@@ -2056,15 +2061,15 @@
             return JSON.parse(localStorage[name]);
         },
 
-        setLocal: function(name, value) {
+        setLocal: function (name, value) {
             localStorage[name] = JSON.stringify(value);
         },
 
-        removeLocal: function(name) {
+        removeLocal: function (name) {
             delete localStorage[name];
         },
 
-        getSession: function(name, defaultValue) {
+        getSession: function (name, defaultValue) {
             if (!(name in sessionStorage)) {
                 return defaultValue || null;
             }
@@ -2072,13 +2077,13 @@
             return JSON.parse(sessionStorage[name]);
         },
 
-        setSession: function(name, value) {
+        setSession: function (name, value) {
             sessionStorage[name] = JSON.stringify(value);
         },
 
-        removeSession: function(name) {
+        removeSession: function (name) {
             delete sessionStorage[name];
         }
     };
 
-})(this.laroux);
+}(this.laroux));

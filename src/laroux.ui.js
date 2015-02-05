@@ -1,4 +1,4 @@
-(function(laroux) {
+(function (laroux) {
     'use strict';
 
     // requires $l
@@ -15,15 +15,13 @@
         popup: {
             defaultTimeout: 500,
 
-            createBox: function(id, xclass, message) {
-                return laroux.dom.createElement('DIV', {id: id, 'class': xclass},
-                    message
-                );
+            createBox: function (id, xclass, message) {
+                return laroux.dom.createElement('DIV', {id: id, 'class': xclass}, message);
             },
 
-            msgbox: function(timeout, message) {
-                var id = laroux.helpers.getUniqueId();
-                var obj = laroux.ui.popup.createBox(id, 'laroux_msgbox', message);
+            msgbox: function (timeout, message) {
+                var id = laroux.helpers.getUniqueId(),
+                    obj = laroux.ui.popup.createBox(id, 'laroux_msgbox', message);
                 laroux.ui.floatContainer.appendChild(obj);
 
                 laroux.css.setProperty(obj, {opacity: 1});
@@ -31,7 +29,7 @@
                 laroux.timers.set({
                     timeout: timeout,
                     reset: false,
-                    ontick: function(x) {
+                    ontick: function (x) {
                         // laroux.css.setProperty(x, {opacity: 0});
                         laroux.dom.remove(x);
                     },
@@ -39,8 +37,8 @@
                 });
             },
 
-            init: function() {
-                laroux.popupFunc = function(message) {
+            init: function () {
+                laroux.popupFunc = function (message) {
                     laroux.ui.popup.msgbox(laroux.ui.popup.defaultTimeout, message);
                 };
             }
@@ -52,18 +50,18 @@
             defaultDelay: 1500,
             timer: null,
 
-            killTimer: function() {
+            killTimer: function () {
                 clearTimeout(laroux.ui.loading.timer);
             },
 
-            hide: function() {
+            hide: function () {
                 laroux.ui.loading.killTimer();
 
                 laroux.css.setProperty(laroux.ui.loading.element, {display: 'none'});
                 localStorage.loadingIndicator = 'false';
             },
 
-            show: function(delay) {
+            show: function (delay) {
                 laroux.ui.loading.killTimer();
 
                 if (delay === undefined) {
@@ -71,14 +69,14 @@
                 }
 
                 if (delay > 0) {
-                    setTimeout(function() { laroux.ui.loading.show(0); }, delay);
+                    setTimeout(function () { laroux.ui.loading.show(0); }, delay);
                 } else {
                     laroux.css.setProperty(laroux.ui.loading.element, {display: 'block'});
                     localStorage.loadingIndicator = 'true';
                 }
             },
 
-            init: function() {
+            init: function () {
                 if (laroux.ui.loading.element === null && laroux.ui.loading.elementSelector !== null) {
                     laroux.ui.loading.element = laroux.dom.selectSingle(laroux.ui.loading.elementSelector);
                 }
@@ -87,7 +85,7 @@
                     laroux.dom.setEvent(window, 'load', laroux.ui.loading.hide);
                     laroux.dom.setEvent(window, 'beforeunload', laroux.ui.loading.show);
 
-                    if (localStorage.loadingIndicator !== undefined && localStorage.loadingIndicator == 'true') {
+                    if (localStorage.loadingIndicator !== undefined && localStorage.loadingIndicator === 'true') {
                         laroux.ui.loading.show(0);
                     } else {
                         laroux.ui.loading.show();
@@ -99,7 +97,7 @@
         dynamicDates: {
             updateDatesElements: null,
 
-            updateDates: function() {
+            updateDates: function () {
                 if (laroux.ui.dynamicDates.updateDatesElements === null) {
                     laroux.ui.dynamicDates.updateDatesElements = laroux.dom.select('*[data-epoch]');
                 }
@@ -122,7 +120,7 @@
                 }
             },
 
-            init: function() {
+            init: function () {
                 laroux.timers.set({
                     timeout: 500,
                     reset: true,
@@ -134,16 +132,16 @@
         scrollView: {
             selectedElements: [],
 
-            onhidden: function(elements) {
+            onhidden: function (elements) {
                 laroux.css.setProperty(elements, {opacity: 0});
                 laroux.css.setTransition(elements, ['opacity']);
             },
 
-            onreveal: function(elements) {
+            onreveal: function (elements) {
                 laroux.css.setProperty(elements, {opacity: 1});
             },
 
-            set: function(element) {
+            set: function (element) {
                 var elements = laroux.helpers.getAsArray(element);
 
                 for (var i = 0, length = elements.length; i < length; i++) {
@@ -156,13 +154,13 @@
                 laroux.dom.setEvent(window, 'scroll', laroux.ui.scrollView.reveal);
             },
 
-            reveal: function() {
+            reveal: function () {
                 var removeKeys = [],
                     elements = [];
 
                 laroux.each(
                     laroux.ui.scrollView.selectedElements,
-                    function(i, element) {
+                    function (i, element) {
                         if (laroux.css.inViewport(element)) {
                             removeKeys.unshift(i);
                             elements.push(element);
@@ -188,14 +186,14 @@
             }
         },
 
-        createFloatContainer: function() {
+        createFloatContainer: function () {
             if (!laroux.ui.floatContainer) {
                 laroux.ui.floatContainer = laroux.dom.createElement('DIV', {id: 'laroux_floatdiv'});
                 document.body.insertBefore(laroux.ui.floatContainer, document.body.firstChild);
             }
         },
 
-        init: function() {
+        init: function () {
             laroux.ui.createFloatContainer();
             laroux.ui.popup.init();
             laroux.ui.loading.init();
@@ -203,4 +201,4 @@
         }
     };
 
-})(this.laroux);
+}(this.laroux));

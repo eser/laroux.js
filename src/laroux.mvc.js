@@ -1,4 +1,4 @@
-(function(laroux) {
+(function (laroux) {
     'use strict';
 
     // requires $l.dom
@@ -10,7 +10,7 @@
         apps: {},
         pauseUpdate: false,
 
-        init: function(element, model) {
+        init: function (element, model) {
             if (element.constructor === String) {
                 element = laroux.dom.selectById(element);
             }
@@ -21,7 +21,7 @@
 
             var appKey = element.getAttribute('id');
 
-            model.onupdate = function(event) {
+            model.onupdate = function (event) {
                 if (!laroux.mvc.pauseUpdate) {
                     laroux.mvc.update(appKey); // , [event.key]
                 }
@@ -38,8 +38,9 @@
             laroux.mvc.rebind(appKey);
         },
 
-        rebind: function(appKey) {
+        rebind: function (appKey) {
             var app = laroux.mvc.apps[appKey];
+            /*jslint nomen: true */
             app.modelKeys = laroux.helpers.getKeysRecursive(app.model._data); // FIXME: works only for $l.stack
             app.boundElements = {};
             app.eventElements = [];
@@ -47,7 +48,7 @@
             laroux.mvc.scanElements(app, app.element);
             laroux.mvc.update(appKey);
 
-            var fnc = function(ev, elem) {
+            var fnc = function (ev, elem) {
                 var binding = laroux.mvc.bindStringParser(elem.getAttribute('lr-event'));
                 // laroux.mvc.pauseUpdate = true;
                 for (var item in binding) {
@@ -75,7 +76,7 @@
             }
         },
 
-        scanElements: function(app, element) {
+        scanElements: function (app, element) {
             for (var i = 0, atts = element.attributes, m = atts.length; i < m; i++) {
                 if (atts[i].name == 'lr-bind') {
                     var binding1 = laroux.mvc.bindStringParser(atts[i].value);
@@ -111,7 +112,7 @@
             }
         },
 
-        update: function(appKey, keys) {
+        update: function (appKey, keys) {
             var app = laroux.mvc.apps[appKey];
 
             if (typeof keys == 'undefined') {
@@ -139,7 +140,7 @@
             }
         },
 
-        bindStringParser: function(text) {
+        bindStringParser: function (text) {
             var lastBuffer = null,
                 buffer = '',
                 state = 0,
@@ -175,4 +176,4 @@
         }
     };
 
-})(this.laroux);
+}(this.laroux));

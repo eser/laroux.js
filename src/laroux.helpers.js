@@ -1,17 +1,18 @@
-(function(laroux) {
+(function (laroux) {
     'use strict';
 
     // helpers
     laroux.helpers = {
         uniqueId: 0,
 
-        getUniqueId: function() {
+        getUniqueId: function () {
+            /*jslint plusplus: true */
             return 'uid-' + (++laroux.helpers.uniqueId);
         },
 
-        buildQueryString: function(values, rfc3986) {
-            var uri = '';
-            var regEx = /%20/g;
+        buildQueryString: function (values, rfc3986) {
+            var uri = '',
+                regEx = /%20/g;
 
             for (var name in values) {
                 if (!values.hasOwnProperty(name)) {
@@ -30,7 +31,7 @@
             return uri.substr(1);
         },
 
-        buildFormData: function(values) {
+        buildFormData: function (values) {
             var data = new FormData();
 
             for (var name in values) {
@@ -46,23 +47,23 @@
             return data;
         },
 
-        format: function() {
+        format: function () {
             var args = arguments;
-            return Array.prototype.shift.call(args).replace(/%s/g, function() { return Array.prototype.shift.call(args); });
+            return Array.prototype.shift.call(args).replace(/%s/g, function () { return Array.prototype.shift.call(args); });
         },
 
-        replaceAll: function(text, dictionary) {
+        replaceAll: function (text, dictionary) {
             var re = new RegExp(Object.keys(dictionary).join('|'), 'g');
 
             return text.replace(
                 re,
-                function(match) {
+                function (match) {
                     return dictionary[match];
                 }
             );
         },
 
-        camelCase: function(value) {
+        camelCase: function (value) {
             var flag = false;
             var output = '';
 
@@ -80,7 +81,7 @@
             return output;
         },
 
-        antiCamelCase: function(value) {
+        antiCamelCase: function (value) {
             var output = '';
 
             for (var j = 0; j < value.length; j++) {
@@ -96,7 +97,7 @@
             return output;
         },
 
-        quoteAttr: function(value) {
+        quoteAttr: function (value) {
             return value.replace(/&/g, '&amp;')
                         .replace(/'/g, '&apos;')
                         .replace(/"/g, '&quot;')
@@ -107,18 +108,18 @@
                         .replace(/[\r\n]/g, '&#13;');
         },
 
-        spliceString: function(value, index, count, add) {
+        spliceString: function (value, index, count, add) {
             return value.slice(0, index) + (add || '') + value.slice(index + count);
         },
 
-        random: function(min, max) {
+        random: function (min, max) {
             return min + Math.floor(Math.random() * (max - min + 1));
         },
 
-        find: function(obj, iterator, context) {
+        find: function (obj, iterator, context) {
             var result;
 
-            obj.some(function(value, index, list) {
+            obj.some(function (value, index, list) {
                 if (iterator.call(context, value, index, list)) {
                     result = value;
                     return true;
@@ -128,11 +129,11 @@
             return result;
         },
 
-        column: function(obj, key) {
-            return laroux.map(obj, function(value) { return value[key]; }, true);
+        column: function (obj, key) {
+            return laroux.map(obj, function (value) { return value[key]; }, true);
         },
 
-        shuffle: function(obj) {
+        shuffle: function (obj) {
             var index = 0,
                 shuffled = [];
 
@@ -149,7 +150,7 @@
             return shuffled;
         },
 
-        merge: function() {
+        merge: function () {
             var target = Array.prototype.shift.call(arguments),
                 tmp = target,
                 isArray = tmp instanceof Array;
@@ -172,11 +173,11 @@
             return tmp;
         },
 
-        duplicate: function(obj) {
+        duplicate: function (obj) {
             return JSON.parse(JSON.stringify(obj));
         },
 
-        toArray: function(obj) {
+        toArray: function (obj) {
             var length = obj.length,
                 items = new Array(length);
 
@@ -187,7 +188,7 @@
             return items;
         },
 
-        getAsArray: function(obj) {
+        getAsArray: function (obj) {
             var items;
 
             if (obj instanceof Array) {
@@ -206,7 +207,7 @@
             return items;
         },
 
-        getLength: function(obj) {
+        getLength: function (obj) {
             if (obj.constructor === Object) {
                 if (obj.length !== undefined) {
                     return obj.length;
@@ -218,7 +219,7 @@
             return -1;
         },
 
-        getKeysRecursive: function(obj, delimiter, prefix, keys) {
+        getKeysRecursive: function (obj, delimiter, prefix, keys) {
             if (delimiter === undefined) {
                 delimiter = '.';
             }
@@ -244,7 +245,7 @@
             return keys;
         },
 
-        getElement: function(obj, path, defaultValue, delimiter) {
+        getElement: function (obj, path, defaultValue, delimiter) {
             if (defaultValue === undefined) {
                 defaultValue = null;
             }
@@ -276,7 +277,7 @@
         },
         /* for javascript 1.7 or later,
 
-        getKeys: function(obj) {
+        getKeys: function (obj) {
             var keys = Object.keys(obj);
             for (var item in keys) {
                 yield keys[item];
@@ -284,4 +285,4 @@
         } */
     };
 
-})(this.laroux);
+}(this.laroux));

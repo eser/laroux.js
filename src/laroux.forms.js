@@ -1,10 +1,10 @@
-(function(laroux) {
+(function (laroux) {
     'use strict';
 
     // forms
     laroux.forms = {
-        ajaxForm: function(formobj, fnc, fncBegin) {
-            laroux.dom.setEvent(formobj, 'submit', function() {
+        ajaxForm: function (formobj, fnc, fncBegin) {
+            laroux.dom.setEvent(formobj, 'submit', function () {
                 if (fncBegin !== undefined) {
                     fncBegin();
                 }
@@ -19,45 +19,45 @@
             });
         },
 
-        isFormField: function(element) {
-            if (element.tagName == 'SELECT') {
+        isFormField: function (element) {
+            if (element.tagName === 'SELECT') {
                 return true;
             }
 
-            if (element.tagName == 'INPUT') {
+            if (element.tagName === 'INPUT') {
                 var type = element.getAttribute('type').toUpperCase();
 
-                if (type == 'FILE' || type == 'CHECKBOX' || type == 'RADIO' || type == 'TEXT' || type == 'PASSWORD' || type == 'HIDDEN') {
+                if (type === 'FILE' || type === 'CHECKBOX' || type === 'RADIO' || type === 'TEXT' || type === 'PASSWORD' || type === 'HIDDEN') {
                     return true;
                 }
 
                 return false;
             }
 
-            if (element.tagName == 'TEXTAREA') {
+            if (element.tagName === 'TEXTAREA') {
                 return true;
             }
 
             return false;
         },
 
-        getFormFieldValue: function(element) {
+        getFormFieldValue: function (element) {
             if (element.disabled === true) {
                 return null;
             }
 
-            if (element.tagName == 'SELECT') {
+            if (element.tagName === 'SELECT') {
                 return element.options[element.selectedIndex].value;
             }
 
-            if (element.tagName == 'INPUT') {
+            if (element.tagName === 'INPUT') {
                 var type = element.getAttribute('type').toUpperCase();
 
-                if (type == 'FILE') {
+                if (type === 'FILE') {
                     return element.files[0];
                 }
 
-                if (type == 'CHECKBOX' || type == 'RADIO') {
+                if (type === 'CHECKBOX' || type === 'RADIO') {
                     if (element.checked) {
                         return element.value;
                     }
@@ -65,26 +65,26 @@
                     return null;
                 }
 
-                if (type == 'TEXT' || type == 'PASSWORD' || type == 'HIDDEN') {
+                if (type === 'TEXT' || type === 'PASSWORD' || type === 'HIDDEN') {
                     return element.value;
                 }
 
                 return null;
             }
 
-            if (element.tagName == 'TEXTAREA') {
+            if (element.tagName === 'TEXTAREA') {
                 return element.value;
             }
 
             return null;
         },
 
-        setFormFieldValue: function(element, value) {
+        setFormFieldValue: function (element, value) {
             if (element.disabled === true) {
                 return;
             }
 
-            if (element.tagName == 'SELECT') {
+            if (element.tagName === 'SELECT') {
                 for (var option in element.options) {
                     if (!element.options.hasOwnProperty(option)) {
                         continue;
@@ -129,7 +129,7 @@
             }
         },
 
-        toggleFormEditing: function(formobj, value) {
+        toggleFormEditing: function (formobj, value) {
             var selection = formobj.querySelectorAll('*[name]');
 
             if (value === undefined) {
@@ -167,7 +167,7 @@
             }
         },
 
-        serializeFormData: function(formobj) {
+        serializeFormData: function (formobj) {
             var formdata = new FormData();
             var selection = formobj.querySelectorAll('*[name]');
 
@@ -182,7 +182,7 @@
             return formdata;
         },
 
-        serialize: function(formobj) {
+        serialize: function (formobj) {
             var values = {};
             var selection = formobj.querySelectorAll('*[name]');
 
@@ -197,7 +197,7 @@
             return values;
         },
 
-        deserialize: function(formobj, data) {
+        deserialize: function (formobj, data) {
             var selection = formobj.querySelectorAll('*[name]');
 
             for (var selected = 0, length = selection.length; selected < length; selected++) {
@@ -206,4 +206,4 @@
         }
     };
 
-})(this.laroux);
+}(this.laroux));

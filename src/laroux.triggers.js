@@ -1,4 +1,4 @@
-(function(laroux) {
+(function (laroux) {
     'use strict';
 
     // requires $l.helpers
@@ -8,7 +8,7 @@
         delegates: [],
         list: [],
 
-        set: function(condition, fnc, state) {
+        set: function (condition, fnc, state) {
             var conditions = laroux.helpers.getAsArray(condition);
 
             for (var item in conditions) {
@@ -28,7 +28,7 @@
             });
         },
 
-        ontrigger: function(triggerName, args) {
+        ontrigger: function (triggerName, args) {
             var eventIdx = laroux.aindex(laroux.triggers.list, triggerName);
             if (eventIdx !== -1) {
                 laroux.triggers.list.splice(eventIdx, 1);
@@ -79,4 +79,4 @@
         }
     };
 
-})(this.laroux);
+}(this.laroux));

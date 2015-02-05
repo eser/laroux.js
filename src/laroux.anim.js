@@ -1,4 +1,4 @@
-(function(laroux) {
+(function (laroux) {
     'use strict';
 
     // requires $l.helpers
@@ -19,7 +19,7 @@
         },
 
         // {object, property, from, to, time, unit, reset}
-        set: function(newanim) {
+        set: function (newanim) {
             newanim.startTime = null;
 
             if (newanim.unit === undefined || newanim.unit === null) {
@@ -27,14 +27,14 @@
             }
 
             if (newanim.from === undefined || newanim.from === null) {
-                if (newanim.object === document.body && newanim.property == 'scrollTop') {
+                if (newanim.object === document.body && newanim.property === 'scrollTop') {
                     newanim.from = (document.documentElement && document.documentElement.scrollTop) || document.body.scrollTop;
                 } else {
                     newanim.from = newanim.object[newanim.property];
                 }
             }
 
-            if (typeof newanim.from == 'string') {
+            if (typeof newanim.from === 'string') {
                 newanim.from = Number(newanim.from);
             }
 
@@ -48,11 +48,11 @@
 
             laroux.anim.data.push(newanim);
             if (laroux.anim.data.length === 1) {
-                requestAnimationFrame(laroux.anim.onframe);
+                laroux.parent.requestAnimationFrame(laroux.anim.onframe);
             }
         },
 
-        setCss: function(newanim) {
+        setCss: function (newanim) {
             if (newanim.from === undefined || newanim.from === null) {
                 newanim.from = laroux.css.getProperty(newanim.object, newanim.property);
             }
@@ -63,7 +63,7 @@
             laroux.anim.set(newanim);
         },
 
-        remove: function(id) {
+        remove: function (id) {
             var targetKey = null;
 
             for (var item in laroux.anim.data) {
@@ -87,7 +87,7 @@
             return false;
         },
 
-        onframe: function(timestamp) {
+        onframe: function (timestamp) {
             var removeKeys = [];
             for (var item in laroux.anim.data) {
                 if (!laroux.anim.data.hasOwnProperty(item)) {
@@ -108,7 +108,7 @@
                         currentItem.startTime = timestamp;
                         if (newanim.object === document.body && newanim.property == 'scrollTop') {
                             scrollTo(0, currentItem.from);
-                            // setTimeout(function() { scrollTo(0, currentItem.from); }, 1);
+                            // setTimeout(function () { scrollTo(0, currentItem.from); }, 1);
                         } else {
                             currentItem.object[currentItem.property] = currentItem.from;
                         }
@@ -131,7 +131,7 @@
             }
         },
 
-        step: function(newanim, timestamp) {
+        step: function (newanim, timestamp) {
             var finishT = newanim.startTime + newanim.time,
                 shift = (timestamp > finishT) ? 1 : (timestamp - newanim.startTime) / newanim.time;
 
@@ -143,11 +143,11 @@
 
             if (newanim.object === document.body && newanim.property == 'scrollTop') {
                 scrollTo(0, value);
-                // setTimeout(function() { scrollTo(0, value); }, 1);
+                // setTimeout(function () { scrollTo(0, value); }, 1);
             } else {
                 newanim.object[newanim.property] = value;
             }
         }
     };
 
-})(this.laroux);
+}(this.laroux));

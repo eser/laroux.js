@@ -1,4 +1,4 @@
-(function(laroux) {
+(function (laroux) {
     'use strict';
 
     // requires $l
@@ -7,9 +7,9 @@
     laroux.vars = {
         cookiePath: '/',
 
-        getCookie: function(name, defaultValue) {
-            var re = new RegExp(encodeURIComponent(name) + '=[^;]+', 'i');
-            var match = document.cookie.match(re);
+        getCookie: function (name, defaultValue) {
+            var re = new RegExp(encodeURIComponent(name) + '=[^;]+', 'i'),
+                match = document.cookie.match(re);
             
             if (!match) {
                 return defaultValue || null;
@@ -18,7 +18,7 @@
             return decodeURIComponent(match[0].split('=')[1]);
         },
 
-        setCookie: function(name, value, expires, path) {
+        setCookie: function (name, value, expires, path) {
             var expireValue = '';
             if (expires) {
                 expireValue = '; expires=' + expires.toGMTString();
@@ -27,11 +27,11 @@
             document.cookie = encodeURIComponent(name) + '=' + encodeURIComponent(value) + expireValue + '; path=' + (path || laroux.vars.cookiePath);
         },
 
-        removeCookie: function(name, path) {
+        removeCookie: function (name, path) {
             document.cookie = encodeURIComponent(name) + '=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=' + (path || laroux.vars.cookiePath);
         },
 
-        getLocal: function(name, defaultValue) {
+        getLocal: function (name, defaultValue) {
             if (!(name in localStorage)) {
                 return defaultValue || null;
             }
@@ -39,15 +39,15 @@
             return JSON.parse(localStorage[name]);
         },
 
-        setLocal: function(name, value) {
+        setLocal: function (name, value) {
             localStorage[name] = JSON.stringify(value);
         },
 
-        removeLocal: function(name) {
+        removeLocal: function (name) {
             delete localStorage[name];
         },
 
-        getSession: function(name, defaultValue) {
+        getSession: function (name, defaultValue) {
             if (!(name in sessionStorage)) {
                 return defaultValue || null;
             }
@@ -55,13 +55,13 @@
             return JSON.parse(sessionStorage[name]);
         },
 
-        setSession: function(name, value) {
+        setSession: function (name, value) {
             sessionStorage[name] = JSON.stringify(value);
         },
 
-        removeSession: function(name) {
+        removeSession: function (name) {
             delete sessionStorage[name];
         }
     };
 
-})(this.laroux);
+}(this.laroux));

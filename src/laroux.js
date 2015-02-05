@@ -1,8 +1,8 @@
-(function(global) {
+(function (global) {
     'use strict';
 
     // core
-    var laroux = function(selector, parent) {
+    var laroux = function (selector, parent) {
         if (selector instanceof Array) {
             return laroux.helpers.toArray(
                 (parent || document).querySelectorAll(selector)
@@ -30,7 +30,7 @@
         id: {}
     };
 
-    laroux.c = function(selector) {
+    laroux.c = function (selector) {
         if (selector instanceof Array) {
             return laroux.cached.array[selector] || (
                 laroux.cached.array[selector] = laroux.helpers.toArray(
@@ -44,20 +44,20 @@
         );
     };
 
-    laroux.id = function(selector, parent) {
+    laroux.id = function (selector, parent) {
         return (parent || document).getElementById(selector);
     };
 
-    laroux.idc = function(selector) {
+    laroux.idc = function (selector) {
         return laroux.cached.id[selector] ||
             (laroux.cached.id[selector] = document.getElementById(selector));
     };
 
     laroux.parent = global;
-    laroux.popupFunc = alert;
+    laroux.popupFunc = global.alert;
     laroux.readyPassed = false;
 
-    laroux.ready = function(fnc) {
+    laroux.ready = function (fnc) {
         if (!laroux.readyPassed) {
             laroux.events.add('ContentLoaded', fnc);
             return;
@@ -66,12 +66,12 @@
         fnc();
     };
 
-    laroux.extend = function() {
+    laroux.extend = function () {
         Array.prototype.unshift.call(arguments, laroux);
         laroux.extendObject.apply(this, arguments);
     };
 
-    laroux.extendObject = function() {
+    laroux.extendObject = function () {
         var target = Array.prototype.shift.call(arguments),
             isArray = target instanceof Array;
 
@@ -93,7 +93,7 @@
         }
     };
 
-    laroux.each = function(arr, fnc, testOwnProperties) {
+    laroux.each = function (arr, fnc, testOwnProperties) {
         for (var item in arr) {
             if (testOwnProperties && !arr.hasOwnProperty(item)) {
                 continue;
@@ -107,7 +107,7 @@
         return arr;
     };
 
-    laroux.map = function(arr, fnc, dontSkipReturns, testOwnProperties) {
+    laroux.map = function (arr, fnc, dontSkipReturns, testOwnProperties) {
         var results = [];
 
         for (var item in arr) {
@@ -128,7 +128,7 @@
         return results;
     };
 
-    laroux.index = function(arr, value, testOwnProperties) {
+    laroux.index = function (arr, value, testOwnProperties) {
         for (var item in arr) {
             if (testOwnProperties && !arr.hasOwnProperty(item)) {
                 continue;
@@ -142,7 +142,7 @@
         return null;
     };
 
-    laroux.aeach = function(arr, fnc) {
+    laroux.aeach = function (arr, fnc) {
         for (var i = 0, length = arr.length; i < length; i++) {
             if (fnc(i, arr[i]) === false) {
                 break;
@@ -152,7 +152,7 @@
         return arr;
     };
 
-    laroux.amap = function(arr, fnc, dontSkipReturns) {
+    laroux.amap = function (arr, fnc, dontSkipReturns) {
         var results = [];
 
         for (var i = 0, length = arr.length; i < length; i++) {
@@ -169,7 +169,7 @@
         return results;
     };
 
-    laroux.aindex = function(arr, value, start) {
+    laroux.aindex = function (arr, value, start) {
         for (var i = (start || 0), length = arr.length; i < length; i++) {
             if (arr[i] === value) {
                 return i;
@@ -189,7 +189,7 @@
 
     document.addEventListener(
         'DOMContentLoaded',
-        function() {
+        function () {
             if (!laroux.readyPassed) {
                 laroux.events.invoke('ContentLoaded');
                 laroux.readyPassed = true;
@@ -197,4 +197,4 @@
         }
     );
 
-})(this);
+}(this));

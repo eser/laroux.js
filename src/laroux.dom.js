@@ -1,4 +1,4 @@
-(function(laroux) {
+(function (laroux) {
     'use strict';
 
     // requires $l.helpers
@@ -6,43 +6,43 @@
 
     // dom
     laroux.dom = {
-        docprop: function(propName) {
+        docprop: function (propName) {
             return document.documentElement.classList.contains(propName);
         },
 
-        select: function(selector, parent) {
+        select: function (selector, parent) {
             return laroux.helpers.toArray(
                 (parent || document).querySelectorAll(selector)
             );
         },
 
-        selectByClass: function(selector, parent) {
+        selectByClass: function (selector, parent) {
             return laroux.helpers.toArray(
                 (parent || document).getElementsByClassName(selector)
             );
         },
 
-        selectByTag: function(selector, parent) {
+        selectByTag: function (selector, parent) {
             return laroux.helpers.toArray(
                 (parent || document).getElementsByTagName(selector)
             );
         },
 
-        selectById: function(selector, parent) {
+        selectById: function (selector, parent) {
             return (parent || document).getElementById(selector);
         },
 
-        selectSingle: function(selector, parent) {
+        selectSingle: function (selector, parent) {
             return (parent || document).querySelector(selector);
         },
 
-        attr: function(element, attributes, value) {
+        attr: function (element, attributes, value) {
             if (value === undefined && attributes.constructor !== Object) {
                 return element.getAttribute(attributes);
             }
 
             var elements = laroux.helpers.getAsArray(element);
-            if (typeof attributes == 'string') {
+            if (typeof attributes === 'string') {
                 var oldAttributes = attributes;
                 attributes = {};
                 attributes[oldAttributes] = value;
@@ -63,7 +63,7 @@
             }
         },
 
-        data: function(element, datanames, value) {
+        data: function (element, datanames, value) {
             if (value === undefined && datanames.constructor !== Object) {
                 return element.getAttribute('data-' + datanames);
             }
@@ -91,7 +91,7 @@
         },
 
         eventHistory: [],
-        setEvent: function(element, eventname, fnc) {
+        setEvent: function (element, eventname, fnc) {
             var elements = laroux.helpers.getAsArray(element);
 
             for (var i = 0, length = elements.length; i < length; i++) {
@@ -99,8 +99,8 @@
             }
         },
 
-        setEventSingle: function(element, eventname, fnc) {
-            var fncWrapper = function(e) {
+        setEventSingle: function (element, eventname, fnc) {
+            var fncWrapper = function (e) {
                 if (fnc(e, element) === false) {
                     if (e.preventDefault) {
                         e.preventDefault();
@@ -114,7 +114,7 @@
             element.addEventListener(eventname, fncWrapper, false);
         },
 
-        unsetEvent: function(element, eventname, fnc) {
+        unsetEvent: function (element, eventname, fnc) {
             var elements = laroux.helpers.getAsArray(element);
 
             for (var i1 = 0, length1 = elements.length; i1 < length1; i1++) {
@@ -143,7 +143,7 @@
             }
         },
 
-        dispatchEvent: function(element, eventname, data) {
+        dispatchEvent: function (element, eventname, data) {
             var customEvent = document.createEvent('Event');
             for (var item in data) {
                 if (!data.hasOwnProperty(item)) {
@@ -157,7 +157,7 @@
             element.dispatchEvent(customEvent);
         },
 
-        create: function(html) {
+        create: function (html) {
             var frag = document.createDocumentFragment(),
                 temp = document.createElement('DIV');
 
@@ -172,7 +172,7 @@
             return frag;
         },
 
-        createElement: function(element, attributes, children) {
+        createElement: function (element, attributes, children) {
             var elem = document.createElement(element);
 
             if (attributes !== undefined && attributes.constructor === Object) {
@@ -202,7 +202,7 @@
             return elem;
         },
 
-        createOption: function(element, key, value, isDefault) {
+        createOption: function (element, key, value, isDefault) {
             /* old behaviour, does not support optgroups as parents.
             var count = element.options.length;
             element.options[count] = new Option(value, key);
@@ -222,7 +222,7 @@
             element.appendChild(option);
         },
 
-        selectByValue: function(element, value) {
+        selectByValue: function (element, value) {
             for (var i = 0, length = element.options.length; i < length; i++) {
                 if (element.options[i].getAttribute('value') == value) {
                     element.selectedIndex = i;
@@ -232,7 +232,7 @@
         },/*,
 
         // TODO: it's redundant for now
-        loadImage: function() {
+        loadImage: function () {
             var images = [];
 
             for (var i = 0, length = arguments.length; i < length; i++) {
@@ -245,7 +245,7 @@
             return images;
         },
 
-        loadAsyncScript: function(path, triggerName, async) {
+        loadAsyncScript: function (path, triggerName, async) {
             var elem = document.createElement('script');
 
             elem.type = 'text/javascript';
@@ -253,7 +253,7 @@
             elem.src = path;
 
             var loaded = false;
-            elem.onload = elem.onreadystatechange = function() {
+            elem.onload = elem.onreadystatechange = function () {
                 if ((elem.readyState && elem.readyState !== 'complete' && elem.readyState !== 'loaded') || loaded) {
                     return false;
                 }
@@ -273,7 +273,7 @@
             head.appendChild(elem);
         },
 
-        loadAsyncStyle: function(path, triggerName, async) {
+        loadAsyncStyle: function (path, triggerName, async) {
             var elem = document.createElement('LINK');
 
             elem.type = 'text/css';
@@ -282,7 +282,7 @@
             elem.rel = 'stylesheet';
 
             var loaded = false;
-            elem.onload = elem.onreadystatechange = function() {
+            elem.onload = elem.onreadystatechange = function () {
                 if ((elem.readyState && elem.readyState !== 'complete' && elem.readyState !== 'loaded') || loaded) {
                     return false;
                 }
@@ -302,35 +302,35 @@
             head.appendChild(elem);
         },*/
 
-        clear: function(element) {
+        clear: function (element) {
             while (element.hasChildNodes()) {
                 element.removeChild(element.firstChild);
             }
         },
 
-        insert: function(element, position, content) {
+        insert: function (element, position, content) {
             element.insertAdjacentHTML(position, content);
         },
 
-        prepend: function(element, content) {
+        prepend: function (element, content) {
             element.insertAdjacentHTML('afterbegin', content);
         },
 
-        append: function(element, content) {
+        append: function (element, content) {
             element.insertAdjacentHTML('beforeend', content);
         },
 
-        replace: function(element, content) {
+        replace: function (element, content) {
             laroux.dom.clear(element);
             element.insertAdjacentHTML('afterbegin', content);
         },
 
-        replaceText: function(element, content) {
+        replaceText: function (element, content) {
             // laroux.dom.clear(element);
             element.textContent = content;
         },
 
-        remove: function(element) {
+        remove: function (element) {
             element.remove();
         },
 
@@ -339,7 +339,7 @@
         cloneInsertAfter: 2,
         cloneInsertBefore: 3,
 
-        clone: function(element, type, container, target) {
+        clone: function (element, type, container, target) {
             var newElement = element.cloneNode(true);
 
             if (container === undefined) {
@@ -363,7 +363,7 @@
         }/*,
 
         // TODO: it's redundant for now
-        applyOperations: function(element, operations) {
+        applyOperations: function (element, operations) {
             for (var operation in operations) {
                 if (!operations.hasOwnProperty(operation)) {
                     continue;
@@ -450,11 +450,11 @@
 
     // a fix for Internet Explorer
     if (Element.prototype.remove === undefined) {
-        Element.prototype.remove = function() {
+        Element.prototype.remove = function () {
             if (this.parentElement !== null) {
                 this.parentElement.removeChild(this);
             }
         };
     }
 
-})(this.laroux);
+}(this.laroux));

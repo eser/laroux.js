@@ -1,4 +1,4 @@
-(function(laroux) {
+(function (laroux) {
     'use strict';
 
     // requires $l
@@ -7,12 +7,12 @@
     laroux.timers = {
         data: [],
 
-        set: function(timer) {
+        set: function (timer) {
             timer.next = Date.now() + timer.timeout;
             laroux.timers.data.push(timer);
         },
 
-        remove: function(id) {
+        remove: function (id) {
             var targetKey = null;
 
             for (var item in laroux.timers.data) {
@@ -36,7 +36,7 @@
             return false;
         },
 
-        ontick: function() {
+        ontick: function () {
             var now = Date.now();
 
             var removeKeys = [];
@@ -68,8 +68,8 @@
         }
     };
 
-    laroux.ready(function() {
+    laroux.ready(function () {
         setInterval(laroux.timers.ontick, 100);
     });
 
-})(this.laroux);
+}(this.laroux));
