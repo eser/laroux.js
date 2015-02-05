@@ -19,6 +19,7 @@
         browserify = require('browserify'),
         es6ify = require('es6ify'),
         source = require('vinyl-source-stream'),
+        del = require('del'),
 
         jsFile = './src/laroux.js',
 
@@ -74,7 +75,7 @@
             });
     });
 
-    gulp.task('css:dist', function () {
+    gulp.task('css:dist', ['lint:css'], function () {
         return gulp.src(lessFiles)
             .pipe(less({
                 strictMath: true,
@@ -100,7 +101,7 @@
             .pipe(gulp.dest('./dist'));
     });
 
-    gulp.task('js:browserify', function () {
+    gulp.task('js:browserify', ['lint:js'], function () {
         return browserify({ debug: true })
             .add(es6ify.runtime)
             .require(require.resolve(jsFile), { entry: true })
@@ -110,19 +111,25 @@
             .pipe(gulp.dest('./build/js'));
     });
 
-    gulp.task('js:dist', function () {
+    gulp.task('js:dist', ['js:browserify'], function () {
         return gulp.src('./build/js/**/*.js')
             .pipe(gulp.dest('./dist'))
             .pipe(sourcemaps.init())
             .pipe(uglify({
-                mangle: {
-                    except: ['laroux']
-                },
                 preserveComments: false
-            ))
+            }))
             .pipe(rename({ suffix: '.min' }))
             .pipe(sourcemaps.write('./'))
             .pipe(gulp.dest('./dist'));
+    });
+
+    gulp.task('clean', function (cb) {
+        del([
+            './build/coverage/**/*',
+            './build/js/**/*',
+            './dist/**/*',
+            '!./dist/.git*'
+        ], cb);
     });
 
     gulp.task('lint', ['lint:js', 'lint:css']);
