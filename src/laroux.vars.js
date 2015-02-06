@@ -1,10 +1,8 @@
-(function (laroux) {
+module.exports = (function () {
     'use strict';
 
-    // requires $l
-
     // vars
-    laroux.vars = {
+    var laroux_vars = {
         cookiePath: '/',
 
         getCookie: function (name, defaultValue) {
@@ -24,11 +22,11 @@
                 expireValue = '; expires=' + expires.toGMTString();
             }
 
-            document.cookie = encodeURIComponent(name) + '=' + encodeURIComponent(value) + expireValue + '; path=' + (path || laroux.vars.cookiePath);
+            document.cookie = encodeURIComponent(name) + '=' + encodeURIComponent(value) + expireValue + '; path=' + (path || laroux_vars.cookiePath);
         },
 
         removeCookie: function (name, path) {
-            document.cookie = encodeURIComponent(name) + '=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=' + (path || laroux.vars.cookiePath);
+            document.cookie = encodeURIComponent(name) + '=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=' + (path || laroux_vars.cookiePath);
         },
 
         getLocal: function (name, defaultValue) {
@@ -64,4 +62,6 @@
         }
     };
 
-}(this.laroux));
+    return laroux_vars;
+
+}());

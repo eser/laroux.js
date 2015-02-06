@@ -1,11 +1,11 @@
-(function (laroux) {
+module.exports = (function () {
     'use strict';
 
-    // requires $l.dom
-    // requires $l.forms
+    var laroux_dom = require('./laroux.dom.js'),
+        laroux_forms = require('./laroux.forms.js');
 
     // keys
-    laroux.keys = {
+    var laroux_keys = {
         keyName: function (keycode) {
             keycode = keycode.toLowerCase();
 
@@ -115,7 +115,7 @@
                     element = element.parentNode;
                 }
 
-                if (options.disableInputs && laroux.forms.isFormField(element)) {
+                if (options.disableInputs && laroux_forms.isFormField(element)) {
                     return;
                 }
 
@@ -131,7 +131,7 @@
                     return;
                 }
 
-                var key = laroux.keys.keyName(options.key);
+                var key = laroux_keys.keyName(options.key);
                 if (key !== (event.keyCode || event.which)) {
                     return;
                 }
@@ -141,8 +141,10 @@
                 return false;
             };
 
-            laroux.dom.setEvent(options.target || document, 'keydown', wrapper);
+            laroux_dom.setEvent(options.target || window.document, 'keydown', wrapper);
         }
     };
 
-}(this.laroux));
+    return laroux_keys;
+
+}());

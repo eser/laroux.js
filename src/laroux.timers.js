@@ -1,26 +1,24 @@
-(function (laroux) {
+module.exports = (function () {
     'use strict';
 
-    // requires $l
-
     // timers
-    laroux.timers = {
+    var laroux_timers = {
         data: [],
 
         set: function (timer) {
             timer.next = Date.now() + timer.timeout;
-            laroux.timers.data.push(timer);
+            laroux_timers.data.push(timer);
         },
 
         remove: function (id) {
             var targetKey = null;
 
-            for (var item in laroux.timers.data) {
-                if (!laroux.timers.data.hasOwnProperty(item)) {
+            for (var item in laroux_timers.data) {
+                if (!laroux_timers.data.hasOwnProperty(item)) {
                     continue;
                 }
 
-                var currentItem = laroux.timers.data[item];
+                var currentItem = laroux_timers.data[item];
 
                 if (currentItem.id !== undefined && currentItem.id == id) {
                     targetKey = item;
@@ -29,7 +27,7 @@
             }
 
             if (targetKey !== null) {
-                laroux.timers.data.splice(targetKey, 1);
+                laroux_timers.data.splice(targetKey, 1);
                 return true;
             }
 
@@ -40,12 +38,12 @@
             var now = Date.now();
 
             var removeKeys = [];
-            for (var item in laroux.timers.data) {
-                if (!laroux.timers.data.hasOwnProperty(item)) {
+            for (var item in laroux_timers.data) {
+                if (!laroux_timers.data.hasOwnProperty(item)) {
                     continue;
                 }
 
-                var currentItem = laroux.timers.data[item];
+                var currentItem = laroux_timers.data[item];
 
                 if (currentItem.next <= now) {
                     var result = currentItem.ontick(currentItem.state);
@@ -63,13 +61,11 @@
                     continue;
                 }
 
-                laroux.timers.data.splice(removeKeys[item2], 1);
+                laroux_timers.data.splice(removeKeys[item2], 1);
             }
         }
     };
 
-    laroux.ready(function () {
-        setInterval(laroux.timers.ontick, 100);
-    });
+    return laroux_timers;
 
-}(this.laroux));
+}());

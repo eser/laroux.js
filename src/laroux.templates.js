@@ -1,10 +1,11 @@
-(function (laroux) {
+module.exports = (function () {
     'use strict';
 
-    // requires $l.dom
+    var laroux_dom = require('./laroux.dom.js'),
+        laroux_helpers = require('./laroux.helpers.js');
 
     // templates
-    laroux.templates = {
+    var laroux_templates = {
         engines: {
             plain: {
                 compile: function (template, options) {
@@ -25,17 +26,17 @@
                         }
 
                         var key = result.substring(nextIndex, closeIndex);
-                        dict['{{' + key + '}}'] = laroux.helpers.getElement(model, key, '');
+                        dict['{{' + key + '}}'] = laroux_helpers.getElement(model, key, '');
                         lastIndex = closeIndex + 2;
                     }
 
-                    return laroux.helpers.replaceAll(result, dict);
+                    return laroux_helpers.replaceAll(result, dict);
                 }
             },
 
             hogan: {
                 compile: function (template, options) {
-                    return laroux.parent.Hogan.compile(template, options);
+                    return window.Hogan.compile(template, options);
                 },
 
                 render: function (compiled, model) {
@@ -45,7 +46,7 @@
 
             mustache: {
                 compile: function (template, options) {
-                    return laroux.parent.Mustache.compile(template, options);
+                    return window.Mustache.compile(template, options);
                 },
 
                 render: function (compiled, model) {
@@ -55,7 +56,7 @@
 
             handlebars: {
                 compile: function (template, options) {
-                    return laroux.parent.Handlebars.compile(template, options);
+                    return window.Handlebars.compile(template, options);
                 },
 
                 render: function (compiled, model) {
@@ -66,7 +67,7 @@
             lodash: {
                 compile: function (template, options) {
                     /*jslint nomen: true */
-                    return laroux.parent._.compile(template, null, options);
+                    return window._.compile(template, null, options);
                 },
 
                 render: function (compiled, model) {
@@ -77,7 +78,7 @@
             underscore: {
                 compile: function (template, options) {
                     /*jslint nomen: true */
-                    return laroux.parent._.compile(template, null, options);
+                    return window._.compile(template, null, options);
                 },
 
                 render: function (compiled, model) {
@@ -88,7 +89,7 @@
         engine: 'plain',
 
         apply: function (element, model, options) {
-            var content, engine = laroux.templates.engines[laroux.templates.engine];
+            var content, engine = laroux_templates.engines[laroux_templates.engine];
 
             if (element.nodeType === 1 || element.nodeType === 3 || element.nodeType === 11) {
                 content = element.textContent;
@@ -101,16 +102,18 @@
         },
 
         insert: function (element, model, target, position, options) {
-            var output = laroux.templates.apply(element, model, options);
+            var output = laroux_templates.apply(element, model, options);
 
-            laroux.dom.insert(target, position || 'beforeend', output);
+            laroux_dom.insert(target, position || 'beforeend', output);
         },
 
         replace: function (element, model, target, options) {
-            var output = laroux.templates.apply(element, model, options);
+            var output = laroux_templates.apply(element, model, options);
 
-            laroux.dom.replace(target, output);
+            laroux_dom.replace(target, output);
         }
     };
 
-}(this.laroux));
+    return laroux_templates;
+
+}());

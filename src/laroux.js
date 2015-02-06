@@ -1,4 +1,4 @@
-(function (global) {
+module.exports = (function () {
     'use strict';
 
     // core
@@ -23,6 +23,10 @@
 
         return (parent || document).querySelector(selector);
     };
+
+    laroux.events = require('./laroux.events.js');
+    laroux.helpers = require('./laroux.helpers.js');
+    laroux.timers = require('./laroux.timers.js');
 
     laroux.cached = {
         single: {},
@@ -53,9 +57,20 @@
             (laroux.cached.id[selector] = document.getElementById(selector));
     };
 
-    laroux.parent = global;
-    laroux.popupFunc = global.alert;
     laroux.readyPassed = false;
+
+    laroux.extend = function () {
+        Array.prototype.unshift.call(arguments, laroux);
+        laroux.helpers.extendObject.apply(this, arguments);
+    };
+
+    laroux.extendObject = laroux.helpers.extendObject;
+    laroux.each = laroux.helpers.each;
+    laroux.map = laroux.helpers.map;
+    laroux.index = laroux.helpers.index;
+    laroux.aeach = laroux.helpers.aeach;
+    laroux.amap = laroux.helpers.amap;
+    laroux.aindex = laroux.helpers.aindex;
 
     laroux.ready = function (fnc) {
         if (!laroux.readyPassed) {
@@ -66,135 +81,44 @@
         fnc();
     };
 
-    laroux.extend = function () {
-        Array.prototype.unshift.call(arguments, laroux);
-        laroux.extendObject.apply(this, arguments);
-    };
-
-    laroux.extendObject = function () {
-        var target = Array.prototype.shift.call(arguments),
-            isArray = target instanceof Array;
-
-        for (var item in arguments) {
-            for (var name in arguments[item]) {
-                // if (isArray) {
-                //     target.push(arguments[item][name]);
-                //     continue;
-                // }
-
-                /* target[name].constructor === Object */
-                if (target.hasOwnProperty(name) && target[name] instanceof Object) {
-                    laroux.extendObject(target[name], arguments[item][name]);
-                    continue;
+    if (typeof window !== 'undefined') {
+        window.document.addEventListener(
+            'DOMContentLoaded',
+            function () {
+                if (!laroux.readyPassed) {
+                    laroux.events.invoke('ContentLoaded');
+                    window.setInterval(laroux.timers.ontick, 100);
+                    laroux.readyPassed = true;
                 }
-
-                target[name] = arguments[item][name];
             }
+        );
+
+        if (!('$l' in window)) {
+            window.$l = laroux;
         }
-    };
+    }
 
-    laroux.each = function (arr, fnc, testOwnProperties) {
-        for (var item in arr) {
-            if (testOwnProperties && !arr.hasOwnProperty(item)) {
-                continue;
-            }
+    // optional modules
+    laroux.wrapper = require('./laroux.wrapper.js');
+    laroux.ajax = require('./laroux.ajax.js');
+    laroux.css = require('./laroux.css.js');
+    laroux.dom = require('./laroux.dom.js');
+    laroux.events = require('./laroux.events.js');
+    laroux.forms = require('./laroux.forms.js');
+    laroux.helpers = require('./laroux.helpers.js');
+    laroux.timers = require('./laroux.timers.js');
+    laroux.triggers = require('./laroux.triggers.js');
+    laroux.vars = require('./laroux.vars.js');
 
-            if (fnc(item, arr[item]) === false) {
-                break;
-            }
-        }
+    laroux.anim = require('./laroux.anim.js');
+    laroux.date = require('./laroux.date.js');
+    laroux.keys = require('./laroux.keys.js');
+    laroux.mvc = require('./laroux.mvc.js');
+    laroux.stack = require('./laroux.stack.js');
+    laroux.templates = require('./laroux.templates.js');
+    laroux.touch = require('./laroux.touch.js');
+    laroux.ui = require('./laroux.ui.js');
 
-        return arr;
-    };
+    return laroux;
 
-    laroux.map = function (arr, fnc, dontSkipReturns, testOwnProperties) {
-        var results = [];
-
-        for (var item in arr) {
-            if (testOwnProperties && !arr.hasOwnProperty(item)) {
-                continue;
-            }
-
-            var result = fnc(arr[item], item);
-            if (result === false) {
-                break;
-            }
-
-            if (!dontSkipReturns && result !== undefined) {
-                results.push(result);
-            }
-        }
-
-        return results;
-    };
-
-    laroux.index = function (arr, value, testOwnProperties) {
-        for (var item in arr) {
-            if (testOwnProperties && !arr.hasOwnProperty(item)) {
-                continue;
-            }
-
-            if (arr[item] === object) {
-                return item;
-            }
-        }
-
-        return null;
-    };
-
-    laroux.aeach = function (arr, fnc) {
-        for (var i = 0, length = arr.length; i < length; i++) {
-            if (fnc(i, arr[i]) === false) {
-                break;
-            }
-        }
-
-        return arr;
-    };
-
-    laroux.amap = function (arr, fnc, dontSkipReturns) {
-        var results = [];
-
-        for (var i = 0, length = arr.length; i < length; i++) {
-            var result = fnc(arr[i], i);
-            if (result === false) {
-                break;
-            }
-
-            if (!dontSkipReturns && result !== undefined) {
-                results.unshift(result);
-            }
-        }
-
-        return results;
-    };
-
-    laroux.aindex = function (arr, value, start) {
-        for (var i = (start || 0), length = arr.length; i < length; i++) {
-            if (arr[i] === value) {
-                return i;
-            }
-        }
-
-        return -1;
-    };
-
-    // initialization
-    // if (typeof module !== 'undefined' && module.exports !== undefined) {
-    //     module.exports = laroux;
-    // } else {
-    //     global.$l = global.laroux = laroux;
-    // }
-    global.$l = global.laroux = laroux;
-
-    document.addEventListener(
-        'DOMContentLoaded',
-        function () {
-            if (!laroux.readyPassed) {
-                laroux.events.invoke('ContentLoaded');
-                laroux.readyPassed = true;
-            }
-        }
-    );
-
-}(this));
+}());

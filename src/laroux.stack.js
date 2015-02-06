@@ -1,9 +1,9 @@
 /*jslint nomen: true */
-(function (laroux) {
+module.exports = (function () {
     'use strict';
 
     // stack
-    laroux.stack = function (data, depth, top) {
+    var laroux_stack = function (data, depth, top) {
         this._data = {};
         this._depth = depth;
         this._top = top || this;
@@ -31,7 +31,7 @@
             default:
                 /*
                 if (type == 'object') {
-                    this._data[key] = new laroux.stack(
+                    this._data[key] = new laroux_stack(
                         value,
                         this._depth ?
                             this._depth + '.' + key :
@@ -136,4 +136,6 @@
         }
     };
 
-}(this.laroux));
+    return laroux_stack;
+
+}());

@@ -1,18 +1,17 @@
-(function (laroux) {
+module.exports = (function () {
     'use strict';
 
-    // requires $l.helpers
-    // requires $l.dom
+    var laroux_helpers = require('./laroux.helpers.js');
 
     // css
-    laroux.css = {
+    var laroux_css = {
         // class features
         hasClass: function (element, className) {
             return element.classList.contains(className);
         },
 
         addClass: function (element, className) {
-            var elements = laroux.helpers.getAsArray(element);
+            var elements = laroux_helpers.getAsArray(element);
 
             for (var i = 0, length = elements.length; i < length; i++) {
                 elements[i].classList.add(className);
@@ -20,7 +19,7 @@
         },
 
         removeClass: function (element, className) {
-            var elements = laroux.helpers.getAsArray(element);
+            var elements = laroux_helpers.getAsArray(element);
 
             for (var i = 0, length = elements.length; i < length; i++) {
                 elements[i].classList.remove(className);
@@ -28,7 +27,7 @@
         },
 
         toggleClass: function (element, className) {
-            var elements = laroux.helpers.getAsArray(element);
+            var elements = laroux_helpers.getAsArray(element);
 
             for (var i = 0, length = elements.length; i < length; i++) {
                 if (elements[i].classList.contains(className)) {
@@ -53,13 +52,13 @@
         getProperty: function (element, styleName) {
             var style = getComputedStyle(element);
 
-            styleName = laroux.helpers.antiCamelCase(styleName);
+            styleName = laroux_helpers.antiCamelCase(styleName);
 
             return style.getPropertyValue(styleName);
         },
 
         setProperty: function (element, properties, value) {
-            var elements = laroux.helpers.getAsArray(element);
+            var elements = laroux_helpers.getAsArray(element);
 
             if (typeof properties == 'string') {
                 var oldProperties = properties;
@@ -72,7 +71,7 @@
                     continue;
                 }
 
-                var newStyleName = laroux.helpers.camelCase(styleName);
+                var newStyleName = laroux_helpers.camelCase(styleName);
 
                 for (var i = 0, length = elements.length; i < length; i++) {
                     elements[i].style[newStyleName] = properties[styleName];
@@ -84,7 +83,7 @@
         defaultTransition: '2s ease',
 
         setTransitionSingle: function (element, transition) {
-            var transitions = laroux.helpers.getAsArray(transition),
+            var transitions = laroux_helpers.getAsArray(transition),
                 style = getComputedStyle(element),
                 currentTransitions = style.getPropertyValue('transition') || style.getPropertyValue('-webkit-transition') ||
                     style.getPropertyValue('-ms-transition') || '',
@@ -110,7 +109,7 @@
                     transitionProperties = transitions[item].substring(pos + 1);
                 } else {
                     styleName = transitions[item];
-                    transitionProperties = laroux.css.defaultTransition;
+                    transitionProperties = laroux_css.defaultTransition;
                 }
 
                 var found = false;
@@ -135,31 +134,31 @@
         },
 
         setTransition: function (element, transition) {
-            var elements = laroux.helpers.getAsArray(element);
+            var elements = laroux_helpers.getAsArray(element);
 
             for (var i = 0, length = elements.length; i < length; i++) {
-                laroux.css.setTransitionSingle(elements[i], transition);
+                laroux_css.setTransitionSingle(elements[i], transition);
             }
         },
 
         show: function (element, transitionProperties) {
             if (transitionProperties !== undefined) {
-                laroux.css.setTransition(element, 'opacity ' + transitionProperties);
+                laroux_css.setTransition(element, 'opacity ' + transitionProperties);
             } else {
-                laroux.css.setTransition(element, 'opacity');
+                laroux_css.setTransition(element, 'opacity');
             }
 
-            laroux.css.setProperty(element, { opacity: 1 });
+            laroux_css.setProperty(element, { opacity: 1 });
         },
 
         hide: function (element, transitionProperties) {
             if (transitionProperties !== undefined) {
-                laroux.css.setTransition(element, 'opacity ' + transitionProperties);
+                laroux_css.setTransition(element, 'opacity ' + transitionProperties);
             } else {
-                laroux.css.setTransition(element, 'opacity');
+                laroux_css.setTransition(element, 'opacity');
             }
 
-            laroux.css.setProperty(element, { opacity: 0 });
+            laroux_css.setProperty(element, { opacity: 0 });
         },
 
         // measurement features
@@ -221,12 +220,12 @@
 
         top: function (element) {
             return element.getBoundingClientRect().top +
-                ((document.documentElement && document.documentElement.scrollTop) || document.body.scrollTop);
+                ((window.document.documentElement && window.document.documentElement.scrollTop) || window.document.body.scrollTop);
         },
 
         left: function (element) {
             return element.getBoundingClientRect().left +
-                ((document.documentElement && document.documentElement.scrollLeft) || document.body.scrollLeft);
+                ((window.document.documentElement && window.document.documentElement.scrollLeft) || window.document.body.scrollLeft);
         },
 
         aboveTheTop: function (element) {
@@ -234,7 +233,7 @@
         },
 
         belowTheFold: function (element) {
-            return element.getBoundingClientRect().top > laroux.parent.innerHeight;
+            return element.getBoundingClientRect().top > window.innerHeight;
         },
 
         leftOfScreen: function (element) {
@@ -242,41 +241,17 @@
         },
 
         rightOfScreen: function (element) {
-            return element.getBoundingClientRect().left > laroux.parent.innerWidth;
+            return element.getBoundingClientRect().left > window.innerWidth;
         },
 
         inViewport: function (element) {
             var rect = element.getBoundingClientRect();
 
-            return !(rect.bottom <= 0 || rect.top > laroux.parent.innerHeight ||
-                rect.right <= 0 || rect.left > laroux.parent.innerWidth);
+            return !(rect.bottom <= 0 || rect.top > window.innerHeight ||
+                rect.right <= 0 || rect.left > window.innerWidth);
         }
     };
 
-    // wrapper support
-    if (laroux.wrapper !== undefined) {
-        laroux.wrapper.register('hasClass', laroux.css.hasClass, laroux.wrapper.registerSingle);
-        laroux.wrapper.register('addClass', laroux.css.addClass, laroux.wrapper.registerBoth);
-        laroux.wrapper.register('removeClass', laroux.css.removeClass, laroux.wrapper.registerBoth);
-        laroux.wrapper.register('toggleClass', laroux.css.toggleClass, laroux.wrapper.registerBoth);
-        laroux.wrapper.register('getProperty', laroux.css.getProperty, laroux.wrapper.registerSingle);
-        laroux.wrapper.register('setProperty', laroux.css.setProperty, laroux.wrapper.registerBoth);
-        laroux.wrapper.register('setTransition', laroux.css.setTransition, laroux.wrapper.registerBoth);
-        laroux.wrapper.register('show', laroux.css.show, laroux.wrapper.registerBoth);
-        laroux.wrapper.register('hide', laroux.css.hide, laroux.wrapper.registerBoth);
-        laroux.wrapper.register('height', laroux.css.height, laroux.wrapper.registerSingle);
-        laroux.wrapper.register('innerHeight', laroux.css.innerHeight, laroux.wrapper.registerSingle);
-        laroux.wrapper.register('outerHeight', laroux.css.outerHeight, laroux.wrapper.registerSingle);
-        laroux.wrapper.register('width', laroux.css.width, laroux.wrapper.registerSingle);
-        laroux.wrapper.register('innerWidth', laroux.css.innerWidth, laroux.wrapper.registerSingle);
-        laroux.wrapper.register('outerWidth', laroux.css.outerWidth, laroux.wrapper.registerSingle);
-        laroux.wrapper.register('top', laroux.css.top, laroux.wrapper.registerSingle);
-        laroux.wrapper.register('left', laroux.css.left, laroux.wrapper.registerSingle);
-        laroux.wrapper.register('aboveTheTop', laroux.css.aboveTheTop, laroux.wrapper.registerSingle);
-        laroux.wrapper.register('belowTheFold', laroux.css.belowTheFold, laroux.wrapper.registerSingle);
-        laroux.wrapper.register('leftOfScreen', laroux.css.leftOfScreen, laroux.wrapper.registerSingle);
-        laroux.wrapper.register('rightOfScreen', laroux.css.rightOfScreen, laroux.wrapper.registerSingle);
-        laroux.wrapper.register('inViewport', laroux.css.inViewport, laroux.wrapper.registerSingle);
-    }
+    return laroux_css;
 
-}(this.laroux));
+}());

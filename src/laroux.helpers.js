@@ -1,13 +1,13 @@
-(function (laroux) {
+module.exports = (function () {
     'use strict';
 
     // helpers
-    laroux.helpers = {
+    var laroux_helpers = {
         uniqueId: 0,
 
         getUniqueId: function () {
             /*jslint plusplus: true */
-            return 'uid-' + (++laroux.helpers.uniqueId);
+            return 'uid-' + (++laroux_helpers.uniqueId);
         },
 
         buildQueryString: function (values, rfc3986) {
@@ -129,8 +129,116 @@
             return result;
         },
 
+        extendObject: function () {
+            var target = Array.prototype.shift.call(arguments),
+                isArray = target instanceof Array;
+
+            for (var item in arguments) {
+                for (var name in arguments[item]) {
+                    // if (isArray) {
+                    //     target.push(arguments[item][name]);
+                    //     continue;
+                    // }
+
+                    /* target[name].constructor === Object */
+                    if (target.hasOwnProperty(name) && target[name] instanceof Object) {
+                        laroux_helpers.extendObject(target[name], arguments[item][name]);
+                        continue;
+                    }
+
+                    target[name] = arguments[item][name];
+                }
+            }
+        },
+
+        each: function (arr, fnc, testOwnProperties) {
+            for (var item in arr) {
+                if (testOwnProperties && !arr.hasOwnProperty(item)) {
+                    continue;
+                }
+
+                if (fnc(item, arr[item]) === false) {
+                    break;
+                }
+            }
+
+            return arr;
+        },
+
+        map: function (arr, fnc, dontSkipReturns, testOwnProperties) {
+            var results = [];
+
+            for (var item in arr) {
+                if (testOwnProperties && !arr.hasOwnProperty(item)) {
+                    continue;
+                }
+
+                var result = fnc(arr[item], item);
+                if (result === false) {
+                    break;
+                }
+
+                if (!dontSkipReturns && result !== undefined) {
+                    results.push(result);
+                }
+            }
+
+            return results;
+        },
+
+        index: function (arr, value, testOwnProperties) {
+            for (var item in arr) {
+                if (testOwnProperties && !arr.hasOwnProperty(item)) {
+                    continue;
+                }
+
+                if (arr[item] === object) {
+                    return item;
+                }
+            }
+
+            return null;
+        },
+
+        aeach: function (arr, fnc) {
+            for (var i = 0, length = arr.length; i < length; i++) {
+                if (fnc(i, arr[i]) === false) {
+                    break;
+                }
+            }
+
+            return arr;
+        },
+
+        amap: function (arr, fnc, dontSkipReturns) {
+            var results = [];
+
+            for (var i = 0, length = arr.length; i < length; i++) {
+                var result = fnc(arr[i], i);
+                if (result === false) {
+                    break;
+                }
+
+                if (!dontSkipReturns && result !== undefined) {
+                    results.unshift(result);
+                }
+            }
+
+            return results;
+        },
+
+        aindex: function (arr, value, start) {
+            for (var i = (start || 0), length = arr.length; i < length; i++) {
+                if (arr[i] === value) {
+                    return i;
+                }
+            }
+
+            return -1;
+        },
+
         column: function (obj, key) {
-            return laroux.map(obj, function (value) { return value[key]; }, true);
+            return laroux_helpers.map(obj, function (value) { return value[key]; }, true);
         },
 
         shuffle: function (obj) {
@@ -142,7 +250,7 @@
                     continue;
                 }
 
-                var rand = laroux.helpers.random(0, index);
+                var rand = laroux_helpers.random(0, index);
                 shuffled[index++] = shuffled[rand];
                 shuffled[rand] = obj[item];
             }
@@ -237,7 +345,7 @@
                 keys.push(prefix + item);
 
                 if (obj[item] !== undefined && obj[item] !== null && obj[item].constructor === Object) {
-                    laroux.helpers.getKeysRecursive(obj[item], delimiter, prefix + item + delimiter, keys);
+                    laroux_helpers.getKeysRecursive(obj[item], delimiter, prefix + item + delimiter, keys);
                     continue;
                 }
             }
@@ -273,8 +381,10 @@
                 return obj[key];
             }
 
-            return laroux.helpers.getElement(obj[key], rest, defaultValue, delimiter);
+            return laroux_helpers.getElement(obj[key], rest, defaultValue, delimiter);
         }
     };
 
-}(this.laroux));
+    return laroux_helpers;
+
+}());

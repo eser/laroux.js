@@ -12,7 +12,6 @@
     "disallowSpacesInsideParentheses": true,
     "disallowTrailingComma": true,
     "disallowTrailingWhitespace": true,
-    "requireCamelCaseOrUpperCaseIdentifiers": true,
     "requireCapitalizedConstructors": true,
     "requireCommaBeforeLineBreak": true,
     "requireDotNotation": true,
@@ -29,5 +28,6 @@
     "requireSpacesInsideObjectBrackets": "allButNested",
     "validateIndentation": 4,
     "validateLineBreaks": "LF",
-    "validateQuoteMarks": "'"
+    "validateQuoteMarks": "'",
+    "esnext": true
 }

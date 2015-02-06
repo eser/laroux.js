@@ -117,9 +117,9 @@
 
     gulp.task('js:browserify', ['lint:js'], function () {
         return browserify({ debug: true })
-            .add(es6ify.runtime)
+            // .add(es6ify.runtime)
             .require(require.resolve(jsFile), { entry: true })
-            .transform(es6ify.configure(/^(?!.*node_modules)+.+\.js$/))
+            // .transform(es6ify.configure(/^(?!.*node_modules)+.+\.js$/))
             .bundle()
             .pipe(source('laroux.js'))
             .pipe(gulp.dest('./build/js'));

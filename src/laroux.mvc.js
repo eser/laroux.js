@@ -1,33 +1,33 @@
-(function (laroux) {
+module.exports = (function () {
     'use strict';
 
-    // requires $l.dom
-    // requires $l.helpers
-    // requires $l.stack
+    var laroux_dom = require('./laroux.dom.js'),
+        laroux_helpers = require('./laroux.helpers.js'),
+        laroux_stack = require('./laroux.stack.js');
 
     // mvc
-    laroux.mvc = {
+    var laroux_mvc = {
         apps: {},
         pauseUpdate: false,
 
         init: function (element, model) {
             if (element.constructor === String) {
-                element = laroux.dom.selectById(element);
+                element = laroux_dom.selectById(element);
             }
 
-            // if (model.constructor !== laroux.stack) {
-            //     model = new laroux.stack(model);
+            // if (model.constructor !== laroux_stack) {
+            //     model = new laroux_stack(model);
             // }
 
             var appKey = element.getAttribute('id');
 
             model.onupdate = function (event) {
-                if (!laroux.mvc.pauseUpdate) {
-                    laroux.mvc.update(appKey); // , [event.key]
+                if (!laroux_mvc.pauseUpdate) {
+                    laroux_mvc.update(appKey); // , [event.key]
                 }
             };
 
-            laroux.mvc.apps[appKey] = {
+            laroux_mvc.apps[appKey] = {
                 element: element,
                 model: model // ,
                 // modelKeys: null,
@@ -35,22 +35,22 @@
                 // eventElements: null
             };
 
-            laroux.mvc.rebind(appKey);
+            laroux_mvc.rebind(appKey);
         },
 
         rebind: function (appKey) {
-            var app = laroux.mvc.apps[appKey];
+            var app = laroux_mvc.apps[appKey];
             /*jslint nomen: true */
-            app.modelKeys = laroux.helpers.getKeysRecursive(app.model._data); // FIXME: works only for $l.stack
+            app.modelKeys = laroux_helpers.getKeysRecursive(app.model._data); // FIXME: works only for $l.stack
             app.boundElements = {};
             app.eventElements = [];
 
-            laroux.mvc.scanElements(app, app.element);
-            laroux.mvc.update(appKey);
+            laroux_mvc.scanElements(app, app.element);
+            laroux_mvc.update(appKey);
 
             var fnc = function (ev, elem) {
-                var binding = laroux.mvc.bindStringParser(elem.getAttribute('lr-event'));
-                // laroux.mvc.pauseUpdate = true;
+                var binding = laroux_mvc.bindStringParser(elem.getAttribute('lr-event'));
+                // laroux_mvc.pauseUpdate = true;
                 for (var item in binding) {
                     if (item === null || !binding.hasOwnProperty(item)) {
                         continue;
@@ -64,11 +64,11 @@
                         app.model[item] = elem[binding[item].substring(5)];
                     }
                 }
-                // laroux.mvc.pauseUpdate = false;
+                // laroux_mvc.pauseUpdate = false;
             };
 
             for (var i = 0, length = app.eventElements.length; i < length; i++) {
-                laroux.dom.setEvent(
+                laroux_dom.setEvent(
                     app.eventElements[i].element,
                     app.eventElements[i].binding[null],
                     fnc
@@ -79,7 +79,7 @@
         scanElements: function (app, element) {
             for (var i = 0, atts = element.attributes, m = atts.length; i < m; i++) {
                 if (atts[i].name == 'lr-bind') {
-                    var binding1 = laroux.mvc.bindStringParser(atts[i].value);
+                    var binding1 = laroux_mvc.bindStringParser(atts[i].value);
 
                     for (var item in binding1) {
                         if (!binding1.hasOwnProperty(item)) {
@@ -96,7 +96,7 @@
                         });
                     }
                 } else if (atts[i].name == 'lr-event') {
-                    var binding2 = laroux.mvc.bindStringParser(atts[i].value);
+                    var binding2 = laroux_mvc.bindStringParser(atts[i].value);
 
                     app.eventElements.push({
                         element: element,
@@ -107,13 +107,13 @@
 
             for (var j = 0, chldrn = element.childNodes, n = chldrn.length; j < n; j++) {
                 if (chldrn[j].nodeType === 1) {
-                    laroux.mvc.scanElements(app, chldrn[j]);
+                    laroux_mvc.scanElements(app, chldrn[j]);
                 }
             }
         },
 
         update: function (appKey, keys) {
-            var app = laroux.mvc.apps[appKey];
+            var app = laroux_mvc.apps[appKey];
 
             if (typeof keys == 'undefined') {
                 keys = app.modelKeys;
@@ -128,13 +128,13 @@
 
                 for (var j = 0, length2 = boundElement.length; j < length2; j++) {
                     if (boundElement[j].target.substring(0, 6) == 'style.') {
-                        boundElement[j].element.style[boundElement[j].target.substring(6)] = laroux.helpers.getElement(app.model, keys[i]);
+                        boundElement[j].element.style[boundElement[j].target.substring(6)] = laroux_helpers.getElement(app.model, keys[i]);
                     } else if (boundElement[j].target.substring(0, 5) == 'attr.') {
                         // FIXME removeAttribute on null value?
-                        boundElement[j].element.setAttribute(boundElement[j].target.substring(5), laroux.helpers.getElement(app.model, keys[i]));
+                        boundElement[j].element.setAttribute(boundElement[j].target.substring(5), laroux_helpers.getElement(app.model, keys[i]));
                     } else if (boundElement[j].target.substring(0, 5) == 'prop.') {
                         // FIXME removeAttribute on null value?
-                        boundElement[j].element[boundElement[j].target.substring(5)] = laroux.helpers.getElement(app.model, keys[i]);
+                        boundElement[j].element[boundElement[j].target.substring(5)] = laroux_helpers.getElement(app.model, keys[i]);
                     }
                 }
             }
@@ -176,4 +176,6 @@
         }
     };
 
-}(this.laroux));
+    return laroux_mvc;
+
+}());
