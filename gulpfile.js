@@ -1,10 +1,11 @@
 /*jslint nomen: true */
-/*global require, process, __dirname */
+/*global require, __dirname */
 (function () {
     'use strict';
 
-    var packageJSON = require('./package'),
+    var pkg = require('./package.json'),
         gulp = require('gulp'),
+        header = require('gulp-header'),
         sourcemaps = require('gulp-sourcemaps'),
         jshint = require('gulp-jshint'),
         jscs = require('gulp-jscs'),
@@ -20,6 +21,17 @@
         es6ify = require('es6ify'),
         source = require('vinyl-source-stream'),
         del = require('del'),
+
+        banner = [
+            '/**',
+            ' * <%= pkg.name %> - <%= pkg.description %>',
+            ' *',
+            ' * @version v<%= pkg.version %>',
+            ' * @link <%= pkg.homepage %>',
+            ' * @license <%= pkg.licenses[0].type %>',
+            ' */',
+            ''
+        ].join('\n'),
 
         jsFile = './src/laroux.js',
 
@@ -85,6 +97,7 @@
             }))
             .pipe(concat('laroux.css'))
             .pipe(csscomb({ configPath: __dirname + '/config/.csscomb.json', verbose: true }))
+            .pipe(header(banner, { pkg: pkg }))
             .pipe(gulp.dest('./dist'))
             .pipe(sourcemaps.init())
             .pipe(minifyCSS({
@@ -97,6 +110,7 @@
                 shorthandCompacting: true
             }))
             .pipe(rename({ suffix: '.min' }))
+            .pipe(header(banner, { pkg: pkg }))
             .pipe(sourcemaps.write('.'))
             .pipe(gulp.dest('./dist'));
     });
@@ -113,12 +127,14 @@
 
     gulp.task('js:dist', ['js:browserify'], function () {
         return gulp.src('./build/js/**/*.js')
+            .pipe(header(banner, { pkg: pkg }))
             .pipe(gulp.dest('./dist'))
             .pipe(sourcemaps.init())
             .pipe(uglify({
                 preserveComments: false
             }))
             .pipe(rename({ suffix: '.min' }))
+            .pipe(header(banner, { pkg: pkg }))
             .pipe(sourcemaps.write('./'))
             .pipe(gulp.dest('./dist'));
     });
