@@ -19,6 +19,7 @@
         recess = require('gulp-recess'),
         browserify = require('browserify'),
         es6ify = require('es6ify'),
+        buffer = require('vinyl-buffer'),
         source = require('vinyl-source-stream'),
         del = require('del'),
 
@@ -96,10 +97,14 @@
                 optimization: 0
             }))
             .pipe(concat('laroux.css'))
-            .pipe(csscomb({ configPath: __dirname + '/config/.csscomb.json', verbose: true }))
+            .pipe(csscomb({
+                configPath: __dirname + '/config/.csscomb.json',
+                verbose: true
+            }))
             .pipe(header(banner, { pkg: pkg }))
             .pipe(gulp.dest('./dist'))
-            .pipe(sourcemaps.init())
+            .pipe(buffer())
+            .pipe(sourcemaps.init({ loadMaps: true }))
             .pipe(minifyCSS({
                 advanced: false,
                 compatibility: 'ie8',
@@ -109,32 +114,27 @@
                 // relativeTo: '',
                 shorthandCompacting: true
             }))
-            .pipe(rename({ suffix: '.min' }))
             .pipe(header(banner, { pkg: pkg }))
+            .pipe(rename({ suffix: '.min' }))
             .pipe(sourcemaps.write('.'))
             .pipe(gulp.dest('./dist'));
     });
 
-    gulp.task('js:browserify', ['lint:js'], function () {
-        return browserify({ debug: true })
+    gulp.task('js:dist', ['lint:js'], function () {
+        return browserify({ entries: [jsFile], debug: true })
             // .add(es6ify.runtime)
-            .require(require.resolve(jsFile), { entry: true })
             // .transform(es6ify.configure(/^(?!.*node_modules)+.+\.js$/))
             .bundle()
             .pipe(source('laroux.js'))
-            .pipe(gulp.dest('./build/js'));
-    });
-
-    gulp.task('js:dist', ['js:browserify'], function () {
-        return gulp.src('./build/js/**/*.js')
             .pipe(header(banner, { pkg: pkg }))
             .pipe(gulp.dest('./dist'))
-            .pipe(sourcemaps.init())
+            .pipe(buffer())
+            .pipe(sourcemaps.init({ loadMaps: true }))
             .pipe(uglify({
                 preserveComments: false
             }))
-            .pipe(rename({ suffix: '.min' }))
             .pipe(header(banner, { pkg: pkg }))
+            .pipe(rename({ suffix: '.min' }))
             .pipe(sourcemaps.write('./'))
             .pipe(gulp.dest('./dist'));
     });
@@ -149,7 +149,7 @@
     });
 
     gulp.task('lint', ['lint:js', 'lint:css']);
-    gulp.task('js', ['lint:js', 'js:browserify', 'js:dist']);
+    gulp.task('js', ['lint:js', 'js:dist']);
     gulp.task('css', ['lint:css', 'css:dist']);
     gulp.task('default', ['css', 'js', 'test']);
 }());
