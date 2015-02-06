@@ -1,4 +1,4 @@
-(function (laroux) {
+module.exports = (function () {
     'use strict';
 
     var laroux_helpers = require('./laroux.helpers.js');
