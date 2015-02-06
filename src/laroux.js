@@ -1,11 +1,11 @@
-module.exports = (function () {
+module.exports = (function (scope) {
     'use strict';
 
     // core
     var laroux = function (selector, parent) {
         if (selector instanceof Array) {
             return laroux.helpers.toArray(
-                (parent || document).querySelectorAll(selector)
+                (parent || window.document).querySelectorAll(selector)
             );
         }
 
@@ -14,16 +14,21 @@ module.exports = (function () {
         var re = /^#([^\+\>\[\]\.# ]*)$/.exec(selector);
         if (re) {
             if (parent === undefined) {
-                return document.getElementById(re[1]);
+                return window.document.getElementById(re[1]);
             }
 
             return parent.getElementById(re[1]);
         }
         */
 
-        return (parent || document).querySelector(selector);
+        return (parent || window.document).querySelector(selector);
     };
 
+    if (!('$l' in scope)) {
+        scope.$l = laroux;
+    }
+
+    // core modules
     laroux.events = require('./laroux.events.js');
     laroux.helpers = require('./laroux.helpers.js');
     laroux.timers = require('./laroux.timers.js');
@@ -38,23 +43,23 @@ module.exports = (function () {
         if (selector instanceof Array) {
             return laroux.cached.array[selector] || (
                 laroux.cached.array[selector] = laroux.helpers.toArray(
-                    document.querySelectorAll(selector)
+                    window.document.querySelectorAll(selector)
                 )
             );
         }
 
         return laroux.cached.single[selector] || (
-            laroux.cached.single[selector] = document.querySelector(selector)
+            laroux.cached.single[selector] = window.document.querySelector(selector)
         );
     };
 
     laroux.id = function (selector, parent) {
-        return (parent || document).getElementById(selector);
+        return (parent || window.document).getElementById(selector);
     };
 
     laroux.idc = function (selector) {
         return laroux.cached.id[selector] ||
-            (laroux.cached.id[selector] = document.getElementById(selector));
+            (laroux.cached.id[selector] = window.document.getElementById(selector));
     };
 
     laroux.readyPassed = false;
@@ -81,32 +86,15 @@ module.exports = (function () {
         fnc();
     };
 
-    if (typeof window !== 'undefined') {
-        window.document.addEventListener(
-            'DOMContentLoaded',
-            function () {
-                if (!laroux.readyPassed) {
-                    laroux.events.invoke('ContentLoaded');
-                    window.setInterval(laroux.timers.ontick, 100);
-                    laroux.readyPassed = true;
-                }
-            }
-        );
-
-        if (!('$l' in window)) {
-            window.$l = laroux;
-        }
-    }
-
     // optional modules
     laroux.wrapper = require('./laroux.wrapper.js');
     laroux.ajax = require('./laroux.ajax.js');
     laroux.css = require('./laroux.css.js');
     laroux.dom = require('./laroux.dom.js');
-    laroux.events = require('./laroux.events.js');
+    // laroux.events = require('./laroux.events.js');
     laroux.forms = require('./laroux.forms.js');
-    laroux.helpers = require('./laroux.helpers.js');
-    laroux.timers = require('./laroux.timers.js');
+    // laroux.helpers = require('./laroux.helpers.js');
+    // laroux.timers = require('./laroux.timers.js');
     laroux.triggers = require('./laroux.triggers.js');
     laroux.vars = require('./laroux.vars.js');
 
@@ -119,6 +107,20 @@ module.exports = (function () {
     laroux.touch = require('./laroux.touch.js');
     laroux.ui = require('./laroux.ui.js');
 
+    if (typeof window !== 'undefined') {
+        window.document.addEventListener(
+            'DOMContentLoaded',
+            function () {
+                if (!laroux.readyPassed) {
+                    laroux.events.invoke('ContentLoaded');
+                    window.setInterval(laroux.timers.ontick, 100);
+                    laroux.touch.init();
+                    laroux.readyPassed = true;
+                }
+            }
+        );
+    }
+
     return laroux;
 
-}());
+}(typeof window !== 'undefined' ? window : global));

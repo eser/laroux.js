@@ -193,6 +193,8 @@ module.exports = (function () {
         }
     };
 
+    // laroux.ready(laroux_ui.init);
+
     return laroux_ui;
 
 }());

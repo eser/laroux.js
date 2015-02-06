@@ -13,28 +13,28 @@ module.exports = (function () {
 
         select: function (selector, parent) {
             return laroux_helpers.toArray(
-                (parent || document).querySelectorAll(selector)
+                (parent || window.document).querySelectorAll(selector)
             );
         },
 
         selectByClass: function (selector, parent) {
             return laroux_helpers.toArray(
-                (parent || document).getElementsByClassName(selector)
+                (parent || window.document).getElementsByClassName(selector)
             );
         },
 
         selectByTag: function (selector, parent) {
             return laroux_helpers.toArray(
-                (parent || document).getElementsByTagName(selector)
+                (parent || window.document).getElementsByTagName(selector)
             );
         },
 
         selectById: function (selector, parent) {
-            return (parent || document).getElementById(selector);
+            return (parent || window.document).getElementById(selector);
         },
 
         selectSingle: function (selector, parent) {
-            return (parent || document).querySelector(selector);
+            return (parent || window.document).querySelector(selector);
         },
 
         attr: function (element, attributes, value) {

@@ -178,7 +178,7 @@ module.exports = (function () {
                     break;
                 }
 
-                if (!dontSkipReturns && result !== undefined) {
+                if (dontSkipReturns || result !== undefined) {
                     results.push(result);
                 }
             }
@@ -219,7 +219,7 @@ module.exports = (function () {
                     break;
                 }
 
-                if (!dontSkipReturns && result !== undefined) {
+                if (dontSkipReturns || result !== undefined) {
                     results.unshift(result);
                 }
             }
