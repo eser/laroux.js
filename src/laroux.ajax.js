@@ -47,11 +47,11 @@ module.exports = (function () {
             }
 
             if (crossDomain) {
-                if (!('withCredentials' in laroux_ajax.xmlHttpRequestObject) && window.XDomainRequest !== undefined) {
+                if (!('withCredentials' in laroux_ajax.xmlHttpRequestObject) && typeof XDomainRequest !== 'undefined') {
                     laroux_ajax.xDomainObject = true;
 
                     if (laroux_ajax.xDomainRequestObject === null) {
-                        laroux_ajax.xDomainRequestObject = new window.XDomainRequest();
+                        laroux_ajax.xDomainRequestObject = new XDomainRequest();
                     }
 
                     return laroux_ajax.xDomainRequestObject;

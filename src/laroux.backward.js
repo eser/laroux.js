@@ -1,15 +1,24 @@
-/*global Event, Element */
-(function (global) {
+(function (scope) {
     'use strict';
 
-    if (!('requestAnimationFrame' in global)) {
-        global.requestAnimationFrame = function (callback) {
+    var emptyFunction = function () {};
+
+    if (scope.document === undefined) {
+        scope.document = {
+            attachEvent: emptyFunction,
+            createEventObject: emptyFunction,
+            readyState: null
+        };
+    }
+
+    if (!('requestAnimationFrame' in scope)) {
+        scope.requestAnimationFrame = function (callback) {
             setTimeout(function () { callback(Date.now()); }, 50);
         };
     }
 
-    if (!('getComputedStyle' in global)) {
-        global.getComputedStyle = function (element) {
+    if (!('getComputedStyle' in scope)) {
+        scope.getComputedStyle = function (element) {
             this.element = element;
 
             this.getPropertyValue = function (prop) {
@@ -28,15 +37,15 @@
             };
 
             this.getPropertyCSSValue = function (prop) {
-                return new global.CSSPrimitiveValue(this.element, prop);
+                return new CSSPrimitiveValue(this.element, prop);
             };
 
             return this;
         };
     }
 
-    if (!('CSSPrimitiveValue' in global)) {
-        global.CSSPrimitiveValue = function (element, prop) {
+    if (!('CSSPrimitiveValue' in scope)) {
+        scope.CSSPrimitiveValue = function (element, prop) {
             this.element = element;
             this.prop = prop;
             this.primitiveType = 0;
@@ -60,6 +69,10 @@
         };
     }
 
+    if (scope.Event === undefined) {
+        scope.Event = emptyFunction;
+    }
+
     if (!('preventDefault' in Event.prototype)) {
         Event.prototype.preventDefault = function () {
             this.returnValue = false;
@@ -72,8 +85,8 @@
         };
     }
 
-    if (Element === undefined) {
-        global.Element = function () {};
+    if (scope.Element === undefined) {
+        scope.Element = emptyFunction;
     }
 
     if (!('addEventListener' in Element.prototype)) {
@@ -120,13 +133,13 @@
         Element.prototype.removeEventListener = removeListener;
         Element.prototype.dispatchEvent = dispatchEvent;
 
-        if (HTMLDocument !== undefined) {
+        if (scope.HTMLDocument !== undefined) {
             HTMLDocument.prototype.addEventListener = addListener;
             HTMLDocument.prototype.removeEventListener = removeListener;
             HTMLDocument.prototype.dispatchEvent = dispatchEvent;
         }
 
-        if (Window !== undefined) {
+        if (scope.Window !== undefined) {
             Window.prototype.addEventListener = addListener;
             Window.prototype.removeEventListener = removeListener;
             Window.prototype.dispatchEvent = dispatchEvent;
@@ -144,6 +157,10 @@
                 }
             }
         });
+    }
+
+    if (scope.Text === undefined) {
+        scope.Text = emptyFunction;
     }
 
     if (!('textContent' in Element.prototype)) {
@@ -230,7 +247,7 @@
     }
 
     if (!('observe' in Object)) {
-        Object.observe = function () {};
+        Object.observe = emptyFunction;
     }
 
     if (!('keys' in Object)) {
@@ -311,4 +328,4 @@
     }
     */
 
-}(this));
+}(typeof window !== 'undefined' ? window : global));

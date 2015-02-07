@@ -105,12 +105,12 @@ module.exports = (function () {
 
         // {target, key, shift, ctrl, alt, disableInputs, fnc}
         assign: function (options) {
-            var wrapper = function (event) {
-                if (!event) {
-                    event = window.event;
+            var wrapper = function (ev) {
+                if (!ev) {
+                    ev = event;
                 }
 
-                var element = event.target || event.srcElement;
+                var element = ev.target || ev.srcElement;
                 if (element.nodeType === 3 || element.nodeType === 11) { // element.nodeType === 1 ||
                     element = element.parentNode;
                 }
@@ -119,29 +119,29 @@ module.exports = (function () {
                     return;
                 }
 
-                if (options.shift && !event.shiftKey) {
+                if (options.shift && !ev.shiftKey) {
                     return;
                 }
 
-                if (options.ctrl && !event.ctrlKey) {
+                if (options.ctrl && !ev.ctrlKey) {
                     return;
                 }
 
-                if (options.alt && !event.altKey) {
+                if (options.alt && !ev.altKey) {
                     return;
                 }
 
                 var key = laroux_keys.keyName(options.key);
-                if (key !== (event.keyCode || event.which)) {
+                if (key !== (ev.keyCode || ev.which)) {
                     return;
                 }
 
-                options.fnc(event);
+                options.fnc(ev);
 
                 return false;
             };
 
-            laroux_dom.setEvent(options.target || window.document, 'keydown', wrapper);
+            laroux_dom.setEvent(options.target || document, 'keydown', wrapper);
         }
     };
 

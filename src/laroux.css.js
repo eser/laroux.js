@@ -220,12 +220,12 @@ module.exports = (function () {
 
         top: function (element) {
             return element.getBoundingClientRect().top +
-                ((window.document.documentElement && window.document.documentElement.scrollTop) || window.document.body.scrollTop);
+                ((document.documentElement && document.documentElement.scrollTop) || document.body.scrollTop);
         },
 
         left: function (element) {
             return element.getBoundingClientRect().left +
-                ((window.document.documentElement && window.document.documentElement.scrollLeft) || window.document.body.scrollLeft);
+                ((document.documentElement && document.documentElement.scrollLeft) || document.body.scrollLeft);
         },
 
         aboveTheTop: function (element) {
@@ -233,7 +233,7 @@ module.exports = (function () {
         },
 
         belowTheFold: function (element) {
-            return element.getBoundingClientRect().top > window.innerHeight;
+            return element.getBoundingClientRect().top > innerHeight;
         },
 
         leftOfScreen: function (element) {
@@ -241,14 +241,14 @@ module.exports = (function () {
         },
 
         rightOfScreen: function (element) {
-            return element.getBoundingClientRect().left > window.innerWidth;
+            return element.getBoundingClientRect().left > innerWidth;
         },
 
         inViewport: function (element) {
             var rect = element.getBoundingClientRect();
 
-            return !(rect.bottom <= 0 || rect.top > window.innerHeight ||
-                rect.right <= 0 || rect.left > window.innerWidth);
+            return !(rect.bottom <= 0 || rect.top > innerHeight ||
+                rect.right <= 0 || rect.left > innerWidth);
         }
     };
 

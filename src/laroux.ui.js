@@ -182,7 +182,7 @@ module.exports = (function () {
         createFloatContainer: function () {
             if (!laroux_ui.floatContainer) {
                 laroux_ui.floatContainer = laroux_dom.createElement('DIV', { 'class': 'larouxFloatDiv' });
-                window.document.body.insertBefore(laroux_ui.floatContainer, window.document.body.firstChild);
+                document.body.insertBefore(laroux_ui.floatContainer, document.body.firstChild);
             }
         },
 

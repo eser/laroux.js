@@ -8,33 +8,33 @@ module.exports = (function () {
     // dom
     var laroux_dom = {
         docprop: function (propName) {
-            return window.document.documentElement.classList.contains(propName);
+            return document.documentElement.classList.contains(propName);
         },
 
         select: function (selector, parent) {
             return laroux_helpers.toArray(
-                (parent || window.document).querySelectorAll(selector)
+                (parent || document).querySelectorAll(selector)
             );
         },
 
         selectByClass: function (selector, parent) {
             return laroux_helpers.toArray(
-                (parent || window.document).getElementsByClassName(selector)
+                (parent || document).getElementsByClassName(selector)
             );
         },
 
         selectByTag: function (selector, parent) {
             return laroux_helpers.toArray(
-                (parent || window.document).getElementsByTagName(selector)
+                (parent || document).getElementsByTagName(selector)
             );
         },
 
         selectById: function (selector, parent) {
-            return (parent || window.document).getElementById(selector);
+            return (parent || document).getElementById(selector);
         },
 
         selectSingle: function (selector, parent) {
-            return (parent || window.document).querySelector(selector);
+            return (parent || document).querySelector(selector);
         },
 
         attr: function (element, attributes, value) {
@@ -106,7 +106,7 @@ module.exports = (function () {
                     if (e.preventDefault) {
                         e.preventDefault();
                     } else {
-                        window.event.returnValue = false;
+                        event.returnValue = false;
                     }
                 }
             };
@@ -145,7 +145,7 @@ module.exports = (function () {
         },
 
         dispatchEvent: function (element, eventname, data) {
-            var customEvent = window.document.createEvent('Event');
+            var customEvent = document.createEvent('Event');
             for (var item in data) {
                 if (!data.hasOwnProperty(item)) {
                     continue;
@@ -159,8 +159,8 @@ module.exports = (function () {
         },
 
         create: function (html) {
-            var frag = window.document.createDocumentFragment(),
-                temp = window.document.createElement('DIV');
+            var frag = document.createDocumentFragment(),
+                temp = document.createElement('DIV');
 
             temp.insertAdjacentHTML('beforeend', html);
             while (temp.firstChild) {
@@ -174,7 +174,7 @@ module.exports = (function () {
         },
 
         createElement: function (element, attributes, children) {
-            var elem = window.document.createElement(element);
+            var elem = document.createElement(element);
 
             if (attributes !== undefined && attributes.constructor === Object) {
                 for (var item in attributes) {
@@ -213,7 +213,7 @@ module.exports = (function () {
             }
             */
 
-            var option = window.document.createElement('OPTION');
+            var option = document.createElement('OPTION');
             option.setAttribute('value', key);
             if (isDefault === true) {
                 option.setAttribute('checked', 'checked');
@@ -237,7 +237,7 @@ module.exports = (function () {
             var images = [];
 
             for (var i = 0, length = arguments.length; i < length; i++) {
-                var image = window.document.createElement('IMG');
+                var image = document.createElement('IMG');
                 image.setAttribute('src', arguments[i]);
 
                 images.push(image);
@@ -247,7 +247,7 @@ module.exports = (function () {
         },
 
         loadAsyncScript: function (path, triggerName, async) {
-            var elem = window.document.createElement('script');
+            var elem = document.createElement('script');
 
             elem.type = 'text/javascript';
             elem.async = (async !== undefined) ? async : true;
@@ -270,12 +270,12 @@ module.exports = (function () {
                 }
             };
 
-            var head = window.document.getElementsByTagName('head')[0];
+            var head = document.getElementsByTagName('head')[0];
             head.appendChild(elem);
         },
 
         loadAsyncStyle: function (path, triggerName, async) {
-            var elem = window.document.createElement('LINK');
+            var elem = document.createElement('LINK');
 
             elem.type = 'text/css';
             elem.async = (async !== undefined) ? async : true;
@@ -299,7 +299,7 @@ module.exports = (function () {
                 }
             };
 
-            var head = window.document.getElementsByTagName('head')[0];
+            var head = document.getElementsByTagName('head')[0];
             head.appendChild(elem);
         },*/
 
@@ -434,9 +434,9 @@ module.exports = (function () {
     };
 
     // a fix for Internet Explorer
-    if (typeof window !== 'undefined') {
-        if (window.Element.prototype.remove === undefined) {
-            window.Element.prototype.remove = function () {
+    if (typeof Element !== 'undefined') {
+        if (Element.prototype.remove === undefined) {
+            Element.prototype.remove = function () {
                 if (this.parentElement !== null) {
                     this.parentElement.removeChild(this);
                 }

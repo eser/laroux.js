@@ -38,9 +38,9 @@ module.exports = (function () {
             ];
 
             for (var i = 0, length = events.length; i < length; i++) {
-                laroux_dom.setEventSingle(window.document, laroux_touch.events.start[events[i]], laroux_touch.onstart);
-                laroux_dom.setEventSingle(window.document, laroux_touch.events.end[events[i]], laroux_touch.onend);
-                laroux_dom.setEventSingle(window.document, laroux_touch.events.move[events[i]], laroux_touch.locatePointer);
+                laroux_dom.setEventSingle(document, laroux_touch.events.start[events[i]], laroux_touch.onstart);
+                laroux_dom.setEventSingle(document, laroux_touch.events.end[events[i]], laroux_touch.onend);
+                laroux_dom.setEventSingle(document, laroux_touch.events.move[events[i]], laroux_touch.locatePointer);
             }
         },
 

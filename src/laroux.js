@@ -5,7 +5,7 @@ module.exports = (function (scope) {
     var laroux = function (selector, parent) {
         if (selector instanceof Array) {
             return laroux.helpers.toArray(
-                (parent || window.document).querySelectorAll(selector)
+                (parent || document).querySelectorAll(selector)
             );
         }
 
@@ -14,14 +14,14 @@ module.exports = (function (scope) {
         var re = /^#([^\+\>\[\]\.# ]*)$/.exec(selector);
         if (re) {
             if (parent === undefined) {
-                return window.document.getElementById(re[1]);
+                return document.getElementById(re[1]);
             }
 
             return parent.getElementById(re[1]);
         }
         */
 
-        return (parent || window.document).querySelector(selector);
+        return (parent || document).querySelector(selector);
     };
 
     if (!('$l' in scope)) {
@@ -43,23 +43,23 @@ module.exports = (function (scope) {
         if (selector instanceof Array) {
             return laroux.cached.array[selector] || (
                 laroux.cached.array[selector] = laroux.helpers.toArray(
-                    window.document.querySelectorAll(selector)
+                    document.querySelectorAll(selector)
                 )
             );
         }
 
         return laroux.cached.single[selector] || (
-            laroux.cached.single[selector] = window.document.querySelector(selector)
+            laroux.cached.single[selector] = document.querySelector(selector)
         );
     };
 
     laroux.id = function (selector, parent) {
-        return (parent || window.document).getElementById(selector);
+        return (parent || document).getElementById(selector);
     };
 
     laroux.idc = function (selector) {
         return laroux.cached.id[selector] ||
-            (laroux.cached.id[selector] = window.document.getElementById(selector));
+            (laroux.cached.id[selector] = document.getElementById(selector));
     };
 
     laroux.readyPassed = false;
@@ -107,13 +107,13 @@ module.exports = (function (scope) {
     laroux.touch = require('./laroux.touch.js');
     laroux.ui = require('./laroux.ui.js');
 
-    if (typeof window !== 'undefined') {
-        window.document.addEventListener(
+    if (typeof document !== 'undefined') {
+        document.addEventListener(
             'DOMContentLoaded',
             function () {
                 if (!laroux.readyPassed) {
                     laroux.events.invoke('ContentLoaded');
-                    window.setInterval(laroux.timers.ontick, 100);
+                    setInterval(laroux.timers.ontick, 100);
                     laroux.touch.init();
                     laroux.readyPassed = true;
                 }

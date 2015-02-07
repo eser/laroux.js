@@ -27,8 +27,8 @@ module.exports = (function () {
             }
 
             if (newanim.from === undefined || newanim.from === null) {
-                if (newanim.object === window.document.body && newanim.property === 'scrollTop') {
-                    newanim.from = (window.document.documentElement && window.document.documentElement.scrollTop) || window.document.body.scrollTop;
+                if (newanim.object === document.body && newanim.property === 'scrollTop') {
+                    newanim.from = (document.documentElement && document.documentElement.scrollTop) || document.body.scrollTop;
                 } else {
                     newanim.from = newanim.object[newanim.property];
                 }
@@ -48,7 +48,7 @@ module.exports = (function () {
 
             laroux_anim.data.push(newanim);
             if (laroux_anim.data.length === 1) {
-                window.requestAnimationFrame(laroux_anim.onframe);
+                requestAnimationFrame(laroux_anim.onframe);
             }
         },
 
@@ -106,7 +106,7 @@ module.exports = (function () {
                 } else if (timestamp > currentItem.startTime + currentItem.time) {
                     if (currentItem.reset) {
                         currentItem.startTime = timestamp;
-                        if (newanim.object === window.document.body && newanim.property == 'scrollTop') {
+                        if (newanim.object === document.body && newanim.property == 'scrollTop') {
                             scrollTo(0, currentItem.from);
                             // setTimeout(function () { scrollTo(0, currentItem.from); }, 1);
                         } else {
@@ -141,7 +141,7 @@ module.exports = (function () {
                 laroux_anim.fx.easing(shift)
             ) + newanim.unit;
 
-            if (newanim.object === window.document.body && newanim.property == 'scrollTop') {
+            if (newanim.object === document.body && newanim.property == 'scrollTop') {
                 scrollTo(0, value);
                 // setTimeout(function () { scrollTo(0, value); }, 1);
             } else {

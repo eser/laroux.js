@@ -34,7 +34,14 @@
             ''
         ].join('\n'),
 
-        jsFile = './src/laroux.js',
+        jsFiles = {
+            bundle: [
+                './src/laroux.js'
+            ],
+            backward: [
+                './src/laroux.backward.js'
+            ]
+        },
 
         testFiles = [
             './tests/**/*.js'
@@ -120,8 +127,8 @@
             .pipe(gulp.dest('./dist'));
     });
 
-    gulp.task('js:dist', ['lint:js'], function () {
-        return browserify({ entries: [jsFile], debug: true })
+    gulp.task('js:dist-bundle', ['lint:js'], function () {
+        return browserify({ entries: jsFiles.bundle, debug: true })
             // .add(es6ify.runtime)
             // .transform(es6ify.configure(/^(?!.*node_modules)+.+\.js$/))
             .bundle()
@@ -139,16 +146,35 @@
             .pipe(gulp.dest('./dist'));
     });
 
+    gulp.task('js:dist-backward', ['lint:js'], function () {
+        return browserify({ entries: jsFiles.backward, debug: true })
+            // .add(es6ify.runtime)
+            // .transform(es6ify.configure(/^(?!.*node_modules)+.+\.js$/))
+            .bundle()
+            .pipe(source('laroux.backward.js'))
+            .pipe(header(banner, { pkg: pkg }))
+            .pipe(gulp.dest('./dist'))
+            .pipe(buffer())
+            .pipe(sourcemaps.init({ loadMaps: true }))
+            .pipe(uglify({
+                preserveComments: false
+            }))
+            .pipe(header(banner, { pkg: pkg }))
+            .pipe(rename({ suffix: '.min' }))
+            .pipe(sourcemaps.write('./'))
+            .pipe(gulp.dest('./dist'));
+    });
+
     gulp.task('clean', function (cb) {
         del([
             './build/coverage/**/*',
-            './build/js/**/*',
             './dist/**/*',
             '!./dist/.git*'
         ], cb);
     });
 
     gulp.task('lint', ['lint:js', 'lint:css']);
+    gulp.task('js:dist', ['js:dist-bundle', 'js:dist-backward']);
     gulp.task('js', ['lint:js', 'js:dist']);
     gulp.task('css', ['lint:css', 'css:dist']);
     gulp.task('default', ['css', 'js', 'test']);

@@ -36,7 +36,7 @@ module.exports = (function () {
 
             hogan: {
                 compile: function (template, options) {
-                    return window.Hogan.compile(template, options);
+                    return Hogan.compile(template, options);
                 },
 
                 render: function (compiled, model) {
@@ -46,7 +46,7 @@ module.exports = (function () {
 
             mustache: {
                 compile: function (template, options) {
-                    return window.Mustache.compile(template, options);
+                    return Mustache.compile(template, options);
                 },
 
                 render: function (compiled, model) {
@@ -56,7 +56,7 @@ module.exports = (function () {
 
             handlebars: {
                 compile: function (template, options) {
-                    return window.Handlebars.compile(template, options);
+                    return Handlebars.compile(template, options);
                 },
 
                 render: function (compiled, model) {
@@ -67,7 +67,7 @@ module.exports = (function () {
             lodash: {
                 compile: function (template, options) {
                     /*jslint nomen: true */
-                    return window._.compile(template, null, options);
+                    return _.compile(template, null, options);
                 },
 
                 render: function (compiled, model) {
@@ -78,7 +78,7 @@ module.exports = (function () {
             underscore: {
                 compile: function (template, options) {
                     /*jslint nomen: true */
-                    return window._.compile(template, null, options);
+                    return _.compile(template, null, options);
                 },
 
                 render: function (compiled, model) {
