@@ -4,6 +4,8 @@
     var gulp = require('gulp'),
         config = require('../config/tasks.common'),
         pkg = require('../../package.json'),
+        bundleLogger = require('../utils/bundleLogger'),
+        handleErrors = require('../utils/handleErrors'),
         less = require('gulp-less'),
         concat = require('gulp-concat'),
         csscomb = require('gulp-csscomb'),
@@ -14,7 +16,12 @@
         rename = require('gulp-rename');
 
     gulp.task('css:dist', ['lint:css'], function () {
+        var bundleName = 'laroux.css';
+
+        bundleLogger.start(bundleName);
+
         return gulp.src(config.lessFiles)
+            .on('error', handleErrors)
             .pipe(less({
                 strictMath: true,
                 compress: false,
@@ -42,7 +49,8 @@
             .pipe(header(config.banner, { pkg: pkg }))
             .pipe(rename({ suffix: '.min' }))
             .pipe(sourcemaps.write('.'))
-            .pipe(gulp.dest('./build/dist'));
+            .pipe(gulp.dest('./build/dist'))
+            .on('end', function () { bundleLogger.end(bundleName); });
     });
 
 }());

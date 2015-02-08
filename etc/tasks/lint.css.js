@@ -3,16 +3,14 @@
 
     var gulp = require('gulp'),
         config = require('../config/tasks.common'),
+        handleErrors = require('../utils/handleErrors'),
         recess = require('gulp-recess');
 
     gulp.task('lint:css', function () {
         return gulp.src(config.lintFiles.css)
+            .on('error', handleErrors)
             .pipe(recess())
-            .pipe(recess.reporter())
-            .on('error', function (err) {
-                // Make sure failed tests cause gulp to exit non-zero
-                throw err;
-            });
+            .pipe(recess.reporter());
     });
 
 }());
