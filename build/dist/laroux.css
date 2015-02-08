@@ -7,7 +7,8 @@
  */
 /* Stylesheet for laroux.ui.js
 ----------------------------------------------------------*/
-.larouxFloatDiv {
+.larouxFloatDiv
+{
     font-size: 14px;
 
     position: fixed;
@@ -17,7 +18,8 @@
 
     width: 100%;
 }
-.larouxMsgBox {
+.larouxMsgBox
+{
     font: 14px sans-serif;
 
     width: 300px;
@@ -28,17 +30,19 @@
     color: #393939;
     border: 1px solid #808080;
     border-radius: 4px;
-    background-color: #F0F0F0;
-    box-shadow: 3px 3px 5px #000000;
+    background-color: #f0f0f0;
+    box-shadow: 3px 3px 5px #000;
 }
-.larouxMsgBox h3 {
+.larouxMsgBox h3
+{
     font-size: 14px;
     font-weight: bold;
 
     margin: 0 0 4px 0;
 }
-.larouxFade {
-    -webkit-transition: opacity 0.25s ease-in-out;
-       -moz-transition: opacity 0.25s ease-in-out;
-            transition: opacity 0.25s ease-in-out;
+.larouxFade
+{
+    -webkit-transition: opacity .25s ease-in-out;
+       -moz-transition: opacity .25s ease-in-out;
+            transition: opacity .25s ease-in-out;
 }

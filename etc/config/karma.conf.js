@@ -3,10 +3,10 @@ module.exports = function (config) {
     'use strict';
 
     config.set({
-        basePath: '../',
+        basePath: '../../',
         frameworks: ['jasmine'],
         files: [
-            'dist/**/*.js',
+            'build/dist/**/*.js',
             'tests/**/*.js'
         ],
         exclude: [],
@@ -22,7 +22,7 @@ module.exports = function (config) {
         singleRun: true,
         coverageReporter: {
             type: 'lcov',
-            dir: 'build/coverage/'
+            dir: 'build/reports/coverage/'
         }
     });
 };

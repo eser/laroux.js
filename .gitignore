@@ -1,3 +1,2 @@
-build/coverage/*
-build/js/*
+# build/reports/coverage/*
 node_modules/*
