@@ -10,12 +10,19 @@ module.exports = {
         ''
     ].join('\n'),
 
+    bundleNameVersion: 'laroux-<%= bundle.name %>-<%= bundle.version %>.<%= bundle.ext %>',
+    bundleNameLatest: 'laroux-<%= bundle.name %>-latest.<%= bundle.ext %>',
+
     jsFiles: {
-        bundle: [
+        base: [
+            './src/js/laroux{base}.js'
+        ],
+        web: [
             './src/js/laroux.js'
         ],
-        backward: [
-            './src/js/laroux.backward.js'
+        webcompat: [
+            './src/js/laroux.backward.js',
+            './src/js/laroux.js'
         ]
     },
 
@@ -39,7 +46,9 @@ module.exports = {
     ],
 
     cleanFiles: [
-        './build/dist/**/*',
+        './build/dist/base/**/*',
+        './build/dist/web/**/*',
+        './build/dist/webcompat/**/*',
         './build/reports/coverage/**/*'
     ]
 };

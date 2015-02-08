@@ -22,9 +22,7 @@
     requireDir('./etc/tasks', { recurse: true });
 
     gulp.task('lint', ['lint:js', 'lint:css']);
-    gulp.task('js:dist', ['js:dist-bundle', 'js:dist-backward']);
-    gulp.task('js', ['lint:js', 'js:dist']);
-    gulp.task('css', ['lint:css', 'css:dist']);
-    gulp.task('default', ['css', 'js', 'test']);
+    gulp.task('dist', ['dist-base', 'dist-web', 'dist-webcompat']);
+    gulp.task('default', ['dist', 'test']);
 
 }());

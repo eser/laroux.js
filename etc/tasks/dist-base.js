@@ -13,21 +13,26 @@
         buffer = require('vinyl-buffer'),
         sourcemaps = require('gulp-sourcemaps'),
         uglify = require('gulp-uglify'),
+        minifyCSS = require('gulp-minify-css'),
+        less = require('gulp-less'),
+        csscomb = require('gulp-csscomb'),
+        concat = require('gulp-concat'),
         rename = require('gulp-rename');
 
-    gulp.task('js:dist-backward', ['lint:js'], function () {
-        var bundleName = 'laroux.backward.js';
+    gulp.task('dist-base:js', ['lint:js'], function () {
+        var bundleName = 'laroux-base.js';
 
         bundleLogger.start(bundleName);
 
-        return browserify({ entries: config.jsFiles.backward, debug: true })
+        return browserify({ entries: config.jsFiles.base, debug: true })
             // .add(es6ify.runtime)
             // .transform(es6ify.configure(/^(?!.*node_modules)+.+\.js$/))
             .bundle()
             .on('error', handleErrors)
-            .pipe(source('laroux.backward.js'))
+            .pipe(source('laroux{base}.js'))
             .pipe(header(config.banner, { pkg: pkg }))
-            .pipe(gulp.dest('./build/dist'))
+            .pipe(rename({ basename: 'laroux-base' }))
+            .pipe(gulp.dest('./build/dist/base'))
             .pipe(buffer())
             .pipe(sourcemaps.init({ loadMaps: true }))
             .pipe(uglify({
@@ -36,8 +41,10 @@
             .pipe(header(config.banner, { pkg: pkg }))
             .pipe(rename({ suffix: '.min' }))
             .pipe(sourcemaps.write('./'))
-            .pipe(gulp.dest('./build/dist'))
+            .pipe(gulp.dest('./build/dist/base'))
             .on('end', function () { bundleLogger.end(bundleName); });
     });
+
+    gulp.task('dist-base', ['dist-base:js']);
 
 }());
