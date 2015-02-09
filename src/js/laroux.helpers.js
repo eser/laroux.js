@@ -49,7 +49,12 @@ module.exports = (function () {
 
         format: function () {
             var args = arguments;
-            return Array.prototype.shift.call(args).replace(/%s/g, function () { return Array.prototype.shift.call(args); });
+            return Array.prototype.shift.call(args).replace(
+                /%s/g,
+                function () {
+                    return Array.prototype.shift.call(args);
+                }
+            );
         },
 
         replaceAll: function (text, dictionary) {
@@ -238,7 +243,13 @@ module.exports = (function () {
         },
 
         column: function (obj, key) {
-            return laroux_helpers.map(obj, function (value) { return value[key]; }, true);
+            return laroux_helpers.map(
+                obj,
+                function (value) {
+                    return value[key];
+                },
+                true
+            );
         },
 
         shuffle: function (obj) {

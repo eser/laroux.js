@@ -4,6 +4,10 @@ module.exports = (function () {
 
     // stack
     var laroux_stack = function (data, depth, top) {
+        if (!(this instanceof laroux_stack)) {
+            return new this(data, depth, top);
+        }
+
         this._data = {};
         this._depth = depth;
         this._top = top || this;

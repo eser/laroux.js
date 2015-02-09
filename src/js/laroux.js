@@ -6,12 +6,13 @@ module.exports = (function (scope) {
     'use strict';
 
     // core
+    var laroux;
     /* @if ENV!='web' */
-    var laroux = function () {
+    laroux = function () {
     };
     /* @endif */
     /* @if ENV=='web' */
-    var laroux = function (selector, parent) {
+    laroux = function (selector, parent) {
         if (selector instanceof Array) {
             return laroux.helpers.toArray(
                 (parent || document).querySelectorAll(selector)
@@ -34,15 +35,28 @@ module.exports = (function (scope) {
     };
     /* @endif */
 
-    if (!('$l' in scope)) {
-        scope.$l = laroux;
-    }
-
-    // core modules
+    // modules
     laroux.events = require('./laroux.events.js');
     laroux.helpers = require('./laroux.helpers.js');
-    /* @if ENV=='web' */
+    laroux.ajax = require('./laroux.ajax.js');
     laroux.timers = require('./laroux.timers.js');
+    laroux.triggers = require('./laroux.triggers.js');
+    laroux.vars = require('./laroux.vars.js');
+    laroux.date = require('./laroux.date.js');
+    laroux.stack = require('./laroux.stack.js');
+
+    /* @if ENV=='web' */
+    laroux.wrapper = require('./laroux.wrapper.js');
+    laroux.css = require('./laroux.css.js');
+    laroux.dom = require('./laroux.dom.js');
+    laroux.forms = require('./laroux.forms.js');
+
+    laroux.anim = require('./laroux.anim.js');
+    laroux.keys = require('./laroux.keys.js');
+    laroux.mvc = require('./laroux.mvc.js');
+    laroux.templates = require('./laroux.templates.js');
+    laroux.touch = require('./laroux.touch.js');
+    laroux.ui = require('./laroux.ui.js');
     /* @endif */
 
     /* @if ENV=='web' */
@@ -103,51 +117,6 @@ module.exports = (function (scope) {
     /* @endif */
 
     /* @if ENV=='web' */
-    // optional modules
-    laroux.wrapper = require('./laroux.wrapper.js');
-    laroux.ajax = require('./laroux.ajax.js');
-    laroux.css = require('./laroux.css.js');
-    laroux.dom = require('./laroux.dom.js');
-    // laroux.events = require('./laroux.events.js');
-    laroux.forms = require('./laroux.forms.js');
-    // laroux.helpers = require('./laroux.helpers.js');
-    // laroux.timers = require('./laroux.timers.js');
-    laroux.triggers = require('./laroux.triggers.js');
-    laroux.vars = require('./laroux.vars.js');
-
-    laroux.anim = require('./laroux.anim.js');
-    laroux.date = require('./laroux.date.js');
-    laroux.keys = require('./laroux.keys.js');
-    laroux.mvc = require('./laroux.mvc.js');
-    laroux.stack = require('./laroux.stack.js');
-    laroux.templates = require('./laroux.templates.js');
-    laroux.touch = require('./laroux.touch.js');
-    laroux.ui = require('./laroux.ui.js');
-    /* @endif */
-    /* @if ENV!='web' */
-    // optional modules
-    // laroux.wrapper = require('./laroux.wrapper.js');
-    laroux.ajax = require('./laroux.ajax.js');
-    // laroux.css = require('./laroux.css.js');
-    // laroux.dom = require('./laroux.dom.js');
-    // laroux.events = require('./laroux.events.js');
-    // laroux.forms = require('./laroux.forms.js');
-    // laroux.helpers = require('./laroux.helpers.js');
-    laroux.timers = require('./laroux.timers.js');
-    laroux.triggers = require('./laroux.triggers.js');
-    laroux.vars = require('./laroux.vars.js');
-
-    // laroux.anim = require('./laroux.anim.js');
-    laroux.date = require('./laroux.date.js');
-    // laroux.keys = require('./laroux.keys.js');
-    // laroux.mvc = require('./laroux.mvc.js');
-    laroux.stack = require('./laroux.stack.js');
-    // laroux.templates = require('./laroux.templates.js');
-    // laroux.touch = require('./laroux.touch.js');
-    // laroux.ui = require('./laroux.ui.js');
-    /* @endif */
-
-    /* @if ENV=='web' */
     document.addEventListener(
         'DOMContentLoaded',
         function () {
@@ -160,6 +129,10 @@ module.exports = (function (scope) {
         }
     );
     /* @endif */
+
+    if (!('$l' in scope)) {
+        scope.$l = laroux;
+    }
 
     return laroux;
 
