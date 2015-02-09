@@ -4,25 +4,21 @@ module.exports = {
         ' * <%= pkg.name %> - <%= pkg.description %>',
         ' *',
         ' * @version v<%= pkg.version %>',
-        ' * @link <%= pkg.homepage %>',
-        ' * @license <%= pkg.licenses[0].type %>',
+        ' * @link <%= pkg.link %>',
+        ' * @license <%= pkg.license %>',
         ' */',
         ''
     ].join('\n'),
 
-    bundleNameVersion: 'laroux-<%= bundle.name %>-<%= bundle.version %>.<%= bundle.ext %>',
-    bundleNameLatest: 'laroux-<%= bundle.name %>-latest.<%= bundle.ext %>',
-
     jsFiles: {
         base: [
-            './src/js/laroux{base}.js'
+            './temp/base/laroux.js'
         ],
         web: [
-            './src/js/laroux.js'
+            './temp/web/laroux.js'
         ],
         webcompat: [
-            './src/js/laroux.backward.js',
-            './src/js/laroux.js'
+            './temp/webcompat/laroux.js'
         ]
     },
 
@@ -41,8 +37,21 @@ module.exports = {
         ]
     },
 
+    preprocessFiles: [
+        './src/js/**/*.js'
+    ],
+
     lessFiles: [
         './src/less/**/*.less'
+    ],
+
+    tempFiles: [
+        './temp/base/**/*',
+        '!./temp/base/.gitkeep',
+        './temp/web/**/*',
+        '!./temp/web/.gitkeep',
+        './temp/webcompat/**/*',
+        '!./temp/webcompat/.gitkeep'
     ],
 
     cleanFiles: [

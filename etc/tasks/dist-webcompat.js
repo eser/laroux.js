@@ -6,6 +6,7 @@
         pkg = require('../../package.json'),
         bundleLogger = require('../utils/bundleLogger'),
         handleErrors = require('../utils/handleErrors'),
+        tempClean = require('../utils/tempClean'),
         browserify = require('browserify'),
         es6ify = require('es6ify'),
         source = require('vinyl-source-stream'),
@@ -17,11 +18,18 @@
         less = require('gulp-less'),
         csscomb = require('gulp-csscomb'),
         concat = require('gulp-concat'),
-        rename = require('gulp-rename');
+        rename = require('gulp-rename'),
 
-    gulp.task('dist-webcompat:js', ['lint:js'], function () {
-        var bundleName = 'laroux-webcompat.js';
+        bundleInfo = {
+            name: 'laroux.js webcompat',
+            description: pkg.description,
+            version: pkg.version,
+            link: pkg.homepage,
+            license: pkg.licenses[0].type
+        };
 
+    gulp.task('dist-webcompat:js', ['preprocess:webcompat'], function () {
+        var bundleName = bundleInfo.name + ':js';
         bundleLogger.start(bundleName);
 
         return browserify({ entries: config.jsFiles.webcompat, debug: true })
@@ -30,7 +38,7 @@
             .bundle()
             .on('error', handleErrors)
             .pipe(source('laroux.backward.js'))
-            .pipe(header(config.banner, { pkg: pkg }))
+            .pipe(header(config.banner, { pkg: bundleInfo }))
             .pipe(rename({ basename: 'laroux-webcompat' }))
             .pipe(gulp.dest('./build/dist/webcompat'))
             .pipe(buffer())
@@ -38,16 +46,15 @@
             .pipe(uglify({
                 preserveComments: false
             }))
-            .pipe(header(config.banner, { pkg: pkg }))
+            .pipe(header(config.banner, { pkg: bundleInfo }))
             .pipe(rename({ suffix: '.min' }))
             .pipe(sourcemaps.write('./'))
             .pipe(gulp.dest('./build/dist/webcompat'))
-            .on('end', function () { bundleLogger.end(bundleName); });
+            .on('end', function () { bundleLogger.end(bundleName); tempClean(); });
     });
 
     gulp.task('dist-webcompat:css', ['lint:css'], function () {
-        var bundleName = 'laroux-webcompat.css';
-
+        var bundleName = bundleInfo.name + ':css';
         bundleLogger.start(bundleName);
 
         return gulp.src(config.lessFiles)
@@ -63,7 +70,7 @@
                 configPath: './etc/config/.csscomb.json',
                 verbose: true
             }))
-            .pipe(header(config.banner, { pkg: pkg }))
+            .pipe(header(config.banner, { pkg: bundleInfo }))
             .pipe(rename({ basename: 'laroux-webcompat' }))
             .pipe(gulp.dest('./build/dist/webcompat'))
             .pipe(buffer())
@@ -77,7 +84,7 @@
                 // relativeTo: '',
                 shorthandCompacting: true
             }))
-            .pipe(header(config.banner, { pkg: pkg }))
+            .pipe(header(config.banner, { pkg: bundleInfo }))
             .pipe(rename({ suffix: '.min' }))
             .pipe(sourcemaps.write('.'))
             .pipe(gulp.dest('./build/dist/webcompat'))

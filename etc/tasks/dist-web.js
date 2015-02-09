@@ -6,6 +6,7 @@
         pkg = require('../../package.json'),
         bundleLogger = require('../utils/bundleLogger'),
         handleErrors = require('../utils/handleErrors'),
+        tempClean = require('../utils/tempClean'),
         browserify = require('browserify'),
         es6ify = require('es6ify'),
         source = require('vinyl-source-stream'),
@@ -17,11 +18,18 @@
         less = require('gulp-less'),
         csscomb = require('gulp-csscomb'),
         concat = require('gulp-concat'),
-        rename = require('gulp-rename');
+        rename = require('gulp-rename'),
 
-    gulp.task('dist-web:js', ['lint:js'], function () {
-        var bundleName = 'laroux-web.js';
+        bundleInfo = {
+            name: 'laroux.js web',
+            description: pkg.description,
+            version: pkg.version,
+            link: pkg.homepage,
+            license: pkg.licenses[0].type
+        };
 
+    gulp.task('dist-web:js', ['preprocess:web'], function () {
+        var bundleName = bundleInfo.name + ':js';
         bundleLogger.start(bundleName);
 
         return browserify({ entries: config.jsFiles.web, debug: true })
@@ -30,24 +38,23 @@
             .bundle()
             .on('error', handleErrors)
             .pipe(source('laroux.js'))
-            .pipe(header(config.banner, { pkg: pkg }))
-            .pipe(rename({ basename: 'laroux-web' }))
+            .pipe(header(config.banner, { pkg: bundleInfo }))
+            .pipe(rename({ basename: 'laroux' }))
             .pipe(gulp.dest('./build/dist/web'))
             .pipe(buffer())
             .pipe(sourcemaps.init({ loadMaps: true }))
             .pipe(uglify({
                 preserveComments: false
             }))
-            .pipe(header(config.banner, { pkg: pkg }))
+            .pipe(header(config.banner, { pkg: bundleInfo }))
             .pipe(rename({ suffix: '.min' }))
             .pipe(sourcemaps.write('./'))
             .pipe(gulp.dest('./build/dist/web'))
-            .on('end', function () { bundleLogger.end(bundleName); });
+            .on('end', function () { bundleLogger.end(bundleName); tempClean(); });
     });
 
     gulp.task('dist-web:css', ['lint:css'], function () {
-        var bundleName = 'laroux-web.css';
-
+        var bundleName = bundleInfo.name + ':css';
         bundleLogger.start(bundleName);
 
         return gulp.src(config.lessFiles)
@@ -63,8 +70,8 @@
                 configPath: './etc/config/.csscomb.json',
                 verbose: true
             }))
-            .pipe(header(config.banner, { pkg: pkg }))
-            .pipe(rename({ basename: 'laroux-web' }))
+            .pipe(header(config.banner, { pkg: bundleInfo }))
+            .pipe(rename({ basename: 'laroux' }))
             .pipe(gulp.dest('./build/dist/web'))
             .pipe(buffer())
             .pipe(sourcemaps.init({ loadMaps: true }))
@@ -77,7 +84,7 @@
                 // relativeTo: '',
                 shorthandCompacting: true
             }))
-            .pipe(header(config.banner, { pkg: pkg }))
+            .pipe(header(config.banner, { pkg: bundleInfo }))
             .pipe(rename({ suffix: '.min' }))
             .pipe(sourcemaps.write('.'))
             .pipe(gulp.dest('./build/dist/web'))
