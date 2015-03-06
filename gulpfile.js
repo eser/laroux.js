@@ -21,8 +21,6 @@
     // Require all tasks in gulp/tasks, including subfolders
     requireDir('./etc/tasks', { recurse: true });
 
-    gulp.task('lint', ['lint:js', 'lint:css']);
-    gulp.task('dist', ['dist-base', 'dist-web', 'dist-webcompat']);
-    gulp.task('default', ['dist', 'test']);
+    gulp.task('default', ['minify']); // , 'test'
 
 }());

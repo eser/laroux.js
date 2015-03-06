@@ -6,8 +6,14 @@
         handleErrors = require('../utils/handleErrors'),
         karma = require('gulp-karma');
 
-    gulp.task('test', function () {
-        return gulp.src(config.testFiles)
+    gulp.task('test', ['pack'], function () {
+        var files = [];
+
+        Object.keys(config.bundles).forEach(function (item) {
+            files = files.concat(config.bundles[item].testFiles);
+        });
+
+        return gulp.src(files)
             .on('error', handleErrors)
             .pipe(karma({
                 configFile: './etc/config/karma.conf.js',

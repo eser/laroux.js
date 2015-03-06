@@ -1,10 +1,3 @@
-/*
-  handleErrors.js
-  ===============
-
-  Handles compilation errors in order to send them to notification center
-*/
-
 module.exports = (function () {
     'use strict';
 

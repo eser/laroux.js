@@ -7,8 +7,8 @@
         jshint = require('gulp-jshint'),
         jscs = require('gulp-jscs');
 
-    gulp.task('lint:js', function () {
-        return gulp.src(config.lintFiles.js)
+    gulp.task('selfcheck', function () {
+        return gulp.src(config.selfCheckFiles)
             .on('error', handleErrors)
             .pipe(jshint('./etc/config/.jshintrc'))
             .pipe(jshint.reporter('default', { verbose: true }))
