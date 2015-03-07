@@ -1,20 +1,17 @@
-module.exports = (function () {
+(function () {
     'use strict';
 
-    var laroux_dom = require('./laroux.dom.js'),
-        laroux_ajax = require('./laroux.ajax.js');
-
     // forms
-    var laroux_forms = {
+    laroux.ns('laroux.forms', {
         ajaxForm: function (formobj, fnc, fncBegin) {
-            laroux_dom.setEvent(formobj, 'submit', function () {
+            laroux.dom.setEvent(formobj, 'submit', function () {
                 if (fncBegin !== undefined) {
                     fncBegin();
                 }
 
-                laroux_ajax.post(
+                laroux.ajax.post(
                     formobj.getAttribute('action'),
-                    laroux_forms.serializeFormData(formobj),
+                    laroux.forms.serializeFormData(formobj),
                     fnc
                 );
 
@@ -146,7 +143,7 @@ module.exports = (function () {
             }
 
             for (var selected = 0, length = selection.length; selected < length; selected++) {
-                if (!laroux_forms.isFormField(selection[selected])) {
+                if (!laroux.forms.isFormField(selection[selected])) {
                     continue;
                 }
 
@@ -175,7 +172,7 @@ module.exports = (function () {
             var selection = formobj.querySelectorAll('*[name]');
 
             for (var selected = 0, length = selection.length; selected < length; selected++) {
-                var value = laroux_forms.getFormFieldValue(selection[selected]);
+                var value = laroux.forms.getFormFieldValue(selection[selected]);
 
                 if (value !== null) {
                     formdata.append(selection[selected].getAttribute('name'), value);
@@ -190,7 +187,7 @@ module.exports = (function () {
             var selection = formobj.querySelectorAll('*[name]');
 
             for (var selected = 0, length = selection.length; selected < length; selected++) {
-                var value = laroux_forms.getFormFieldValue(selection[selected]);
+                var value = laroux.forms.getFormFieldValue(selection[selected]);
 
                 if (value !== null) {
                     values[selection[selected].getAttribute('name')] = value;
@@ -204,11 +201,9 @@ module.exports = (function () {
             var selection = formobj.querySelectorAll('*[name]');
 
             for (var selected = 0, length = selection.length; selected < length; selected++) {
-                laroux_forms.setFormFieldValue(selection[selected], data[selection[selected].getAttribute('name')]);
+                laroux.forms.setFormFieldValue(selection[selected], data[selection[selected].getAttribute('name')]);
             }
         }
-    };
+    });
 
-    return laroux_forms;
-
-}());
+}).call(this);

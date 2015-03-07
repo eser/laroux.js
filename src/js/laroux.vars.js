@@ -1,8 +1,8 @@
-module.exports = (function () {
+(function () {
     'use strict';
 
     // vars
-    var laroux_vars = {
+    laroux.ns('laroux.vars', {
         cookiePath: '/',
 
         getCookie: function (name, defaultValue) {
@@ -22,11 +22,11 @@ module.exports = (function () {
                 expireValue = '; expires=' + expires.toGMTString();
             }
 
-            document.cookie = encodeURIComponent(name) + '=' + encodeURIComponent(value) + expireValue + '; path=' + (path || laroux_vars.cookiePath);
+            document.cookie = encodeURIComponent(name) + '=' + encodeURIComponent(value) + expireValue + '; path=' + (path || laroux.vars.cookiePath);
         },
 
         removeCookie: function (name, path) {
-            document.cookie = encodeURIComponent(name) + '=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=' + (path || laroux_vars.cookiePath);
+            document.cookie = encodeURIComponent(name) + '=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=' + (path || laroux.vars.cookiePath);
         },
 
         getLocal: function (name, defaultValue) {
@@ -60,8 +60,6 @@ module.exports = (function () {
         removeSession: function (name) {
             delete sessionStorage[name];
         }
-    };
+    });
 
-    return laroux_vars;
-
-}());
+}).call(this);

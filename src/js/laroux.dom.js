@@ -1,30 +1,26 @@
-module.exports = (function () {
+(function () {
     'use strict';
 
-    var laroux_helpers = require('./laroux.helpers.js');
-        // laroux_css = require('./laroux.css.js'),
-        // laroux_triggers = require('./laroux.triggers.js');
-
     // dom
-    var laroux_dom = {
+    laroux.ns('laroux.dom', {
         docprop: function (propName) {
             return document.documentElement.classList.contains(propName);
         },
 
         select: function (selector, parent) {
-            return laroux_helpers.toArray(
+            return laroux.helpers.toArray(
                 (parent || document).querySelectorAll(selector)
             );
         },
 
         selectByClass: function (selector, parent) {
-            return laroux_helpers.toArray(
+            return laroux.helpers.toArray(
                 (parent || document).getElementsByClassName(selector)
             );
         },
 
         selectByTag: function (selector, parent) {
-            return laroux_helpers.toArray(
+            return laroux.helpers.toArray(
                 (parent || document).getElementsByTagName(selector)
             );
         },
@@ -42,7 +38,7 @@ module.exports = (function () {
                 return element.getAttribute(attributes);
             }
 
-            var elements = laroux_helpers.getAsArray(element);
+            var elements = laroux.helpers.getAsArray(element);
             if (typeof attributes === 'string') {
                 var oldAttributes = attributes;
                 attributes = {};
@@ -69,7 +65,7 @@ module.exports = (function () {
                 return element.getAttribute('data-' + datanames);
             }
 
-            var elements = laroux_helpers.getAsArray(element);
+            var elements = laroux.helpers.getAsArray(element);
             if (typeof datanames == 'string') {
                 var oldDatanames = datanames;
                 datanames = {};
@@ -93,10 +89,10 @@ module.exports = (function () {
 
         eventHistory: [],
         setEvent: function (element, eventname, fnc) {
-            var elements = laroux_helpers.getAsArray(element);
+            var elements = laroux.helpers.getAsArray(element);
 
             for (var i = 0, length = elements.length; i < length; i++) {
-                laroux_dom.setEventSingle(elements[i], eventname, fnc);
+                laroux.dom.setEventSingle(elements[i], eventname, fnc);
             }
         },
 
@@ -111,16 +107,16 @@ module.exports = (function () {
                 }
             };
 
-            laroux_dom.eventHistory.push({ element: element, eventname: eventname, fnc: fnc, fncWrapper: fncWrapper });
+            laroux.dom.eventHistory.push({ element: element, eventname: eventname, fnc: fnc, fncWrapper: fncWrapper });
             element.addEventListener(eventname, fncWrapper, false);
         },
 
         unsetEvent: function (element, eventname, fnc) {
-            var elements = laroux_helpers.getAsArray(element);
+            var elements = laroux.helpers.getAsArray(element);
 
             for (var i1 = 0, length1 = elements.length; i1 < length1; i1++) {
-                for (var i2 = 0, length2 = laroux_dom.eventHistory.length; i2 < length2; i2++) {
-                    var item = laroux_dom.eventHistory[i2];
+                for (var i2 = 0, length2 = laroux.dom.eventHistory.length; i2 < length2; i2++) {
+                    var item = laroux.dom.eventHistory[i2];
 
                     if (item === undefined) {
                         continue;
@@ -139,7 +135,7 @@ module.exports = (function () {
                     }
 
                     item.element.removeEventListener(item.eventname, item.fncWrapper, false);
-                    delete laroux_dom.eventHistory[i2];
+                    delete laroux.dom.eventHistory[i2];
                 }
             }
         },
@@ -196,7 +192,7 @@ module.exports = (function () {
                         elem.setAttribute(item2, children[item2]);
                     }
                 } else if (/* typeof children == 'string' && */children.length > 0) {
-                    laroux_dom.append(elem, children);
+                    laroux.dom.append(elem, children);
                 }
             }
 
@@ -219,7 +215,7 @@ module.exports = (function () {
                 option.setAttribute('checked', 'checked');
             }
 
-            laroux_dom.append(option, value);
+            laroux.dom.append(option, value);
             element.appendChild(option);
         },
 
@@ -265,7 +261,7 @@ module.exports = (function () {
                     if (typeof triggerName == 'function') {
                         triggerName();
                     } else {
-                        laroux_triggers.ontrigger(triggerName);
+                        laroux.triggers.ontrigger(triggerName);
                     }
                 }
             };
@@ -294,7 +290,7 @@ module.exports = (function () {
                     if (typeof triggerName == 'function') {
                         triggerName();
                     } else {
-                        laroux_triggers.ontrigger(triggerName);
+                        laroux.triggers.ontrigger(triggerName);
                     }
                 }
             };
@@ -322,12 +318,12 @@ module.exports = (function () {
         },
 
         replace: function (element, content) {
-            laroux_dom.clear(element);
+            laroux.dom.clear(element);
             element.insertAdjacentHTML('afterbegin', content);
         },
 
         replaceText: function (element, content) {
-            // laroux_dom.clear(element);
+            // laroux.dom.clear(element);
             element.textContent = content;
         },
 
@@ -350,12 +346,12 @@ module.exports = (function () {
                 target = element;
             }
 
-            if (type !== undefined && type != laroux_dom.cloneReturn) {
-                if (type == laroux_dom.cloneAppend) {
+            if (type !== undefined && type != laroux.dom.cloneReturn) {
+                if (type == laroux.dom.cloneAppend) {
                     container.appendChild(newElement);
-                } else if (type == laroux_dom.cloneInsertAfter) {
+                } else if (type == laroux.dom.cloneInsertAfter) {
                     container.insertBefore(newElement, target.nextSibling);
-                } else { // type == laroux_dom.cloneInsertBefore
+                } else { // type == laroux.dom.cloneInsertBefore
                     container.insertBefore(newElement, target);
                 }
             }
@@ -385,7 +381,7 @@ module.exports = (function () {
                             }
 
                             if (binding == 'content') {
-                                laroux_dom.replace(element, value);
+                                laroux.dom.replace(element, value);
                                 continue;
                             }
                             break;
@@ -396,7 +392,7 @@ module.exports = (function () {
                             }
 
                             if (binding == 'content') {
-                                laroux_dom.append(element, value);
+                                laroux.dom.append(element, value);
                                 continue;
                             }
                             break;
@@ -407,21 +403,21 @@ module.exports = (function () {
                             }
 
                             if (value == 'content') {
-                                laroux_dom.clear(element);
+                                laroux.dom.clear(element);
                                 continue;
                             }
                             break;
                         case 'addclass':
-                            laroux_css.addClass(element, value);
+                            laroux.css.addClass(element, value);
                             break;
                         case 'removeclass':
-                            laroux_css.removeClass(element, value);
+                            laroux.css.removeClass(element, value);
                             break;
                         case 'addstyle':
-                            laroux_css.setProperty(element, binding, value);
+                            laroux.css.setProperty(element, binding, value);
                             break;
                         case 'removestyle':
-                            laroux_css.setProperty(element, value, 'inherit !important');
+                            laroux.css.setProperty(element, value, 'inherit !important');
                             break;
                         case 'repeat':
                             break;
@@ -431,7 +427,7 @@ module.exports = (function () {
                 }
             }
         }*/
-    };
+    });
 
     // a fix for Internet Explorer
     if (typeof Element !== 'undefined') {
@@ -444,6 +440,4 @@ module.exports = (function () {
         }
     }
 
-    return laroux_dom;
-
-}());
+}).call(this);

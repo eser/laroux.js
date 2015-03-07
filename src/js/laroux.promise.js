@@ -1,30 +1,30 @@
-module.exports = (function () {
+(function () {
     'use strict';
 
     // promise
-    var laroux_promise = function (data) {
-        if (!(this instanceof laroux_promise)) {
-            return new this(data);
+    laroux.ns('laroux', {
+        promise: function (data) {
+            if (!(this instanceof laroux.promise)) {
+                return new this(data);
+            }
+
+            if (typeof data !== 'undefined') {
+                this._data = [];
+            } else {
+                this._data = Array.prototype.slice.call(data);
+                this.begin();
+            }
         }
+    });
 
-        this.when = function (fnc) {
-            this._data.push(fnc);
-        };
-
-        this.then = function () {
-        };
-
-        this.begin = function () {
-        };
-
-        if (typeof data !== 'undefined') {
-            this._data = [];
-        } else {
-            this._data = Array.prototype.slice.call(data);
-            this.begin();
-        }
+    laroux.promise.prototype.when = function (fnc) {
+        this._data.push(fnc);
     };
 
-    return laroux_promise;
+    laroux.promise.prototype.then = function () {
+    };
 
-}());
+    laroux.promise.prototype.begin = function () {
+    };
+
+}).call(this);

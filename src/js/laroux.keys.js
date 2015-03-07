@@ -1,11 +1,8 @@
-module.exports = (function () {
+(function () {
     'use strict';
 
-    var laroux_dom = require('./laroux.dom.js'),
-        laroux_forms = require('./laroux.forms.js');
-
     // keys
-    var laroux_keys = {
+    laroux.ns('laroux.keys', {
         keyName: function (keycode) {
             keycode = keycode.toLowerCase();
 
@@ -115,7 +112,7 @@ module.exports = (function () {
                     element = element.parentNode;
                 }
 
-                if (options.disableInputs && laroux_forms.isFormField(element)) {
+                if (options.disableInputs && laroux.forms.isFormField(element)) {
                     return;
                 }
 
@@ -131,7 +128,7 @@ module.exports = (function () {
                     return;
                 }
 
-                var key = laroux_keys.keyName(options.key);
+                var key = laroux.keys.keyName(options.key);
                 if (key !== (ev.keyCode || ev.which)) {
                     return;
                 }
@@ -141,10 +138,8 @@ module.exports = (function () {
                 return false;
             };
 
-            laroux_dom.setEvent(options.target || document, 'keydown', wrapper);
+            laroux.dom.setEvent(options.target || document, 'keydown', wrapper);
         }
-    };
+    });
 
-    return laroux_keys;
-
-}());
+}).call(this);

@@ -1,11 +1,8 @@
-module.exports = (function () {
+(function () {
     'use strict';
 
-    var laroux_helpers = require('./laroux.helpers.js'),
-        laroux_css = require('./laroux.css.js');
-
     // anim
-    var laroux_anim = {
+    laroux.ns('laroux.anim', {
         data: [],
 
         fx: {
@@ -43,35 +40,35 @@ module.exports = (function () {
             }
 
             // if (newanim.id === undefined) {
-            //     newanim.id = laroux_helpers.getUniqueId();
+            //     newanim.id = laroux.helpers.getUniqueId();
             // }
 
-            laroux_anim.data.push(newanim);
-            if (laroux_anim.data.length === 1) {
-                requestAnimationFrame(laroux_anim.onframe);
+            laroux.anim.data.push(newanim);
+            if (laroux.anim.data.length === 1) {
+                requestAnimationFrame(laroux.anim.onframe);
             }
         },
 
         setCss: function (newanim) {
             if (newanim.from === undefined || newanim.from === null) {
-                newanim.from = laroux_css.getProperty(newanim.object, newanim.property);
+                newanim.from = laroux.css.getProperty(newanim.object, newanim.property);
             }
 
             newanim.object = newanim.object.style;
-            newanim.property = laroux_helpers.camelCase(newanim.property);
+            newanim.property = laroux.helpers.camelCase(newanim.property);
 
-            laroux_anim.set(newanim);
+            laroux.anim.set(newanim);
         },
 
         remove: function (id) {
             var targetKey = null;
 
-            for (var item in laroux_anim.data) {
-                if (!laroux_anim.data.hasOwnProperty(item)) {
+            for (var item in laroux.anim.data) {
+                if (!laroux.anim.data.hasOwnProperty(item)) {
                     continue;
                 }
 
-                var currentItem = laroux_anim.data[item];
+                var currentItem = laroux.anim.data[item];
 
                 if (currentItem.id !== undefined && currentItem.id == id) {
                     targetKey = item;
@@ -80,7 +77,7 @@ module.exports = (function () {
             }
 
             if (targetKey !== null) {
-                laroux_anim.data.splice(targetKey, 1);
+                laroux.anim.data.splice(targetKey, 1);
                 return true;
             }
 
@@ -89,17 +86,17 @@ module.exports = (function () {
 
         onframe: function (timestamp) {
             var removeKeys = [];
-            for (var item in laroux_anim.data) {
-                if (!laroux_anim.data.hasOwnProperty(item)) {
+            for (var item in laroux.anim.data) {
+                if (!laroux.anim.data.hasOwnProperty(item)) {
                     continue;
                 }
 
-                var currentItem = laroux_anim.data[item];
+                var currentItem = laroux.anim.data[item];
                 if (currentItem.startTime === null) {
                     currentItem.startTime = timestamp;
                 }
 
-                var result = laroux_anim.step(currentItem, timestamp);
+                var result = laroux.anim.step(currentItem, timestamp);
 
                 if (result === false) {
                     removeKeys.unshift(item);
@@ -123,11 +120,11 @@ module.exports = (function () {
                     continue;
                 }
 
-                laroux_anim.data.splice(removeKeys[item2], 1);
+                laroux.anim.data.splice(removeKeys[item2], 1);
             }
 
-            if (laroux_anim.data.length > 0) {
-                requestAnimationFrame(laroux_anim.onframe);
+            if (laroux.anim.data.length > 0) {
+                requestAnimationFrame(laroux.anim.onframe);
             }
         },
 
@@ -135,10 +132,10 @@ module.exports = (function () {
             var finishT = newanim.startTime + newanim.time,
                 shift = (timestamp > finishT) ? 1 : (timestamp - newanim.startTime) / newanim.time;
 
-            var value = laroux_anim.fx.interpolate(
+            var value = laroux.anim.fx.interpolate(
                 newanim.from,
                 newanim.to,
-                laroux_anim.fx.easing(shift)
+                laroux.anim.fx.easing(shift)
             ) + newanim.unit;
 
             if (newanim.object === document.body && newanim.property == 'scrollTop') {
@@ -148,8 +145,6 @@ module.exports = (function () {
                 newanim.object[newanim.property] = value;
             }
         }
-    };
+    });
 
-    return laroux_anim;
-
-}());
+}).call(this);

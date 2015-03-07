@@ -1,24 +1,24 @@
-module.exports = (function () {
+(function () {
     'use strict';
 
     // timers
-    var laroux_timers = {
+    laroux.ns('laroux.timers', {
         data: [],
 
         set: function (timer) {
             timer.next = Date.now() + timer.timeout;
-            laroux_timers.data.push(timer);
+            laroux.timers.data.push(timer);
         },
 
         remove: function (id) {
             var targetKey = null;
 
-            for (var item in laroux_timers.data) {
-                if (!laroux_timers.data.hasOwnProperty(item)) {
+            for (var item in laroux.timers.data) {
+                if (!laroux.timers.data.hasOwnProperty(item)) {
                     continue;
                 }
 
-                var currentItem = laroux_timers.data[item];
+                var currentItem = laroux.timers.data[item];
 
                 if (currentItem.id !== undefined && currentItem.id == id) {
                     targetKey = item;
@@ -27,7 +27,7 @@ module.exports = (function () {
             }
 
             if (targetKey !== null) {
-                laroux_timers.data.splice(targetKey, 1);
+                laroux.timers.data.splice(targetKey, 1);
                 return true;
             }
 
@@ -38,12 +38,12 @@ module.exports = (function () {
             var now = Date.now();
 
             var removeKeys = [];
-            for (var item in laroux_timers.data) {
-                if (!laroux_timers.data.hasOwnProperty(item)) {
+            for (var item in laroux.timers.data) {
+                if (!laroux.timers.data.hasOwnProperty(item)) {
                     continue;
                 }
 
-                var currentItem = laroux_timers.data[item];
+                var currentItem = laroux.timers.data[item];
 
                 if (currentItem.next <= now) {
                     var result = currentItem.ontick(currentItem.state);
@@ -61,11 +61,9 @@ module.exports = (function () {
                     continue;
                 }
 
-                laroux_timers.data.splice(removeKeys[item2], 1);
+                laroux.timers.data.splice(removeKeys[item2], 1);
             }
         }
-    };
+    });
 
-    return laroux_timers;
-
-}());
+}).call(this);

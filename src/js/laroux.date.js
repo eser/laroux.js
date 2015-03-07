@@ -1,8 +1,8 @@
-module.exports = (function () {
+(function () {
     'use strict';
 
     // date
-    var laroux_date = {
+    laroux.ns('laroux.date', {
         shortDateFormat: 'dd.MM.yyyy',
         longDateFormat: 'dd MMMM yyyy',
         timeFormat: 'HH:mm',
@@ -33,47 +33,47 @@ module.exports = (function () {
             if (timespan < 60 * 1000) {
                 timespan = Math.ceil(timespan / 1000);
 
-                return timespan + ' ' + laroux_date.strings.seconds;
+                return timespan + ' ' + laroux.date.strings.seconds;
             }
 
             if (timespan < 60 * 60 * 1000) {
                 timespan = Math.ceil(timespan / (60 * 1000));
 
                 if (timespan === 1) {
-                    return laroux_date.strings.aminute;
+                    return laroux.date.strings.aminute;
                 }
 
-                return timespan + ' ' + laroux_date.strings.minutes;
+                return timespan + ' ' + laroux.date.strings.minutes;
             }
 
             if (timespan < 24 * 60 * 60 * 1000) {
                 timespan = Math.ceil(timespan / (60 * 60 * 1000));
 
                 if (timespan === 1) {
-                    return laroux_date.strings.ahour;
+                    return laroux.date.strings.ahour;
                 }
 
-                return timespan + ' ' + laroux_date.strings.hours;
+                return timespan + ' ' + laroux.date.strings.hours;
             }
 
             if (timespan < 7 * 24 * 60 * 60 * 1000) {
                 timespan = Math.ceil(timespan / (24 * 60 * 60 * 1000));
 
                 if (timespan === 1) {
-                    return laroux_date.strings.aday;
+                    return laroux.date.strings.aday;
                 }
 
-                return timespan + ' ' + laroux_date.strings.days;
+                return timespan + ' ' + laroux.date.strings.days;
             }
 
             if (timespan < 4 * 7 * 24 * 60 * 60 * 1000) {
                 timespan = Math.ceil(timespan / (7 * 24 * 60 * 60 * 1000));
 
                 if (timespan === 1) {
-                    return laroux_date.strings.aweek;
+                    return laroux.date.strings.aweek;
                 }
 
-                return timespan + ' ' + laroux_date.strings.weeks;
+                return timespan + ' ' + laroux.date.strings.weeks;
             }
 
             if (limitWithWeeks === true) {
@@ -84,19 +84,19 @@ module.exports = (function () {
                 timespan = Math.ceil(timespan / (30 * 24 * 60 * 60 * 1000));
 
                 if (timespan === 1) {
-                    return laroux_date.strings.amonth;
+                    return laroux.date.strings.amonth;
                 }
 
-                return timespan + ' ' + laroux_date.strings.months;
+                return timespan + ' ' + laroux.date.strings.months;
             }
 
             timespan = Math.ceil(timespan / (365 * 24 * 60 * 60 * 1000));
 
             if (timespan === 1) {
-                return laroux_date.strings.ayear;
+                return laroux.date.strings.ayear;
             }
 
-            return timespan + ' ' + laroux_date.strings.years;
+            return timespan + ' ' + laroux.date.strings.years;
         },
 
         getCustomDateString: function (format, date) {
@@ -113,10 +113,10 @@ module.exports = (function () {
                         return now.getYear();
 
                     case 'MMMM':
-                        return laroux_date.monthsLong[now.getMonth()];
+                        return laroux.date.monthsLong[now.getMonth()];
 
                     case 'MMM':
-                        return laroux_date.monthsShort[now.getMonth()];
+                        return laroux.date.monthsShort[now.getMonth()];
 
                     case 'MM':
                         return ('0' + (now.getMonth() + 1)).substr(-2, 2);
@@ -183,34 +183,32 @@ module.exports = (function () {
                 past = (timespan > 0);
 
             if (absTimespan <= 3000) {
-                return laroux_date.strings.now;
+                return laroux.date.strings.now;
             }
 
-            var timespanstring = laroux_date.parseEpoch(absTimespan, true);
+            var timespanstring = laroux.date.parseEpoch(absTimespan, true);
             if (timespanstring !== null) {
                 return timespanstring +
                     ' ' +
-                    (past ? laroux_date.strings.ago : laroux_date.strings.later);
+                    (past ? laroux.date.strings.ago : laroux.date.strings.later);
             }
 
-            return laroux_date.getShortDateString(date, true);
+            return laroux.date.getShortDateString(date, true);
         },
 
         getShortDateString: function (date, includeTime) {
-            return laroux_date.getCustomDateString(
-                includeTime ? laroux_date.shortDateFormat + ' ' + laroux_date.timeFormat : laroux_date.shortDateFormat,
+            return laroux.date.getCustomDateString(
+                includeTime ? laroux.date.shortDateFormat + ' ' + laroux.date.timeFormat : laroux.date.shortDateFormat,
                 date
             );
         },
 
         getLongDateString: function (date, includeTime) {
-            return laroux_date.getCustomDateString(
-                includeTime ? laroux_date.longDateFormat + ' ' + laroux_date.timeFormat : laroux_date.longDateFormat,
+            return laroux.date.getCustomDateString(
+                includeTime ? laroux.date.longDateFormat + ' ' + laroux.date.timeFormat : laroux.date.longDateFormat,
                 date
             );
         }
-    };
+    });
 
-    return laroux_date;
-
-}());
+}).call(this);
