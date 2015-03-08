@@ -48,10 +48,12 @@ module.exports = {
                     header: true,
                     files: [
                         '~/base/js/laroux.js',
+                        '~/base/js/laroux.helpers.js',
                         '~/base/js/laroux.events.js',
                         '~/base/js/laroux.ajax.js',
                         '~/base/js/laroux.timers.js',
                         '~/base/js/laroux.triggers.js',
+                        '~/base/js/laroux.promise.js',
                         '~/base/js/laroux.vars.js',
                         '~/base/js/laroux.date.js',
                         '~/base/js/laroux.stack.js'
@@ -110,10 +112,12 @@ module.exports = {
                     header: true,
                     files: [
                         '~/web/js/laroux.js',
+                        '~/web/js/laroux.helpers.js',
                         '~/web/js/laroux.events.js',
                         '~/web/js/laroux.ajax.js',
                         '~/web/js/laroux.timers.js',
                         '~/web/js/laroux.triggers.js',
+                        '~/web/js/laroux.promise.js',
                         '~/web/js/laroux.vars.js',
                         '~/web/js/laroux.date.js',
                         '~/web/js/laroux.stack.js',

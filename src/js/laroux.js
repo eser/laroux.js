@@ -54,7 +54,7 @@
 
                     /* target[name].constructor === Object */
                     if (target.hasOwnProperty(name) && target[name] instanceof Object) {
-                        extendObject(target[name], arguments[item][name]);
+                        laroux.helpers.extendObject(target[name], arguments[item][name]);
                         continue;
                     }
 
