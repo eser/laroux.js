@@ -957,7 +957,6 @@
 
             this._delegates = [];
             this._events = [];
-            this._permanentEvents = ['error', 'success', 'complete'];
             this._terminated = false;
 
             if (fnc !== undefined) {
@@ -1004,9 +1003,7 @@
                 continue;
             }
 
-            if (laroux.helpers.aindex(this._permanentEvents, item) === -1) {
-                removeKeys.unshift(item);
-            }
+            removeKeys.unshift(item);
             eventItem.fnc.apply(this, arguments);
         }
 
