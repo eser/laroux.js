@@ -1308,20 +1308,22 @@
 
             this._delegates = [];
             this._events = [];
+            this._permanentEvents = ['error', 'success', 'complete'];
+            this._terminated = false;
 
             if (fnc !== undefined) {
-                this.and(fnc);
+                this.then(fnc);
             }
         }
     });
 
-    laroux.promise.prototype.and = function (fnc) {
+    laroux.promise.prototype.then = function (fnc) {
         this._delegates.push(fnc);
 
         return this;
     };
 
-    laroux.promise.prototype.on = function (condition, fnc) {
+    laroux.promise.prototype.catch = function (condition, fnc) {
         var conditions = laroux.helpers.getAsArray(condition);
 
         this._events.push({
@@ -1332,9 +1334,9 @@
         return this;
     };
 
-    laroux.promise.prototype.omit = function () {
-        var eventName = Array.prototype.shift.call(arguments);
-        // fnc.apply(null, [this].concat(laroux.helpers.toArray(arguments)));
+    laroux.promise.prototype.throw = function () {
+        var eventName = Array.prototype.shift.call(arguments),
+            terminate = Array.prototype.shift.call(arguments);
 
         var removeKeys = [];
         for (var item in this._events) {
@@ -1353,7 +1355,9 @@
                 continue;
             }
 
-            removeKeys.unshift(item);
+            if (laroux.helpers.aindex(this._permanentEvents, item) === -1) {
+                removeKeys.unshift(item);
+            }
             eventItem.fnc.apply(this, arguments);
         }
 
@@ -1364,18 +1368,35 @@
 
             this._events.splice(removeKeys[item2], 1);
         }
+
+        if (terminate === true) {
+            this._terminated = true;
+            this.throw('complete', false);
+        }
     };
 
-    laroux.promise.prototype.begin = function () {
-        for (var item in this._delegates) {
-            if (!this._delegates.hasOwnProperty(item)) {
-                continue;
-            }
+    laroux.promise.prototype.next = function () {
+        var self = this,
+            delegate = this._delegates.shift(),
+            args = laroux.helpers.toArray(arguments);
 
-            this._delegates[item].apply(this, arguments);
+        if (this._terminated) {
+            return;
         }
 
-        return this;
+        if (delegate === undefined) {
+            this.throw.apply(this, ['success', true].concat(args));
+            return;
+        }
+
+        setTimeout(function () {
+            try {
+                var lastReturn = delegate.apply(self, args);
+                self.next.call(self, lastReturn);
+            } catch (err) {
+                self.throw('error', true, [err]);
+            }
+        }, 0);
     };
 
 }).call(this);
