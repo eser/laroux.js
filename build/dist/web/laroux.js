@@ -1307,7 +1307,9 @@
             }
 
             this._delegates = [];
+            this._delegateQueue = [];
             this._events = [];
+            this._eventStack = [];
             this._terminated = false;
 
             if (fnc !== undefined) {
@@ -1318,32 +1320,32 @@
 
     laroux.promise.prototype.then = function (fnc) {
         this._delegates.push(fnc);
+        this._delegateQueue.push(fnc);
 
         return this;
     };
 
-    laroux.promise.prototype.catch = function (condition, fnc) {
-        var conditions = laroux.helpers.getAsArray(condition);
+    laroux.promise.prototype.on = function (condition, fnc) {
+        var conditions = laroux.helpers.getAsArray(condition),
+            ev = {
+                conditions: conditions,
+                fnc: fnc
+            };
 
-        this._events.push({
-            conditions: conditions,
-            fnc: fnc
-        });
+        this._events.push(ev);
+        this._eventStack.push(ev);
 
         return this;
     };
 
-    laroux.promise.prototype.throw = function () {
-        var eventName = Array.prototype.shift.call(arguments),
-            terminate = Array.prototype.shift.call(arguments);
-
+    laroux.promise.prototype.invoke = function (eventName, terminate, args) {
         var removeKeys = [];
-        for (var item in this._events) {
-            if (!this._events.hasOwnProperty(item)) {
+        for (var item in this._eventStack) {
+            if (!this._eventStack.hasOwnProperty(item)) {
                 continue;
             }
 
-            var eventItem = this._events[item],
+            var eventItem = this._eventStack[item],
                 eventIdx = laroux.helpers.aindex(eventItem.conditions, eventName);
 
             if (eventIdx !== -1) {
@@ -1355,7 +1357,7 @@
             }
 
             removeKeys.unshift(item);
-            eventItem.fnc.apply(this, arguments);
+            eventItem.fnc.apply(this, args);
         }
 
         for (var item2 in removeKeys) {
@@ -1363,18 +1365,18 @@
                 continue;
             }
 
-            this._events.splice(removeKeys[item2], 1);
+            this._eventStack.splice(removeKeys[item2], 1);
         }
 
         if (terminate === true) {
             this._terminated = true;
-            this.throw('complete', false);
+            this.invoke('complete', false);
         }
     };
 
-    laroux.promise.prototype.next = function () {
+    laroux.promise.prototype.start = function () {
         var self = this,
-            delegate = this._delegates.shift(),
+            delegate = this._delegateQueue.shift(),
             args = laroux.helpers.toArray(arguments);
 
         if (this._terminated) {
@@ -1382,18 +1384,28 @@
         }
 
         if (delegate === undefined) {
-            this.throw.apply(this, ['success', true].concat(args));
+            this.invoke('success', true, args);
             return;
         }
 
         setTimeout(function () {
             try {
                 var lastReturn = delegate.apply(self, args);
-                self.next.call(self, lastReturn);
+                self.start.call(self, lastReturn);
             } catch (err) {
-                self.throw('error', true, [err]);
+                self.invoke('error', true, [err]);
             }
         }, 0);
+
+        return this;
+    };
+
+    laroux.promise.prototype.reset = function () {
+        this._delegateQueue = this._delegates.slice();
+        this._eventStack = this._events.slice();
+        this._terminated = false;
+
+        return this;
     };
 
 }).call(this);
