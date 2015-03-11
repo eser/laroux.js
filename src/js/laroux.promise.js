@@ -3,26 +3,27 @@
 
     // promise
     laroux.ns('laroux', {
-        promise: function (fnc) {
+        promise: function (fnc, isAsync) {
             if (!(this instanceof laroux.promise)) {
-                return new laroux.promise(fnc);
+                return new laroux.promise(fnc, isAsync);
             }
 
             this._delegates = [];
-            this._delegateQueue = [];
+            this._delegateQueue = null;
             this._events = [];
-            this._eventStack = [];
-            this._terminated = false;
+            this._eventStack = null;
+            this.completed = false;
 
             if (fnc !== undefined) {
-                this.then(fnc);
+                this.then(fnc, isAsync);
             }
         }
     });
 
-    laroux.promise.prototype.then = function (fnc) {
-        this._delegates.push(fnc);
-        this._delegateQueue.push(fnc);
+    laroux.promise.prototype.then = function (fnc, isAsync) {
+        var delegate = { fnc: fnc, isAsync: isAsync };
+
+        this._delegates.push(delegate);
 
         return this;
     };
@@ -35,13 +36,14 @@
             };
 
         this._events.push(ev);
-        this._eventStack.push(ev);
 
         return this;
     };
 
-    laroux.promise.prototype.invoke = function (eventName, terminate, args) {
-        var removeKeys = [];
+    laroux.promise.prototype.invoke = function () {
+        var eventName = Array.prototype.shift.call(arguments),
+            removeKeys = [];
+
         for (var item in this._eventStack) {
             if (!this._eventStack.hasOwnProperty(item)) {
                 continue;
@@ -59,7 +61,7 @@
             }
 
             removeKeys.unshift(item);
-            eventItem.fnc.apply(this, args);
+            eventItem.fnc.apply(this, arguments);
         }
 
         for (var item2 in removeKeys) {
@@ -69,45 +71,52 @@
 
             this._eventStack.splice(removeKeys[item2], 1);
         }
-
-        if (terminate === true) {
-            this._terminated = true;
-            this.invoke('complete', false);
-        }
     };
 
-    laroux.promise.prototype.start = function () {
+    laroux.promise.prototype.complete = function () {
+        this.completed = true;
+        this.invoke('complete');
+    };
+
+    laroux.promise.prototype.next = function () {
         var self = this,
             delegate = this._delegateQueue.shift(),
             args = laroux.helpers.toArray(arguments);
 
-        if (this._terminated) {
-            return;
+        if (this.completed) {
+            return this;
         }
 
         if (delegate === undefined) {
-            this.invoke('success', true, args);
-            return;
+            var parameters = ['success'].concat(args);
+
+            this.invoke.apply(this, parameters);
+            this.complete();
+
+            return this;
         }
 
         setTimeout(function () {
             try {
-                var lastReturn = delegate.apply(self, args);
-                self.start.call(self, lastReturn);
+                var lastReturn = delegate.fnc.apply(self, args);
+                if (delegate.isAsync !== true) {
+                    self.next.call(self, lastReturn);
+                }
             } catch (err) {
-                self.invoke('error', true, [err]);
+                self.invoke('error', err);
+                self.complete();
             }
         }, 0);
 
         return this;
     };
 
-    laroux.promise.prototype.reset = function () {
+    laroux.promise.prototype.start = function () {
         this._delegateQueue = this._delegates.slice();
         this._eventStack = this._events.slice();
-        this._terminated = false;
+        this.completed = false;
 
-        return this;
+        return this.next.apply(this, arguments);
     };
 
 }).call(this);

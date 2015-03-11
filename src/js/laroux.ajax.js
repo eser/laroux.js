@@ -89,211 +89,195 @@
         },
 
         makeRequest: function (options) {
-            var cors = options.cors || laroux.ajax.corsDefault,
-                xhr = laroux.ajax.xhr(cors),
-                url = options.url,
-                timer = null,
-                n = 0;
+            var promise = new laroux.promise();
 
-            if (options.timeout !== undefined) {
-                timer = setTimeout(
-                    function () {
-                        xhr.abort();
-                        if (options.timeoutFn !== undefined) {
-                            options.timeoutFn(options.url);
+            return promise.then(function () {
+                var cors = options.cors || laroux.ajax.corsDefault,
+                    xhr = laroux.ajax.xhr(cors),
+                    url = options.url,
+                    timer = null,
+                    n = 0;
+
+                if (options.timeout !== undefined) {
+                    timer = setTimeout(
+                        function () {
+                            xhr.abort();
+                            promise.invoke('timeout', options.url);
+                            promise.complete();
+                        },
+                        options.timeout
+                    );
+                }
+
+                xhr.onreadystatechange = function () {
+                    if (xhr.readyState === 4) {
+                        if (timer !== null) {
+                            clearTimeout(timer);
                         }
-                    },
-                    options.timeout
-                );
-            }
 
-            xhr.onreadystatechange = function () {
-                if (xhr.readyState === 4) {
-                    if (timer !== null) {
-                        clearTimeout(timer);
-                    }
+                        if (xhr.status < 300) {
+                            var res = null,
+                                isSuccess = true;
 
-                    if (xhr.status < 300) {
-                        var res = null,
-                            isSuccess = true;
+                            try {
+                                res = laroux.ajax.xhrResp(xhr, options);
+                            } catch (e) {
+                                promise.invoke('error', e, xhr);
+                                promise.complete();
 
-                        try {
-                            res = laroux.ajax.xhrResp(xhr, options);
-                        } catch (e) {
-                            if (options.error !== undefined) {
-                                options.error(xhr, xhr.status, xhr.statusText);
+                                laroux.events.invoke('ajaxError', [xhr, xhr.status, xhr.statusText, options]);
+                                isSuccess = false;
                             }
+
+                            if (isSuccess && res !== null) {
+                                promise.next(res.response, res.wrapperFunc);
+
+                                laroux.events.invoke('ajaxSuccess', [xhr, res.response, res.wrapperFunc, options]);
+                            }
+                        } else {
+                            promise.invoke('error', e, xhr);
 
                             laroux.events.invoke('ajaxError', [xhr, xhr.status, xhr.statusText, options]);
-                            isSuccess = false;
                         }
 
-                        if (isSuccess) {
-                            if (options.success !== undefined && res !== null) {
-                                options.success(res.response, res.wrapperFunc);
-                            }
+                        laroux.events.invoke('ajaxComplete', [xhr, xhr.statusText, options]);
+                    } else if (options.progress !== undefined) {
+                        /*jslint plusplus: true */
+                        options.progress(++n);
+                    }
+                };
 
-                            laroux.events.invoke('ajaxSuccess', [xhr, res.response, res.wrapperFunc, options]);
+                if (options.getdata !== undefined && options.getdata !== null) {
+                    if (options.getdata.constructor === Object) {
+                        var queryString = laroux.helpers.buildQueryString(options.getdata);
+                        if (queryString.length > 0) {
+                            url += ((url.indexOf('?') < 0) ? '?' : '&') + queryString;
                         }
                     } else {
-                        if (options.error !== undefined) {
-                            options.error(xhr, xhr.status, xhr.statusText);
-                        }
-
-                        laroux.events.invoke('ajaxError', [xhr, xhr.status, xhr.statusText, options]);
+                        url += ((url.indexOf('?') < 0) ? '?' : '&') + options.getdata;
                     }
-
-                    if (options.complete !== undefined) {
-                        options.complete(xhr, xhr.statusText);
-                    }
-
-                    laroux.events.invoke('ajaxComplete', [xhr, xhr.statusText, options]);
-                } else if (options.progress !== undefined) {
-                    /*jslint plusplus: true */
-                    options.progress(++n);
                 }
-            };
 
-            if (options.getdata !== undefined && options.getdata !== null) {
-                if (options.getdata.constructor === Object) {
-                    var queryString = laroux.helpers.buildQueryString(options.getdata);
-                    if (queryString.length > 0) {
-                        url += ((url.indexOf('?') < 0) ? '?' : '&') + queryString;
-                    }
+                if (options.jsonp !== undefined) {
+                    url += ((url.indexOf('?') < 0) ? '?' : '&') + 'jsonp=' + options.jsonp;
+                }
+
+                if (!laroux.ajax.xDomainObject) {
+                    xhr.open(options.type, url, true);
                 } else {
-                    url += ((url.indexOf('?') < 0) ? '?' : '&') + options.getdata;
+                    xhr.open(options.type, url);
                 }
-            }
 
-            if (options.jsonp !== undefined) {
-                url += ((url.indexOf('?') < 0) ? '?' : '&') + 'jsonp=' + options.jsonp;
-            }
+                try {
+                    if (options.xhrFields !== undefined) {
+                        for (var i in options.xhrFields) {
+                            if (!options.xhrFields.hasOwnProperty(i)) {
+                                continue;
+                            }
 
-            if (!laroux.ajax.xDomainObject) {
-                xhr.open(options.type, url, true);
-            } else {
-                xhr.open(options.type, url);
-            }
+                            xhr[i] = options.xhrFields[i];
+                        }
+                    }
 
-            try {
-                if (options.xhrFields !== undefined) {
-                    for (var i in options.xhrFields) {
-                        if (!options.xhrFields.hasOwnProperty(i)) {
+                    var headers = options.headers || {};
+
+                    if (!cors) {
+                        headers['X-Requested-With'] = 'XMLHttpRequest';
+
+                        if (options.wrapper) {
+                            headers['X-Wrapper-Function'] = 'laroux.js';
+                        }
+                    }
+
+                    for (var j in headers) {
+                        if (!headers.hasOwnProperty(j)) {
                             continue;
                         }
 
-                        xhr[i] = options.xhrFields[i];
+                        xhr.setRequestHeader(j, headers[j]);
                     }
+                } catch (e) {
+                    console.log(e);
                 }
 
-                var headers = options.headers || {};
-
-                if (!cors) {
-                    headers['X-Requested-With'] = 'XMLHttpRequest';
-
-                    if (options.wrapper) {
-                        headers['X-Wrapper-Function'] = 'laroux.js';
-                    }
+                if (options.postdata === undefined || options.postdata === null) {
+                    xhr.send(null);
+                    return;
                 }
 
-                for (var j in headers) {
-                    if (!headers.hasOwnProperty(j)) {
-                        continue;
-                    }
-
-                    xhr.setRequestHeader(j, headers[j]);
+                switch (options.postdatatype) {
+                    case 'json':
+                        xhr.send(JSON.stringify(options.postdata));
+                        break;
+                    case 'form':
+                        xhr.send(laroux.helpers.buildFormData(options.postdata));
+                        break;
+                    default:
+                        xhr.send(options.postdata);
+                        break;
                 }
-            } catch (e) {
-                console.log(e);
-            }
-
-            if (options.postdata === undefined || options.postdata === null) {
-                xhr.send(null);
-                return;
-            }
-
-            switch (options.postdatatype) {
-                case 'json':
-                    xhr.send(JSON.stringify(options.postdata));
-                    break;
-                case 'form':
-                    xhr.send(laroux.helpers.buildFormData(options.postdata));
-                    break;
-                default:
-                    xhr.send(options.postdata);
-                    break;
-            }
+            }, true);
         },
 
-        get: function (path, values, successfnc, errorfnc, cors) {
-            laroux.ajax.makeRequest({
+        get: function (path, values, cors) {
+            return laroux.ajax.makeRequest({
                 type: 'GET',
                 url: path,
                 datatype: 'html',
                 getdata: values,
                 wrapper: true,
-                cors: cors || laroux.ajax.corsDefault,
-                success: successfnc,
-                error: errorfnc
+                cors: cors || laroux.ajax.corsDefault
             });
         },
 
-        getJson: function (path, values, successfnc, errorfnc, cors) {
-            laroux.ajax.makeRequest({
+        getJson: function (path, values, cors) {
+            return laroux.ajax.makeRequest({
                 type: 'GET',
                 url: path,
                 datatype: 'json',
                 getdata: values,
                 wrapper: true,
-                cors: cors || laroux.ajax.corsDefault,
-                success: successfnc,
-                error: errorfnc
+                cors: cors || laroux.ajax.corsDefault
             });
         },
 
-        getJsonP: function (path, values, method, successfnc, errorfnc, cors) {
-            laroux.ajax.makeRequest({
+        getJsonP: function (path, values, method, cors) {
+            return laroux.ajax.makeRequest({
                 type: 'GET',
                 url: path,
                 datatype: 'script',
                 getdata: values,
                 jsonp: method,
                 wrapper: false,
-                cors: cors || laroux.ajax.corsDefault,
-                success: successfnc,
-                error: errorfnc
+                cors: cors || laroux.ajax.corsDefault
             });
         },
 
-        getScript: function (path, values, successfnc, errorfnc, cors) {
-            laroux.ajax.makeRequest({
+        getScript: function (path, values, cors) {
+            return laroux.ajax.makeRequest({
                 type: 'GET',
                 url: path,
                 datatype: 'script',
                 getdata: values,
                 wrapper: false,
-                cors: cors || laroux.ajax.corsDefault,
-                success: successfnc,
-                error: errorfnc
+                cors: cors || laroux.ajax.corsDefault
             });
         },
 
-        post: function (path, values, successfnc, errorfnc, cors) {
-            laroux.ajax.makeRequest({
+        post: function (path, values, cors) {
+            return laroux.ajax.makeRequest({
                 type: 'POST',
                 url: path,
                 datatype: 'json',
                 postdata: values,
                 postdatatype: 'form',
                 wrapper: true,
-                cors: cors || laroux.ajax.corsDefault,
-                success: successfnc,
-                error: errorfnc
+                cors: cors || laroux.ajax.corsDefault
             });
         },
 
-        postJson: function (path, values, successfnc, errorfnc, cors) {
-            laroux.ajax.makeRequest({
+        postJson: function (path, values, cors) {
+            return laroux.ajax.makeRequest({
                 type: 'POST',
                 url: path,
                 datatype: 'json',
@@ -303,9 +287,7 @@
                     'Content-Type': 'application/json; charset=UTF-8'
                 },
                 wrapper: true,
-                cors: cors || laroux.ajax.corsDefault,
-                success: successfnc,
-                error: errorfnc
+                cors: cors || laroux.ajax.corsDefault
             });
         }
     });
