@@ -37,7 +37,7 @@
         rebind: function (appKey) {
             var app = laroux.mvc.apps[appKey];
             /*jslint nomen: true */
-            app.modelKeys = laroux.helpers.getKeysRecursive(app.model._data); // FIXME: works only for $l.stack
+            app.modelKeys = laroux.getKeysRecursive(app.model._data); // FIXME: works only for $l.stack
             app.boundElements = {};
             app.eventElements = [];
 
@@ -124,13 +124,13 @@
 
                 for (var j = 0, length2 = boundElement.length; j < length2; j++) {
                     if (boundElement[j].target.substring(0, 6) == 'style.') {
-                        boundElement[j].element.style[boundElement[j].target.substring(6)] = laroux.helpers.getElement(app.model, keys[i]);
+                        boundElement[j].element.style[boundElement[j].target.substring(6)] = laroux.getElement(app.model, keys[i]);
                     } else if (boundElement[j].target.substring(0, 5) == 'attr.') {
                         // FIXME removeAttribute on null value?
-                        boundElement[j].element.setAttribute(boundElement[j].target.substring(5), laroux.helpers.getElement(app.model, keys[i]));
+                        boundElement[j].element.setAttribute(boundElement[j].target.substring(5), laroux.getElement(app.model, keys[i]));
                     } else if (boundElement[j].target.substring(0, 5) == 'prop.') {
                         // FIXME removeAttribute on null value?
-                        boundElement[j].element[boundElement[j].target.substring(5)] = laroux.helpers.getElement(app.model, keys[i]);
+                        boundElement[j].element[boundElement[j].target.substring(5)] = laroux.getElement(app.model, keys[i]);
                     }
                 }
             }

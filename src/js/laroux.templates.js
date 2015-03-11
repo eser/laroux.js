@@ -23,11 +23,11 @@
                         }
 
                         var key = result.substring(nextIndex, closeIndex);
-                        dict['{{' + key + '}}'] = laroux.helpers.getElement(model, key, '');
+                        dict['{{' + key + '}}'] = laroux.getElement(model, key, '');
                         lastIndex = closeIndex + 2;
                     }
 
-                    return laroux.helpers.replaceAll(result, dict);
+                    return laroux.replaceAll(result, dict);
                 }
             },
 

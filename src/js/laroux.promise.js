@@ -29,7 +29,7 @@
     };
 
     laroux.promise.prototype.on = function (condition, fnc) {
-        var conditions = laroux.helpers.getAsArray(condition),
+        var conditions = laroux.getAsArray(condition),
             ev = {
                 conditions: conditions,
                 fnc: fnc
@@ -50,7 +50,7 @@
             }
 
             var eventItem = this._eventStack[item],
-                eventIdx = laroux.helpers.aindex(eventItem.conditions, eventName);
+                eventIdx = laroux.aindex(eventItem.conditions, eventName);
 
             if (eventIdx !== -1) {
                 eventItem.conditions.splice(eventIdx, 1);
@@ -81,7 +81,7 @@
     laroux.promise.prototype.next = function () {
         var self = this,
             delegate = this._delegateQueue.shift(),
-            args = laroux.helpers.toArray(arguments);
+            args = laroux.toArray(arguments);
 
         if (this.completed) {
             return this;

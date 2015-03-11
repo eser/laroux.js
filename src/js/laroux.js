@@ -15,7 +15,7 @@
     /* @if ENV=='web' */
     top.laroux = function (selector, parent) {
         if (selector instanceof Array) {
-            return laroux.helpers.toArray(
+            return laroux.toArray(
                 (parent || document).querySelectorAll(selector)
             );
         }
@@ -40,38 +40,36 @@
         top.$l = laroux;
     }
 
-    laroux.helpers = {
-        extendObject: function () {
-            var target = Array.prototype.shift.call(arguments),
-                isArray = target instanceof Array;
+    laroux.extendObject = function () {
+        var target = Array.prototype.shift.call(arguments),
+            isArray = target instanceof Array;
 
-            for (var item in arguments) {
-                for (var name in arguments[item]) {
-                    // if (isArray) {
-                    //     target.push(arguments[item][name]);
-                    //     continue;
-                    // }
+        for (var item in arguments) {
+            for (var name in arguments[item]) {
+                // if (isArray) {
+                //     target.push(arguments[item][name]);
+                //     continue;
+                // }
 
-                    /* target[name].constructor === Object */
-                    if (target.hasOwnProperty(name) && target[name] instanceof Object) {
-                        laroux.helpers.extendObject(target[name], arguments[item][name]);
-                        continue;
-                    }
-
-                    target[name] = arguments[item][name];
+                /* target[name].constructor === Object */
+                if (target.hasOwnProperty(name) && target[name] instanceof Object) {
+                    laroux.extendObject(target[name], arguments[item][name]);
+                    continue;
                 }
-            }
-        },
 
-        toArray: function (obj) {
-            var length = obj.length,
-                items = new Array(length);
-
-            for (var i = 0; i < length; i++) {
-                items[i] = obj[i];
+                target[name] = arguments[item][name];
             }
-            return items;
         }
+    };
+
+    laroux.toArray = function (obj) {
+        var length = obj.length,
+            items = new Array(length);
+
+        for (var i = 0; i < length; i++) {
+            items[i] = obj[i];
+        }
+        return items;
     };
 
     laroux.ns = function (path, obj) {
@@ -89,7 +87,7 @@
         }
 
         if (obj !== undefined) {
-            laroux.helpers.extendObject(parent, obj);
+            laroux.extendObject(parent, obj);
         }
 
         return parent;

@@ -129,10 +129,15 @@ module.exports = {
                         '~/web/js/laroux.keys.js',
                         '~/web/js/laroux.mvc.js',
                         '~/web/js/laroux.templates.js',
-                        '~/web/js/laroux.touch.js',
-                        '~/web/js/laroux.ui.js',
 
-                        '~/web/js/laroux.web.js'
+                        '~/web/js/laroux.touch.js',
+                        '~/web/js/laroux.web.js',
+
+                        '~/web/js/laroux.ui.js',
+                        '~/web/js/laroux.ui.popup.js',
+                        '~/web/js/laroux.ui.loading.js',
+                        '~/web/js/laroux.ui.dynamicDates.js',
+                        '~/web/js/laroux.ui.scrollView.js'
                     ]
                 },
 

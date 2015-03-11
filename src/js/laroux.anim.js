@@ -19,11 +19,11 @@
         set: function (newanim) {
             newanim.startTime = null;
 
-            if (newanim.unit === undefined || newanim.unit === null) {
+            if (newanim.unit === undefined) {
                 newanim.unit = '';
             }
 
-            if (newanim.from === undefined || newanim.from === null) {
+            if (newanim.from === undefined) {
                 if (newanim.object === document.body && newanim.property === 'scrollTop') {
                     newanim.from = (document.documentElement && document.documentElement.scrollTop) || document.body.scrollTop;
                 } else {
@@ -35,12 +35,8 @@
                 newanim.from = Number(newanim.from);
             }
 
-            if (newanim.reset === undefined || newanim.reset === null) {
-                newanim.reset = false;
-            }
-
             // if (newanim.id === undefined) {
-            //     newanim.id = laroux.helpers.getUniqueId();
+            //     newanim.id = laroux.getUniqueId();
             // }
 
             laroux.anim.data.push(newanim);
@@ -50,12 +46,12 @@
         },
 
         setCss: function (newanim) {
-            if (newanim.from === undefined || newanim.from === null) {
+            if (newanim.from === undefined) {
                 newanim.from = laroux.css.getProperty(newanim.object, newanim.property);
             }
 
             newanim.object = newanim.object.style;
-            newanim.property = laroux.helpers.camelCase(newanim.property);
+            newanim.property = laroux.camelCase(newanim.property);
 
             laroux.anim.set(newanim);
         },
@@ -92,7 +88,7 @@
                 }
 
                 var currentItem = laroux.anim.data[item];
-                if (currentItem.startTime === null) {
+                if (currentItem.startTime === undefined) {
                     currentItem.startTime = timestamp;
                 }
 
@@ -101,7 +97,7 @@
                 if (result === false) {
                     removeKeys.unshift(item);
                 } else if (timestamp > currentItem.startTime + currentItem.time) {
-                    if (currentItem.reset) {
+                    if (currentItem.reset === true) {
                         currentItem.startTime = timestamp;
                         if (newanim.object === document.body && newanim.property == 'scrollTop') {
                             scrollTo(0, currentItem.from);

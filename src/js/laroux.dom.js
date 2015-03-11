@@ -8,19 +8,19 @@
         },
 
         select: function (selector, parent) {
-            return laroux.helpers.toArray(
+            return laroux.toArray(
                 (parent || document).querySelectorAll(selector)
             );
         },
 
         selectByClass: function (selector, parent) {
-            return laroux.helpers.toArray(
+            return laroux.toArray(
                 (parent || document).getElementsByClassName(selector)
             );
         },
 
         selectByTag: function (selector, parent) {
-            return laroux.helpers.toArray(
+            return laroux.toArray(
                 (parent || document).getElementsByTagName(selector)
             );
         },
@@ -38,7 +38,7 @@
                 return element.getAttribute(attributes);
             }
 
-            var elements = laroux.helpers.getAsArray(element);
+            var elements = laroux.getAsArray(element);
             if (typeof attributes === 'string') {
                 var oldAttributes = attributes;
                 attributes = {};
@@ -65,7 +65,7 @@
                 return element.getAttribute('data-' + datanames);
             }
 
-            var elements = laroux.helpers.getAsArray(element);
+            var elements = laroux.getAsArray(element);
             if (typeof datanames == 'string') {
                 var oldDatanames = datanames;
                 datanames = {};
@@ -89,7 +89,7 @@
 
         eventHistory: [],
         setEvent: function (element, eventname, fnc) {
-            var elements = laroux.helpers.getAsArray(element);
+            var elements = laroux.getAsArray(element);
 
             for (var i = 0, length = elements.length; i < length; i++) {
                 laroux.dom.setEventSingle(elements[i], eventname, fnc);
@@ -112,7 +112,7 @@
         },
 
         unsetEvent: function (element, eventname, fnc) {
-            var elements = laroux.helpers.getAsArray(element);
+            var elements = laroux.getAsArray(element);
 
             for (var i1 = 0, length1 = elements.length; i1 < length1; i1++) {
                 for (var i2 = 0, length2 = laroux.dom.eventHistory.length; i2 < length2; i2++) {

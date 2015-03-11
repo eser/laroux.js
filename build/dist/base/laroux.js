@@ -17,38 +17,36 @@
         top.$l = laroux;
     }
 
-    laroux.helpers = {
-        extendObject: function () {
-            var target = Array.prototype.shift.call(arguments),
-                isArray = target instanceof Array;
+    laroux.extendObject = function () {
+        var target = Array.prototype.shift.call(arguments),
+            isArray = target instanceof Array;
 
-            for (var item in arguments) {
-                for (var name in arguments[item]) {
-                    // if (isArray) {
-                    //     target.push(arguments[item][name]);
-                    //     continue;
-                    // }
+        for (var item in arguments) {
+            for (var name in arguments[item]) {
+                // if (isArray) {
+                //     target.push(arguments[item][name]);
+                //     continue;
+                // }
 
-                    /* target[name].constructor === Object */
-                    if (target.hasOwnProperty(name) && target[name] instanceof Object) {
-                        laroux.helpers.extendObject(target[name], arguments[item][name]);
-                        continue;
-                    }
-
-                    target[name] = arguments[item][name];
+                /* target[name].constructor === Object */
+                if (target.hasOwnProperty(name) && target[name] instanceof Object) {
+                    laroux.extendObject(target[name], arguments[item][name]);
+                    continue;
                 }
-            }
-        },
 
-        toArray: function (obj) {
-            var length = obj.length,
-                items = new Array(length);
-
-            for (var i = 0; i < length; i++) {
-                items[i] = obj[i];
+                target[name] = arguments[item][name];
             }
-            return items;
         }
+    };
+
+    laroux.toArray = function (obj) {
+        var length = obj.length,
+            items = new Array(length);
+
+        for (var i = 0; i < length; i++) {
+            items[i] = obj[i];
+        }
+        return items;
     };
 
     laroux.ns = function (path, obj) {
@@ -66,7 +64,7 @@
         }
 
         if (obj !== undefined) {
-            laroux.helpers.extendObject(parent, obj);
+            laroux.extendObject(parent, obj);
         }
 
         return parent;
@@ -78,12 +76,12 @@
     'use strict';
 
     // helpers
-    laroux.ns('laroux.helpers', {
+    laroux.ns('laroux', {
         uniqueId: 0,
 
         getUniqueId: function () {
             /*jslint plusplus: true */
-            return 'uid-' + (++laroux.helpers.uniqueId);
+            return 'uid-' + (++laroux.uniqueId);
         },
 
         buildQueryString: function (values, rfc3986) {
@@ -297,7 +295,7 @@
         },
 
         column: function (obj, key) {
-            return laroux.helpers.map(
+            return laroux.map(
                 obj,
                 function (value) {
                     return value[key];
@@ -315,7 +313,7 @@
                     continue;
                 }
 
-                var rand = laroux.helpers.random(0, index);
+                var rand = laroux.random(0, index);
                 shuffled[index++] = shuffled[rand];
                 shuffled[rand] = obj[item];
             }
@@ -410,7 +408,7 @@
                 keys.push(prefix + item);
 
                 if (obj[item] !== undefined && obj[item] !== null && obj[item].constructor === Object) {
-                    laroux.helpers.getKeysRecursive(obj[item], delimiter, prefix + item + delimiter, keys);
+                    laroux.getKeysRecursive(obj[item], delimiter, prefix + item + delimiter, keys);
                     continue;
                 }
             }
@@ -446,7 +444,7 @@
                 return obj[key];
             }
 
-            return laroux.helpers.getElement(obj[key], rest, defaultValue, delimiter);
+            return laroux.getElement(obj[key], rest, defaultValue, delimiter);
         }
     });
 
@@ -631,7 +629,7 @@
 
                 if (options.getdata !== undefined && options.getdata !== null) {
                     if (options.getdata.constructor === Object) {
-                        var queryString = laroux.helpers.buildQueryString(options.getdata);
+                        var queryString = laroux.buildQueryString(options.getdata);
                         if (queryString.length > 0) {
                             url += ((url.indexOf('?') < 0) ? '?' : '&') + queryString;
                         }
@@ -692,7 +690,7 @@
                         xhr.send(JSON.stringify(options.postdata));
                         break;
                     case 'form':
-                        xhr.send(laroux.helpers.buildFormData(options.postdata));
+                        xhr.send(laroux.buildFormData(options.postdata));
                         break;
                     default:
                         xhr.send(options.postdata);
@@ -877,7 +875,7 @@
     };
 
     laroux.promise.prototype.on = function (condition, fnc) {
-        var conditions = laroux.helpers.getAsArray(condition),
+        var conditions = laroux.getAsArray(condition),
             ev = {
                 conditions: conditions,
                 fnc: fnc
@@ -898,7 +896,7 @@
             }
 
             var eventItem = this._eventStack[item],
-                eventIdx = laroux.helpers.aindex(eventItem.conditions, eventName);
+                eventIdx = laroux.aindex(eventItem.conditions, eventName);
 
             if (eventIdx !== -1) {
                 eventItem.conditions.splice(eventIdx, 1);
@@ -929,7 +927,7 @@
     laroux.promise.prototype.next = function () {
         var self = this,
             delegate = this._delegateQueue.shift(),
-            args = laroux.helpers.toArray(arguments);
+            args = laroux.toArray(arguments);
 
         if (this.completed) {
             return this;

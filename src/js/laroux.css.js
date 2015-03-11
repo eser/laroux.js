@@ -9,7 +9,7 @@
         },
 
         addClass: function (element, className) {
-            var elements = laroux.helpers.getAsArray(element);
+            var elements = laroux.getAsArray(element);
 
             for (var i = 0, length = elements.length; i < length; i++) {
                 elements[i].classList.add(className);
@@ -17,7 +17,7 @@
         },
 
         removeClass: function (element, className) {
-            var elements = laroux.helpers.getAsArray(element);
+            var elements = laroux.getAsArray(element);
 
             for (var i = 0, length = elements.length; i < length; i++) {
                 elements[i].classList.remove(className);
@@ -25,7 +25,7 @@
         },
 
         toggleClass: function (element, className) {
-            var elements = laroux.helpers.getAsArray(element);
+            var elements = laroux.getAsArray(element);
 
             for (var i = 0, length = elements.length; i < length; i++) {
                 if (elements[i].classList.contains(className)) {
@@ -50,13 +50,13 @@
         getProperty: function (element, styleName) {
             var style = getComputedStyle(element);
 
-            styleName = laroux.helpers.antiCamelCase(styleName);
+            styleName = laroux.antiCamelCase(styleName);
 
             return style.getPropertyValue(styleName);
         },
 
         setProperty: function (element, properties, value) {
-            var elements = laroux.helpers.getAsArray(element);
+            var elements = laroux.getAsArray(element);
 
             if (typeof properties == 'string') {
                 var oldProperties = properties;
@@ -69,7 +69,7 @@
                     continue;
                 }
 
-                var newStyleName = laroux.helpers.camelCase(styleName);
+                var newStyleName = laroux.camelCase(styleName);
 
                 for (var i = 0, length = elements.length; i < length; i++) {
                     elements[i].style[newStyleName] = properties[styleName];
@@ -81,7 +81,7 @@
         defaultTransition: '2s ease',
 
         setTransitionSingle: function (element, transition) {
-            var transitions = laroux.helpers.getAsArray(transition),
+            var transitions = laroux.getAsArray(transition),
                 style = getComputedStyle(element),
                 currentTransitions = style.getPropertyValue('transition') || style.getPropertyValue('-webkit-transition') ||
                     style.getPropertyValue('-ms-transition') || '',
@@ -132,7 +132,7 @@
         },
 
         setTransition: function (element, transition) {
-            var elements = laroux.helpers.getAsArray(element);
+            var elements = laroux.getAsArray(element);
 
             for (var i = 0, length = elements.length; i < length; i++) {
                 laroux.css.setTransitionSingle(elements[i], transition);

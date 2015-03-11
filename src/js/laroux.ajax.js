@@ -149,7 +149,7 @@
 
                 if (options.getdata !== undefined && options.getdata !== null) {
                     if (options.getdata.constructor === Object) {
-                        var queryString = laroux.helpers.buildQueryString(options.getdata);
+                        var queryString = laroux.buildQueryString(options.getdata);
                         if (queryString.length > 0) {
                             url += ((url.indexOf('?') < 0) ? '?' : '&') + queryString;
                         }
@@ -210,7 +210,7 @@
                         xhr.send(JSON.stringify(options.postdata));
                         break;
                     case 'form':
-                        xhr.send(laroux.helpers.buildFormData(options.postdata));
+                        xhr.send(laroux.buildFormData(options.postdata));
                         break;
                     default:
                         xhr.send(options.postdata);

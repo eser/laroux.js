@@ -2,12 +2,12 @@
     'use strict';
 
     // helpers
-    laroux.ns('laroux.helpers', {
+    laroux.ns('laroux', {
         uniqueId: 0,
 
         getUniqueId: function () {
             /*jslint plusplus: true */
-            return 'uid-' + (++laroux.helpers.uniqueId);
+            return 'uid-' + (++laroux.uniqueId);
         },
 
         buildQueryString: function (values, rfc3986) {
@@ -221,7 +221,7 @@
         },
 
         column: function (obj, key) {
-            return laroux.helpers.map(
+            return laroux.map(
                 obj,
                 function (value) {
                     return value[key];
@@ -239,7 +239,7 @@
                     continue;
                 }
 
-                var rand = laroux.helpers.random(0, index);
+                var rand = laroux.random(0, index);
                 shuffled[index++] = shuffled[rand];
                 shuffled[rand] = obj[item];
             }
@@ -334,7 +334,7 @@
                 keys.push(prefix + item);
 
                 if (obj[item] !== undefined && obj[item] !== null && obj[item].constructor === Object) {
-                    laroux.helpers.getKeysRecursive(obj[item], delimiter, prefix + item + delimiter, keys);
+                    laroux.getKeysRecursive(obj[item], delimiter, prefix + item + delimiter, keys);
                     continue;
                 }
             }
@@ -370,7 +370,7 @@
                 return obj[key];
             }
 
-            return laroux.helpers.getElement(obj[key], rest, defaultValue, delimiter);
+            return laroux.getElement(obj[key], rest, defaultValue, delimiter);
         }
     });
 

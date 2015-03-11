@@ -12,7 +12,7 @@
         c: function (selector) {
             if (selector instanceof Array) {
                 return laroux.cached.array[selector] || (
-                    laroux.cached.array[selector] = laroux.helpers.toArray(
+                    laroux.cached.array[selector] = laroux.toArray(
                         document.querySelectorAll(selector)
                     )
                 );
