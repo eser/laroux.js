@@ -277,7 +277,7 @@
                 }
 
                 if (dontSkipReturns || result !== undefined) {
-                    results.unshift(result);
+                    results.push(result);
                 }
             }
 
@@ -348,6 +348,18 @@
             return JSON.parse(JSON.stringify(obj));
         },
 
+        prependArray: function (obj, value) {
+            var length = obj.length,
+                items = new Array(length + 1);
+
+            items[0] = value;
+            for (var i = 0, j = 1; i < length; i++, j++) {
+                items[j] = obj[i];
+            }
+
+            return items;
+        },
+
         toArray: function (obj) {
             var length = obj.length,
                 items = new Array(length);
@@ -360,22 +372,22 @@
         },
 
         getAsArray: function (obj) {
-            var items;
-
             if (obj instanceof Array) {
-                items = obj;
-            } else if (obj instanceof NodeList) {
+                return obj;
+            }
+
+            if (obj instanceof NodeList) {
                 var length = obj.length;
 
-                items = new Array(length);
+                var items = new Array(length);
                 for (var i = 0; i < length; i++) {
                     items[i] = obj[i];
                 }
-            } else {
-                items = [obj];
+
+                return items;
             }
 
-            return items;
+            return [obj];
         },
 
         getLength: function (obj) {
@@ -811,9 +823,9 @@
         },
 
         ontick: function () {
-            var now = Date.now();
+            var now = Date.now(),
+                removeKeys = [];
 
-            var removeKeys = [];
             for (var item in laroux.timers.data) {
                 if (!laroux.timers.data.hasOwnProperty(item)) {
                     continue;
@@ -827,7 +839,7 @@
                     if (result !== false && currentItem.reset) {
                         currentItem.next = now + currentItem.timeout;
                     } else {
-                        removeKeys.unshift(item);
+                        removeKeys = laroux.prependArray(removeKeys, item);
                     }
                 }
             }
@@ -906,7 +918,7 @@
                 continue;
             }
 
-            removeKeys.unshift(item);
+            removeKeys = laroux.prependArray(removeKeys, item);
             eventItem.fnc.apply(this, arguments);
         }
 

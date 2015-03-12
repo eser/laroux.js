@@ -60,7 +60,7 @@
                 continue;
             }
 
-            removeKeys.unshift(item);
+            removeKeys = laroux.prependArray(removeKeys, item);
             eventItem.fnc.apply(this, arguments);
         }
 

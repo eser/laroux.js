@@ -35,9 +35,9 @@
         },
 
         ontick: function () {
-            var now = Date.now();
+            var now = Date.now(),
+                removeKeys = [];
 
-            var removeKeys = [];
             for (var item in laroux.timers.data) {
                 if (!laroux.timers.data.hasOwnProperty(item)) {
                     continue;
@@ -51,7 +51,7 @@
                     if (result !== false && currentItem.reset) {
                         currentItem.next = now + currentItem.timeout;
                     } else {
-                        removeKeys.unshift(item);
+                        removeKeys = laroux.prependArray(removeKeys, item);
                     }
                 }
             }

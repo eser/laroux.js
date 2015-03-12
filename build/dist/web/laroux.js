@@ -628,7 +628,7 @@
                 }
 
                 if (dontSkipReturns || result !== undefined) {
-                    results.unshift(result);
+                    results.push(result);
                 }
             }
 
@@ -699,6 +699,18 @@
             return JSON.parse(JSON.stringify(obj));
         },
 
+        prependArray: function (obj, value) {
+            var length = obj.length,
+                items = new Array(length + 1);
+
+            items[0] = value;
+            for (var i = 0, j = 1; i < length; i++, j++) {
+                items[j] = obj[i];
+            }
+
+            return items;
+        },
+
         toArray: function (obj) {
             var length = obj.length,
                 items = new Array(length);
@@ -711,22 +723,22 @@
         },
 
         getAsArray: function (obj) {
-            var items;
-
             if (obj instanceof Array) {
-                items = obj;
-            } else if (obj instanceof NodeList) {
+                return obj;
+            }
+
+            if (obj instanceof NodeList) {
                 var length = obj.length;
 
-                items = new Array(length);
+                var items = new Array(length);
                 for (var i = 0; i < length; i++) {
                     items[i] = obj[i];
                 }
-            } else {
-                items = [obj];
+
+                return items;
             }
 
-            return items;
+            return [obj];
         },
 
         getLength: function (obj) {
@@ -1162,9 +1174,9 @@
         },
 
         ontick: function () {
-            var now = Date.now();
+            var now = Date.now(),
+                removeKeys = [];
 
-            var removeKeys = [];
             for (var item in laroux.timers.data) {
                 if (!laroux.timers.data.hasOwnProperty(item)) {
                     continue;
@@ -1178,7 +1190,7 @@
                     if (result !== false && currentItem.reset) {
                         currentItem.next = now + currentItem.timeout;
                     } else {
-                        removeKeys.unshift(item);
+                        removeKeys = laroux.prependArray(removeKeys, item);
                     }
                 }
             }
@@ -1257,7 +1269,7 @@
                 continue;
             }
 
-            removeKeys.unshift(item);
+            removeKeys = laroux.prependArray(removeKeys, item);
             eventItem.fnc.apply(this, arguments);
         }
 
@@ -2805,7 +2817,7 @@
                 }
             }
 
-            if (typeof newanim.from === 'string') {
+            if (newanim.from.constructor === String) {
                 newanim.from = Number(newanim.from);
             }
 
@@ -2856,6 +2868,7 @@
 
         onframe: function (timestamp) {
             var removeKeys = [];
+
             for (var item in laroux.anim.data) {
                 if (!laroux.anim.data.hasOwnProperty(item)) {
                     continue;
@@ -2869,7 +2882,7 @@
                 var result = laroux.anim.step(currentItem, timestamp);
 
                 if (result === false) {
-                    removeKeys.unshift(item);
+                    removeKeys = laroux.prependArray(removeKeys, item);
                 } else if (timestamp > currentItem.startTime + currentItem.time) {
                     if (currentItem.reset === true) {
                         currentItem.startTime = timestamp;
@@ -2880,7 +2893,7 @@
                             currentItem.object[currentItem.property] = currentItem.from;
                         }
                     } else {
-                        removeKeys.unshift(item);
+                        removeKeys = laroux.prependArray(removeKeys, item);
                     }
                 }
             }
@@ -3748,7 +3761,7 @@
                 laroux.ui.scrollView.selectedElements,
                 function (i, element) {
                     if (laroux.css.inViewport(element)) {
-                        removeKeys.unshift(i);
+                        removeKeys = laroux.prependArray(removeKeys, i);
                         elements.push(element);
                     }
                 }

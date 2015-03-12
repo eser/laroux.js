@@ -31,7 +31,7 @@
                 }
             }
 
-            if (typeof newanim.from === 'string') {
+            if (newanim.from.constructor === String) {
                 newanim.from = Number(newanim.from);
             }
 
@@ -82,6 +82,7 @@
 
         onframe: function (timestamp) {
             var removeKeys = [];
+
             for (var item in laroux.anim.data) {
                 if (!laroux.anim.data.hasOwnProperty(item)) {
                     continue;
@@ -95,7 +96,7 @@
                 var result = laroux.anim.step(currentItem, timestamp);
 
                 if (result === false) {
-                    removeKeys.unshift(item);
+                    removeKeys = laroux.prependArray(removeKeys, item);
                 } else if (timestamp > currentItem.startTime + currentItem.time) {
                     if (currentItem.reset === true) {
                         currentItem.startTime = timestamp;
@@ -106,7 +107,7 @@
                             currentItem.object[currentItem.property] = currentItem.from;
                         }
                     } else {
-                        removeKeys.unshift(item);
+                        removeKeys = laroux.prependArray(removeKeys, item);
                     }
                 }
             }

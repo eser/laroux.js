@@ -35,7 +35,7 @@
                 laroux.ui.scrollView.selectedElements,
                 function (i, element) {
                     if (laroux.css.inViewport(element)) {
-                        removeKeys.unshift(i);
+                        removeKeys = laroux.prependArray(removeKeys, i);
                         elements.push(element);
                     }
                 }
