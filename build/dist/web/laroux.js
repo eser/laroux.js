@@ -2805,7 +2805,7 @@
         set: function (newanim) {
             newanim.promise = new laroux.promise();
 
-            newanim.startTime = null;
+            newanim.startTime = undefined;
 
             if (newanim.unit === null || newanim.unit === undefined) {
                 newanim.unit = '';
@@ -2836,7 +2836,7 @@
         },
 
         setCss: function (newanim) {
-            if (newanim.from === undefined) {
+            if (newanim.from === null || newanim.from === undefined) {
                 newanim.from = laroux.css.getProperty(newanim.object, newanim.property);
             }
 

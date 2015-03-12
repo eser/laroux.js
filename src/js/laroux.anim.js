@@ -19,7 +19,7 @@
         set: function (newanim) {
             newanim.promise = new laroux.promise();
 
-            newanim.startTime = null;
+            newanim.startTime = undefined;
 
             if (newanim.unit === null || newanim.unit === undefined) {
                 newanim.unit = '';
