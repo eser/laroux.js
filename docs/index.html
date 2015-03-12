@@ -1,0 +1,1210 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <title>laroux.js - Demos</title>
+        <meta name="description" content="" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+        <!-- Latest compiled and minified CSS -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" />
+        <link rel="stylesheet" href="assets/css/prettify.css" />
+        <link rel="stylesheet" href="assets/css/laroux.min.css" />
+        <link rel="stylesheet" href="assets/css/fonts.css" />
+        <link rel="stylesheet" href="assets/css/style.css" />
+
+        <link rel="shortcut icon" type="image/x-icon" href="favicon.ico" />
+        <link rel="icon" type="image/x-icon" href="favicon.ico" />
+    </head>
+    <body id="home">
+
+        <div class="container">
+            <!-- Static navbar -->
+            <nav class="navbar navbar-default" role="navigation">
+                <div class="navbar-collapse">
+                    <ul class="nav navbar-nav">
+                        <li id="dropdown-toggle-element" class="dropdown mega-dropdown">
+                            <a href="#" id="dropdown-toggle-button" class="dropdown-toggle" data-toggle="dropdown">laroux.js <span class="glyphicon glyphicon-chevron-down pull-right"></span></a>
+                            <ul class="dropdown-menu mega-dropdown-menu row">
+                                <li class="col-sm-3">
+                                    <ul>
+                                        <li class="dropdown-header">Stable Version</li>
+                                    </ul>
+
+                                    <div class="box-large vertical-spaces">
+                                        <h2>2.0.0</h2>
+                                    </div>
+
+                                    <button data-href="https://github.com/larukedi/laroux.js/releases/latest" class="btn btn-primary btn-href">Download</button>
+                                    <button data-href="https://github.com/larukedi/laroux.js/releases" class="btn btn-default btn-href">All Releases</button>
+                                </li>
+                                <li class="col-sm-3">
+                                    <ul>
+                                        <li class="dropdown-header">Base Components</li>
+                                        <li><a href="https://github.com/larukedi/laroux.js/wiki/ajax">Ajax</a></li>
+                                        <li><a href="https://github.com/larukedi/laroux.js/wiki/css">CSS</a></li>
+                                        <li><a href="https://github.com/larukedi/laroux.js/wiki/dom">DOM</a></li>
+                                        <li><a href="https://github.com/larukedi/laroux.js/wiki/events">Events</a></li>
+                                        <li><a href="https://github.com/larukedi/laroux.js/wiki/forms">Forms</a></li>
+                                        <li><a href="https://github.com/larukedi/laroux.js/wiki/helpers">Helpers</a></li>
+                                        <li><a href="https://github.com/larukedi/laroux.js/wiki/timers">Timers</a></li>
+                                    </ul>
+                                </li>
+                                <li class="col-sm-3">
+                                    <ul>
+                                        <li><a href="https://github.com/larukedi/laroux.js/wiki/triggers">Triggers</a></li>
+                                        <li><a href="https://github.com/larukedi/laroux.js/wiki/vars">Vars</a></li>
+                                        <li class="divider"></li>
+                                        <li class="dropdown-header">Extended</li>
+                                        <li><a href="https://github.com/larukedi/laroux.js/wiki/anim">Anim</a></li>
+                                        <li><a href="https://github.com/larukedi/laroux.js/wiki/date">Date</a></li>
+                                        <li><a href="https://github.com/larukedi/laroux.js/wiki/keys">Keys</a></li>
+                                        <li><a href="https://github.com/larukedi/laroux.js/wiki/mvc">MVC</a></li>
+                                    </ul>
+                                </li>
+                                <li class="col-sm-3">
+                                    <ul>
+                                        <li><a href="https://github.com/larukedi/laroux.js/wiki/stack">Stack</a></li>
+                                        <li><a href="https://github.com/larukedi/laroux.js/wiki/templates">Templates</a></li>
+                                        <li><a href="https://github.com/larukedi/laroux.js/wiki/touch">Touch</a></li>
+                                        <li><a href="https://github.com/larukedi/laroux.js/wiki/ui">UI</a></li>
+                                        <li><a href="https://github.com/larukedi/laroux.js/wiki/wrapper">Wrapper</a></li>
+                                        <li class="divider"></li>
+                                        <li class="dropdown-header">Need Help?</li>
+                                        <li><a href="https://github.com/larukedi/laroux.js/issues">GitHub Issues <span class="glyphicon glyphicon-chevron-right pull-right"></span></a></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+                        <li><a href="./">Demos</a></li>
+                        <li><a href="./snippets.html">Snippets</a></li>
+                        <li><a href="./benchmarks.html">Benchmarks</a></li>
+                        <li><a href="./faq.html">FAQ</a></li>
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><a href="https://github.com/larukedi/laroux.js">GitHub Repository</a></li>
+                    </ul>
+                </div>
+            </nav>
+
+            <div class="jumbotron">
+                <div class="row">
+                    <div class="col-md-3">
+                        <img src="assets/images/logo-medium.png" />
+                    </div>
+                    <div class="col-md-9">
+                        <div id="slider">
+                            
+                            <!-- Slides -->
+                            <div id="one" class="slide active">
+                                <h1>laroux.js 2.0.0</h1>
+                                <div class="lead">
+                                    This project is a jQuery substitute for modern browsers and mobile devices. But instead of offering some wrappers and own dynamics, it simply provides helper functions to achieve the same objectives as jQuery or Zepto.
+                                </div>
+                            </div>
+
+                            <div id="two" class="slide">
+                                <h3><em>laroux.js</em> is right for you if you:</h3>
+                                <ul>
+                                    <li>Complain about people who do not know the difference between jQuery and Javascript.</li>
+                                    <li>Love working with more compact, organized libraries in smaller sizes (between 24K and 42K depending on your requirements).</li>
+                                    <li>Want to be working with native DOM objects instead of wrappers.</li>
+                                    <li>Want to leverage the debug console's autocomplete/fluent typing.</li>
+                                    <li>Are not satisfied with the performance of other libraries on mobile devices.</li>
+                                    <li>Looking for a light abstraction layer to build your toolkit on.</li>
+                                    <li>See <a href="faq.html">FAQ</a> for more.</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="button-bar text-right">
+                    <a class="btn btn-default" href="./snippets.html" role="button">Snippets</a>
+                    <a class="btn btn-default" href="./benchmarks.html" role="button">Benchmarks</a>
+                    <a class="btn btn-default" href="./faq.html" role="button">FAQ</a>
+                    <a class="btn btn-primary" href="https://github.com/larukedi/laroux.js/releases" role="button">Downloads &raquo;</a>
+                </div>
+            </div>
+
+        </div>
+
+        <div id="examples" class="container">
+            <div class="row header-row">
+                <div class="col-sm-6">
+                    <h2 class="nomargin">Ajax Examples</h2>
+                </div>
+                <div class="col-sm-6 text-right">
+                    <a class="btn btn-sm btn-default" href="https://github.com/larukedi/laroux.js/wiki/ajax" role="button">Wiki Page</a>
+                </div>
+            </div>
+            
+            <div class="example-area">
+                <h3>Making a GET request</h3>
+                <div class="row">
+                    <div class="col-sm-4">
+                        <button id="button-ajax-get-request" class="btn btn-default">Make Request</button>
+                        <div id="text-ajax-get-request"></div>
+                    </div>
+                    <div class="col-sm-8">
+                        <h4>HTML</h4>
+                        <pre class="prettyprint">
+&lt;div id="text-ajax-get-request"&gt;&lt;/div&gt;
+                        </pre>
+
+                        <h4>Javascript</h4>
+                        <pre class="prettyprint">
+$l.ajax.getJson(
+    'test.json'
+
+).then(function (response) {
+    $l.dom.replace($l.id('text-ajax-get-request'), response.testResponse);
+
+}).on('error', function (error) {
+    $l.dom.replace(text, 'Error: ' + error.message);
+
+}).start();
+                        </pre>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row header-row">
+                <div class="col-sm-6">
+                    <h2 class="nomargin">Anim Examples</h2>
+                </div>
+                <div class="col-sm-6 text-right">
+                    <a class="btn btn-sm btn-default" href="https://github.com/larukedi/laroux.js/wiki/anim" role="button">Wiki Page</a>
+                </div>
+            </div>
+
+            <div class="example-area">
+                <h3>Creating a variable animation</h3>
+                <div class="row">
+                    <div class="col-sm-4">
+                        <button id="button-anim-var-animate" class="btn btn-default">Scroll to top</button>
+                    </div>
+                    <div class="col-sm-8">
+                        <h4>Javascript</h4>
+                        <pre class="prettyprint">
+$l.anim.set({
+    object:   document.body,
+    property: 'scrollTop',
+    from:     null,
+    to:       0,
+    time:     800,
+    unit:     '',
+    reset:    false
+}).start();
+                        </pre>
+                    </div>
+                </div>
+
+                <h3>Creating a CSS animation</h3>
+                <div class="row">
+                    <div class="col-sm-4">
+                        <button id="button-anim-css-animate" class="btn btn-default">Animate</button>
+                        <div class="box" id="div-anim-css-animate"></div>
+                    </div>
+                    <div class="col-sm-8">
+                        <h4>HTML</h4>
+                        <pre class="prettyprint">
+&lt;div class="box" id="div-anim-css-animate"&gt;&lt;/div&gt;
+                        </pre>
+
+                        <h4>Javascript</h4>
+                        <pre class="prettyprint">
+$l.anim.setCss({
+    object:   $l.id('div-anim-css-animate'),
+    property: 'top',
+    from:     0, // current value
+    to:       50,
+    time:     1200,
+    unit:     'px',
+    reset:    false
+}).start();
+                        </pre>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row header-row">
+                <div class="col-sm-6">
+                    <h2 class="nomargin">CSS Examples</h2>
+                </div>
+                <div class="col-sm-6 text-right">
+                    <a class="btn btn-sm btn-default" href="https://github.com/larukedi/laroux.js/wiki/css" role="button">Wiki Page</a>
+                </div>
+            </div>
+
+            <div class="example-area">
+                <h3>Transitions</h3>
+                <div class="row">
+                    <div class="col-sm-4">
+                        <button id="button-css-transition" class="btn btn-default">Toggle Class</button>
+                        <div class="box" id="div-css-transition"></div>
+                    </div>
+                    <div class="col-sm-8">
+                        <h4>HTML</h4>
+                        <pre class="prettyprint">
+&lt;div class="box" id="div-css-transition"&gt;&lt;/div&gt;
+                        </pre>
+
+                        <h4>Javascript</h4>
+                        <pre class="prettyprint">
+var box = $l.id('div-css-transition');
+
+$l.css.setTransition(
+    box,
+    [
+        'background-color',
+        'width 1s linear'
+    ]
+);
+
+$l.css.toggleClass(box, 'box-silver');
+                        </pre>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row header-row">
+                <div class="col-sm-6">
+                    <h2 class="nomargin">Date Examples</h2>
+                </div>
+                <div class="col-sm-6 text-right">
+                    <a class="btn btn-sm btn-default" href="https://github.com/larukedi/laroux.js/wiki/date" role="button">Wiki Page</a>
+                </div>
+            </div>
+
+            <div class="example-area">
+                <h3>Dates</h3>
+                <div class="row">
+                    <div class="col-sm-4">
+                        <button id="button-date-dates" class="btn btn-default">Show Dates</button>
+                        <div id="text-date-dates"></div>
+                    </div>
+                    <div class="col-sm-8">
+                        <h4>HTML</h4>
+                        <pre class="prettyprint">
+&lt;div id="text-date-dates"&gt;&lt;/div&gt;
+                        </pre>
+
+                        <h4>Javascript</h4>
+                        <pre class="prettyprint">
+var text = $l.id('text-date-dates');
+
+var now = new Date();
+var yesterday = new Date();
+yesterday.setDate(yesterday.getDate() - 1);
+
+$l.dom.clear(text);
+
+$l.dom.append(text, '&lt;div&gt;&lt;strong&gt;From yesterday to today:&lt;/strong&gt;&lt;/div&gt;');
+$l.dom.append(text, $l.date.parseEpoch(now.getTime() - yesterday.getTime()));
+
+$l.dom.append(text, '&lt;div&gt;&lt;strong&gt;Short Date:&lt;/strong&gt;&lt;/div&gt;');
+$l.dom.append(text, $l.date.getShortDateString(now) + '&lt;br /&gt;');
+
+$l.dom.append(text, '&lt;div&gt;&lt;strong&gt;Short Date + month names:&lt;/strong&gt;&lt;/div&gt;');
+$l.dom.append(text, $l.date.getShortDateString(now, true) + '&lt;br /&gt;');
+
+$l.dom.append(text, '&lt;div&gt;&lt;strong&gt;Long Date:&lt;/strong&gt;&lt;/div&gt;');
+$l.dom.append(text, $l.date.getLongDateString(now) + '&lt;br /&gt;');
+
+$l.dom.append(text, '&lt;div&gt;&lt;strong&gt;Long Date + month names:&lt;/strong&gt;&lt;/div&gt;');
+$l.dom.append(text, $l.date.getLongDateString(now, true) + '&lt;br /&gt;');
+
+$l.dom.append(text, '&lt;div&gt;&lt;strong&gt;Custom Date:&lt;/strong&gt;&lt;/div&gt;');
+$l.dom.append(text, $l.date.getCustomDateString('dd/MM/yyyy HH:ss', now) + '&lt;br /&gt;');
+                        </pre>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row header-row">
+                <div class="col-sm-6">
+                    <h2 class="nomargin">DOM Examples</h2>
+                </div>
+                <div class="col-sm-6 text-right">
+                    <a class="btn btn-sm btn-default" href="https://github.com/larukedi/laroux.js/wiki/dom" role="button">Wiki Page</a>
+                </div>
+            </div>
+
+            <div class="example-area">
+                <h3>Clone</h3>
+                <div class="row">
+                    <div class="col-sm-4">
+                        <button id="button-dom-clone" class="btn btn-default">Duplicate Node</button>
+                        <ul id="target-dom-clone">
+                            <li>Item</li>
+                        </ul>
+                    </div>
+                    <div class="col-sm-8">
+                        <h4>HTML</h4>
+                        <pre class="prettyprint">
+&lt;ul id="target-dom-clone"&gt;
+    &lt;li&gt;Item&lt;/li&gt;
+&lt;/ul&gt;
+                        </pre>
+
+                        <h4>Javascript</h4>
+                        <pre class="prettyprint">
+var target = $l.id('target-dom-clone');
+
+$l.dom.clone(target.firstElementChild, $l.dom.cloneAppend);
+                        </pre>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row header-row">
+                <div class="col-sm-6">
+                    <h2 class="nomargin">Events Examples</h2>
+                </div>
+                <div class="col-sm-6 text-right">
+                    <a class="btn btn-sm btn-default" href="https://github.com/larukedi/laroux.js/wiki/events" role="button">Wiki Page</a>
+                </div>
+            </div>
+
+            <div class="example-area">
+                <h3>Setting Events</h3>
+                <div class="row">
+                    <div class="col-sm-4">
+                        <label><input id="checkbox-events-setting-events" type="checkbox" /> Check me</label>
+                        <div id="text-events-setting-events"></div>
+                    </div>
+                    <div class="col-sm-8">
+                        <h4>HTML</h4>
+                        <pre class="prettyprint">
+&lt;label&gt;&lt;input id="checkbox-events-setting-events" type="checkbox" /&gt; Check me&lt;/label&gt;
+&lt;div id="text-events-setting-events"&gt;&lt;/div&gt;
+                        </pre>
+
+                        <h4>Javascript</h4>
+                        <pre class="prettyprint">
+var text = $l.id('text-events-setting-events');
+
+$l.dom.setEvent(
+    $l.id('checkbox-events-setting-events'),
+    'change',
+    function(ev, element) {
+        if (element.checked) {
+            $l.dom.replace(text, 'checked');
+        } else {
+            $l.dom.replace(text, 'unchecked');
+        }
+
+        return false;
+    }
+);
+                        </pre>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row header-row">
+                <div class="col-sm-6">
+                    <h2 class="nomargin">Forms Examples</h2>
+                </div>
+                <div class="col-sm-6 text-right">
+                    <a class="btn btn-sm btn-default" href="https://github.com/larukedi/laroux.js/wiki/forms" role="button">Wiki Page</a>
+                </div>
+            </div>
+
+            <div class="example-area">
+                <h3>Serializing</h3>
+                <div class="row">
+                    <div class="col-sm-4">
+                        <button id="button-forms-serializing" class="btn btn-default">Serialize</button>
+
+                        <form id="target-forms-serializing">
+                            Username:<br />
+                            <input type="text" name="username" value="eserozvataf" /><br />
+                            Password:<br />
+                            <input type="password" name="password" value="123456" />
+                        </form>
+
+                        <div id="text-forms-serializing"></div>
+                    </div>
+                    <div class="col-sm-8">
+                        <h4>HTML</h4>
+                        <pre class="prettyprint">
+&lt;form id="target-forms-serializing"&gt;
+    Username:&lt;br /&gt;
+    &lt;input type="text" name="username" value="eserozvataf" /&gt;&lt;br /&gt;
+    Password:&lt;br /&gt;
+    &lt;input type="password" name="password" value="123456" /&gt;
+&lt;/form&gt;
+
+&lt;div id="text-forms-serializing"&gt;&lt;/div&gt;
+                        </pre>
+
+                        <h4>Javascript</h4>
+                        <pre class="prettyprint">
+var serialized = $l.forms.serialize($l.id('target-forms-serializing'));
+$l.dom.replace($l.id('text-forms-serializing'), JSON.stringify(serialized));
+                        </pre>
+                    </div>
+                </div>
+
+                <h3>Toggle Form Editing</h3>
+                <div class="row">
+                    <div class="col-sm-4">
+                        <button id="button-forms-toggle" class="btn btn-default">Enable/Disable</button>
+
+                        <form id="target-forms-toggle">
+                            Username:<br />
+                            <input type="text" name="username" value="eserozvataf" disabled="disabled" /><br />
+                            Password:<br />
+                            <input type="password" name="password" value="123456" /><br />
+                            <label><input type="checkbox" name="rememberme" value="1" /> Remember me</label>
+                        </form>
+                    </div>
+                    <div class="col-sm-8">
+                        <h4>HTML</h4>
+                        <pre class="prettyprint">
+&lt;form id="target-forms-toggle"&gt;
+    Username:&lt;br /&gt;
+    &lt;input type="text" name="username" value="eserozvataf" disabled="disabled" /&gt;&lt;br /&gt;
+    Password:&lt;br /&gt;
+    &lt;input type="password" name="password" value="123456" /&gt;&lt;br /&gt;
+    &lt;label&gt;&lt;input type="checkbox" name="rememberme" value="1" /&gt; Remember me&lt;/label&gt;
+&lt;/form&gt;
+
+&lt;div id="text-forms-toggle"&gt;&lt;/div&gt;
+                        </pre>
+
+                        <h4>Javascript</h4>
+                        <pre class="prettyprint">
+$l.forms.toggleFormEditing($l.id('target-forms-toggle'));
+                        </pre>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row header-row">
+                <div class="col-sm-6">
+                    <h2 class="nomargin">Helpers Examples</h2>
+                </div>
+                <div class="col-sm-6 text-right">
+                    <a class="btn btn-sm btn-default" href="https://github.com/larukedi/laroux.js/wiki/helpers" role="button">Wiki Page</a>
+                </div>
+            </div>
+
+            <div class="example-area">
+                <h3>Helpers</h3>
+                <div class="row">
+                    <div class="col-sm-4">
+                        <button id="button-helpers-helpers" class="btn btn-default">Show Helpers</button>
+                        <div id="text-helpers-helpers"></div>
+                    </div>
+                    <div class="col-sm-8">
+                        <h4>HTML</h4>
+                        <pre class="prettyprint">
+&lt;div id="text-helpers-helpers"&gt;&lt;/div&gt;
+                        </pre>
+
+                        <h4>Javascript</h4>
+                        <pre class="prettyprint">
+var text = $l.id('text-helpers-helpers');
+
+$l.dom.clear(text);
+
+$l.dom.append(text, '&lt;div&gt;&lt;strong&gt;Unique Id Generator:&lt;/strong&gt;&lt;/div&gt;');
+$l.dom.append(text, $l.helpers.getUniqueId() + '&lt;br /&gt;');
+$l.dom.append(text, $l.helpers.getUniqueId() + '&lt;br /&gt;');
+
+$l.dom.append(text, '&lt;div&gt;&lt;strong&gt;Query String Generation:&lt;/strong&gt;&lt;/div&gt;');
+$l.dom.append(text, $l.helpers.buildQueryString({ pageId: 5, showAll: 'yes' }) + '&lt;br /&gt;');
+
+$l.dom.append(text, '&lt;div&gt;&lt;strong&gt;Transform string into camel case:&lt;/strong&gt;&lt;/div&gt;');
+$l.dom.append(text, $l.helpers.camelCase('text-align') + '&lt;br /&gt;');
+
+$l.dom.append(text, '&lt;div&gt;&lt;strong&gt;Transform string back from camel case:&lt;/strong&gt;&lt;/div&gt;');
+$l.dom.append(text, $l.helpers.antiCamelCase('textAlign') + '&lt;br /&gt;');
+
+$l.dom.append(text, '&lt;div&gt;&lt;strong&gt;Encoding special characters:&lt;/strong&gt;&lt;/div&gt;');
+$l.dom.append(text, $l.helpers.quoteAttr('&lt;br clear="all" /&gt;') + '&lt;br /&gt;');
+
+$l.dom.append(text, '&lt;div&gt;&lt;strong&gt;Generating random value:&lt;/strong&gt;&lt;/div&gt;');
+$l.dom.append(text, $l.helpers.random(1, 15) + '&lt;br /&gt;');
+$l.dom.append(text, $l.helpers.random(1, 15) + '&lt;br /&gt;');
+
+$l.dom.append(text, '&lt;div&gt;&lt;strong&gt;Getting values from a single column:&lt;/strong&gt;&lt;/div&gt;');
+var arr = [{id: 1, count: 5}, {id: 2, count: 12}];
+$l.dom.append(text, JSON.stringify($l.helpers.column(arr, 'count')) + '&lt;br /&gt;');
+
+$l.dom.append(text, '&lt;div&gt;&lt;strong&gt;Shuffling values:&lt;/strong&gt;&lt;/div&gt;');
+$l.dom.append(text, $l.helpers.shuffle([1, 2, 3, 4, 5]) + '&lt;br /&gt;');
+
+$l.dom.append(text, '&lt;div&gt;&lt;strong&gt;Merging two arrays:&lt;/strong&gt;&lt;/div&gt;');
+$l.dom.append(text, JSON.stringify($l.helpers.merge({id: 1}, {name: 'eser', count: 5})) + '&lt;br /&gt;');
+
+$l.dom.append(text, '&lt;div&gt;&lt;strong&gt;Getting count of elements:&lt;/strong&gt;&lt;/div&gt;');
+$l.dom.append(text, $l.helpers.getLength({id: 1, name: 'eser', count: 5}) + '&lt;br /&gt;');
+
+$l.dom.append(text, '&lt;div&gt;&lt;strong&gt;Getting elements with dot notation:&lt;/strong&gt;&lt;/div&gt;');
+$l.dom.append(text, $l.helpers.getElement({id: 1, child: { a: 1, b: 2 }}, 'child.a') + '&lt;br /&gt;');
+
+$l.dom.append(text, '&lt;div&gt;&lt;strong&gt;Getting keys for dot notation:&lt;/strong&gt;&lt;/div&gt;');
+$l.dom.append(text, JSON.stringify($l.helpers.getKeysRecursive({id: 1, child: { a: 1, b: 2 }})) + '&lt;br /&gt;');
+
+                        </pre>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row header-row">
+                <div class="col-sm-6">
+                    <h2 class="nomargin">Keys Examples</h2>
+                </div>
+                <div class="col-sm-6 text-right">
+                    <a class="btn btn-sm btn-default" href="https://github.com/larukedi/laroux.js/wiki/keys" role="button">Wiki Page</a>
+                </div>
+            </div>
+
+            <div class="example-area">
+                <h3>Keys</h3>
+                <div class="row">
+                    <div class="col-sm-4">
+                        <button id="button-keys-assign" class="btn btn-default">Assign F7</button>
+                        <div id="text-keys-assign"></div>
+                    </div>
+                    <div class="col-sm-8">
+                        <h4>HTML</h4>
+                        <pre class="prettyprint">
+&lt;div id="text-keys-assign"&gt;&lt;/div&gt;
+                        </pre>
+
+                        <h4>Javascript</h4>
+                        <pre class="prettyprint">
+var text = $l.id('text-keys-assign');
+var pressCount = 0;
+
+$l.keys.assign({
+    target: document,
+    key: 'f7',
+    fnc: function() {
+        $l.dom.replace(text, 'pressed: ' + ++pressCount);
+    }
+});
+                        </pre>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row header-row">
+                <div class="col-sm-6">
+                    <h2 class="nomargin">MVC Examples</h2>
+                </div>
+                <div class="col-sm-6 text-right">
+                    <a class="btn btn-sm btn-default" href="https://github.com/larukedi/laroux.js/wiki/mvc" role="button">Wiki Page</a>
+                </div>
+            </div>
+
+            <div class="example-area">
+                <h3>Simple Model Binding</h3>
+                <div class="row">
+                    <div class="col-sm-4">
+                        <div id="mvcsimple">
+                            Name: <input id="textbox-mvc-simple" type="text" value="" placeholder="Enter text" />
+                            <br />
+                            Entered: <span lr-bind="prop.textContent: name"></span>
+                        </div>
+                    </div>
+                    <div class="col-sm-8">
+                        <h4>HTML</h4>
+                        <pre class="prettyprint">
+&lt;div id="mvcsimple"&gt;
+    Name: &lt;input id="textbox-mvc-simple" type="text" value="" placeholder="Enter text" /&gt;
+    &lt;br /&gt;
+    Entered: &lt;span lr-bind="prop.textContent: name"&gt;
+&lt;/div&gt;
+                        </pre>
+
+                        <h4>Javascript</h4>
+                        <pre class="prettyprint">
+var myModel = new $l.stack({
+    name: ''
+});
+
+$l.mvc.init('mvcsimple', myModel);
+
+$l.dom.setEvent(
+    $l.id('textbox-mvc-simple'),
+    'keyup',
+    function(ev, element) {
+        myModel.name = element.value;
+
+        return false;
+    }
+);
+                        </pre>
+                    </div>
+                </div>
+
+                <h3>Model Binding with Calculation</h3>
+                <div class="row">
+                    <div class="col-sm-4">
+                        <div id="mvccalculation">
+                            A: <input type="text" name="a" value="3" size="3" lr-event="keyup, a: prop.value" />
+                            B: <input type="text" name="b" value="5" size="3" lr-event="keyup, b: prop.value" />
+                            <br />
+                            Total: <span lr-bind="prop.textContent: total"></span>
+                        </div>
+                    </div>
+                    <div class="col-sm-8">
+                        <h4>HTML</h4>
+                        <pre class="prettyprint">
+&lt;div id="mvccalculation"&gt;
+    A: &lt;input type="text" name="a" value="3" size="3" lr-event="keyup, a: prop.value" /&gt;
+    B: &lt;input type="text" name="b" value="5" size="3" lr-event="keyup, b: prop.value" /&gt;
+    &lt;br /&gt;
+    Total: &lt;span lr-bind="prop.textContent: total"&gt;&lt;/span&gt;
+&lt;/div&gt;
+                        </pre>
+
+                        <h4>Javascript</h4>
+                        <pre class="prettyprint">
+var myModel = new $l.stack({
+    a: 3,
+    b: 5,
+    total: function() {
+        return parseInt(this.a) + parseInt(this.b);
+    }
+});
+
+$l.mvc.init('mvccalculation', myModel);
+                        </pre>
+                    </div>
+
+
+                <h3>Model Binding in two-way</h3>
+                <div class="row">
+                    <div class="col-sm-4">
+                        <div id="mvctwoway">
+                            <input type="text" name="text" lr-bind="prop.value: text" lr-event="keyup, text: prop.value" />
+                            <input type="button" value="Set" lr-event="click, text: 'clicked'" />
+                            <br />
+                            Value: <span lr-bind="prop.textContent: text"></span>
+                        </div>
+                    </div>
+                    <div class="col-sm-8">
+                        <h4>HTML</h4>
+                        <pre class="prettyprint">
+&lt;div id="mvctwoway"&gt;
+    &lt;input type="text" name="text" lr-bind="prop.value: text" lr-event="keyup, text: prop.value" /&gt;
+    &lt;input type="button" value="Set" lr-event="click, text: 'clicked'" /&gt;
+    &lt;br /&gt;
+    Value: &lt;span lr-bind="prop.textContent: text"&gt;&lt;/span&gt;
+&lt;/div&gt;
+                        </pre>
+
+                        <h4>Javascript</h4>
+                        <pre class="prettyprint">
+var myModel = new $l.stack({
+    text: 'initial'
+});
+
+$l.mvc.init('mvctwoway', myModel);
+                        </pre>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row header-row">
+                <div class="col-sm-6">
+                    <h2 class="nomargin">Stack Examples</h2>
+                </div>
+                <div class="col-sm-6 text-right">
+                    <a class="btn btn-sm btn-default" href="https://github.com/larukedi/laroux.js/wiki/stack" role="button">Wiki Page</a>
+                </div>
+            </div>
+
+            <div class="example-area">
+                <h3>Stack Example</h3>
+                <div class="row">
+                    <div class="col-sm-4">
+                        <button id="button-stack-example" class="btn btn-default">Execute</button>
+                        <div id="text-stack-example"></div>
+                    </div>
+                    <div class="col-sm-8">
+                        <h4>HTML</h4>
+                        <pre class="prettyprint">
+&lt;div id="text-stack-example"&gt;&lt;/div&gt;
+                        </pre>
+
+                        <h4>Javascript</h4>
+                        <pre class="prettyprint">
+var stack = new $l.stack();
+stack.set('id', 1);
+stack.setRange({count: 15, name: 'eser'});
+
+$l.dom.clear(text);
+
+$l.dom.append(text, '&lt;div&gt;&lt;strong&gt;Element with key \'id\':&lt;/strong&gt;&lt;/div&gt;');
+$l.dom.append(text, stack.get('id') + '&lt;br /&gt;');
+
+$l.dom.append(text, '&lt;div&gt;&lt;strong&gt;Elements with keys \'id\' and \'name\':&lt;/strong&gt;&lt;/div&gt;');
+$l.dom.append(text, JSON.stringify(stack.getRange(['id', 'name'])) + '&lt;br /&gt;');
+
+$l.dom.append(text, '&lt;div&gt;&lt;strong&gt;Keys:&lt;/strong&gt;&lt;/div&gt;');
+$l.dom.append(text, JSON.stringify(stack.keys()) + '&lt;br /&gt;');
+
+$l.dom.append(text, '&lt;div&gt;&lt;strong&gt;Length:&lt;/strong&gt;&lt;/div&gt;');
+$l.dom.append(text, JSON.stringify(stack.length()) + '&lt;br /&gt;');
+
+$l.dom.append(text, '&lt;div&gt;&lt;strong&gt;Check if it has element with key \'name\':&lt;/strong&gt;&lt;/div&gt;');
+$l.dom.append(text, JSON.stringify(stack.exists('name')) + '&lt;br /&gt;');
+
+$l.dom.append(text, '&lt;div&gt;&lt;strong&gt;All data:&lt;/strong&gt;&lt;/div&gt;');
+$l.dom.append(text, JSON.stringify(stack._data) + '&lt;br /&gt;');
+
+                        </pre>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row header-row">
+                <div class="col-sm-6">
+                    <h2 class="nomargin">Templates Examples</h2>
+                </div>
+                <div class="col-sm-6 text-right">
+                    <a class="btn btn-sm btn-default" href="https://github.com/larukedi/laroux.js/wiki/templates" role="button">Wiki Page</a>
+                </div>
+            </div>
+
+            <div class="example-area">
+                <h3>Plain Example</h3>
+                <div class="row">
+                    <div class="col-sm-4">
+                        <button id="button-templates-example" class="btn btn-default">Execute</button>
+                        <script id="script-templates-example" type="text/plain-template">
+                            Name: {{name.first}} Age: {{age}}
+                        </script>
+                        <div id="text-templates-example"></div>
+                    </div>
+                    <div class="col-sm-8">
+                        <h4>HTML</h4>
+                        <pre class="prettyprint">
+&lt;script id="script-templates-example" type="text/plain-template"&gt;
+    Name: {{name.first}} Age: {{age}}
+&lt;/script&gt;
+&lt;div id="text-templates-example"&gt;&lt;/div&gt;
+                        </pre>
+
+                        <h4>Javascript</h4>
+                        <pre class="prettyprint">
+var text = $l.id('text-templates-example');
+var script = $l.id('script-templates-example');
+
+var model = { name: { first: 'Jane', last: 'Doe' }, age: 25 };
+$l.templates.replace(script, model, text);
+                        </pre>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row header-row">
+                <div class="col-sm-6">
+                    <h2 class="nomargin">Timers Examples</h2>
+                </div>
+                <div class="col-sm-6 text-right">
+                    <a class="btn btn-sm btn-default" href="https://github.com/larukedi/laroux.js/wiki/timers" role="button">Wiki Page</a>
+                </div>
+            </div>
+
+            <div class="example-area">
+                <h3>Setting a timer</h3>
+                <div class="row">
+                    <div class="col-sm-4">
+                        <button id="button-timers-set" class="btn btn-default">Set Timer</button>
+                        <div id="text-timers-set"></div>
+                    </div>
+                    <div class="col-sm-8">
+                        <h4>HTML</h4>
+                        <pre class="prettyprint">
+&lt;div id="text-timers-set"&gt;&lt;/div&gt;
+                        </pre>
+
+                        <h4>Javascript</h4>
+                        <pre class="prettyprint">
+var text = $l.id('text-timers-set');
+$l.dom.replace(text, 'waiting...&lt;br /&gt;');
+
+$l.timers.set({
+    'timeout': 500,
+    'reset': false,
+    'ontick': function() {
+        $l.dom.append(text, 'time\'s up');
+    }
+});
+                        </pre>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row header-row">
+                <div class="col-sm-6">
+                    <h2 class="nomargin">Touch Examples</h2>
+                </div>
+                <div class="col-sm-6 text-right">
+                    <a class="btn btn-sm btn-default" href="https://github.com/larukedi/laroux.js/wiki/touch" role="button">Wiki Page</a>
+                </div>
+            </div>
+
+            <div class="example-area">
+                <h3>Touch Events</h3>
+                <div class="row">
+                    <div class="col-sm-4">
+                        Try Tap, Double Tap or Long Tap on the box
+                        <div class="box" id="div-touch-events"></div>
+                        <ul id="target-touch-events"></ul>
+                    </div>
+                    <div class="col-sm-8">
+                        <h4>HTML</h4>
+                        <pre class="prettyprint">
+&lt;div class="box" id="div-touch-events"&gt;&lt;/div&gt;
+&lt;ul id="target-touch-events"&gt;&lt;/ul&gt;
+                        </pre>
+
+                        <h4>Javascript</h4>
+                        <pre class="prettyprint">
+var box = $l.id('div-touch-events');
+var target = $l.id('target-touch-events');
+
+$l.dom.setEvent(
+    box,
+    'tap',
+    function(event) {
+        var createdElement = $l.dom.createElement('LI', { }, 'tap');
+        target.appendChild(createdElement);
+    }
+);
+
+$l.dom.setEvent(
+    box,
+    'dbltap',
+    function(event) {
+        var createdElement = $l.dom.createElement('LI', { }, 'dbltap');
+        target.appendChild(createdElement);
+    }
+);
+
+$l.dom.setEvent(
+    box,
+    'longtap',
+    function(event) {
+        var createdElement = $l.dom.createElement('LI', { }, 'longtap');
+        target.appendChild(createdElement);
+    }
+);
+                        </pre>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row header-row">
+                <div class="col-sm-6">
+                    <h2 class="nomargin">Triggers Examples</h2>
+                </div>
+                <div class="col-sm-6 text-right">
+                    <a class="btn btn-sm btn-default" href="https://github.com/larukedi/laroux.js/wiki/triggers" role="button">Wiki Page</a>
+                </div>
+            </div>
+
+            <div class="example-area">
+                <h3>Setting a trigger</h3>
+                <div class="row">
+                    <div class="col-sm-4">
+                        <button id="button-triggers-set-1" class="btn btn-default">Button 1</button>
+                        <button id="button-triggers-set-2" class="btn btn-default">Button 2</button>
+                        <button id="button-triggers-set-reset" class="btn btn-default" disabled="disabled">Reset</button>
+                        <div id="text-triggers-set"></div>
+                    </div>
+                    <div class="col-sm-8">
+                        <h4>HTML</h4>
+                        <pre class="prettyprint">
+&lt;button id="button-triggers-set-1" class="btn btn-default"&gt;Button 1&lt;/button&gt;
+&lt;button id="button-triggers-set-2" class="btn btn-default"&gt;Button 2&lt;/button&gt;
+&lt;div id="text-triggers-set"&gt;&lt;/div&gt;
+                        </pre>
+
+                        <h4>Javascript</h4>
+                        <pre class="prettyprint">
+var text = $l.id('text-triggers-set');
+$l.dom.replace(text, 'click both buttons in any order&lt;br /&gt;');
+
+$l.triggers.set(
+    ['condition1', 'condition2'],
+    function() {
+        $l.dom.append(text, 'all set&lt;br /&gt;');
+    }
+);
+
+$l.dom.setEvent(
+    $l.id('button-triggers-set-1'),
+    'click',
+    function() {
+        $l.dom.append(text, 'button1 clicked...&lt;br /&gt;');
+        $l.triggers.ontrigger('condition1');
+
+        return false;
+    }
+);
+
+$l.dom.setEvent(
+    $l.id('button-triggers-set-2'),
+    'click',
+    function() {
+        $l.dom.append(text, 'button2 clicked...&lt;br /&gt;');
+        $l.triggers.ontrigger('condition2');
+
+        return false;
+    }
+);
+                        </pre>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row header-row">
+                <div class="col-sm-6">
+                    <h2 class="nomargin">UI Examples</h2>
+                </div>
+                <div class="col-sm-6 text-right">
+                    <a class="btn btn-sm btn-default" href="https://github.com/larukedi/laroux.js/wiki/ui" role="button">Wiki Page</a>
+                </div>
+            </div>
+
+            <div class="example-area">
+                <h3>Disposable Message Popup</h3>
+                <div class="row">
+                    <div class="col-sm-4">
+                        <button id="button-ui-popup" class="btn btn-default">Show Message</button>
+                    </div>
+                    <div class="col-sm-8">
+                        <h4>Javascript</h4>
+                        <pre class="prettyprint">
+$l.ui.init();
+$l.ui.popup.msgbox(500, 'test message');
+                        </pre>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row header-row">
+                <div class="col-sm-6">
+                    <h2 class="nomargin">Vars Examples</h2>
+                </div>
+                <div class="col-sm-6 text-right">
+                    <a class="btn btn-sm btn-default" href="https://github.com/larukedi/laroux.js/wiki/vars" role="button">Wiki Page</a>
+                </div>
+            </div>
+
+            <div class="example-area">
+                <h3>Cookies</h3>
+                <div class="row">
+                    <div class="col-sm-4">
+                        <button id="button-vars-cookies-set" class="btn btn-default">Set Cookie</button>
+                        <button id="button-vars-cookies-read" class="btn btn-default">Read Cookie</button>
+                        <button id="button-vars-cookies-remove" class="btn btn-default">Remove Cookie</button>
+                        <div id="text-vars-cookies"></div>
+                    </div>
+                    <div class="col-sm-8">
+                        <h4>HTML</h4>
+                        <pre class="prettyprint">
+&lt;button id="button-vars-cookies-set" class="btn btn-default"&gt;Set Cookie&lt;/button&gt;
+&lt;button id="button-vars-cookies-read" class="btn btn-default"&gt;Read Cookie&lt;/button&gt;
+&lt;button id="button-vars-cookies-remove" class="btn btn-default"&gt;Remove Cookie&lt;/button&gt;
+&lt;div id="text-vars-cookies"&gt;&lt;/div&gt;
+                        </pre>
+
+                        <h4>Javascript</h4>
+                        <pre class="prettyprint">
+var text = $l.id('text-vars-cookies');
+
+$l.dom.setEvent(
+    $l.id('button-vars-cookies-set'),
+    'click',
+    function() {
+        $l.vars.setCookie('demopage', 'a cookie test&lt;br /&gt;');
+        $l.dom.append(text, 'cookie set');
+
+        return false;
+    }
+);
+
+$l.dom.setEvent(
+    $l.id('button-vars-cookies-read'),
+    'click',
+    function() {
+        var value = $l.vars.getCookie('demopage');
+        if (value !== null) {
+            $l.dom.append(text, 'cookie\'s value is: ' + value + '&lt;br /&gt;');
+        } else {
+            $l.dom.append(text, 'you need to set a cookie first&lt;br /&gt;');
+        }
+
+        return false;
+    }
+);
+
+$l.dom.setEvent(
+    $l.id('button-vars-cookies-remove'),
+    'click',
+    function() {
+        $l.vars.removeCookie('demopage');
+        $l.dom.append(text, 'cookie is removed&lt;br /&gt;');
+
+        return false;
+    }
+);
+                        </pre>
+                    </div>
+                </div>
+
+                <h3>Local Storage</h3>
+                <div class="row">
+                    <div class="col-sm-4">
+                        <button id="button-vars-local-set" class="btn btn-default">Set Variable</button>
+                        <button id="button-vars-local-read" class="btn btn-default">Read Variable</button>
+                        <button id="button-vars-local-remove" class="btn btn-default">Remove Variable</button>
+                        <div id="text-vars-local"></div>
+                    </div>
+                    <div class="col-sm-8">
+                        <h4>HTML</h4>
+                        <pre class="prettyprint">
+&lt;button id="button-vars-local-set" class="btn btn-default"&gt;Set Variable&lt;/button&gt;
+&lt;button id="button-vars-local-read" class="btn btn-default"&gt;Read Variable&lt;/button&gt;
+&lt;button id="button-vars-local-remove" class="btn btn-default"&gt;Remove Variable&lt;/button&gt;
+&lt;div id="text-vars-local"&gt;&lt;/div&gt;
+                        </pre>
+
+                        <h4>Javascript</h4>
+                        <pre class="prettyprint">
+var text = $l.id('text-vars-local');
+
+$l.dom.setEvent(
+    $l.id('button-vars-local-set'),
+    'click',
+    function() {
+        $l.vars.setLocal('demopage', 'a local storage variable test&lt;br /&gt;');
+        $l.dom.append(text, 'local storage variable set');
+
+        return false;
+    }
+);
+
+$l.dom.setEvent(
+    $l.id('button-vars-local-read'),
+    'click',
+    function() {
+        var value = $l.vars.getLocal('demopage');
+        if (value !== null) {
+            $l.dom.append(text, 'local storage variable\'s value is: ' + value + '&lt;br /&gt;');
+        } else {
+            $l.dom.append(text, 'you need to set a local storage variable first&lt;br /&gt;');
+        }
+
+        return false;
+    }
+);
+
+$l.dom.setEvent(
+    $l.id('button-vars-local-remove'),
+    'click',
+    function() {
+        $l.vars.removeLocal('demopage');
+        $l.dom.append(text, 'local storage variable is removed&lt;br /&gt;');
+
+        return false;
+    }
+);
+                        </pre>
+                    </div>
+                </div>
+
+                <h3>Session Storage</h3>
+                <div class="row">
+                    <div class="col-sm-4">
+                        <button id="button-vars-session-set" class="btn btn-default">Set Variable</button>
+                        <button id="button-vars-session-read" class="btn btn-default">Read Variable</button>
+                        <button id="button-vars-session-remove" class="btn btn-default">Remove Variable</button>
+                        <div id="text-vars-session"></div>
+                    </div>
+                    <div class="col-sm-8">
+                        <h4>HTML</h4>
+                        <pre class="prettyprint">
+&lt;button id="button-vars-session-set" class="btn btn-default"&gt;Set Variable&lt;/button&gt;
+&lt;button id="button-vars-session-read" class="btn btn-default"&gt;Read Variable&lt;/button&gt;
+&lt;button id="button-vars-session-remove" class="btn btn-default"&gt;Remove Variable&lt;/button&gt;
+&lt;div id="text-vars-session"&gt;&lt;/div&gt;
+                        </pre>
+
+                        <h4>Javascript</h4>
+                        <pre class="prettyprint">
+var text = $l.id('text-vars-session');
+
+$l.dom.setEvent(
+    $l.id('button-vars-session-set'),
+    'click',
+    function() {
+        $l.vars.setSession('demopage', 'a session storage variable test&lt;br /&gt;');
+        $l.dom.append(text, 'session storage variable set');
+
+        return false;
+    }
+);
+
+$l.dom.setEvent(
+    $l.id('button-vars-session-read'),
+    'click',
+    function() {
+        var value = $l.vars.getSession('demopage');
+        if (value !== null) {
+            $l.dom.append(text, 'session storage variable\'s value is: ' + value + '&lt;br /&gt;');
+        } else {
+            $l.dom.append(text, 'you need to set a session storage variable first&lt;br /&gt;');
+        }
+
+        return false;
+    }
+);
+
+$l.dom.setEvent(
+    $l.id('button-vars-session-remove'),
+    'click',
+    function() {
+        $l.vars.removeSession('demopage');
+        $l.dom.append(text, 'session storage variable is removed&lt;br /&gt;');
+
+        return false;
+    }
+);
+                        </pre>
+                    </div>
+                </div>
+            </div>
+
+            <div class="example-area">
+                <div class="well">
+                    To add your own demos to this page, please don't hesitate to send your pull requests to
+                    <a href="https://github.com/larukedi/laroux.js/tree/gh-pages">this branch</a>, all you need to do is
+                    editing <code>index.html</code> and placing your scripts into <code>assets/js/demos.js</code> file.
+                </div>
+            </div>
+
+            <footer>
+                <p>laroux.js GitHub Demo Page - Documented by <a href="http://eser.ozvataf.com/">Eser Ozvataf</a> and Onur Babacan 2014</p>
+            </footer>
+        </div>
+
+        <script src="assets/js/prettify.min.js"></script>
+        <script src="assets/js/laroux.js"></script>
+        <script src="assets/js/common.js"></script>
+        <script src="assets/js/demos.js"></script>
+    </body>
+</html>
