@@ -24,7 +24,7 @@ module.exports = function (grunt) {
                 src: [
                     'src/laroux.backward.js'
                 ],
-                dest: 'dist/parts/<%= pkg.name %>.backward.js'
+                dest: 'dist/parts/laroux.backward.js'
             },
             basejs: {
                 options: {
@@ -43,7 +43,7 @@ module.exports = function (grunt) {
                     'src/laroux.triggers.js',
                     'src/laroux.vars.js'
                 ],
-                dest: 'dist/parts/<%= pkg.name %>.base.js'
+                dest: 'dist/parts/laroux.base.js'
             },
             extjs: {
                 options: {
@@ -59,7 +59,7 @@ module.exports = function (grunt) {
                     'src/laroux.touch.js',
                     'src/laroux.ui.js'
                 ],
-                dest: 'dist/parts/<%= pkg.name %>.ext.js'
+                dest: 'dist/parts/laroux.ext.js'
             },
             alljs: {
                 options: {
@@ -89,13 +89,13 @@ module.exports = function (grunt) {
                     'src/laroux.touch.js',
                     'src/laroux.ui.js'
                 ],
-                dest: 'dist/<%= pkg.name %>.js'
+                dest: 'dist/laroux.js'
             },
             css: {
                 src: [
                     'temp/laroux.ui.css'
                 ],
-                dest: 'dist/<%= pkg.name %>.css'
+                dest: 'dist/laroux.css'
             }
         },
         uglify: {
@@ -104,29 +104,29 @@ module.exports = function (grunt) {
             },
             backwardjs: {
                 files: {
-                    'dist/parts/<%= pkg.name %>.backward.min.js': ['<%= concat.backwardjs.dest %>']
+                    'dist/parts/laroux.backward.min.js': ['<%= concat.backwardjs.dest %>']
                 }
             },
             basejs: {
                 files: {
-                    'dist/parts/<%= pkg.name %>.base.min.js': ['<%= concat.basejs.dest %>']
+                    'dist/parts/laroux.base.min.js': ['<%= concat.basejs.dest %>']
                 }
             },
             extjs: {
                 files: {
-                    'dist/parts/<%= pkg.name %>.ext.min.js': ['<%= concat.extjs.dest %>']
+                    'dist/parts/laroux.ext.min.js': ['<%= concat.extjs.dest %>']
                 }
             },
             alljs: {
                 files: {
-                    'dist/<%= pkg.name %>.min.js': ['<%= concat.alljs.dest %>']
+                    'dist/laroux.min.js': ['<%= concat.alljs.dest %>']
                 }
             }
         },
         cssmin: {
             css: {
-                src: 'dist/<%= pkg.name %>.css',
-                dest: 'dist/<%= pkg.name %>.min.css'
+                src: 'dist/laroux.css',
+                dest: 'dist/laroux.min.css'
             }
         },
         jshint: {
@@ -174,16 +174,16 @@ module.exports = function (grunt) {
         clean: {
             all: {
                 src: [
-                    'dist/<%= pkg.name %>.js',
-                    'dist/parts/<%= pkg.name %>.backward.js',
-                    'dist/parts/<%= pkg.name %>.base.js',
-                    'dist/parts/<%= pkg.name %>.ext.js',
-                    'dist/<%= pkg.name %>.min.js',
-                    'dist/parts/<%= pkg.name %>.backward.min.js',
-                    'dist/parts/<%= pkg.name %>.base.min.js',
-                    'dist/parts/<%= pkg.name %>.ext.min.js',
-                    'dist/<%= pkg.name %>.css',
-                    'dist/<%= pkg.name %>.min.css'
+                    'dist/laroux.js',
+                    'dist/parts/laroux.backward.js',
+                    'dist/parts/laroux.base.js',
+                    'dist/parts/laroux.ext.js',
+                    'dist/laroux.min.js',
+                    'dist/parts/laroux.backward.min.js',
+                    'dist/parts/laroux.base.min.js',
+                    'dist/parts/laroux.ext.min.js',
+                    'dist/laroux.css',
+                    'dist/laroux.min.css'
                 ]
             },
             temp: {
