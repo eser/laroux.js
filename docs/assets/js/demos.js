@@ -226,43 +226,43 @@
                 $l.dom.clear(text);
 
                 $l.dom.append(text, '<div><strong>Unique Id Generator:</strong></div>');
-                $l.dom.append(text, $l.helpers.getUniqueId() + crlf);
-                $l.dom.append(text, $l.helpers.getUniqueId() + crlf);
+                $l.dom.append(text, $l.getUniqueId() + crlf);
+                $l.dom.append(text, $l.getUniqueId() + crlf);
 
                 $l.dom.append(text, '<div><strong>Query String Generation:</strong></div>');
-                $l.dom.append(text, $l.helpers.buildQueryString({pageId: 5, showAll: 'yes'}) + crlf);
+                $l.dom.append(text, $l.buildQueryString({pageId: 5, showAll: 'yes'}) + crlf);
 
                 $l.dom.append(text, '<div><strong>Transform string into camel case:</strong></div>');
-                $l.dom.append(text, $l.helpers.camelCase('text-align') + crlf);
+                $l.dom.append(text, $l.camelCase('text-align') + crlf);
 
                 $l.dom.append(text, '<div><strong>Transform string back from camel case:</strong></div>');
-                $l.dom.append(text, $l.helpers.antiCamelCase('textAlign') + crlf);
+                $l.dom.append(text, $l.antiCamelCase('textAlign') + crlf);
 
                 $l.dom.append(text, '<div><strong>Encoding special characters:</strong></div>');
-                $l.dom.append(text, $l.helpers.quoteAttr('<br clear="all" />') + crlf);
+                $l.dom.append(text, $l.quoteAttr('<br clear="all" />') + crlf);
 
                 $l.dom.append(text, '<div><strong>Generating random value:</strong></div>');
-                $l.dom.append(text, $l.helpers.random(1, 15) + crlf);
-                $l.dom.append(text, $l.helpers.random(1, 15) + crlf);
+                $l.dom.append(text, $l.random(1, 15) + crlf);
+                $l.dom.append(text, $l.random(1, 15) + crlf);
 
                 $l.dom.append(text, '<div><strong>Getting values from a single column:</strong></div>');
                 var arr = [{id: 1, count: 5}, {id: 2, count: 12}];
-                $l.dom.append(text, JSON.stringify($l.helpers.column(arr, 'count')) + crlf);
+                $l.dom.append(text, JSON.stringify($l.column(arr, 'count')) + crlf);
 
                 $l.dom.append(text, '<div><strong>Shuffling values:</strong></div>');
-                $l.dom.append(text, $l.helpers.shuffle([1, 2, 3, 4, 5]) + crlf);
+                $l.dom.append(text, $l.shuffle([1, 2, 3, 4, 5]) + crlf);
 
                 $l.dom.append(text, '<div><strong>Merging two arrays:</strong></div>');
-                $l.dom.append(text, JSON.stringify($l.helpers.merge({id: 1}, {name: 'eser', count: 5})) + crlf);
+                $l.dom.append(text, JSON.stringify($l.merge({id: 1}, {name: 'eser', count: 5})) + crlf);
 
                 $l.dom.append(text, '<div><strong>Getting count of elements:</strong></div>');
-                $l.dom.append(text, $l.helpers.getLength({id: 1, name: 'eser', count: 5}) + crlf);
+                $l.dom.append(text, $l.getLength({id: 1, name: 'eser', count: 5}) + crlf);
 
                 $l.dom.append(text, '<div><strong>Getting elements with dot notation:</strong></div>');
-                $l.dom.append(text, $l.helpers.getElement({id: 1, child: {a: 1, b: 2}}, 'child.a') + crlf);
+                $l.dom.append(text, $l.getElement({id: 1, child: {a: 1, b: 2}}, 'child.a') + crlf);
 
                 $l.dom.append(text, '<div><strong>Getting keys for dot notation:</strong></div>');
-                $l.dom.append(text, JSON.stringify($l.helpers.getKeysRecursive({id: 1, child: {a: 1, b: 2}})) + crlf);
+                $l.dom.append(text, JSON.stringify($l.getKeysRecursive({id: 1, child: {a: 1, b: 2}})) + crlf);
 
                 return false;
             }

@@ -22,14 +22,6 @@ module.exports = {
                 COMPAT: false
             },
 
-            /*
-            jsBrowsifyEntryPoints: [
-                'laroux.js'
-            ],
-
-            jsBrowsifyOutputFile: '_browserified.js',
-            */
-
             lessFiles: [
             ],
 
@@ -83,13 +75,11 @@ module.exports = {
                 COMPAT: true
             },
 
-            /*
-            jsBrowsifyEntryPoints: [
+            jsBrowserifyEntryPoints: [
                 'laroux.js'
             ],
 
-            jsBrowsifyOutputFile: '_browserified.js',
-            */
+            jsBrowserifyOutputFile: '_browserified.js',
 
             lessFiles: [
                 './src/less/laroux.ui.less'
@@ -110,6 +100,8 @@ module.exports = {
                     csscomb: false,
                     header: true,
                     files: [
+                        '~/web/js/_browserified.js'
+                    /*
                         '~/web/js/laroux.js',
                         '~/web/js/laroux.helpers.js',
                         '~/web/js/laroux.events.js',
@@ -138,6 +130,7 @@ module.exports = {
                         '~/web/js/laroux.ui.loading.js',
                         '~/web/js/laroux.ui.dynamicDates.js',
                         '~/web/js/laroux.ui.scrollView.js'
+                    */
                     ]
                 },
 

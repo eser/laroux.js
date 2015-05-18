@@ -6,7 +6,6 @@
         handleErrors = require('../utils/handleErrors'),
         resolvePath = require('../utils/resolvePath'),
         browserify = require('browserify'),
-        es6ify = require('es6ify'),
         source = require('vinyl-source-stream'),
         rename = require('gulp-rename'),
         taskList = [];
@@ -14,27 +13,25 @@
     Object.keys(config.bundles).forEach(function (item) {
         var bundle = config.bundles[item],
             taskName = 'browserify:' + item,
-            taskNameLint = 'lint-js:' + item,
+            taskNameBabel = 'babel:' + item,
             tempDir = resolvePath('~/' + item + '/js'),
-            tempFile = bundle.jsBrowsifyOutputFile,
+            tempFile = bundle.jsBrowserifyOutputFile,
             entries = [];
 
-        if (bundle.jsBrowsifyEntryPoints !== null) {
-            for (var item2 in bundle.jsBrowsifyEntryPoints) {
-                entries.push(tempDir + '/' + bundle.jsBrowsifyEntryPoints[item2]);
+        if (bundle.jsBrowserifyEntryPoints !== null) {
+            for (var item2 in bundle.jsBrowserifyEntryPoints) {
+                entries.push(tempDir + '/' + bundle.jsBrowserifyEntryPoints[item2]);
             }
         }
 
-        gulp.task(taskName, [taskNameLint], function () {
+        gulp.task(taskName, [taskNameBabel], function () {
             var browserified;
 
             if (entries.length > 0) {
-                browserified = browserify({ entries: entries, debug: true })
-                    // .add(es6ify.runtime)
-                    // .transform(es6ify.configure(/^(?!.*node_modules)+.+\.js$/))
+                browserified = browserify({ entries: entries })
                     .bundle()
                     .on('error', handleErrors)
-                    .pipe(source(bundle.jsBrowsifyEntryPoints[0]));
+                    .pipe(source(bundle.jsBrowserifyEntryPoints[0]));
             } else {
                 browserified = gulp.src([])
                     .on('error', handleErrors);
