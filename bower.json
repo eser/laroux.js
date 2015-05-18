@@ -1,0 +1,25 @@
+{
+  "name": "laroux",
+  "version": "1.5.2",
+  "homepage": "https://github.com/larukedi/laroux.js",
+  "authors": [
+    "Eser Ozvataf <eser@ozvataf.com>"
+  ],
+  "description": "A jquery substitute for modern browsers",
+  "main": "dist/laroux.js",
+  "moduleType": [
+    "globals"
+  ],
+  "keywords": [
+    "laroux",
+    "larouxjs",
+    "laroux.js",
+    "jquery",
+    "substitute",
+    "dom",
+    "css",
+    "helpers",
+    "ajax"
+  ],
+  "license": "Apache-2.0"
+}

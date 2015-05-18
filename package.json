@@ -22,7 +22,7 @@
             "url": "http://eser.ozvataf.com/"
         }
     ],
-    "main": "laroux",
+    "main": "dist/laroux.js",
     "repository": {
         "type": "git",
         "url": "https://github.com/larukedi/laroux.js.git"
@@ -48,6 +48,5 @@
     "dependencies": {
     },
     "scripts": {
-        "test": "grunt test --verbose --force"
     }
 }
