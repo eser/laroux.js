@@ -40,6 +40,8 @@ module.exports = {
                     header: true,
                     dest: './build/dist/base/',
                     files: [
+                        '~/base/js/laroux.js'
+                    /*
                         '~/base/js/laroux.js',
                         '~/base/js/laroux.helpers.js',
                         '~/base/js/laroux.events.js',
@@ -49,6 +51,7 @@ module.exports = {
                         '~/base/js/laroux.vars.js',
                         '~/base/js/laroux.date.js',
                         '~/base/js/laroux.stack.js'
+                    */
                     ]
                 }
             ]

@@ -7,67 +7,29 @@
  */
 'use strict';
 
-(function () {
-    'use strict';
+Object.defineProperty(exports, '__esModule', {
+    value: true
+});
 
-    var top = typeof global !== 'undefined' ? global : window;
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
-    // core
-    top.laroux = function () {};
-    if (top.$l === undefined) {
-        top.$l = laroux;
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+var Laroux = (function () {
+    function Laroux() {
+        _classCallCheck(this, Laroux);
     }
 
-    laroux.extendObject = function () {
-        var target = Array.prototype.shift.call(arguments),
-            isArray = target instanceof Array;
-
-        for (var item in arguments) {
-            for (var name in arguments[item]) {
-                // if (isArray) {
-                //     target.push(arguments[item][name]);
-                //     continue;
-                // }
-
-                /* target[name].constructor === Object */
-                if (target.hasOwnProperty(name) && target[name] instanceof Object) {
-                    laroux.extendObject(target[name], arguments[item][name]);
-                    continue;
-                }
-
-                target[name] = arguments[item][name];
-            }
+    _createClass(Laroux, [{
+        key: 'hello',
+        value: function hello() {
+            console.log('hello back');
         }
-    };
+    }]);
 
-    laroux.toArray = function (obj) {
-        var length = obj.length,
-            items = new Array(length);
+    return Laroux;
+})();
 
-        for (var i = 0; i < length; i++) {
-            items[i] = obj[i];
-        }
-        return items;
-    };
-
-    laroux.ns = function (path, obj) {
-        var pathSlices = path.split('.'),
-            parent = top;
-
-        for (var i = 0, length1 = pathSlices.length; i < length1; i++) {
-            var current = pathSlices[i];
-
-            if (parent[current] === undefined) {
-                parent[current] = {};
-            }
-
-            parent = parent[current];
-        }
-
-        if (obj !== undefined) {
-            laroux.extendObject(parent, obj);
-        }
-
-        return parent;
-    };
-}).call(undefined);
+var laroux = new Laroux();
+exports['default'] = laroux;
+module.exports = exports['default'];
