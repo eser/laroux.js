@@ -19,7 +19,7 @@ export function extendNs(target, path, source) {
 
     if (source !== undefined) {
         // might be replaced w/ $l.extend method
-        ptr = extend(ptr, source);
+        extend(ptr, source);
     }
 
     return target;

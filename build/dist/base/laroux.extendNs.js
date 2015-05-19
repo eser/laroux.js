@@ -33,7 +33,7 @@ function extendNs(target, path, source) {
 
     if (source !== undefined) {
         // might be replaced w/ $l.extend method
-        ptr = (0, _larouxExtendJs.extend)(ptr, source);
+        (0, _larouxExtendJs.extend)(ptr, source);
     }
 
     return target;

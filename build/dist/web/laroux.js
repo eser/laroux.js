@@ -63,12 +63,23 @@ module.exports = exports['default'];
 //     var target = Array.prototype.shift.call(arguments);
 //
 //     for (var i = 0, length1 = arguments.length; i < length1; i++) {
-//         var keys = Object.keys(arguments[i]);
+//         var argument = arguments[i],
+//             keys = Object.keys(argument);
 //
 //         for (var j = 0, length2 = keys.length; j < length2; j++) {
 //             var key = keys[j];
 //
-//             target[key] = arguments[i][key];
+//             if (target[key] instanceof Array) {
+//                 target[key] = target[key].concat(argument[key]);
+//                 continue;
+//             }
+//
+//             if (target[key] instanceof Object) {
+//                 extend(target[key], argument[key]);
+//                 continue;
+//             }
+//
+//             target[key] = argument[key];
 //         }
 //     }
 //
@@ -88,6 +99,16 @@ function extend(target, source) {
 
     for (var i = 0, length = keys.length; i < length; i++) {
         var key = keys[i];
+
+        if (target[key] instanceof Array) {
+            target[key] = target[key].concat(source[key]);
+            continue;
+        }
+
+        if (target[key] instanceof Object) {
+            extend(target[key], source[key]);
+            continue;
+        }
 
         target[key] = source[key];
     }
@@ -123,7 +144,7 @@ function extendNs(target, path, source) {
 
     if (source !== undefined) {
         // might be replaced w/ $l.extend method
-        ptr = (0, _larouxExtendJs.extend)(ptr, source);
+        (0, _larouxExtendJs.extend)(ptr, source);
     }
 
     return target;
