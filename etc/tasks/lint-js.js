@@ -12,10 +12,9 @@
     Object.keys(config.bundles).forEach(function (item) {
         var bundle = config.bundles[item],
             taskName = 'lint-js:' + item,
-            taskNamePreprocess = 'preprocess-js:' + item,
             tempSources = resolvePath('~/' + item + '/js/**/*.js');
 
-        gulp.task(taskName, [taskNamePreprocess], function () {
+        gulp.task(taskName, ['eolfix-js'], function () {
             return gulp.src(tempSources)
                 .on('error', handleErrors)
                 .pipe(jshint('./etc/config/.jshintrc'))

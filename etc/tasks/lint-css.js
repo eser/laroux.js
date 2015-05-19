@@ -11,10 +11,9 @@
     Object.keys(config.bundles).forEach(function (item) {
         var bundle = config.bundles[item],
             taskName = 'lint-css:' + item,
-            taskNamePreprocess = 'preprocess-css:' + item,
             tempSources = resolvePath('~/' + item + '/css/**/*.css');
 
-        gulp.task(taskName, [taskNamePreprocess], function () {
+        gulp.task(taskName, ['eolfix-css'], function () {
             return gulp.src(tempSources)
                 .on('error', handleErrors)
                 // .pipe(csslint('./etc/config/.csslintrc'))

@@ -14,8 +14,6 @@
     Object.keys(config.bundles).forEach(function (item) {
         var bundle = config.bundles[item],
             taskName = 'pack:' + item,
-            taskNameBrowserify = 'browserify:' + item,
-            taskNameLint = 'lint-css:' + item,
             subtaskList = [],
             subtaskCount = 0,
 
@@ -32,10 +30,13 @@
             var pack = bundle.packs[item2],
                 subtaskName = taskName + ':' + subtaskCount++;
 
-            gulp.task(subtaskName, [taskNameBrowserify, taskNameLint], function () {
+            gulp.task(subtaskName, ['lint', 'browserify'], function () {
                 var stream = gulp.src(resolvePath.array(pack.files))
-                    .on('error', handleErrors)
-                    .pipe(concat(item2));
+                    .on('error', handleErrors);
+
+                if (pack.concat) {
+                    stream = stream.pipe(concat(pack.concat));
+                }
 
                 if (pack.csscomb) {
                     stream = stream.pipe(csscomb({
@@ -50,7 +51,7 @@
                     ));
                 }
 
-                return stream.pipe(gulp.dest('.'));
+                return stream.pipe(gulp.dest(pack.dest));
             });
 
             subtaskList.push(subtaskName);

@@ -13,7 +13,6 @@
     Object.keys(config.bundles).forEach(function (item) {
         var bundle = config.bundles[item],
             taskName = 'browserify:' + item,
-            taskNameBabel = 'babel:' + item,
             tempDir = resolvePath('~/' + item + '/js'),
             tempFile = bundle.jsBrowserifyOutputFile,
             entries = [];
@@ -24,7 +23,7 @@
             }
         }
 
-        gulp.task(taskName, [taskNameBabel], function () {
+        gulp.task(taskName, ['babel'], function () {
             var browserified;
 
             if (entries.length > 0) {

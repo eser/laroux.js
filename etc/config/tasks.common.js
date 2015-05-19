@@ -32,12 +32,13 @@ module.exports = {
                 './tests/**/*.js'
             ],
 
-            packs: {
-                './build/dist/base/laroux.js': {
-                    uglify: true,
+            packs: [
+                {
+                    uglify: false,
                     minifyCSS: false,
                     csscomb: false,
                     header: true,
+                    dest: './build/dist/base/',
                     files: [
                         '~/base/js/laroux.js',
                         '~/base/js/laroux.helpers.js',
@@ -50,7 +51,7 @@ module.exports = {
                         '~/base/js/laroux.stack.js'
                     ]
                 }
-            }
+            ]
         },
 
         web: {
@@ -93,12 +94,14 @@ module.exports = {
                 './tests/**/*.js'
             ],
 
-            packs: {
-                './build/dist/web/laroux.js': {
+            packs: [
+                {
                     uglify: true,
                     minifyCSS: false,
                     csscomb: false,
                     header: true,
+                    concat: 'laroux.js',
+                    dest: './build/dist/web/',
                     files: [
                         '~/web/js/_browserified.js'
                     /*
@@ -134,16 +137,18 @@ module.exports = {
                     ]
                 },
 
-                './build/dist/web/laroux.css': {
+                {
                     uglify: false,
                     minifyCSS: true,
                     csscomb: true,
                     header: true,
+                    concat: 'laroux.css',
+                    dest: './build/dist/web/',
                     files: [
                         '~/web/css/**/*.css'
                     ]
                 }
-            }
+            ]
         }
     },
 

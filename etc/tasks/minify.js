@@ -17,7 +17,6 @@
     Object.keys(config.bundles).forEach(function (item) {
         var bundle = config.bundles[item],
             taskName = 'minify:' + item,
-            taskNamePack = 'pack:' + item,
             subtaskList = [],
             subtaskCount = 0,
 
@@ -38,8 +37,22 @@
                 return;
             }
 
-            gulp.task(subtaskName, [taskNamePack], function () {
-                var stream = gulp.src([item2])
+            gulp.task(subtaskName, ['pack'], function () {
+                var stream = null;
+
+                if (pack.concat) {
+                    stream = gulp.src(path.join(pack.dest, pack.concat));
+                } else {
+                    var files = [];
+
+                    pack.files.forEach(function (item3) {
+                        files.push(path.join(pack.dest, path.basename(pack.files[item3])));
+                    });
+
+                    stream = gulp.src(files);
+                }
+
+                stream = stream
                     .on('error', handleErrors)
                     .pipe(buffer())
                     .pipe(sourcemaps.init({ loadMaps: true }));
@@ -70,7 +83,7 @@
                 }
 
                 stream = stream.pipe(rename({
-                    dirname: path.dirname(item2),
+                    dirname: pack.dest,
                     suffix: '.min'
                 }))
                     .pipe(sourcemaps.write('./'))

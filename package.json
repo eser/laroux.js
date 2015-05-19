@@ -51,7 +51,7 @@
         "gulp-uglify": "~1.2.0",
         "gulp-notify": "~2.2.0",
         "gulp-preprocess": "~1.2.0",
-        "gulp-riot": "~0.2.12",
+        "gulp-eol": "~0.1.1",
         "gulp-util": "~3.0.4",
         "browserify": "~10.2.0",
         "vinyl-buffer": "~1.0.0",
