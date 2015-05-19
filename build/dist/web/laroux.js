@@ -13,28 +13,139 @@ Object.defineProperty(exports, '__esModule', {
     value: true
 });
 
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+var _larouxExtendJs = require('./laroux.extend.js');
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+var _larouxExtendNsJs = require('./laroux.extendNs.js');
 
-var Laroux = (function () {
-    function Laroux() {
-        _classCallCheck(this, Laroux);
+var _larouxToArrayJs = require('./laroux.toArray.js');
+
+exports['default'] = (function () {
+    'use strict';
+
+    var laroux = function laroux(selector, parent) {
+        if (selector instanceof Array) {
+            return (0, _larouxToArrayJs.toArray)((parent || document).querySelectorAll(selector));
+        }
+
+        // FIXME: Laroux: non-chromium optimization, but it runs
+        //                slowly in chromium
+        //
+        // var re = /^#([^\+\>\[\]\.# ]*)$/.exec(selector);
+        // if (re) {
+        //     return (parent || document).getElementById(re[1]);
+        // }
+
+        return (parent || document).querySelector(selector);
+    };
+
+    (0, _larouxExtendJs.extend)(laroux, {
+        extend: _larouxExtendJs.extend,
+        extendNs: _larouxExtendNsJs.extendNs,
+        toArray: _larouxToArrayJs.toArray
+    });
+
+    if (global.$l === undefined) {
+        global.$l = laroux;
     }
 
-    _createClass(Laroux, [{
-        key: 'hello',
-        value: function hello() {
-            console.log('hello back');
-        }
-    }]);
-
-    return Laroux;
+    return laroux;
 })();
 
-var laroux = new Laroux();
-global.$l = laroux;
-exports['default'] = laroux;
 module.exports = exports['default'];
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+},{"./laroux.extend.js":2,"./laroux.extendNs.js":3,"./laroux.toArray.js":4}],2:[function(require,module,exports){
+// FIXME: Laroux: not used version in favor of speed, redundant loop extracted in case of
+//                if there are multiple source objects to merge with target
+//
+// export function extend() {
+//     'use strict';
+//
+//     var target = Array.prototype.shift.call(arguments);
+//
+//     for (var i = 0, length1 = arguments.length; i < length1; i++) {
+//         var keys = Object.keys(arguments[i]);
+//
+//         for (var j = 0, length2 = keys.length; j < length2; j++) {
+//             var key = keys[j];
+//
+//             target[key] = arguments[i][key];
+//         }
+//     }
+//
+//     return target;
+// }
+'use strict';
+
+Object.defineProperty(exports, '__esModule', {
+    value: true
+});
+exports.extend = extend;
+
+function extend(target, source) {
+    'use strict';
+
+    var keys = Object.keys(source);
+
+    for (var i = 0, length = keys.length; i < length; i++) {
+        var key = keys[i];
+
+        target[key] = source[key];
+    }
+
+    return target;
+}
+},{}],3:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, '__esModule', {
+    value: true
+});
+exports.extendNs = extendNs;
+
+var _larouxExtendJs = require('./laroux.extend.js');
+
+function extendNs(target, path, source) {
+    'use strict';
+
+    var ptr = target,
+        pathSlices = path.split('.'),
+        keys = Object.keys(source);
+
+    for (var i = 0, length = pathSlices.length; i < length; i++) {
+        var current = pathSlices[i];
+
+        if (ptr[current] === undefined) {
+            ptr[current] = {};
+        }
+
+        ptr = ptr[current];
+    }
+
+    if (source !== undefined) {
+        // might be replaced w/ $l.extend method
+        ptr = (0, _larouxExtendJs.extend)(ptr, source);
+    }
+
+    return target;
+}
+},{"./laroux.extend.js":2}],4:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, '__esModule', {
+    value: true
+});
+exports.toArray = toArray;
+
+function toArray(obj) {
+    'use strict';
+
+    var length = obj.length,
+        items = new Array(length);
+
+    for (var i = 0; i < length; i++) {
+        items[i] = obj[i];
+    }
+
+    return items;
+}
 },{}]},{},[1]);

@@ -11,25 +11,42 @@ Object.defineProperty(exports, '__esModule', {
     value: true
 });
 
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+var _larouxExtendJs = require('./laroux.extend.js');
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+var _larouxExtendNsJs = require('./laroux.extendNs.js');
 
-var Laroux = (function () {
-    function Laroux() {
-        _classCallCheck(this, Laroux);
+var _larouxToArrayJs = require('./laroux.toArray.js');
+
+exports['default'] = (function () {
+    'use strict';
+
+    var laroux = function laroux(selector, parent) {
+        if (selector instanceof Array) {
+            return (0, _larouxToArrayJs.toArray)((parent || document).querySelectorAll(selector));
+        }
+
+        // FIXME: Laroux: non-chromium optimization, but it runs
+        //                slowly in chromium
+        //
+        // var re = /^#([^\+\>\[\]\.# ]*)$/.exec(selector);
+        // if (re) {
+        //     return (parent || document).getElementById(re[1]);
+        // }
+
+        return (parent || document).querySelector(selector);
+    };
+
+    (0, _larouxExtendJs.extend)(laroux, {
+        extend: _larouxExtendJs.extend,
+        extendNs: _larouxExtendNsJs.extendNs,
+        toArray: _larouxToArrayJs.toArray
+    });
+
+    if (global.$l === undefined) {
+        global.$l = laroux;
     }
 
-    _createClass(Laroux, [{
-        key: 'hello',
-        value: function hello() {
-            console.log('hello back');
-        }
-    }]);
-
-    return Laroux;
+    return laroux;
 })();
 
-var laroux = new Laroux();
-exports['default'] = laroux;
 module.exports = exports['default'];
