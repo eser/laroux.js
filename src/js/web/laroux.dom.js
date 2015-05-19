@@ -1,4 +1,4 @@
-import helpers from './laroux.helpers.js';
+import helpers from '../laroux.helpers.js';
 
 export default (function () {
     'use strict';

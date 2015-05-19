@@ -1,6 +1,6 @@
 import css from './laroux.css.js';
-import Deferred from './laroux.deferred.js';
-import helpers from './laroux.helpers.js';
+import Deferred from '../laroux.deferred.js';
+import helpers from '../laroux.helpers.js';
 
 export default (function () {
     'use strict';

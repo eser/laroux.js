@@ -37,6 +37,10 @@ var _larouxStackJs = require('./laroux.stack.js');
 
 var _larouxStackJs2 = _interopRequireDefault(_larouxStackJs);
 
+var _larouxTemplatesJs = require('./laroux.templates.js');
+
+var _larouxTemplatesJs2 = _interopRequireDefault(_larouxTemplatesJs);
+
 var _larouxTimersJs = require('./laroux.timers.js');
 
 var _larouxTimersJs2 = _interopRequireDefault(_larouxTimersJs);
@@ -64,7 +68,17 @@ exports['default'] = (function () {
         return (parent || document).querySelector(selector);
     };
 
+    _larouxHelpersJs2['default'].extend(laroux, _larouxHelpersJs2['default']);
     _larouxHelpersJs2['default'].extend(laroux, {
+        ajax: _larouxAjaxJs2['default'],
+        date: _larouxDateJs2['default'],
+        deferred: _larouxDeferredJs2['default'],
+        events: _larouxEventsJs2['default'],
+        stack: _larouxStackJs2['default'],
+        templates: _larouxTemplatesJs2['default'],
+        timers: _larouxTimersJs2['default'],
+        vars: _larouxVarsJs2['default'],
+
         cached: {
             single: {},
             array: {},
@@ -73,7 +87,7 @@ exports['default'] = (function () {
 
         c: function c(selector) {
             if (selector instanceof Array) {
-                return laroux.cached.array[selector] || (laroux.cached.array[selector] = laroux.toArray(document.querySelectorAll(selector)));
+                return laroux.cached.array[selector] || (laroux.cached.array[selector] = _larouxHelpersJs2['default'].toArray(document.querySelectorAll(selector)));
             }
 
             return laroux.cached.single[selector] || (laroux.cached.single[selector] = document.querySelector(selector));
@@ -99,29 +113,8 @@ exports['default'] = (function () {
         }
     });
 
-    _larouxHelpersJs2['default'].extend(laroux, _larouxHelpersJs2['default']);
-    _larouxHelpersJs2['default'].extend(laroux, {
-        ajax: _larouxAjaxJs2['default'],
-        date: _larouxDateJs2['default'],
-        deferred: _larouxDeferredJs2['default'],
-        events: _larouxEventsJs2['default'],
-        stack: _larouxStackJs2['default'],
-        timers: _larouxTimersJs2['default'],
-        vars: _larouxVarsJs2['default']
-    });
-
     if (global.$l === undefined) {
         global.$l = laroux;
-    }
-
-    if (typeof document !== 'undefined') {
-        document.addEventListener('DOMContentLoaded', function () {
-            if (!laroux.readyPassed) {
-                _larouxEventsJs2['default'].invoke('ContentLoaded');
-                setInterval(_larouxTimersJs2['default'].ontick, 100);
-                laroux.readyPassed = true;
-            }
-        });
     }
 
     return laroux;

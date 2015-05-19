@@ -1,4 +1,4 @@
-import ajax from './laroux.ajax.js';
+import ajax from '../laroux.ajax.js';
 import dom from './laroux.dom.js';
 
 export default (function () {

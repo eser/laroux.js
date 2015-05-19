@@ -4,6 +4,7 @@ import Deferred from './laroux.deferred.js';
 import events from './laroux.events.js';
 import helpers from './laroux.helpers.js';
 import Stack from './laroux.stack.js';
+import templates from './laroux.templates.js';
 import timers from './laroux.timers.js';
 import vars from './laroux.vars.js';
 
@@ -28,7 +29,17 @@ export default (function () {
         return (parent || document).querySelector(selector);
     };
 
+    helpers.extend(laroux, helpers);
     helpers.extend(laroux, {
+        ajax,
+        date,
+        deferred: Deferred,
+        events,
+        stack: Stack,
+        templates,
+        timers,
+        vars,
+
         cached: {
             single: {},
             array: {},
@@ -38,7 +49,7 @@ export default (function () {
         c: function (selector) {
             if (selector instanceof Array) {
                 return laroux.cached.array[selector] || (
-                    laroux.cached.array[selector] = laroux.toArray(
+                    laroux.cached.array[selector] = helpers.toArray(
                         document.querySelectorAll(selector)
                     )
                 );
@@ -70,32 +81,8 @@ export default (function () {
         }
     });
 
-    helpers.extend(laroux, helpers);
-    helpers.extend(laroux, {
-        ajax,
-        date,
-        deferred: Deferred,
-        events,
-        stack: Stack,
-        timers,
-        vars
-    });
-
     if (global.$l === undefined) {
         global.$l = laroux;
-    }
-
-    if (typeof document !== 'undefined') {
-        document.addEventListener(
-            'DOMContentLoaded',
-            function () {
-                if (!laroux.readyPassed) {
-                    events.invoke('ContentLoaded');
-                    setInterval(timers.ontick, 100);
-                    laroux.readyPassed = true;
-                }
-            }
-        );
     }
 
     return laroux;

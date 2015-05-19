@@ -48,7 +48,8 @@ module.exports = {
                         '~/base/js/laroux.deferred.js',
                         '~/base/js/laroux.vars.js',
                         '~/base/js/laroux.date.js',
-                        '~/base/js/laroux.stack.js'
+                        '~/base/js/laroux.stack.js',
+                        '~/base/js/laroux.templates.js'
                     ]
                 }
             ]
@@ -77,7 +78,7 @@ module.exports = {
             },
 
             jsBrowserifyEntryPoints: [
-                'laroux.js'
+                'web/laroux.web.js'
             ],
 
             jsBrowserifyOutputFile: '_browserified.js',
