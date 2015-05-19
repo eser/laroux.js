@@ -41,7 +41,7 @@
 Object.defineProperty(exports, '__esModule', {
     value: true
 });
-exports.extend = extend;
+exports['default'] = extend;
 
 function extend(target, source) {
     'use strict';
@@ -66,3 +66,5 @@ function extend(target, source) {
 
     return target;
 }
+
+module.exports = exports['default'];

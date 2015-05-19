@@ -10,7 +10,7 @@
 Object.defineProperty(exports, '__esModule', {
     value: true
 });
-exports.toArray = toArray;
+exports['default'] = toArray;
 
 function toArray(obj) {
     'use strict';
@@ -24,3 +24,5 @@ function toArray(obj) {
 
     return items;
 }
+
+module.exports = exports['default'];

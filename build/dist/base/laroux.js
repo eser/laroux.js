@@ -11,18 +11,22 @@ Object.defineProperty(exports, '__esModule', {
     value: true
 });
 
-var _larouxExtendJs = require('./laroux.extend.js');
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-var _larouxExtendNsJs = require('./laroux.extendNs.js');
+var _larouxHelpersJs = require('./laroux.helpers.js');
 
-var _larouxToArrayJs = require('./laroux.toArray.js');
+var _larouxHelpersJs2 = _interopRequireDefault(_larouxHelpersJs);
+
+var _larouxTestJs = require('./laroux.test.js');
+
+var _larouxTestJs2 = _interopRequireDefault(_larouxTestJs);
 
 exports['default'] = (function () {
     'use strict';
 
     var laroux = function laroux(selector, parent) {
         if (selector instanceof Array) {
-            return (0, _larouxToArrayJs.toArray)((parent || document).querySelectorAll(selector));
+            return _larouxHelpersJs2['default'].toArray((parent || document).querySelectorAll(selector));
         }
 
         // FIXME: Laroux: non-chromium optimization, but it runs
@@ -36,10 +40,9 @@ exports['default'] = (function () {
         return (parent || document).querySelector(selector);
     };
 
-    (0, _larouxExtendJs.extend)(laroux, {
-        extend: _larouxExtendJs.extend,
-        extendNs: _larouxExtendNsJs.extendNs,
-        toArray: _larouxToArrayJs.toArray
+    _larouxHelpersJs2['default'].extend(laroux, _larouxHelpersJs2['default']);
+    _larouxHelpersJs2['default'].extend(laroux, {
+        test: _larouxTestJs2['default']
     });
 
     if (global.$l === undefined) {

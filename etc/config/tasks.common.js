@@ -41,9 +41,8 @@ module.exports = {
                     dest: './build/dist/base/',
                     files: [
                         '~/base/js/laroux.js',
-                        '~/base/js/laroux.extend.js',
-                        '~/base/js/laroux.extendNs.js',
-                        '~/base/js/laroux.toArray.js'
+                        '~/base/js/laroux.helpers.js',
+                        '~/base/js/laroux.test.js'
                     /*
                         '~/base/js/laroux.js',
                         '~/base/js/laroux.helpers.js',

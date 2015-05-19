@@ -1,13 +1,12 @@
-import {extend} from './laroux.extend.js';
-import {extendNs} from './laroux.extendNs.js';
-import {toArray} from './laroux.toArray.js';
+import helpers from './laroux.helpers.js';
+import Test from './laroux.test.js';
 
 export default (function () {
     'use strict';
 
     var laroux = function (selector, parent) {
         if (selector instanceof Array) {
-            return toArray(
+            return helpers.toArray(
                 (parent || document).querySelectorAll(selector)
             );
         }
@@ -23,10 +22,9 @@ export default (function () {
         return (parent || document).querySelector(selector);
     };
 
-    extend(laroux, {
-        extend,
-        extendNs,
-        toArray
+    helpers.extend(laroux, helpers);
+    helpers.extend(laroux, {
+        test: Test
     });
 
     if (global.$l === undefined) {

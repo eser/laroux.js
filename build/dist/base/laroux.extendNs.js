@@ -10,9 +10,13 @@
 Object.defineProperty(exports, '__esModule', {
     value: true
 });
-exports.extendNs = extendNs;
+exports['default'] = extendNs;
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
 var _larouxExtendJs = require('./laroux.extend.js');
+
+var _larouxExtendJs2 = _interopRequireDefault(_larouxExtendJs);
 
 function extendNs(target, path, source) {
     'use strict';
@@ -33,8 +37,10 @@ function extendNs(target, path, source) {
 
     if (source !== undefined) {
         // might be replaced w/ $l.extend method
-        (0, _larouxExtendJs.extend)(ptr, source);
+        (0, _larouxExtendJs2['default'])(ptr, source);
     }
 
     return target;
 }
+
+module.exports = exports['default'];
