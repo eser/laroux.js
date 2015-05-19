@@ -110,6 +110,14 @@ exports['default'] = (function () {
             }
 
             fnc();
+        },
+
+        setReady: function setReady() {
+            if (!laroux.readyPassed) {
+                _larouxEventsJs2['default'].invoke('ContentLoaded');
+                setInterval(_larouxTimersJs2['default'].ontick, 100);
+                laroux.readyPassed = true;
+            }
         }
     });
 

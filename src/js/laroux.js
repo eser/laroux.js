@@ -78,6 +78,14 @@ export default (function () {
             }
 
             fnc();
+        },
+
+        setReady: function () {
+            if (!laroux.readyPassed) {
+                events.invoke('ContentLoaded');
+                setInterval(timers.ontick, 100);
+                laroux.readyPassed = true;
+            }
         }
     });
 

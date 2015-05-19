@@ -1,8 +1,6 @@
 import laroux from '../laroux.js';
 
-import events from '../laroux.events.js';
 import helpers from '../laroux.helpers.js';
-import timers from '../laroux.timers.js';
 
 import anim from './laroux.anim.js';
 import css from './laroux.css.js';
@@ -28,13 +26,7 @@ export default (function () {
     if (typeof document !== 'undefined') {
         document.addEventListener(
             'DOMContentLoaded',
-            function () {
-                if (!laroux.readyPassed) {
-                    events.invoke('ContentLoaded');
-                    setInterval(timers.ontick, 100);
-                    laroux.readyPassed = true;
-                }
-            }
+            laroux.setReady
         );
     }
 

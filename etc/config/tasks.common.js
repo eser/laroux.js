@@ -50,6 +50,16 @@ module.exports = {
                         '~/base/js/laroux.date.js',
                         '~/base/js/laroux.stack.js',
                         '~/base/js/laroux.templates.js'
+                        /*
+                        '~/base/js/web/laroux.web.js',
+                        '~/base/js/web/laroux.anim.js',
+                        '~/base/js/web/laroux.css.js',
+                        '~/base/js/web/laroux.dom.js',
+                        '~/base/js/web/laroux.forms.js',
+                        '~/base/js/web/laroux.keys.js',
+                        '~/base/js/web/laroux.mvc.js',
+                        '~/base/js/web/laroux.touch.js'
+                        */
                     ]
                 }
             ]
@@ -104,37 +114,8 @@ module.exports = {
                     concat: 'laroux.js',
                     dest: './build/dist/web/',
                     files: [
+                        // FIXME '~/web/js/laroux.backward.js',
                         '~/web/js/_browserified.js'
-                    /*
-                        '~/web/js/laroux.js',
-                        '~/web/js/laroux.helpers.js',
-                        '~/web/js/laroux.events.js',
-                        '~/web/js/laroux.ajax.js',
-                        '~/web/js/laroux.timers.js',
-                        '~/web/js/laroux.promise.js',
-                        '~/web/js/laroux.vars.js',
-                        '~/web/js/laroux.date.js',
-                        '~/web/js/laroux.stack.js',
-
-                        '~/web/js/laroux.css.js',
-                        '~/web/js/laroux.dom.js',
-                        '~/web/js/laroux.forms.js',
-                        '~/web/js/laroux.wrapper.js',
-
-                        '~/web/js/laroux.anim.js',
-                        '~/web/js/laroux.keys.js',
-                        '~/web/js/laroux.mvc.js',
-                        '~/web/js/laroux.templates.js',
-
-                        '~/web/js/laroux.touch.js',
-                        '~/web/js/laroux.web.js',
-
-                        '~/web/js/laroux.ui.js',
-                        '~/web/js/laroux.ui.popup.js',
-                        '~/web/js/laroux.ui.loading.js',
-                        '~/web/js/laroux.ui.dynamicDates.js',
-                        '~/web/js/laroux.ui.scrollView.js'
-                    */
                     ]
                 },
 

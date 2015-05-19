@@ -18,17 +18,9 @@ var _larouxJs = require('../laroux.js');
 
 var _larouxJs2 = _interopRequireDefault(_larouxJs);
 
-var _larouxEventsJs = require('../laroux.events.js');
-
-var _larouxEventsJs2 = _interopRequireDefault(_larouxEventsJs);
-
 var _larouxHelpersJs = require('../laroux.helpers.js');
 
 var _larouxHelpersJs2 = _interopRequireDefault(_larouxHelpersJs);
-
-var _larouxTimersJs = require('../laroux.timers.js');
-
-var _larouxTimersJs2 = _interopRequireDefault(_larouxTimersJs);
 
 var _larouxAnimJs = require('./laroux.anim.js');
 
@@ -72,20 +64,14 @@ exports['default'] = (function () {
     });
 
     if (typeof document !== 'undefined') {
-        document.addEventListener('DOMContentLoaded', function () {
-            if (!_larouxJs2['default'].readyPassed) {
-                _larouxEventsJs2['default'].invoke('ContentLoaded');
-                setInterval(_larouxTimersJs2['default'].ontick, 100);
-                _larouxJs2['default'].readyPassed = true;
-            }
-        });
+        document.addEventListener('DOMContentLoaded', _larouxJs2['default'].setReady);
     }
 
     return _larouxJs2['default'];
 })();
 
 module.exports = exports['default'];
-},{"../laroux.events.js":5,"../laroux.helpers.js":6,"../laroux.js":7,"../laroux.timers.js":10,"./laroux.anim.js":12,"./laroux.css.js":13,"./laroux.dom.js":14,"./laroux.forms.js":15,"./laroux.keys.js":16,"./laroux.mvc.js":17,"./laroux.touch.js":18}],2:[function(require,module,exports){
+},{"../laroux.helpers.js":6,"../laroux.js":7,"./laroux.anim.js":12,"./laroux.css.js":13,"./laroux.dom.js":14,"./laroux.forms.js":15,"./laroux.keys.js":16,"./laroux.mvc.js":17,"./laroux.touch.js":18}],2:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -1328,6 +1314,14 @@ exports['default'] = (function () {
             }
 
             fnc();
+        },
+
+        setReady: function setReady() {
+            if (!laroux.readyPassed) {
+                _larouxEventsJs2['default'].invoke('ContentLoaded');
+                setInterval(_larouxTimersJs2['default'].ontick, 100);
+                laroux.readyPassed = true;
+            }
         }
     });
 
