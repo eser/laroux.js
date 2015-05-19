@@ -42,7 +42,7 @@ module.exports = {
                     files: [
                         '~/base/js/laroux.js',
                         '~/base/js/laroux.helpers.js',
-                        '~/base/js/laroux.test.js'
+                        '~/base/js/laroux.stack.js'
                     /*
                         '~/base/js/laroux.js',
                         '~/base/js/laroux.helpers.js',

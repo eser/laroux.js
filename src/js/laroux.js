@@ -1,5 +1,5 @@
 import helpers from './laroux.helpers.js';
-import Test from './laroux.test.js';
+import Stack from './laroux.stack.js';
 
 export default (function () {
     'use strict';
@@ -24,7 +24,7 @@ export default (function () {
 
     helpers.extend(laroux, helpers);
     helpers.extend(laroux, {
-        test: Test
+        stack: Stack
     });
 
     if (global.$l === undefined) {

@@ -19,9 +19,9 @@ var _larouxHelpersJs = require('./laroux.helpers.js');
 
 var _larouxHelpersJs2 = _interopRequireDefault(_larouxHelpersJs);
 
-var _larouxTestJs = require('./laroux.test.js');
+var _larouxStackJs = require('./laroux.stack.js');
 
-var _larouxTestJs2 = _interopRequireDefault(_larouxTestJs);
+var _larouxStackJs2 = _interopRequireDefault(_larouxStackJs);
 
 exports['default'] = (function () {
     'use strict';
@@ -44,7 +44,7 @@ exports['default'] = (function () {
 
     _larouxHelpersJs2['default'].extend(laroux, _larouxHelpersJs2['default']);
     _larouxHelpersJs2['default'].extend(laroux, {
-        test: _larouxTestJs2['default']
+        stack: _larouxStackJs2['default']
     });
 
     if (global.$l === undefined) {
@@ -56,7 +56,7 @@ exports['default'] = (function () {
 
 module.exports = exports['default'];
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./laroux.helpers.js":2,"./laroux.test.js":3}],2:[function(require,module,exports){
+},{"./laroux.helpers.js":2,"./laroux.stack.js":3}],2:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -504,21 +504,148 @@ var _createClass = (function () { function defineProperties(target, props) { for
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
-var Test = (function () {
-    function Test() {
-        _classCallCheck(this, Test);
+var Stack = (function () {
+    function Stack(data, depth, top) {
+        _classCallCheck(this, Stack);
+
+        this._data = {};
+        this._depth = depth;
+        this._top = top || this;
+
+        if (data) {
+            this.setRange(data);
+        }
     }
 
-    _createClass(Test, [{
-        key: 'test',
-        value: function test() {
-            console.log('test done.');
+    _createClass(Stack, [{
+        key: 'set',
+        value: function set(key, value) {
+            // delete this._data[key];
+
+            var type = typeof value;
+            switch (type) {
+                case 'function':
+                    this._data[key] = value;
+
+                    Object.defineProperty(this, key, {
+                        configurable: true,
+                        get: function get() {
+                            return this._data[key]();
+                        }
+                    });
+                    break;
+
+                default:
+                    /*
+                    if (type == 'object') {
+                        this._data[key] = new Stack(
+                            value,
+                            this._depth ?
+                                this._depth + '.' + key :
+                                key,
+                            this._top
+                        );
+                    } else {
+                        this._data[key] = value;
+                    }
+                    */
+                    this._data[key] = value;
+
+                    Object.defineProperty(this, key, {
+                        configurable: true,
+                        get: function get() {
+                            return this._data[key];
+                        },
+                        set: function set(newValue) {
+                            var oldValue = this._data[key];
+                            if (this._data[key] === newValue) {
+                                return;
+                            }
+
+                            // this.set(this, key, newValue);
+                            this._data[key] = newValue;
+                            this._top.onupdate({ scope: this, key: key, oldValue: oldValue, newValue: newValue });
+                        }
+                    });
+                    break;
+            }
         }
+    }, {
+        key: 'setRange',
+        value: function setRange(values) {
+            for (var valueKey in values) {
+                if (!values.hasOwnProperty(valueKey)) {
+                    continue;
+                }
+
+                this.set(valueKey, values[valueKey]);
+            }
+        }
+    }, {
+        key: 'get',
+        value: function get(key, defaultValue) {
+            return this[key] || defaultValue || null;
+        }
+    }, {
+        key: 'getRange',
+        value: function getRange(keys) {
+            var values = {};
+
+            for (var item in keys) {
+                if (!keys.hasOwnProperty(item)) {
+                    continue;
+                }
+
+                values[keys[item]] = this[keys[item]];
+            }
+
+            return values;
+        }
+    }, {
+        key: 'keys',
+        value: function keys() {
+            return Object.keys(this._data);
+        }
+    }, {
+        key: 'length',
+        value: function length() {
+            return Object.keys(this._data).length;
+        }
+    }, {
+        key: 'exists',
+        value: function exists(key) {
+            return key in this._data;
+        }
+    }, {
+        key: 'remove',
+        value: function remove(key) {
+            if (key in this._data) {
+                delete this[key];
+                delete this._data[key];
+            }
+        }
+    }, {
+        key: 'clear',
+        value: function clear() {
+            for (var item in this._data) {
+                if (!this._data.hasOwnProperty(item)) {
+                    continue;
+                }
+
+                delete this[item];
+                delete this._data[item];
+            }
+
+            this._data = {};
+        }
+    }, {
+        key: 'onupdate',
+        value: function onupdate(event) {}
     }]);
 
-    return Test;
+    return Stack;
 })();
 
-exports['default'] = Test;
+exports['default'] = Stack;
 module.exports = exports['default'];
 },{}]},{},[1]);

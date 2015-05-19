@@ -17,9 +17,9 @@ var _larouxHelpersJs = require('./laroux.helpers.js');
 
 var _larouxHelpersJs2 = _interopRequireDefault(_larouxHelpersJs);
 
-var _larouxTestJs = require('./laroux.test.js');
+var _larouxStackJs = require('./laroux.stack.js');
 
-var _larouxTestJs2 = _interopRequireDefault(_larouxTestJs);
+var _larouxStackJs2 = _interopRequireDefault(_larouxStackJs);
 
 exports['default'] = (function () {
     'use strict';
@@ -42,7 +42,7 @@ exports['default'] = (function () {
 
     _larouxHelpersJs2['default'].extend(laroux, _larouxHelpersJs2['default']);
     _larouxHelpersJs2['default'].extend(laroux, {
-        test: _larouxTestJs2['default']
+        stack: _larouxStackJs2['default']
     });
 
     if (global.$l === undefined) {
