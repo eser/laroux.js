@@ -110,7 +110,7 @@ export default (function () {
                 if (timestamp > currentItem.startTime + currentItem.time) {
                     if (currentItem.reset === true) {
                         currentItem.startTime = timestamp;
-                        if (currentItem.object === document.body && currentItem.property == 'scrollTop') {
+                        if (currentItem.object === document.body && currentItem.property === 'scrollTop') {
                             scrollTo(0, currentItem.from);
                             // setTimeout(function () { scrollTo(0, currentItem.from); }, 1);
                         } else {
@@ -146,7 +146,7 @@ export default (function () {
                 anim.fx.easing(shift)
             ) + newanim.unit;
 
-            if (newanim.object === document.body && newanim.property == 'scrollTop') {
+            if (newanim.object === document.body && newanim.property === 'scrollTop') {
                 scrollTo(0, value);
                 // setTimeout(function () { scrollTo(0, value); }, 1);
             } else {

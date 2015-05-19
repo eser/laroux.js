@@ -101,15 +101,15 @@ export default (function () {
                 return;
             }
 
-            if (element.tagName == 'INPUT') {
+            if (element.tagName === 'INPUT') {
                 var type = element.getAttribute('type').toUpperCase();
 
-                if (type == 'FILE') {
+                if (type === 'FILE') {
                     element.files[0] = value;
                     return;
                 }
 
-                if (type == 'CHECKBOX' || type == 'RADIO') {
+                if (type === 'CHECKBOX' || type === 'RADIO') {
                     if (value === true || value == element.value) {
                         element.checked = true;
                     }
@@ -117,7 +117,7 @@ export default (function () {
                     return;
                 }
 
-                if (type == 'TEXT' || type == 'PASSWORD' || type == 'HIDDEN') {
+                if (type === 'TEXT' || type === 'PASSWORD' || type === 'HIDDEN') {
                     element.value = value;
                     return;
                 }
@@ -125,7 +125,7 @@ export default (function () {
                 return;
             }
 
-            if (element.tagName == 'TEXTAREA') {
+            if (element.tagName === 'TEXTAREA') {
                 element.value = value;
                 return;
             }

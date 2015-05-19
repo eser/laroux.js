@@ -50,7 +50,7 @@ exports['default'] = (function () {
                         /*jslint evil:true */
                         obj = eval(data.object);
                     } else {
-                        // if (data.format == 'xml') {
+                        // if (data.format === 'xml') {
                         obj = data.object;
                     }
 

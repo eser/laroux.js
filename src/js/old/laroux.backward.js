@@ -115,7 +115,7 @@
                     var eventListener = eventListeners[i];
 
                     if (eventListener.object === this && eventListener.type === eventname && eventListener.listener === callback) {
-                        if (eventname != 'DOMContentLoaded') {
+                        if (eventname !== 'DOMContentLoaded') {
                             this.detachEvent('on' + eventname, eventListener.wrapper);
                         }
 
@@ -146,7 +146,7 @@
         }
 
         document.attachEvent('onreadystatechange', function () {
-            if (document.readyState == 'complete') {
+            if (document.readyState === 'complete') {
                 var eventObject = document.createEventObject();
                 // eventObject.srcElement = window;
 

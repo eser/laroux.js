@@ -1,4 +1,5 @@
 import dom from './laroux.dom.js';
+import laroux from './laroux.js';
 
 export default (function () {
     'use strict';
@@ -133,7 +134,7 @@ export default (function () {
         }
     };
 
-    // laroux.ready(touch.init);
+    laroux.ready(touch.init);
 
     return touch;
 

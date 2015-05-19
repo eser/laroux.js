@@ -63,7 +63,7 @@ export default (function () {
                     continue;
                 }
 
-                if (typeof values[name] != 'function') {
+                if (typeof values[name] !== 'function') {
                     if (rfc3986 || false) {
                         uri += '&' + encodeURIComponent(name).replace(regEx, '+') + '=' + encodeURIComponent(values[name].toString()).replace(regEx, '+');
                     } else {
@@ -83,7 +83,7 @@ export default (function () {
                     continue;
                 }
 
-                if (typeof values[name] != 'function') {
+                if (typeof values[name] !== 'function') {
                     data.append(name, values[name]);
                 }
             }
@@ -118,7 +118,7 @@ export default (function () {
 
             for (var j = 0; j < value.length; j++) {
                 var currChar = value.charAt(j);
-                if (currChar == '-') {
+                if (currChar === '-') {
                     flag = true;
                     continue;
                 }
@@ -135,7 +135,7 @@ export default (function () {
 
             for (var j = 0; j < value.length; j++) {
                 var currChar = value.charAt(j);
-                if (currChar != '-' && currChar == currChar.toUpperCase()) {
+                if (currChar !== '-' && currChar == currChar.toUpperCase()) {
                     output += '-' + currChar.toLowerCase();
                     continue;
                 }

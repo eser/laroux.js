@@ -34,7 +34,7 @@ export default class Stack {
 
         default:
             /*
-            if (type == 'object') {
+            if (type === 'object') {
                 this._data[key] = new Stack(
                     value,
                     this._depth ?

@@ -28,6 +28,48 @@ export default (function () {
         return (parent || document).querySelector(selector);
     };
 
+    helpers.extend(laroux, {
+        cached: {
+            single: {},
+            array: {},
+            id: {}
+        },
+
+        c: function (selector) {
+            if (selector instanceof Array) {
+                return laroux.cached.array[selector] || (
+                    laroux.cached.array[selector] = laroux.toArray(
+                        document.querySelectorAll(selector)
+                    )
+                );
+            }
+
+            return laroux.cached.single[selector] || (
+                laroux.cached.single[selector] = document.querySelector(selector)
+            );
+        },
+
+        id: function (selector, parent) {
+            return (parent || document).getElementById(selector);
+        },
+
+        idc: function (selector) {
+            return laroux.cached.id[selector] ||
+                (laroux.cached.id[selector] = document.getElementById(selector));
+        },
+
+        readyPassed: false,
+
+        ready: function (fnc) {
+            if (!laroux.readyPassed) {
+                events.add('ContentLoaded', fnc);
+                return;
+            }
+
+            fnc();
+        }
+    });
+
     helpers.extend(laroux, helpers);
     helpers.extend(laroux, {
         ajax,
@@ -41,6 +83,19 @@ export default (function () {
 
     if (global.$l === undefined) {
         global.$l = laroux;
+    }
+
+    if (typeof document !== 'undefined') {
+        document.addEventListener(
+            'DOMContentLoaded',
+            function () {
+                if (!laroux.readyPassed) {
+                    events.invoke('ContentLoaded');
+                    setInterval(timers.ontick, 100);
+                    laroux.readyPassed = true;
+                }
+            }
+        );
     }
 
     return laroux;

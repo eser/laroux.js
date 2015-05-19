@@ -64,6 +64,41 @@ exports['default'] = (function () {
         return (parent || document).querySelector(selector);
     };
 
+    _larouxHelpersJs2['default'].extend(laroux, {
+        cached: {
+            single: {},
+            array: {},
+            id: {}
+        },
+
+        c: function c(selector) {
+            if (selector instanceof Array) {
+                return laroux.cached.array[selector] || (laroux.cached.array[selector] = laroux.toArray(document.querySelectorAll(selector)));
+            }
+
+            return laroux.cached.single[selector] || (laroux.cached.single[selector] = document.querySelector(selector));
+        },
+
+        id: function id(selector, parent) {
+            return (parent || document).getElementById(selector);
+        },
+
+        idc: function idc(selector) {
+            return laroux.cached.id[selector] || (laroux.cached.id[selector] = document.getElementById(selector));
+        },
+
+        readyPassed: false,
+
+        ready: function ready(fnc) {
+            if (!laroux.readyPassed) {
+                _larouxEventsJs2['default'].add('ContentLoaded', fnc);
+                return;
+            }
+
+            fnc();
+        }
+    });
+
     _larouxHelpersJs2['default'].extend(laroux, _larouxHelpersJs2['default']);
     _larouxHelpersJs2['default'].extend(laroux, {
         ajax: _larouxAjaxJs2['default'],
@@ -77,6 +112,16 @@ exports['default'] = (function () {
 
     if (global.$l === undefined) {
         global.$l = laroux;
+    }
+
+    if (typeof document !== 'undefined') {
+        document.addEventListener('DOMContentLoaded', function () {
+            if (!laroux.readyPassed) {
+                _larouxEventsJs2['default'].invoke('ContentLoaded');
+                setInterval(_larouxTimersJs2['default'].ontick, 100);
+                laroux.readyPassed = true;
+            }
+        });
     }
 
     return laroux;

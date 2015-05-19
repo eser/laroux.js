@@ -59,7 +59,7 @@ export default (function () {
         setProperty: function (element, properties, value) {
             var elements = helpers.getAsArray(element);
 
-            if (typeof properties == 'string') {
+            if (typeof properties === 'string') {
                 var oldProperties = properties;
                 properties = {};
                 properties[oldProperties] = value;

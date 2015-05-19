@@ -54,11 +54,11 @@ export default (function () {
                         continue;
                     }
 
-                    if (binding[item].charAt(0) == '\'') {
+                    if (binding[item].charAt(0) === '\'') {
                         app.model[item] = binding[item].substring(1, binding[item].length - 1);
-                    } else if (binding[item].substring(0, 5) == 'attr.') {
+                    } else if (binding[item].substring(0, 5) === 'attr.') {
                         app.model[item] = elem.getAttribute(binding[item].substring(5));
-                    } else if (binding[item].substring(0, 5) == 'prop.') {
+                    } else if (binding[item].substring(0, 5) === 'prop.') {
                         app.model[item] = elem[binding[item].substring(5)];
                     }
                 }
@@ -76,7 +76,7 @@ export default (function () {
 
         scanElements: function (app, element) {
             for (var i = 0, atts = element.attributes, m = atts.length; i < m; i++) {
-                if (atts[i].name == 'lr-bind') {
+                if (atts[i].name === 'lr-bind') {
                     var binding1 = mvc.bindStringParser(atts[i].value);
 
                     for (var item in binding1) {
@@ -93,7 +93,7 @@ export default (function () {
                             target: item
                         });
                     }
-                } else if (atts[i].name == 'lr-event') {
+                } else if (atts[i].name === 'lr-event') {
                     var binding2 = mvc.bindStringParser(atts[i].value);
 
                     app.eventElements.push({
@@ -113,7 +113,7 @@ export default (function () {
         update: function (appKey, keys) {
             var app = mvc.apps[appKey];
 
-            if (typeof keys == 'undefined') {
+            if (typeof keys === 'undefined') {
                 keys = app.modelKeys;
             }
 
@@ -125,12 +125,12 @@ export default (function () {
                 var boundElement = app.boundElements[keys[i]];
 
                 for (var j = 0, length2 = boundElement.length; j < length2; j++) {
-                    if (boundElement[j].target.substring(0, 6) == 'style.') {
+                    if (boundElement[j].target.substring(0, 6) === 'style.') {
                         boundElement[j].element.style[boundElement[j].target.substring(6)] = helpers.getElement(app.model, keys[i]);
-                    } else if (boundElement[j].target.substring(0, 5) == 'attr.') {
+                    } else if (boundElement[j].target.substring(0, 5) === 'attr.') {
                         // FIXME removeAttribute on null value?
                         boundElement[j].element.setAttribute(boundElement[j].target.substring(5), helpers.getElement(app.model, keys[i]));
-                    } else if (boundElement[j].target.substring(0, 5) == 'prop.') {
+                    } else if (boundElement[j].target.substring(0, 5) === 'prop.') {
                         // FIXME removeAttribute on null value?
                         boundElement[j].element[boundElement[j].target.substring(5)] = helpers.getElement(app.model, keys[i]);
                     }
@@ -148,7 +148,7 @@ export default (function () {
                 var curr = text.charAt(i);
 
                 if (state === 0) {
-                    if (curr == ':') {
+                    if (curr === ':') {
                         state = 1;
                         lastBuffer = buffer.trim();
                         buffer = '';
@@ -156,7 +156,7 @@ export default (function () {
                     }
                 }
 
-                if (curr == ',') {
+                if (curr === ',') {
                     state = 0;
                     result[lastBuffer] = buffer.trim();
                     buffer = '';

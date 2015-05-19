@@ -26,7 +26,7 @@ export default (function () {
                         /*jshint evil:true */
                         /*jslint evil:true */
                         obj = eval(data.object);
-                    } else { // if (data.format == 'xml') {
+                    } else { // if (data.format === 'xml') {
                         obj = data.object;
                     }
 

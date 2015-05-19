@@ -67,7 +67,7 @@ export default (function () {
             }
 
             var elements = helpers.getAsArray(element);
-            if (typeof datanames == 'string') {
+            if (typeof datanames === 'string') {
                 var oldDatanames = datanames;
                 datanames = {};
                 datanames[oldDatanames] = value;
@@ -192,7 +192,7 @@ export default (function () {
 
                         elem.setAttribute(item2, children[item2]);
                     }
-                } else if (/* typeof children == 'string' && */children.length > 0) {
+                } else if (/* typeof children === 'string' && */children.length > 0) {
                     dom.append(elem, children);
                 }
             }
@@ -259,7 +259,7 @@ export default (function () {
                 elem.onload = elem.onreadystatechange = null;
                 loaded = true;
                 if (triggerName) {
-                    if (typeof triggerName == 'function') {
+                    if (typeof triggerName === 'function') {
                         triggerName();
                     } else {
                         triggers.ontrigger(triggerName);
@@ -288,7 +288,7 @@ export default (function () {
                 elem.onload = elem.onreadystatechange = null;
                 loaded = true;
                 if (triggerName) {
-                    if (typeof triggerName == 'function') {
+                    if (typeof triggerName === 'function') {
                         triggerName();
                     } else {
                         triggers.ontrigger(triggerName);
@@ -376,34 +376,34 @@ export default (function () {
 
                     switch (operation) {
                         case 'setprop':
-                            if (binding.substring(0, 1) == '_') {
+                            if (binding.substring(0, 1) === '_') {
                                 element.setAttribute(binding.substring(1), value);
                                 continue;
                             }
 
-                            if (binding == 'content') {
+                            if (binding === 'content') {
                                 dom.replace(element, value);
                                 continue;
                             }
                             break;
                         case 'addprop':
-                            if (binding.substring(0, 1) == '_') {
+                            if (binding.substring(0, 1) === '_') {
                                 element.setAttribute(binding.substring(1), element.getAttribute(binding.substring(1)) + value);
                                 continue;
                             }
 
-                            if (binding == 'content') {
+                            if (binding === 'content') {
                                 dom.append(element, value);
                                 continue;
                             }
                             break;
                         case 'removeprop':
-                            if (value.substring(0, 1) == '_') {
+                            if (value.substring(0, 1) === '_') {
                                 element.removeAttribute(value.substring(1));
                                 continue;
                             }
 
-                            if (value == 'content') {
+                            if (value === 'content') {
                                 dom.clear(element);
                                 continue;
                             }
