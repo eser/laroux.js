@@ -1,5 +1,11 @@
+import ajax from './laroux.ajax.js';
+import date from './laroux.date.js';
+import Deferred from './laroux.deferred.js';
+import events from './laroux.events.js';
 import helpers from './laroux.helpers.js';
 import Stack from './laroux.stack.js';
+import timers from './laroux.timers.js';
+import vars from './laroux.vars.js';
 
 export default (function () {
     'use strict';
@@ -24,7 +30,13 @@ export default (function () {
 
     helpers.extend(laroux, helpers);
     helpers.extend(laroux, {
-        stack: Stack
+        ajax,
+        date,
+        deferred: Deferred,
+        events,
+        stack: Stack,
+        timers,
+        vars
     });
 
     if (global.$l === undefined) {

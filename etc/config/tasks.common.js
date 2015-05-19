@@ -42,18 +42,13 @@ module.exports = {
                     files: [
                         '~/base/js/laroux.js',
                         '~/base/js/laroux.helpers.js',
-                        '~/base/js/laroux.stack.js'
-                    /*
-                        '~/base/js/laroux.js',
-                        '~/base/js/laroux.helpers.js',
                         '~/base/js/laroux.events.js',
                         '~/base/js/laroux.ajax.js',
                         '~/base/js/laroux.timers.js',
-                        '~/base/js/laroux.promise.js',
+                        '~/base/js/laroux.deferred.js',
                         '~/base/js/laroux.vars.js',
                         '~/base/js/laroux.date.js',
                         '~/base/js/laroux.stack.js'
-                    */
                     ]
                 }
             ]
