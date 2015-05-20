@@ -602,7 +602,7 @@ var Deferred = (function () {
 
             while (callbacks.length > 0) {
                 var callback = callbacks.shift();
-                callback.apply(undefined, args);
+                callback.apply(this, args);
             }
         }
     }, {
@@ -637,7 +637,7 @@ var Deferred = (function () {
             var event = this.events[eventName];
 
             if (event.invoked) {
-                callback.apply(undefined, event.result);
+                callback.apply(this, event.result);
 
                 return this;
             }
@@ -672,13 +672,14 @@ var Deferred = (function () {
         }
     }], [{
         key: 'async',
-        value: function async(fnc) {
+        value: function async() {
             var deferred = new Deferred(),
-                args = arguments;
+                args = _larouxHelpersJs2['default'].toArray(arguments),
+                fnc = args.shift();
 
             setTimeout(function () {
                 try {
-                    var result = fnc.apply(undefined, args);
+                    var result = fnc.apply(deferred, args);
                     deferred.resolve(result);
                 } catch (err) {
                     deferred.reject(err);
@@ -1674,66 +1675,102 @@ Object.defineProperty(exports, '__esModule', {
     value: true
 });
 
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+var _larouxHelpersJs = require('./laroux.helpers.js');
+
+var _larouxHelpersJs2 = _interopRequireDefault(_larouxHelpersJs);
+
 exports['default'] = (function () {
     'use strict';
 
     var vars = {
-        cookiePath: '/',
+        storages: {
+            cookie: {
+                defaultPath: '/',
 
-        getCookie: function getCookie(name, defaultValue) {
-            var re = new RegExp(encodeURIComponent(name) + '=[^;]+', 'i'),
-                match = document.cookie.match(re);
+                get: function get(name, defaultValue) {
+                    var re = new RegExp(encodeURIComponent(name) + '=[^;]+', 'i'),
+                        match = document.cookie.match(re);
 
-            if (!match) {
-                return defaultValue || null;
+                    if (!match) {
+                        return defaultValue || null;
+                    }
+
+                    return decodeURIComponent(match[0].split('=')[1]);
+                },
+
+                set: function set(name, value, expires, path) {
+                    var expireValue = '';
+                    if (expires) {
+                        expireValue = '; expires=' + expires.toGMTString();
+                    }
+
+                    document.cookie = encodeURIComponent(name) + '=' + encodeURIComponent(value) + expireValue + '; path=' + (path || vars.storages.cookie.defaultPath);
+                },
+
+                remove: function remove(name, path) {
+                    document.cookie = encodeURIComponent(name) + '=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=' + (path || vars.storages.cookie.defaultPath);
+                }
+            },
+
+            local: {
+                get: function get(name, defaultValue) {
+                    if (!(name in localStorage)) {
+                        return defaultValue || null;
+                    }
+
+                    return JSON.parse(localStorage[name]);
+                },
+
+                set: function set(name, value) {
+                    localStorage[name] = JSON.stringify(value);
+                },
+
+                remove: function remove(name) {
+                    delete localStorage[name];
+                }
+            },
+
+            session: {
+                get: function get(name, defaultValue) {
+                    if (!(name in sessionStorage)) {
+                        return defaultValue || null;
+                    }
+
+                    return JSON.parse(sessionStorage[name]);
+                },
+
+                set: function set(name, value) {
+                    sessionStorage[name] = JSON.stringify(value);
+                },
+
+                remove: function remove(name) {
+                    delete sessionStorage[name];
+                }
             }
+        },
+        storage: 'local',
 
-            return decodeURIComponent(match[0].split('=')[1]);
+        get: function get() {
+            var args = _larouxHelpersJs2['default'].toArray(arguments),
+                storage = args.shift();
+
+            return vars.storages[storage].get.apply(this, args);
         },
 
-        setCookie: function setCookie(name, value, expires, path) {
-            var expireValue = '';
-            if (expires) {
-                expireValue = '; expires=' + expires.toGMTString();
-            }
+        set: function set() {
+            var args = _larouxHelpersJs2['default'].toArray(arguments),
+                storage = args.shift();
 
-            document.cookie = encodeURIComponent(name) + '=' + encodeURIComponent(value) + expireValue + '; path=' + (path || vars.cookiePath);
+            return vars.storages[storage].set.apply(this, args);
         },
 
-        removeCookie: function removeCookie(name, path) {
-            document.cookie = encodeURIComponent(name) + '=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=' + (path || vars.cookiePath);
-        },
+        remove: function remove() {
+            var args = _larouxHelpersJs2['default'].toArray(arguments),
+                storage = args.shift();
 
-        getLocal: function getLocal(name, defaultValue) {
-            if (!(name in localStorage)) {
-                return defaultValue || null;
-            }
-
-            return JSON.parse(localStorage[name]);
-        },
-
-        setLocal: function setLocal(name, value) {
-            localStorage[name] = JSON.stringify(value);
-        },
-
-        removeLocal: function removeLocal(name) {
-            delete localStorage[name];
-        },
-
-        getSession: function getSession(name, defaultValue) {
-            if (!(name in sessionStorage)) {
-                return defaultValue || null;
-            }
-
-            return JSON.parse(sessionStorage[name]);
-        },
-
-        setSession: function setSession(name, value) {
-            sessionStorage[name] = JSON.stringify(value);
-        },
-
-        removeSession: function removeSession(name) {
-            delete sessionStorage[name];
+            return vars.storages[storage].remove.apply(this, args);
         }
     };
 
@@ -1741,7 +1778,7 @@ exports['default'] = (function () {
 })();
 
 module.exports = exports['default'];
-},{}],12:[function(require,module,exports){
+},{"./laroux.helpers.js":6}],12:[function(require,module,exports){
 /*jslint node: true */
 'use strict';
 

@@ -10,7 +10,6 @@
         <!-- Latest compiled and minified CSS -->
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" />
         <link rel="stylesheet" href="assets/css/prettify.css" />
-        <link rel="stylesheet" href="assets/css/laroux.min.css" />
         <link rel="stylesheet" href="assets/css/fonts.css" />
         <link rel="stylesheet" href="assets/css/style.css" />
 
@@ -157,10 +156,10 @@
 $l.ajax.getJson(
     'test.json'
 
-).on('done', function (response) {
+).done(function (response) {
     $l.dom.replace($l.id('text-ajax-get-request'), response.testResponse);
 
-}).on('fail', function (error) {
+}).fail(function (error) {
     $l.dom.replace(text, 'Error: ' + error.message);
 
 });
@@ -195,7 +194,7 @@ $l.anim.set({
     time:     800,
     unit:     '',
     reset:    false
-}).start();
+});
                         </pre>
                     </div>
                 </div>
@@ -222,7 +221,7 @@ $l.anim.setCss({
     time:     1200,
     unit:     'px',
     reset:    false
-}).start();
+});
                         </pre>
                     </div>
                 </div>
@@ -916,47 +915,62 @@ $l.dom.setEvent(
             </div>
 
             <div class="example-area">
-                <h3>Cookies</h3>
+                <h3>Set / Read / Remove</h3>
                 <div class="row">
                     <div class="col-sm-4">
-                        <button id="button-vars-cookies-set" class="btn btn-default">Set Cookie</button>
-                        <button id="button-vars-cookies-read" class="btn btn-default">Read Cookie</button>
-                        <button id="button-vars-cookies-remove" class="btn btn-default">Remove Cookie</button>
-                        <div id="text-vars-cookies"></div>
+                        <select id="select-vars" class="form-control">
+                            <option value="cookie">Cookies</option>
+                            <option value="local">LocalStorage</option>
+                            <option value="session">SessionStorage</option>
+                        </select>
+                        <br />
+                        <button id="button-vars-set" class="btn btn-default">Set</button>
+                        <button id="button-vars-read" class="btn btn-default">Read</button>
+                        <button id="button-vars-remove" class="btn btn-default">Remove</button>
+                        <div id="text-vars"></div>
                     </div>
                     <div class="col-sm-8">
                         <h4>HTML</h4>
                         <pre class="prettyprint">
-&lt;button id="button-vars-cookies-set" class="btn btn-default"&gt;Set Cookie&lt;/button&gt;
-&lt;button id="button-vars-cookies-read" class="btn btn-default"&gt;Read Cookie&lt;/button&gt;
-&lt;button id="button-vars-cookies-remove" class="btn btn-default"&gt;Remove Cookie&lt;/button&gt;
-&lt;div id="text-vars-cookies"&gt;&lt;/div&gt;
+&lt;select id="select-vars" class="form-control"&gt;
+    &lt;option value="cookie"&gt;Cookies&lt;/option&gt;
+    &lt;option value="local"&gt;LocalStorage&lt;/option&gt;
+    &lt;option value="session"&gt;SessionStorage&lt;/option&gt;
+&lt;/select&gt;
+&lt;br /&gt;
+&lt;button id="button-vars-set" class="btn btn-default"&gt;Set&lt;/button&gt;
+&lt;button id="button-vars-read" class="btn btn-default"&gt;Read&lt;/button&gt;
+&lt;button id="button-vars-remove" class="btn btn-default"&gt;Remove&lt;/button&gt;
+&lt;div id="text-vars"&gt;&lt;/div&gt;
                         </pre>
 
                         <h4>Javascript</h4>
                         <pre class="prettyprint">
-var text = $l.id('text-vars-cookies');
+var text = $l.id('text-vars');
+var select = $l.id('select-vars');
 
 $l.dom.setEvent(
-    $l.id('button-vars-cookies-set'),
+    $l.id('button-vars-set'),
     'click',
     function() {
-        $l.vars.setCookie('demopage', 'a cookie test&lt;br /&gt;');
-        $l.dom.append(text, 'cookie set');
+        var storage = select.options[select.selectedIndex].value;
+        $l.vars.set(storage, 'demopage', 'a ' + storage + ' test&lt;br /&gt;');
+        $l.dom.append(text, storage + ' set');
 
         return false;
     }
 );
 
 $l.dom.setEvent(
-    $l.id('button-vars-cookies-read'),
+    $l.id('button-vars-read'),
     'click',
     function() {
-        var value = $l.vars.getCookie('demopage');
+        var storage = select.options[select.selectedIndex].value;
+        var value = $l.vars.get(storage, 'demopage');
         if (value !== null) {
-            $l.dom.append(text, 'cookie\'s value is: ' + value + '&lt;br /&gt;');
+            $l.dom.append(text, storage + '\'s value is: ' + value + '&lt;br /&gt;');
         } else {
-            $l.dom.append(text, 'you need to set a cookie first&lt;br /&gt;');
+            $l.dom.append(text, 'you need to set a ' + storage + ' first&lt;br /&gt;');
         }
 
         return false;
@@ -964,133 +978,12 @@ $l.dom.setEvent(
 );
 
 $l.dom.setEvent(
-    $l.id('button-vars-cookies-remove'),
+    $l.id('button-vars-remove'),
     'click',
     function() {
-        $l.vars.removeCookie('demopage');
-        $l.dom.append(text, 'cookie is removed&lt;br /&gt;');
-
-        return false;
-    }
-);
-                        </pre>
-                    </div>
-                </div>
-
-                <h3>Local Storage</h3>
-                <div class="row">
-                    <div class="col-sm-4">
-                        <button id="button-vars-local-set" class="btn btn-default">Set Variable</button>
-                        <button id="button-vars-local-read" class="btn btn-default">Read Variable</button>
-                        <button id="button-vars-local-remove" class="btn btn-default">Remove Variable</button>
-                        <div id="text-vars-local"></div>
-                    </div>
-                    <div class="col-sm-8">
-                        <h4>HTML</h4>
-                        <pre class="prettyprint">
-&lt;button id="button-vars-local-set" class="btn btn-default"&gt;Set Variable&lt;/button&gt;
-&lt;button id="button-vars-local-read" class="btn btn-default"&gt;Read Variable&lt;/button&gt;
-&lt;button id="button-vars-local-remove" class="btn btn-default"&gt;Remove Variable&lt;/button&gt;
-&lt;div id="text-vars-local"&gt;&lt;/div&gt;
-                        </pre>
-
-                        <h4>Javascript</h4>
-                        <pre class="prettyprint">
-var text = $l.id('text-vars-local');
-
-$l.dom.setEvent(
-    $l.id('button-vars-local-set'),
-    'click',
-    function() {
-        $l.vars.setLocal('demopage', 'a local storage variable test&lt;br /&gt;');
-        $l.dom.append(text, 'local storage variable set');
-
-        return false;
-    }
-);
-
-$l.dom.setEvent(
-    $l.id('button-vars-local-read'),
-    'click',
-    function() {
-        var value = $l.vars.getLocal('demopage');
-        if (value !== null) {
-            $l.dom.append(text, 'local storage variable\'s value is: ' + value + '&lt;br /&gt;');
-        } else {
-            $l.dom.append(text, 'you need to set a local storage variable first&lt;br /&gt;');
-        }
-
-        return false;
-    }
-);
-
-$l.dom.setEvent(
-    $l.id('button-vars-local-remove'),
-    'click',
-    function() {
-        $l.vars.removeLocal('demopage');
-        $l.dom.append(text, 'local storage variable is removed&lt;br /&gt;');
-
-        return false;
-    }
-);
-                        </pre>
-                    </div>
-                </div>
-
-                <h3>Session Storage</h3>
-                <div class="row">
-                    <div class="col-sm-4">
-                        <button id="button-vars-session-set" class="btn btn-default">Set Variable</button>
-                        <button id="button-vars-session-read" class="btn btn-default">Read Variable</button>
-                        <button id="button-vars-session-remove" class="btn btn-default">Remove Variable</button>
-                        <div id="text-vars-session"></div>
-                    </div>
-                    <div class="col-sm-8">
-                        <h4>HTML</h4>
-                        <pre class="prettyprint">
-&lt;button id="button-vars-session-set" class="btn btn-default"&gt;Set Variable&lt;/button&gt;
-&lt;button id="button-vars-session-read" class="btn btn-default"&gt;Read Variable&lt;/button&gt;
-&lt;button id="button-vars-session-remove" class="btn btn-default"&gt;Remove Variable&lt;/button&gt;
-&lt;div id="text-vars-session"&gt;&lt;/div&gt;
-                        </pre>
-
-                        <h4>Javascript</h4>
-                        <pre class="prettyprint">
-var text = $l.id('text-vars-session');
-
-$l.dom.setEvent(
-    $l.id('button-vars-session-set'),
-    'click',
-    function() {
-        $l.vars.setSession('demopage', 'a session storage variable test&lt;br /&gt;');
-        $l.dom.append(text, 'session storage variable set');
-
-        return false;
-    }
-);
-
-$l.dom.setEvent(
-    $l.id('button-vars-session-read'),
-    'click',
-    function() {
-        var value = $l.vars.getSession('demopage');
-        if (value !== null) {
-            $l.dom.append(text, 'session storage variable\'s value is: ' + value + '&lt;br /&gt;');
-        } else {
-            $l.dom.append(text, 'you need to set a session storage variable first&lt;br /&gt;');
-        }
-
-        return false;
-    }
-);
-
-$l.dom.setEvent(
-    $l.id('button-vars-session-remove'),
-    'click',
-    function() {
-        $l.vars.removeSession('demopage');
-        $l.dom.append(text, 'session storage variable is removed&lt;br /&gt;');
+        var storage = select.options[select.selectedIndex].value;
+        $l.vars.remove(storage, 'demopage');
+        $l.dom.append(text, storage + ' is removed&lt;br /&gt;');
 
         return false;
     }

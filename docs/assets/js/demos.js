@@ -19,10 +19,10 @@
                 $l.ajax.getJson(
                     'test.json'
 
-                ).on('done', function (response) {
+                ).done(function (response) {
                     $l.dom.replace(text, response.testResponse);
 
-                }).on('fail', function (error) {
+                }).fail(function (error) {
                     $l.dom.replace(text, 'Error: ' + error.message);
 
                 });
@@ -448,6 +448,55 @@
         );
     });
 
+    // vars - Set / Read / Remove
+    $l.ready(function() {
+        var text = $l.id('text-vars');
+        var select = $l.id('select-vars');
+        var buttonSet = $l.id('button-vars-set');
+        var buttonRead = $l.id('button-vars-read');
+        var buttonRemove = $l.id('button-vars-remove');
+
+        $l.dom.setEvent(
+            buttonSet,
+            'click',
+            function() {
+                var storage = select.options[select.selectedIndex].value;
+                $l.vars.set(storage, 'demopage', 'a ' + storage + ' test');
+                $l.dom.append(text, storage + ' set' + crlf);
+
+                return false;
+            }
+        );
+
+        $l.dom.setEvent(
+            buttonRead,
+            'click',
+            function() {
+                var storage = select.options[select.selectedIndex].value;
+                var value = $l.vars.get(storage, 'demopage');
+                if (value !== null) {
+                    $l.dom.append(text, storage + '\'s value is: ' + value + crlf);
+                } else {
+                    $l.dom.append(text, 'you need to set a ' + storage + ' first' + crlf);
+                }
+
+                return false;
+            }
+        );
+
+        $l.dom.setEvent(
+            buttonRemove,
+            'click',
+            function() {
+                var storage = select.options[select.selectedIndex].value;
+                $l.vars.remove(storage, 'demopage');
+                $l.dom.append(text, storage + ' is removed' + crlf);
+
+                return false;
+            }
+        );
+    });
+
     // when - Set
     $l.ready(function() {
         var button1 = $l.id('button-when-set-1');
@@ -501,141 +550,6 @@
             'click',
             function() {
                 resetFunc();
-
-                return false;
-            }
-        );
-    });
-
-    // vars - Cookie
-    $l.ready(function() {
-        var text = $l.id('text-vars-cookies');
-        var buttonSet = $l.id('button-vars-cookies-set');
-        var buttonRead = $l.id('button-vars-cookies-read');
-        var buttonRemove = $l.id('button-vars-cookies-remove');
-
-        $l.dom.setEvent(
-            buttonSet,
-            'click',
-            function() {
-                $l.vars.setCookie('demopage', 'a cookie test');
-                $l.dom.append(text, 'cookie set' + crlf);
-
-                return false;
-            }
-        );
-
-        $l.dom.setEvent(
-            buttonRead,
-            'click',
-            function() {
-                var value = $l.vars.getCookie('demopage');
-                if (value !== null) {
-                    $l.dom.append(text, 'cookie\'s value is: ' + value + crlf);
-                } else {
-                    $l.dom.append(text, 'you need to set a cookie first' + crlf);
-                }
-
-                return false;
-            }
-        );
-
-        $l.dom.setEvent(
-            buttonRemove,
-            'click',
-            function() {
-                $l.vars.removeCookie('demopage');
-                $l.dom.append(text, 'cookie is removed' + crlf);
-
-                return false;
-            }
-        );
-    });
-
-    // vars - Local Storage
-    $l.ready(function() {
-        var text = $l.id('text-vars-local');
-        var buttonSet = $l.id('button-vars-local-set');
-        var buttonRead = $l.id('button-vars-local-read');
-        var buttonRemove = $l.id('button-vars-local-remove');
-
-        $l.dom.setEvent(
-            buttonSet,
-            'click',
-            function() {
-                $l.vars.setLocal('demopage', 'a local storage test');
-                $l.dom.append(text, 'local storage variable set' + crlf);
-
-                return false;
-            }
-        );
-
-        $l.dom.setEvent(
-            buttonRead,
-            'click',
-            function() {
-                var value = $l.vars.getLocal('demopage');
-                if (value !== null) {
-                    $l.dom.append(text, 'local storage variable\'s value is: ' + value + crlf);
-                } else {
-                    $l.dom.append(text, 'you need to set a local storage variable first' + crlf);
-                }
-
-                return false;
-            }
-        );
-
-        $l.dom.setEvent(
-            buttonRemove,
-            'click',
-            function() {
-                $l.vars.removeLocal('demopage');
-                $l.dom.append(text, 'local storage variable is removed' + crlf);
-
-                return false;
-            }
-        );
-    });
-
-    // vars - Session Storage
-    $l.ready(function() {
-        var text = $l.id('text-vars-session');
-        var buttonSet = $l.id('button-vars-session-set');
-        var buttonRead = $l.id('button-vars-session-read');
-        var buttonRemove = $l.id('button-vars-session-remove');
-
-        $l.dom.setEvent(
-            buttonSet,
-            'click',
-            function() {
-                $l.vars.setSession('demopage', 'a session storage test');
-                $l.dom.append(text, 'session storage variable set' + crlf);
-
-                return false;
-            }
-        );
-
-        $l.dom.setEvent(
-            buttonRead,
-            'click',
-            function() {
-                var value = $l.vars.getSession('demopage');
-                if (value !== null) {
-                    $l.dom.append(text, 'session storage variable\'s value is: ' + value + crlf);
-                } else {
-                    $l.dom.append(text, 'you need to set a session storage variable first' + crlf);
-                }
-
-                return false;
-            }
-        );
-
-        $l.dom.setEvent(
-            buttonRemove,
-            'click',
-            function() {
-                $l.vars.removeSession('demopage');
-                $l.dom.append(text, 'session storage variable is removed' + crlf);
 
                 return false;
             }

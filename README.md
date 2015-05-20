@@ -4,10 +4,11 @@
 
 [This project](https://github.com/larukedi/laroux.js) is a jQuery substitute for modern browsers and mobile devices. But instead of offering some wrappers and own dynamics, it simply provides helper functions to achieve the same objectives as jQuery or Zepto.
 
-Even though keeping compactness is the primary concern of this library, it does contain lightweight versions of some concepts/components, including some UI helpers and MVC.
+Even though keeping compactness is the primary concern of this library, it does contain lightweight versions of some concepts/components, including MVC.
 
-So far, it has [Ajax](https://github.com/larukedi/laroux.js/wiki/ajax), [Anim](https://github.com/larukedi/laroux.js/wiki/anim), [CSS](https://github.com/larukedi/laroux.js/wiki/css), [Date](https://github.com/larukedi/laroux.js/wiki/date), [DOM](https://github.com/larukedi/laroux.js/wiki/dom), [Events](https://github.com/larukedi/laroux.js/wiki/events), [Forms](https://github.com/larukedi/laroux.js/wiki/forms), [Helpers](https://github.com/larukedi/laroux.js/wiki/helpers), [Keys](https://github.com/larukedi/laroux.js/wiki/keys), [MVC](https://github.com/larukedi/laroux.js/wiki/mvc), [Stack](https://github.com/larukedi/laroux.js/wiki/stack), [Templates](https://github.com/larukedi/laroux.js/wiki/templates), [Timers](https://github.com/larukedi/laroux.js/wiki/timers), [Touch](https://github.com/larukedi/laroux.js/wiki/touch), [Triggers](https://github.com/larukedi/laroux.js/wiki/triggers), [UI](https://github.com/larukedi/laroux.js/wiki/ui), [Vars](https://github.com/larukedi/laroux.js/wiki/vars) and [Wrapper](https://github.com/larukedi/laroux.js/wiki/wrapper) components.
+So far, it has [Ajax](https://github.com/larukedi/laroux.js/wiki/ajax), [Date](https://github.com/larukedi/laroux.js/wiki/date), [Deferred](https://github.com/larukedi/laroux.js/wiki/deferred), [Events](https://github.com/larukedi/laroux.js/wiki/events), [Helpers](https://github.com/larukedi/laroux.js/wiki/helpers), [Stack](https://github.com/larukedi/laroux.js/wiki/stack), [Templates](https://github.com/larukedi/laroux.js/wiki/templates), [Timers](https://github.com/larukedi/laroux.js/wiki/timers), [Vars](https://github.com/larukedi/laroux.js/wiki/vars) and [When](https://github.com/larukedi/laroux.js/wiki/when) components on its core.
 
+Additionally [Anim](https://github.com/larukedi/laroux.js/wiki/anim), [CSS](https://github.com/larukedi/laroux.js/wiki/css), [DOM](https://github.com/larukedi/laroux.js/wiki/dom), [Forms](https://github.com/larukedi/laroux.js/wiki/forms), [Keys](https://github.com/larukedi/laroux.js/wiki/keys), [MVC](https://github.com/larukedi/laroux.js/wiki/mvc) and [Touch](https://github.com/larukedi/laroux.js/wiki/touch) will be available in web bundle.
 
 [![Build Status](https://travis-ci.org/larukedi/laroux.js.png?branch=master)](https://travis-ci.org/larukedi/laroux.js)
 [![Scrutinizer Quality Score](https://scrutinizer-ci.com/g/larukedi/laroux.js/badges/quality-score.png?s=0a36236d23cac2919f7aafff510a636d9437abec)](https://scrutinizer-ci.com/g/larukedi/laroux.js/)
@@ -41,14 +42,13 @@ So far, it has [Ajax](https://github.com/larukedi/laroux.js/wiki/ajax), [Anim](h
 The latest version is always downloadable from [releases page](https://github.com/larukedi/laroux.js/releases).
 
 
-The required files ([laroux.min.js](//rawgit.com/larukedi/laroux.js/master/dist/laroux.min.js) and [laroux.min.css](//rawgit.com/larukedi/laroux.js/master/dist/laroux.min.css)) can also be found at `rawgit.com`.
+The required file ([laroux.min.js](//rawgit.com/larukedi/laroux.js/master/build/dist/web/laroux.min.js) can also be found at `rawgit.com`.
 
 
-Including these files would be enough to start using `laroux.js` in your web project. For example:
+Including these files would be enough to start using `laroux.js` (or `laroux.min.js`) in your web project. For example:
 
 ```html
-<link rel="stylesheet" href="//rawgit.com/larukedi/laroux.js/master/dist/laroux.min.css" />
-<script src="//rawgit.com/larukedi/laroux.js/master/dist/laroux.min.js"></script>
+<script src="//rawgit.com/larukedi/laroux.js/master/build/dist/web/laroux.min.js"></script>
 ```
 
 

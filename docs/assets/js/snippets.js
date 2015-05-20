@@ -23,11 +23,11 @@
 
             code = '$l.ready(function() {\n\n';
             for (var item in splitted) {
-                code += $l.helpers.quoteAttr(('    ' + splitted[item]).replace(/~+$/, '')) + '\n';
+                code += $l.quoteAttr(('    ' + splitted[item]).replace(/~+$/, '')) + '\n';
             }
             code += '\n});';
         } else {
-            code = $l.helpers.quoteAttr(lastLoaded);
+            code = $l.quoteAttr(lastLoaded);
         }
 
         var pre = $l.dom.createElement('PRE', { class: 'prettyprint' }, code);
@@ -51,13 +51,11 @@
         $l.css.addClass(snippetDescription, 'in');
 
         $l.ajax.get(
-            'snippets/' + element.getAttribute('data-file'),
-            null,
-            function(response) {
-                lastLoaded = response;
-                drawSnippet();
-            }
-        );
+            'snippets/' + element.getAttribute('data-file')
+        ).done(function (response) {
+            lastLoaded = response;
+            drawSnippet();
+        });
 
         return false;
     }
@@ -68,33 +66,31 @@
         $l.dom.setEvent(checkboxExecSnippetOnLoad, 'change', drawSnippet);
 
         $l.ajax.getJson(
-            'snippets.json',
-            null,
-            function(response) {
-                for (var item in response) {
-                    if (typeof response[item].onload != 'undefined' && response[item].onload) {
-                        checkboxExecSnippetOnLoad.removeAttribute('disabled');
-                    } else {
-                        checkboxExecSnippetOnLoad.setAttribute('disabled', 'disabled');
-                    }
-
-                    var li = $l.dom.createElement('LI');
-                    snippetList.appendChild(li);
-
-                    var a = $l.dom.createElement(
-                        'A',
-                        {
-                            href:          'javascript:;',
-                            'data-file':   response[item].file,
-                            title:         response[item].description
-                        },
-                        response[item].name
-                    );
-
-                    $l.dom.setEvent(a, 'click', loadSnippet);
-                    li.appendChild(a);
+            'snippets.json'
+        ).done(function (response) {
+            for (var item in response) {
+                if (typeof response[item].onload != 'undefined' && response[item].onload) {
+                    checkboxExecSnippetOnLoad.removeAttribute('disabled');
+                } else {
+                    checkboxExecSnippetOnLoad.setAttribute('disabled', 'disabled');
                 }
+
+                var li = $l.dom.createElement('LI');
+                snippetList.appendChild(li);
+
+                var a = $l.dom.createElement(
+                    'A',
+                    {
+                        href:          'javascript:;',
+                        'data-file':   response[item].file,
+                        title:         response[item].description
+                    },
+                    response[item].name
+                );
+
+                $l.dom.setEvent(a, 'click', loadSnippet);
+                li.appendChild(a);
             }
-        );
+        });
     });
 })();

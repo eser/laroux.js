@@ -95,11 +95,9 @@ module.exports = {
             jsBrowserifyOutputFile: '_browserified.js',
 
             lessFiles: [
-                './src/less/laroux.ui.less'
             ],
 
             cssFiles: [
-                './src/css/**/*.css'
             ],
 
             testFiles: [
@@ -117,18 +115,6 @@ module.exports = {
                     files: [
                         // FIXME '~/web/js/laroux.backward.js',
                         '~/web/js/_browserified.js'
-                    ]
-                },
-
-                {
-                    uglify: false,
-                    minifyCSS: true,
-                    csscomb: true,
-                    header: true,
-                    concat: 'laroux.css',
-                    dest: './build/dist/web/',
-                    files: [
-                        '~/web/css/**/*.css'
                     ]
                 }
             ]
