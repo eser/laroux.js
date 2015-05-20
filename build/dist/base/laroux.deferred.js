@@ -78,6 +78,23 @@ var Deferred = (function () {
 
             return this;
         }
+    }], [{
+        key: 'async',
+        value: function async(fnc) {
+            var deferred = new Deferred(),
+                args = arguments;
+
+            setTimeout(function () {
+                try {
+                    var result = fnc.apply(undefined, args);
+                    deferred.invoke('done', result);
+                } catch (err) {
+                    deferred.invoke('fail', err);
+                }
+            }, 0);
+
+            return deferred;
+        }
     }]);
 
     return Deferred;

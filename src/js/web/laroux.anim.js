@@ -20,7 +20,7 @@ export default (function () {
 
         // {object, property, from, to, time, unit, reset}
         set: function (newanim) {
-            newanim.promise = new Deferred();
+            newanim.deferred = new Deferred();
 
             newanim.startTime = undefined;
 
@@ -44,12 +44,12 @@ export default (function () {
             //     newanim.id = helpers.getUniqueId();
             // }
 
-            return newanim.promise.then(function () {
-                anim.data.push(newanim);
-                if (anim.data.length === 1) {
-                    requestAnimationFrame(anim.onframe);
-                }
-            }, true);
+            anim.data.push(newanim);
+            if (anim.data.length === 1) {
+                requestAnimationFrame(anim.onframe);
+            }
+
+            return newanim.deferred;
         },
 
         setCss: function (newanim) {
@@ -80,10 +80,10 @@ export default (function () {
             }
 
             if (targetKey !== null) {
-                var promise = anim.data[targetKey].promise;
+                var deferred = anim.data[targetKey].deferred;
 
-                promise.invoke('stop');
-                promise.complete();
+                deferred.invoke('stop');
+                deferred.invoke('complete');
 
                 anim.data.splice(targetKey, 1);
                 return true;
@@ -118,7 +118,8 @@ export default (function () {
                         }
                     } else {
                         removeKeys = helpers.prependArray(removeKeys, item);
-                        currentItem.promise.next();
+                        currentItem.deferred.invoke('done');
+                        currentItem.deferred.invoke('complete');
                     }
                 }
             }

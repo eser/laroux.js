@@ -1,5 +1,4 @@
 import ajax from './laroux.ajax.js';
-import Async from './laroux.async.js';
 import date from './laroux.date.js';
 import Deferred from './laroux.deferred.js';
 import events from './laroux.events.js';
@@ -33,7 +32,6 @@ export default (function () {
     helpers.extend(laroux, helpers);
     helpers.extend(laroux, {
         ajax,
-        async: Async,
         date,
         deferred: Deferred,
         events,

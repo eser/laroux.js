@@ -71,7 +71,7 @@ exports['default'] = (function () {
 })();
 
 module.exports = exports['default'];
-},{"../laroux.helpers.js":7,"../laroux.js":8,"./laroux.anim.js":13,"./laroux.css.js":14,"./laroux.dom.js":15,"./laroux.forms.js":16,"./laroux.keys.js":17,"./laroux.mvc.js":18,"./laroux.touch.js":19}],2:[function(require,module,exports){
+},{"../laroux.helpers.js":6,"../laroux.js":7,"./laroux.anim.js":12,"./laroux.css.js":13,"./laroux.dom.js":14,"./laroux.forms.js":15,"./laroux.keys.js":16,"./laroux.mvc.js":17,"./laroux.touch.js":18}],2:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -184,131 +184,127 @@ exports['default'] = (function () {
         },
 
         makeRequest: function makeRequest(options) {
-            var promise = new _larouxDeferredJs2['default']();
+            var deferred = new _larouxDeferredJs2['default'](),
+                cors = options.cors || ajax.corsDefault,
+                xhr = ajax.xhr(cors),
+                url = options.url,
+                timer = null,
+                n = 0;
 
-            return promise.then(function () {
-                var cors = options.cors || ajax.corsDefault,
-                    xhr = ajax.xhr(cors),
-                    url = options.url,
-                    timer = null,
-                    n = 0;
+            if (options.timeout !== undefined) {
+                timer = setTimeout(function () {
+                    xhr.abort();
+                    deferred.invoke('timeout', options.url);
+                    deferred.invoke('complete');
+                }, options.timeout);
+            }
 
-                if (options.timeout !== undefined) {
-                    timer = setTimeout(function () {
-                        xhr.abort();
-                        promise.invoke('timeout', options.url);
-                        promise.complete();
-                    }, options.timeout);
-                }
-
-                xhr.onreadystatechange = function () {
-                    if (xhr.readyState === 4) {
-                        if (timer !== null) {
-                            clearTimeout(timer);
-                        }
-
-                        if (xhr.status < 300) {
-                            var res = null,
-                                isSuccess = true;
-
-                            try {
-                                res = ajax.xhrResp(xhr, options);
-                            } catch (e) {
-                                promise.invoke('error', e, xhr);
-                                promise.complete();
-
-                                _larouxEventsJs2['default'].invoke('ajaxError', [xhr, xhr.status, xhr.statusText, options]);
-                                isSuccess = false;
-                            }
-
-                            if (isSuccess && res !== null) {
-                                promise.next(res.response, res.wrapperFunc);
-
-                                _larouxEventsJs2['default'].invoke('ajaxSuccess', [xhr, res.response, res.wrapperFunc, options]);
-                            }
-                        } else {
-                            promise.invoke('error', e, xhr);
-
-                            _larouxEventsJs2['default'].invoke('ajaxError', [xhr, xhr.status, xhr.statusText, options]);
-                        }
-
-                        _larouxEventsJs2['default'].invoke('ajaxComplete', [xhr, xhr.statusText, options]);
-                    } else if (options.progress !== undefined) {
-                        /*jslint plusplus: true */
-                        options.progress(++n);
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4) {
+                    if (timer !== null) {
+                        clearTimeout(timer);
                     }
-                };
 
-                if (options.getdata !== undefined && options.getdata !== null) {
-                    if (options.getdata.constructor === Object) {
-                        var queryString = _larouxHelpersJs2['default'].buildQueryString(options.getdata);
-                        if (queryString.length > 0) {
-                            url += (url.indexOf('?') < 0 ? '?' : '&') + queryString;
+                    if (xhr.status < 300) {
+                        var res = null,
+                            isSuccess = true;
+
+                        try {
+                            res = ajax.xhrResp(xhr, options);
+                        } catch (e) {
+                            deferred.invoke('fail', e, xhr);
+                            _larouxEventsJs2['default'].invoke('ajaxError', [xhr, xhr.status, xhr.statusText, options]);
+                            isSuccess = false;
+                        }
+
+                        if (isSuccess && res !== null) {
+                            deferred.invoke('done', res.response, res.wrapperFunc);
+                            _larouxEventsJs2['default'].invoke('ajaxSuccess', [xhr, res.response, res.wrapperFunc, options]);
                         }
                     } else {
-                        url += (url.indexOf('?') < 0 ? '?' : '&') + options.getdata;
+                        deferred.invoke('fail', e, xhr);
+                        _larouxEventsJs2['default'].invoke('ajaxError', [xhr, xhr.status, xhr.statusText, options]);
                     }
-                }
 
-                if (options.jsonp !== undefined) {
-                    url += (url.indexOf('?') < 0 ? '?' : '&') + 'jsonp=' + options.jsonp;
+                    deferred.invoke('complete');
+                    _larouxEventsJs2['default'].invoke('ajaxComplete', [xhr, xhr.statusText, options]);
+                } else if (options.progress !== undefined) {
+                    /*jslint plusplus: true */
+                    options.progress(++n);
                 }
+            };
 
-                if (!ajax.xDomainObject) {
-                    xhr.open(options.type, url, true);
+            if (options.getdata !== undefined && options.getdata !== null) {
+                if (options.getdata.constructor === Object) {
+                    var queryString = _larouxHelpersJs2['default'].buildQueryString(options.getdata);
+                    if (queryString.length > 0) {
+                        url += (url.indexOf('?') < 0 ? '?' : '&') + queryString;
+                    }
                 } else {
-                    xhr.open(options.type, url);
+                    url += (url.indexOf('?') < 0 ? '?' : '&') + options.getdata;
                 }
+            }
 
-                try {
-                    if (options.xhrFields !== undefined) {
-                        for (var i in options.xhrFields) {
-                            if (!options.xhrFields.hasOwnProperty(i)) {
-                                continue;
-                            }
+            if (options.jsonp !== undefined) {
+                url += (url.indexOf('?') < 0 ? '?' : '&') + 'jsonp=' + options.jsonp;
+            }
 
-                            xhr[i] = options.xhrFields[i];
-                        }
-                    }
+            if (!ajax.xDomainObject) {
+                xhr.open(options.type, url, true);
+            } else {
+                xhr.open(options.type, url);
+            }
 
-                    var headers = options.headers || {};
-
-                    if (!cors) {
-                        headers['X-Requested-With'] = 'XMLHttpRequest';
-
-                        if (options.wrapper) {
-                            headers['X-Wrapper-Function'] = 'laroux.js';
-                        }
-                    }
-
-                    for (var j in headers) {
-                        if (!headers.hasOwnProperty(j)) {
+            try {
+                if (options.xhrFields !== undefined) {
+                    for (var i in options.xhrFields) {
+                        if (!options.xhrFields.hasOwnProperty(i)) {
                             continue;
                         }
 
-                        xhr.setRequestHeader(j, headers[j]);
+                        xhr[i] = options.xhrFields[i];
                     }
-                } catch (e) {
-                    console.log(e);
                 }
 
-                if (options.postdata === undefined || options.postdata === null) {
-                    xhr.send(null);
-                    return;
+                var headers = options.headers || {};
+
+                if (!cors) {
+                    headers['X-Requested-With'] = 'XMLHttpRequest';
+
+                    if (options.wrapper) {
+                        headers['X-Wrapper-Function'] = 'laroux.js';
+                    }
                 }
 
-                switch (options.postdatatype) {
-                    case 'json':
-                        xhr.send(JSON.stringify(options.postdata));
-                        break;
-                    case 'form':
-                        xhr.send(_larouxHelpersJs2['default'].buildFormData(options.postdata));
-                        break;
-                    default:
-                        xhr.send(options.postdata);
-                        break;
+                for (var j in headers) {
+                    if (!headers.hasOwnProperty(j)) {
+                        continue;
+                    }
+
+                    xhr.setRequestHeader(j, headers[j]);
                 }
-            }, true);
+            } catch (e) {
+                console.log(e);
+            }
+
+            if (options.postdata === undefined || options.postdata === null) {
+                xhr.send(null);
+                return;
+            }
+
+            switch (options.postdatatype) {
+                case 'json':
+                    xhr.send(JSON.stringify(options.postdata));
+                    break;
+                case 'form':
+                    xhr.send(_larouxHelpersJs2['default'].buildFormData(options.postdata));
+                    break;
+                default:
+                    xhr.send(options.postdata);
+                    break;
+            }
+
+            return deferred;
         },
 
         get: function get(path, values, cors) {
@@ -388,59 +384,7 @@ exports['default'] = (function () {
 })();
 
 module.exports = exports['default'];
-},{"./laroux.deferred.js":5,"./laroux.events.js":6,"./laroux.helpers.js":7}],3:[function(require,module,exports){
-/*jslint node: true */
-'use strict';
-
-Object.defineProperty(exports, '__esModule', {
-    value: true
-});
-
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
-
-var _larouxDeferredJs = require('./laroux.deferred.js');
-
-var _larouxDeferredJs2 = _interopRequireDefault(_larouxDeferredJs);
-
-var Async = (function () {
-    function Async(fnc) {
-        _classCallCheck(this, Async);
-
-        this.fnc = fnc;
-        this.deferred = new _larouxDeferredJs2['default']();
-
-        this.invoke();
-    }
-
-    _createClass(Async, [{
-        key: 'invoke',
-        value: function invoke() {
-            var self = this,
-                args = arguments;
-
-            setTimeout(function () {
-                try {
-                    var result = self.fnc.apply(undefined, args);
-                    self.deferred.invoke('done', result);
-                } catch (err) {
-                    self.deferred.invoke('fail', err);
-                }
-            }, 0);
-
-            return this;
-        }
-    }]);
-
-    return Async;
-})();
-
-exports['default'] = Async;
-module.exports = exports['default'];
-},{"./laroux.deferred.js":5}],4:[function(require,module,exports){
+},{"./laroux.deferred.js":4,"./laroux.events.js":5,"./laroux.helpers.js":6}],3:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -652,7 +596,7 @@ exports['default'] = (function () {
 })();
 
 module.exports = exports['default'];
-},{}],5:[function(require,module,exports){
+},{}],4:[function(require,module,exports){
 /*jslint node: true */
 'use strict';
 
@@ -726,6 +670,23 @@ var Deferred = (function () {
 
             return this;
         }
+    }], [{
+        key: 'async',
+        value: function async(fnc) {
+            var deferred = new Deferred(),
+                args = arguments;
+
+            setTimeout(function () {
+                try {
+                    var result = fnc.apply(undefined, args);
+                    deferred.invoke('done', result);
+                } catch (err) {
+                    deferred.invoke('fail', err);
+                }
+            }, 0);
+
+            return deferred;
+        }
     }]);
 
     return Deferred;
@@ -733,7 +694,7 @@ var Deferred = (function () {
 
 exports['default'] = Deferred;
 module.exports = exports['default'];
-},{"./laroux.helpers.js":7}],6:[function(require,module,exports){
+},{"./laroux.helpers.js":6}],5:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -769,7 +730,7 @@ exports['default'] = (function () {
 })();
 
 module.exports = exports['default'];
-},{}],7:[function(require,module,exports){
+},{}],6:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -1205,7 +1166,7 @@ exports['default'] = (function () {
 })();
 
 module.exports = exports['default'];
-},{}],8:[function(require,module,exports){
+},{}],7:[function(require,module,exports){
 (function (global){
 'use strict';
 
@@ -1218,10 +1179,6 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'd
 var _larouxAjaxJs = require('./laroux.ajax.js');
 
 var _larouxAjaxJs2 = _interopRequireDefault(_larouxAjaxJs);
-
-var _larouxAsyncJs = require('./laroux.async.js');
-
-var _larouxAsyncJs2 = _interopRequireDefault(_larouxAsyncJs);
 
 var _larouxDateJs = require('./laroux.date.js');
 
@@ -1277,7 +1234,6 @@ exports['default'] = (function () {
     _larouxHelpersJs2['default'].extend(laroux, _larouxHelpersJs2['default']);
     _larouxHelpersJs2['default'].extend(laroux, {
         ajax: _larouxAjaxJs2['default'],
-        async: _larouxAsyncJs2['default'],
         date: _larouxDateJs2['default'],
         deferred: _larouxDeferredJs2['default'],
         events: _larouxEventsJs2['default'],
@@ -1337,7 +1293,7 @@ exports['default'] = (function () {
 
 module.exports = exports['default'];
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./laroux.ajax.js":2,"./laroux.async.js":3,"./laroux.date.js":4,"./laroux.deferred.js":5,"./laroux.events.js":6,"./laroux.helpers.js":7,"./laroux.stack.js":9,"./laroux.templates.js":10,"./laroux.timers.js":11,"./laroux.vars.js":12}],9:[function(require,module,exports){
+},{"./laroux.ajax.js":2,"./laroux.date.js":3,"./laroux.deferred.js":4,"./laroux.events.js":5,"./laroux.helpers.js":6,"./laroux.stack.js":8,"./laroux.templates.js":9,"./laroux.timers.js":10,"./laroux.vars.js":11}],8:[function(require,module,exports){
 /*jslint node: true */
 'use strict';
 
@@ -1493,7 +1449,7 @@ var Stack = (function () {
 
 exports['default'] = Stack;
 module.exports = exports['default'];
-},{}],10:[function(require,module,exports){
+},{}],9:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -1622,7 +1578,7 @@ exports['default'] = (function () {
 })();
 
 module.exports = exports['default'];
-},{"./laroux.helpers.js":7}],11:[function(require,module,exports){
+},{"./laroux.helpers.js":6}],10:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -1706,7 +1662,7 @@ exports['default'] = (function () {
 })();
 
 module.exports = exports['default'];
-},{"./laroux.helpers.js":7}],12:[function(require,module,exports){
+},{"./laroux.helpers.js":6}],11:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -1780,7 +1736,7 @@ exports['default'] = (function () {
 })();
 
 module.exports = exports['default'];
-},{}],13:[function(require,module,exports){
+},{}],12:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -1819,7 +1775,7 @@ exports['default'] = (function () {
 
         // {object, property, from, to, time, unit, reset}
         set: function set(newanim) {
-            newanim.promise = new _larouxDeferredJs2['default']();
+            newanim.deferred = new _larouxDeferredJs2['default']();
 
             newanim.startTime = undefined;
 
@@ -1843,12 +1799,12 @@ exports['default'] = (function () {
             //     newanim.id = helpers.getUniqueId();
             // }
 
-            return newanim.promise.then(function () {
-                anim.data.push(newanim);
-                if (anim.data.length === 1) {
-                    requestAnimationFrame(anim.onframe);
-                }
-            }, true);
+            anim.data.push(newanim);
+            if (anim.data.length === 1) {
+                requestAnimationFrame(anim.onframe);
+            }
+
+            return newanim.deferred;
         },
 
         setCss: function setCss(newanim) {
@@ -1879,10 +1835,10 @@ exports['default'] = (function () {
             }
 
             if (targetKey !== null) {
-                var promise = anim.data[targetKey].promise;
+                var deferred = anim.data[targetKey].deferred;
 
-                promise.invoke('stop');
-                promise.complete();
+                deferred.invoke('stop');
+                deferred.invoke('complete');
 
                 anim.data.splice(targetKey, 1);
                 return true;
@@ -1917,7 +1873,8 @@ exports['default'] = (function () {
                         }
                     } else {
                         removeKeys = _larouxHelpersJs2['default'].prependArray(removeKeys, item);
-                        currentItem.promise.next();
+                        currentItem.deferred.invoke('done');
+                        currentItem.deferred.invoke('complete');
                     }
                 }
             }
@@ -1954,7 +1911,7 @@ exports['default'] = (function () {
 })();
 
 module.exports = exports['default'];
-},{"../laroux.deferred.js":5,"../laroux.helpers.js":7,"./laroux.css.js":14}],14:[function(require,module,exports){
+},{"../laroux.deferred.js":4,"../laroux.helpers.js":6,"./laroux.css.js":13}],13:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -2216,7 +2173,7 @@ exports['default'] = (function () {
 })();
 
 module.exports = exports['default'];
-},{"../laroux.helpers.js":7}],15:[function(require,module,exports){
+},{"../laroux.helpers.js":6}],14:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -2647,7 +2604,7 @@ exports['default'] = (function () {
 })();
 
 module.exports = exports['default'];
-},{"../laroux.helpers.js":7}],16:[function(require,module,exports){
+},{"../laroux.helpers.js":6}],15:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -2871,7 +2828,7 @@ exports['default'] = (function () {
 })();
 
 module.exports = exports['default'];
-},{"../laroux.ajax.js":2,"./laroux.dom.js":15}],17:[function(require,module,exports){
+},{"../laroux.ajax.js":2,"./laroux.dom.js":14}],16:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -3036,7 +2993,7 @@ exports['default'] = (function () {
 })();
 
 module.exports = exports['default'];
-},{"./laroux.dom.js":15,"./laroux.forms.js":16}],18:[function(require,module,exports){
+},{"./laroux.dom.js":14,"./laroux.forms.js":15}],17:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -3226,7 +3183,7 @@ exports['default'] = (function () {
 })();
 
 module.exports = exports['default'];
-},{"../laroux.helpers.js":7,"./laroux.dom.js":15}],19:[function(require,module,exports){
+},{"../laroux.helpers.js":6,"./laroux.dom.js":14}],18:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -3364,4 +3321,4 @@ exports['default'] = (function () {
 })();
 
 module.exports = exports['default'];
-},{"../laroux.js":8,"./laroux.dom.js":15}]},{},[1]);
+},{"../laroux.js":7,"./laroux.dom.js":14}]},{},[1]);

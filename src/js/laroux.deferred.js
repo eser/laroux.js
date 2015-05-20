@@ -54,4 +54,20 @@ export default class Deferred {
 
         return this;
     }
+
+    static async(fnc) {
+        var deferred = new Deferred(),
+            args = arguments;
+
+        setTimeout(function () {
+            try {
+                let result = fnc.apply(undefined, args);
+                deferred.invoke('done', result);
+            } catch (err) {
+                deferred.invoke('fail', err);
+            }
+        }, 0);
+
+        return deferred;
+    }
 }

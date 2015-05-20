@@ -17,10 +17,6 @@ var _larouxAjaxJs = require('./laroux.ajax.js');
 
 var _larouxAjaxJs2 = _interopRequireDefault(_larouxAjaxJs);
 
-var _larouxAsyncJs = require('./laroux.async.js');
-
-var _larouxAsyncJs2 = _interopRequireDefault(_larouxAsyncJs);
-
 var _larouxDateJs = require('./laroux.date.js');
 
 var _larouxDateJs2 = _interopRequireDefault(_larouxDateJs);
@@ -75,7 +71,6 @@ exports['default'] = (function () {
     _larouxHelpersJs2['default'].extend(laroux, _larouxHelpersJs2['default']);
     _larouxHelpersJs2['default'].extend(laroux, {
         ajax: _larouxAjaxJs2['default'],
-        async: _larouxAsyncJs2['default'],
         date: _larouxDateJs2['default'],
         deferred: _larouxDeferredJs2['default'],
         events: _larouxEventsJs2['default'],

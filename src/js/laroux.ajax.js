@@ -93,134 +93,130 @@ export default (function () {
         },
 
         makeRequest: function (options) {
-            var promise = new Deferred();
+            var deferred = new Deferred(),
+                cors = options.cors || ajax.corsDefault,
+                xhr = ajax.xhr(cors),
+                url = options.url,
+                timer = null,
+                n = 0;
 
-            return promise.then(function () {
-                var cors = options.cors || ajax.corsDefault,
-                    xhr = ajax.xhr(cors),
-                    url = options.url,
-                    timer = null,
-                    n = 0;
+            if (options.timeout !== undefined) {
+                timer = setTimeout(
+                    function () {
+                        xhr.abort();
+                        deferred.invoke('timeout', options.url);
+                        deferred.invoke('complete');
+                    },
+                    options.timeout
+                );
+            }
 
-                if (options.timeout !== undefined) {
-                    timer = setTimeout(
-                        function () {
-                            xhr.abort();
-                            promise.invoke('timeout', options.url);
-                            promise.complete();
-                        },
-                        options.timeout
-                    );
-                }
-
-                xhr.onreadystatechange = function () {
-                    if (xhr.readyState === 4) {
-                        if (timer !== null) {
-                            clearTimeout(timer);
-                        }
-
-                        if (xhr.status < 300) {
-                            var res = null,
-                                isSuccess = true;
-
-                            try {
-                                res = ajax.xhrResp(xhr, options);
-                            } catch (e) {
-                                promise.invoke('error', e, xhr);
-                                promise.complete();
-
-                                events.invoke('ajaxError', [xhr, xhr.status, xhr.statusText, options]);
-                                isSuccess = false;
-                            }
-
-                            if (isSuccess && res !== null) {
-                                promise.next(res.response, res.wrapperFunc);
-
-                                events.invoke('ajaxSuccess', [xhr, res.response, res.wrapperFunc, options]);
-                            }
-                        } else {
-                            promise.invoke('error', e, xhr);
-
-                            events.invoke('ajaxError', [xhr, xhr.status, xhr.statusText, options]);
-                        }
-
-                        events.invoke('ajaxComplete', [xhr, xhr.statusText, options]);
-                    } else if (options.progress !== undefined) {
-                        /*jslint plusplus: true */
-                        options.progress(++n);
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4) {
+                    if (timer !== null) {
+                        clearTimeout(timer);
                     }
-                };
 
-                if (options.getdata !== undefined && options.getdata !== null) {
-                    if (options.getdata.constructor === Object) {
-                        var queryString = helpers.buildQueryString(options.getdata);
-                        if (queryString.length > 0) {
-                            url += ((url.indexOf('?') < 0) ? '?' : '&') + queryString;
+                    if (xhr.status < 300) {
+                        var res = null,
+                            isSuccess = true;
+
+                        try {
+                            res = ajax.xhrResp(xhr, options);
+                        } catch (e) {
+                            deferred.invoke('fail', e, xhr);
+                            events.invoke('ajaxError', [xhr, xhr.status, xhr.statusText, options]);
+                            isSuccess = false;
+                        }
+
+                        if (isSuccess && res !== null) {
+                            deferred.invoke('done', res.response, res.wrapperFunc);
+                            events.invoke('ajaxSuccess', [xhr, res.response, res.wrapperFunc, options]);
                         }
                     } else {
-                        url += ((url.indexOf('?') < 0) ? '?' : '&') + options.getdata;
+                        deferred.invoke('fail', e, xhr);
+                        events.invoke('ajaxError', [xhr, xhr.status, xhr.statusText, options]);
                     }
-                }
 
-                if (options.jsonp !== undefined) {
-                    url += ((url.indexOf('?') < 0) ? '?' : '&') + 'jsonp=' + options.jsonp;
+                    deferred.invoke('complete');
+                    events.invoke('ajaxComplete', [xhr, xhr.statusText, options]);
+                } else if (options.progress !== undefined) {
+                    /*jslint plusplus: true */
+                    options.progress(++n);
                 }
+            };
 
-                if (!ajax.xDomainObject) {
-                    xhr.open(options.type, url, true);
+            if (options.getdata !== undefined && options.getdata !== null) {
+                if (options.getdata.constructor === Object) {
+                    var queryString = helpers.buildQueryString(options.getdata);
+                    if (queryString.length > 0) {
+                        url += ((url.indexOf('?') < 0) ? '?' : '&') + queryString;
+                    }
                 } else {
-                    xhr.open(options.type, url);
+                    url += ((url.indexOf('?') < 0) ? '?' : '&') + options.getdata;
                 }
+            }
 
-                try {
-                    if (options.xhrFields !== undefined) {
-                        for (var i in options.xhrFields) {
-                            if (!options.xhrFields.hasOwnProperty(i)) {
-                                continue;
-                            }
+            if (options.jsonp !== undefined) {
+                url += ((url.indexOf('?') < 0) ? '?' : '&') + 'jsonp=' + options.jsonp;
+            }
 
-                            xhr[i] = options.xhrFields[i];
-                        }
-                    }
+            if (!ajax.xDomainObject) {
+                xhr.open(options.type, url, true);
+            } else {
+                xhr.open(options.type, url);
+            }
 
-                    var headers = options.headers || {};
-
-                    if (!cors) {
-                        headers['X-Requested-With'] = 'XMLHttpRequest';
-
-                        if (options.wrapper) {
-                            headers['X-Wrapper-Function'] = 'laroux.js';
-                        }
-                    }
-
-                    for (var j in headers) {
-                        if (!headers.hasOwnProperty(j)) {
+            try {
+                if (options.xhrFields !== undefined) {
+                    for (var i in options.xhrFields) {
+                        if (!options.xhrFields.hasOwnProperty(i)) {
                             continue;
                         }
 
-                        xhr.setRequestHeader(j, headers[j]);
+                        xhr[i] = options.xhrFields[i];
                     }
-                } catch (e) {
-                    console.log(e);
                 }
 
-                if (options.postdata === undefined || options.postdata === null) {
-                    xhr.send(null);
-                    return;
+                var headers = options.headers || {};
+
+                if (!cors) {
+                    headers['X-Requested-With'] = 'XMLHttpRequest';
+
+                    if (options.wrapper) {
+                        headers['X-Wrapper-Function'] = 'laroux.js';
+                    }
                 }
 
-                switch (options.postdatatype) {
-                    case 'json':
-                        xhr.send(JSON.stringify(options.postdata));
-                        break;
-                    case 'form':
-                        xhr.send(helpers.buildFormData(options.postdata));
-                        break;
-                    default:
-                        xhr.send(options.postdata);
-                        break;
+                for (var j in headers) {
+                    if (!headers.hasOwnProperty(j)) {
+                        continue;
+                    }
+
+                    xhr.setRequestHeader(j, headers[j]);
                 }
-            }, true);
+            } catch (e) {
+                console.log(e);
+            }
+
+            if (options.postdata === undefined || options.postdata === null) {
+                xhr.send(null);
+                return;
+            }
+
+            switch (options.postdatatype) {
+                case 'json':
+                    xhr.send(JSON.stringify(options.postdata));
+                    break;
+                case 'form':
+                    xhr.send(helpers.buildFormData(options.postdata));
+                    break;
+                default:
+                    xhr.send(options.postdata);
+                    break;
+            }
+
+            return deferred;
         },
 
         get: function (path, values, cors) {
