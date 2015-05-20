@@ -41,6 +41,7 @@ module.exports = {
                     dest: './build/dist/base/',
                     files: [
                         '~/base/js/laroux.js',
+                        '~/base/js/laroux.async.js',
                         '~/base/js/laroux.helpers.js',
                         '~/base/js/laroux.events.js',
                         '~/base/js/laroux.ajax.js',

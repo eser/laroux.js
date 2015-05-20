@@ -71,7 +71,7 @@ exports['default'] = (function () {
 })();
 
 module.exports = exports['default'];
-},{"../laroux.helpers.js":6,"../laroux.js":7,"./laroux.anim.js":12,"./laroux.css.js":13,"./laroux.dom.js":14,"./laroux.forms.js":15,"./laroux.keys.js":16,"./laroux.mvc.js":17,"./laroux.touch.js":18}],2:[function(require,module,exports){
+},{"../laroux.helpers.js":7,"../laroux.js":8,"./laroux.anim.js":13,"./laroux.css.js":14,"./laroux.dom.js":15,"./laroux.forms.js":16,"./laroux.keys.js":17,"./laroux.mvc.js":18,"./laroux.touch.js":19}],2:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -388,7 +388,79 @@ exports['default'] = (function () {
 })();
 
 module.exports = exports['default'];
-},{"./laroux.deferred.js":4,"./laroux.events.js":5,"./laroux.helpers.js":6}],3:[function(require,module,exports){
+},{"./laroux.deferred.js":5,"./laroux.events.js":6,"./laroux.helpers.js":7}],3:[function(require,module,exports){
+/*jslint node: true */
+'use strict';
+
+Object.defineProperty(exports, '__esModule', {
+    value: true
+});
+
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+var Async = (function () {
+    function Async(fnc, completedCallback) {
+        _classCallCheck(this, Async);
+
+        this.fnc = fnc;
+        this.completedCallbacks = [];
+        this.isCompleted = false;
+        this.result = undefined;
+
+        if (completedCallback) {
+            this.completedCallbacks.push(completedCallback);
+        }
+    }
+
+    _createClass(Async, [{
+        key: 'onCompleted',
+        value: function onCompleted(completedCallback) {
+            if (this.isCompleted) {
+                completedCallback.call(undefined, this.result);
+                return this;
+            }
+
+            this.completedCallbacks.push(completedCallback);
+            return this;
+        }
+    }, {
+        key: 'invoke',
+        value: function invoke() {
+            var self = this,
+                args = arguments;
+
+            setTimeout(function () {
+                var result = {};
+
+                try {
+                    result.result = self.fnc.apply(undefined, args);
+                    result.success = true;
+                } catch (err) {
+                    result.exception = err;
+                    result.success = false;
+                }
+
+                self.result = result;
+                self.isCompleted = true;
+
+                while (self.completedCallbacks.length > 0) {
+                    var fnc = self.completedCallbacks.shift();
+                    fnc.call(undefined, self.result);
+                }
+            }, 0);
+
+            return this;
+        }
+    }]);
+
+    return Async;
+})();
+
+exports['default'] = Async;
+module.exports = exports['default'];
+},{}],4:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -600,7 +672,7 @@ exports['default'] = (function () {
 })();
 
 module.exports = exports['default'];
-},{}],4:[function(require,module,exports){
+},{}],5:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -735,7 +807,7 @@ exports['default'] = (function () {
 })();
 
 module.exports = exports['default'];
-},{"./laroux.helpers.js":6}],5:[function(require,module,exports){
+},{"./laroux.helpers.js":7}],6:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -771,7 +843,7 @@ exports['default'] = (function () {
 })();
 
 module.exports = exports['default'];
-},{}],6:[function(require,module,exports){
+},{}],7:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -1207,7 +1279,7 @@ exports['default'] = (function () {
 })();
 
 module.exports = exports['default'];
-},{}],7:[function(require,module,exports){
+},{}],8:[function(require,module,exports){
 (function (global){
 'use strict';
 
@@ -1220,6 +1292,10 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'd
 var _larouxAjaxJs = require('./laroux.ajax.js');
 
 var _larouxAjaxJs2 = _interopRequireDefault(_larouxAjaxJs);
+
+var _larouxAsyncJs = require('./laroux.async.js');
+
+var _larouxAsyncJs2 = _interopRequireDefault(_larouxAsyncJs);
 
 var _larouxDateJs = require('./laroux.date.js');
 
@@ -1275,6 +1351,7 @@ exports['default'] = (function () {
     _larouxHelpersJs2['default'].extend(laroux, _larouxHelpersJs2['default']);
     _larouxHelpersJs2['default'].extend(laroux, {
         ajax: _larouxAjaxJs2['default'],
+        async: _larouxAsyncJs2['default'],
         date: _larouxDateJs2['default'],
         deferred: _larouxDeferredJs2['default'],
         events: _larouxEventsJs2['default'],
@@ -1334,7 +1411,7 @@ exports['default'] = (function () {
 
 module.exports = exports['default'];
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./laroux.ajax.js":2,"./laroux.date.js":3,"./laroux.deferred.js":4,"./laroux.events.js":5,"./laroux.helpers.js":6,"./laroux.stack.js":8,"./laroux.templates.js":9,"./laroux.timers.js":10,"./laroux.vars.js":11}],8:[function(require,module,exports){
+},{"./laroux.ajax.js":2,"./laroux.async.js":3,"./laroux.date.js":4,"./laroux.deferred.js":5,"./laroux.events.js":6,"./laroux.helpers.js":7,"./laroux.stack.js":9,"./laroux.templates.js":10,"./laroux.timers.js":11,"./laroux.vars.js":12}],9:[function(require,module,exports){
 /*jslint node: true */
 'use strict';
 
@@ -1490,7 +1567,7 @@ var Stack = (function () {
 
 exports['default'] = Stack;
 module.exports = exports['default'];
-},{}],9:[function(require,module,exports){
+},{}],10:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -1619,7 +1696,7 @@ exports['default'] = (function () {
 })();
 
 module.exports = exports['default'];
-},{"./laroux.helpers.js":6}],10:[function(require,module,exports){
+},{"./laroux.helpers.js":7}],11:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -1703,7 +1780,7 @@ exports['default'] = (function () {
 })();
 
 module.exports = exports['default'];
-},{"./laroux.helpers.js":6}],11:[function(require,module,exports){
+},{"./laroux.helpers.js":7}],12:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -1777,7 +1854,7 @@ exports['default'] = (function () {
 })();
 
 module.exports = exports['default'];
-},{}],12:[function(require,module,exports){
+},{}],13:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -1951,7 +2028,7 @@ exports['default'] = (function () {
 })();
 
 module.exports = exports['default'];
-},{"../laroux.deferred.js":4,"../laroux.helpers.js":6,"./laroux.css.js":13}],13:[function(require,module,exports){
+},{"../laroux.deferred.js":5,"../laroux.helpers.js":7,"./laroux.css.js":14}],14:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -2213,7 +2290,7 @@ exports['default'] = (function () {
 })();
 
 module.exports = exports['default'];
-},{"../laroux.helpers.js":6}],14:[function(require,module,exports){
+},{"../laroux.helpers.js":7}],15:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -2644,7 +2721,7 @@ exports['default'] = (function () {
 })();
 
 module.exports = exports['default'];
-},{"../laroux.helpers.js":6}],15:[function(require,module,exports){
+},{"../laroux.helpers.js":7}],16:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -2868,7 +2945,7 @@ exports['default'] = (function () {
 })();
 
 module.exports = exports['default'];
-},{"../laroux.ajax.js":2,"./laroux.dom.js":14}],16:[function(require,module,exports){
+},{"../laroux.ajax.js":2,"./laroux.dom.js":15}],17:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -3033,7 +3110,7 @@ exports['default'] = (function () {
 })();
 
 module.exports = exports['default'];
-},{"./laroux.dom.js":14,"./laroux.forms.js":15}],17:[function(require,module,exports){
+},{"./laroux.dom.js":15,"./laroux.forms.js":16}],18:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -3223,7 +3300,7 @@ exports['default'] = (function () {
 })();
 
 module.exports = exports['default'];
-},{"../laroux.helpers.js":6,"./laroux.dom.js":14}],18:[function(require,module,exports){
+},{"../laroux.helpers.js":7,"./laroux.dom.js":15}],19:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -3361,4 +3438,4 @@ exports['default'] = (function () {
 })();
 
 module.exports = exports['default'];
-},{"../laroux.js":7,"./laroux.dom.js":14}]},{},[1]);
+},{"../laroux.js":8,"./laroux.dom.js":15}]},{},[1]);
