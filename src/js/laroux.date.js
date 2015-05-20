@@ -98,8 +98,8 @@ export default (function () {
             return timespan + ' ' + date.strings.years;
         },
 
-        getCustomDateString: function (format, date) {
-            var now = date || new Date();
+        getCustomDateString: function (format, timestamp) {
+            var now = timestamp || new Date();
 
             return format.replace(
                 /yyyy|yy|MMMM|MMM|MM|M|dd|d|hh|h|HH|H|mm|m|ss|s|tt|t/g,
@@ -175,9 +175,9 @@ export default (function () {
             );
         },
 
-        getDateDiffString: function (date) {
+        getDateDiffString: function (timestamp) {
             var now = Date.now(),
-                timespan = now - date.getTime(),
+                timespan = now - timestamp.getTime(),
                 absTimespan = Math.abs(timespan),
                 past = (timespan > 0);
 
@@ -192,20 +192,20 @@ export default (function () {
                     (past ? date.strings.ago : date.strings.later);
             }
 
-            return date.getShortDateString(date, true);
+            return date.getShortDateString(timestamp, true);
         },
 
-        getShortDateString: function (date, includeTime) {
+        getShortDateString: function (timestamp, includeTime) {
             return date.getCustomDateString(
                 includeTime ? date.shortDateFormat + ' ' + date.timeFormat : date.shortDateFormat,
-                date
+                timestamp
             );
         },
 
-        getLongDateString: function (date, includeTime) {
+        getLongDateString: function (timestamp, includeTime) {
             return date.getCustomDateString(
                 includeTime ? date.longDateFormat + ' ' + date.timeFormat : date.longDateFormat,
-                date
+                timestamp
             );
         }
     };

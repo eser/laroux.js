@@ -385,7 +385,8 @@
             'click',
             function() {
                 var model = { name: { first: 'Jane', last: 'Doe' }, age: 25 };
-                $l.templates.replace(script, model, text);
+                var result = $l.templates.apply(script, model);
+                $l.dom.replace(text, result);
                 return false;
             }
         );
@@ -496,26 +497,6 @@
             'click',
             function() {
                 resetFunc();
-
-                return false;
-            }
-        );
-    });
-
-    // ui
-    $l.ready(function() {
-        $l.ui.init();
-    });
-
-    // ui - Popup
-    $l.ready(function() {
-        var button = $l.id('button-ui-popup');
-
-        $l.dom.setEvent(
-            button,
-            'click',
-            function() {
-                $l.ui.popup.msgbox(2000, 'test message');
 
                 return false;
             }

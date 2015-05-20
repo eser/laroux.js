@@ -43,33 +43,30 @@
                                     <ul>
                                         <li class="dropdown-header">Base Components</li>
                                         <li><a href="https://github.com/larukedi/laroux.js/wiki/ajax">Ajax</a></li>
-                                        <li><a href="https://github.com/larukedi/laroux.js/wiki/css">CSS</a></li>
-                                        <li><a href="https://github.com/larukedi/laroux.js/wiki/dom">DOM</a></li>
+                                        <li><a href="https://github.com/larukedi/laroux.js/wiki/date">Date</a></li>
+                                        <li><a href="https://github.com/larukedi/laroux.js/wiki/deferred">Deferred</a></li>
                                         <li><a href="https://github.com/larukedi/laroux.js/wiki/events">Events</a></li>
-                                        <li><a href="https://github.com/larukedi/laroux.js/wiki/forms">Forms</a></li>
                                         <li><a href="https://github.com/larukedi/laroux.js/wiki/helpers">Helpers</a></li>
+                                        <li><a href="https://github.com/larukedi/laroux.js/wiki/stack">Stack</a></li>
                                         <li><a href="https://github.com/larukedi/laroux.js/wiki/timers">Timers</a></li>
                                     </ul>
                                 </li>
                                 <li class="col-sm-3">
                                     <ul>
-                                        <li><a href="https://github.com/larukedi/laroux.js/wiki/triggers">Triggers</a></li>
                                         <li><a href="https://github.com/larukedi/laroux.js/wiki/vars">Vars</a></li>
                                         <li class="divider"></li>
-                                        <li class="dropdown-header">Extended</li>
+                                        <li class="dropdown-header">Web Components</li>
                                         <li><a href="https://github.com/larukedi/laroux.js/wiki/anim">Anim</a></li>
-                                        <li><a href="https://github.com/larukedi/laroux.js/wiki/date">Date</a></li>
+                                        <li><a href="https://github.com/larukedi/laroux.js/wiki/css">CSS</a></li>
+                                        <li><a href="https://github.com/larukedi/laroux.js/wiki/dom">DOM</a></li>
+                                        <li><a href="https://github.com/larukedi/laroux.js/wiki/forms">Forms</a></li>
                                         <li><a href="https://github.com/larukedi/laroux.js/wiki/keys">Keys</a></li>
-                                        <li><a href="https://github.com/larukedi/laroux.js/wiki/mvc">MVC</a></li>
                                     </ul>
                                 </li>
                                 <li class="col-sm-3">
                                     <ul>
-                                        <li><a href="https://github.com/larukedi/laroux.js/wiki/stack">Stack</a></li>
-                                        <li><a href="https://github.com/larukedi/laroux.js/wiki/templates">Templates</a></li>
+                                        <li><a href="https://github.com/larukedi/laroux.js/wiki/mvc">MVC</a></li>
                                         <li><a href="https://github.com/larukedi/laroux.js/wiki/touch">Touch</a></li>
-                                        <li><a href="https://github.com/larukedi/laroux.js/wiki/ui">UI</a></li>
-                                        <li><a href="https://github.com/larukedi/laroux.js/wiki/wrapper">Wrapper</a></li>
                                         <li class="divider"></li>
                                         <li class="dropdown-header">Need Help?</li>
                                         <li><a href="https://github.com/larukedi/laroux.js/issues">GitHub Issues <span class="glyphicon glyphicon-chevron-right pull-right"></span></a></li>
@@ -95,7 +92,7 @@
                     </div>
                     <div class="col-md-9">
                         <div id="slider">
-                            
+
                             <!-- Slides -->
                             <div id="one" class="slide active">
                                 <h1>laroux.js 2.0.0</h1>
@@ -108,7 +105,7 @@
                                 <h3><em>laroux.js</em> is right for you if you:</h3>
                                 <ul>
                                     <li>Complain about people who do not know the difference between jQuery and Javascript.</li>
-                                    <li>Love working with more compact, organized libraries in smaller sizes (between 24K and 42K depending on your requirements).</li>
+                                    <li>Love working with more compact, organized libraries in smaller sizes (~39K).</li>
                                     <li>Want to be working with native DOM objects instead of wrappers.</li>
                                     <li>Want to leverage the debug console's autocomplete/fluent typing.</li>
                                     <li>Are not satisfied with the performance of other libraries on mobile devices.</li>
@@ -139,7 +136,7 @@
                     <a class="btn btn-sm btn-default" href="https://github.com/larukedi/laroux.js/wiki/ajax" role="button">Wiki Page</a>
                 </div>
             </div>
-            
+
             <div class="example-area">
                 <h3>Making a GET request</h3>
                 <div class="row">
@@ -801,7 +798,8 @@ var text = $l.id('text-templates-example');
 var script = $l.id('script-templates-example');
 
 var model = { name: { first: 'Jane', last: 'Doe' }, age: 25 };
-$l.templates.replace(script, model, text);
+var result = $l.templates.apply(script, model);
+$l.dom.replace(text, result);
                         </pre>
                     </div>
                 </div>
@@ -965,31 +963,6 @@ $l.dom.setEvent(
         return false;
     }
 );
-                        </pre>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row header-row">
-                <div class="col-sm-6">
-                    <h2 class="nomargin">UI Examples</h2>
-                </div>
-                <div class="col-sm-6 text-right">
-                    <a class="btn btn-sm btn-default" href="https://github.com/larukedi/laroux.js/wiki/ui" role="button">Wiki Page</a>
-                </div>
-            </div>
-
-            <div class="example-area">
-                <h3>Disposable Message Popup</h3>
-                <div class="row">
-                    <div class="col-sm-4">
-                        <button id="button-ui-popup" class="btn btn-default">Show Message</button>
-                    </div>
-                    <div class="col-sm-8">
-                        <h4>Javascript</h4>
-                        <pre class="prettyprint">
-$l.ui.init();
-$l.ui.popup.msgbox(500, 'test message');
                         </pre>
                     </div>
                 </div>

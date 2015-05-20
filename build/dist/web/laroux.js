@@ -495,8 +495,8 @@ exports['default'] = (function () {
             return timespan + ' ' + date.strings.years;
         },
 
-        getCustomDateString: function getCustomDateString(format, date) {
-            var now = date || new Date();
+        getCustomDateString: function getCustomDateString(format, timestamp) {
+            var now = timestamp || new Date();
 
             return format.replace(/yyyy|yy|MMMM|MMM|MM|M|dd|d|hh|h|HH|H|mm|m|ss|s|tt|t/g, function (match) {
                 switch (match) {
@@ -569,9 +569,9 @@ exports['default'] = (function () {
             });
         },
 
-        getDateDiffString: function getDateDiffString(date) {
+        getDateDiffString: function getDateDiffString(timestamp) {
             var now = Date.now(),
-                timespan = now - date.getTime(),
+                timespan = now - timestamp.getTime(),
                 absTimespan = Math.abs(timespan),
                 past = timespan > 0;
 
@@ -584,15 +584,15 @@ exports['default'] = (function () {
                 return timespanstring + ' ' + (past ? date.strings.ago : date.strings.later);
             }
 
-            return date.getShortDateString(date, true);
+            return date.getShortDateString(timestamp, true);
         },
 
-        getShortDateString: function getShortDateString(date, includeTime) {
-            return date.getCustomDateString(includeTime ? date.shortDateFormat + ' ' + date.timeFormat : date.shortDateFormat, date);
+        getShortDateString: function getShortDateString(timestamp, includeTime) {
+            return date.getCustomDateString(includeTime ? date.shortDateFormat + ' ' + date.timeFormat : date.shortDateFormat, timestamp);
         },
 
-        getLongDateString: function getLongDateString(date, includeTime) {
-            return date.getCustomDateString(includeTime ? date.longDateFormat + ' ' + date.timeFormat : date.longDateFormat, date);
+        getLongDateString: function getLongDateString(timestamp, includeTime) {
+            return date.getCustomDateString(includeTime ? date.longDateFormat + ' ' + date.timeFormat : date.longDateFormat, timestamp);
         }
     };
 
