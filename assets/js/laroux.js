@@ -1,812 +1,249 @@
-(function(global) {
+/**
+ * laroux.js - A jquery substitute for modern browsers (web bundle)
+ *
+ * @version v2.0.0
+ * @link https://larukedi.github.io/laroux.js
+ * @license Apache-2.0
+ */
+(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, '__esModule', {
+    value: true
+});
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+var _larouxJs = require('../laroux.js');
+
+var _larouxJs2 = _interopRequireDefault(_larouxJs);
+
+var _larouxHelpersJs = require('../laroux.helpers.js');
+
+var _larouxHelpersJs2 = _interopRequireDefault(_larouxHelpersJs);
+
+var _larouxAnimJs = require('./laroux.anim.js');
+
+var _larouxAnimJs2 = _interopRequireDefault(_larouxAnimJs);
+
+var _larouxCssJs = require('./laroux.css.js');
+
+var _larouxCssJs2 = _interopRequireDefault(_larouxCssJs);
+
+var _larouxDomJs = require('./laroux.dom.js');
+
+var _larouxDomJs2 = _interopRequireDefault(_larouxDomJs);
+
+var _larouxFormsJs = require('./laroux.forms.js');
+
+var _larouxFormsJs2 = _interopRequireDefault(_larouxFormsJs);
+
+var _larouxKeysJs = require('./laroux.keys.js');
+
+var _larouxKeysJs2 = _interopRequireDefault(_larouxKeysJs);
+
+var _larouxMvcJs = require('./laroux.mvc.js');
+
+var _larouxMvcJs2 = _interopRequireDefault(_larouxMvcJs);
+
+var _larouxTouchJs = require('./laroux.touch.js');
+
+var _larouxTouchJs2 = _interopRequireDefault(_larouxTouchJs);
+
+exports['default'] = (function () {
     'use strict';
 
-    if (!('requestAnimationFrame' in global)) {
-        global.requestAnimationFrame = function(callback) {
-            setTimeout(function() { callback(Date.now()); }, 50);
-        };
+    _larouxHelpersJs2['default'].extend(_larouxJs2['default'], {
+        anim: _larouxAnimJs2['default'],
+        css: _larouxCssJs2['default'],
+        dom: _larouxDomJs2['default'],
+        forms: _larouxFormsJs2['default'],
+        keys: _larouxKeysJs2['default'],
+        mvc: _larouxMvcJs2['default'],
+        touch: _larouxTouchJs2['default']
+    });
+
+    if (typeof document !== 'undefined') {
+        document.addEventListener('DOMContentLoaded', _larouxJs2['default'].setReady);
     }
 
-    if (!('getComputedStyle' in global)) {
-        global.getComputedStyle = function(element) {
-            this.element = element;
+    return _larouxJs2['default'];
+})();
 
-            this.getPropertyValue = function(prop) {
-                var re = /(\-([a-z]){1})/g;
-                if (prop == 'float') {
-                    prop = 'styleFloat';
-                }
+module.exports = exports['default'];
+},{"../laroux.helpers.js":6,"../laroux.js":7,"./laroux.anim.js":13,"./laroux.css.js":14,"./laroux.dom.js":15,"./laroux.forms.js":16,"./laroux.keys.js":17,"./laroux.mvc.js":18,"./laroux.touch.js":19}],2:[function(require,module,exports){
+'use strict';
 
-                if (re.test(prop)) {
-                    prop = prop.replace(re, function() {
-                        return arguments[2].toUpperCase();
-                    });
-                }
+Object.defineProperty(exports, '__esModule', {
+    value: true
+});
 
-                return this.element.currentStyle[prop] || null;
-            };
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-            this.getPropertyCSSValue = function(prop) {
-                return new CSSPrimitiveValue(this.element, prop);
-            };
+var _larouxDeferredJs = require('./laroux.deferred.js');
 
-            return this;
-        };
-    }
+var _larouxDeferredJs2 = _interopRequireDefault(_larouxDeferredJs);
 
-    if (!('CSSPrimitiveValue' in global)) {
-        global.CSSPrimitiveValue = function(element, prop) {
-            this.element = element;
-            this.prop = prop;
-            this.primitiveType = 0;
+var _larouxEventsJs = require('./laroux.events.js');
 
-            this.getFloatValue = function(primitiveType) {
-                var re = /(\-([a-z]){1})/g;
-                var prop = this.prop;
-                if (prop == 'float') {
-                    prop = 'styleFloat';
-                }
+var _larouxEventsJs2 = _interopRequireDefault(_larouxEventsJs);
 
-                if (re.test(prop)) {
-                    prop = prop.replace(re, function() {
-                        return arguments[2].toUpperCase();
-                    });
-                }
+var _larouxHelpersJs = require('./laroux.helpers.js');
 
-                return this.element.currentStyle[prop] || null;
-            };
-        };
-    }
+var _larouxHelpersJs2 = _interopRequireDefault(_larouxHelpersJs);
 
-    if (!('preventDefault' in Event.prototype)) {
-        Event.prototype.preventDefault = function() {
-            this.returnValue = false;
-        };
-    }
-
-    if (!('stopPropagation' in Event.prototype)) {
-        Event.prototype.stopPropagation = function() {
-            this.cancelBubble = true;
-        };
-    }
-
-    if (Element === undefined) {
-        Element = function() {};
-    }
-
-    if (!('addEventListener' in Element.prototype)) {
-        var eventListeners = [];
-
-        var addListener = function(eventname, callback) {
-            var self = this;
-            var wrapper = function(event) {
-                event.target = event.srcElement;
-                event.currentTarget = self;
-
-                // if ('handleEvent' in callback) {
-                //     callback.handleEvent(event);
-                // } else {
-                //     callback.call(self, event);
-                // }
-                callback(self, event);
-            };
-
-            if (eventname != 'DOMContentLoaded') {
-                this.attachEvent('on' + eventname, wrapper);
-            }
-            eventListeners.push({object: this, type: eventname, listener: callback, wrapper: wrapper});
-        };
-
-        var removeListener = function(eventname, callback) {
-            for (var i = 0, length = eventListeners.length; i < length; i++) {
-                var eventListener = eventListeners[i];
-
-                if (eventListener.object === this && eventListener.type === eventname && eventListener.listener === callback) {
-                    if (eventname != 'DOMContentLoaded') {
-                        this.detachEvent('on' + eventname, eventListener.wrapper);
-                    }
-
-                    eventListeners.splice(i, 1);
-                    break;
-                }
-            }
-        };
-
-        var dispatchEvent = function(event) {
-            var eventObject = document.createEventObject();
-            this.fireEvent('on' + event.type, eventObject);
-        };
-
-        Element.prototype.addEventListener = addListener;
-        Element.prototype.removeEventListener = removeListener;
-        Element.prototype.dispatchEvent = dispatchEvent;
-
-        if (HTMLDocument !== undefined) {
-            HTMLDocument.prototype.addEventListener = addListener;
-            HTMLDocument.prototype.removeEventListener = removeListener;
-            HTMLDocument.prototype.dispatchEvent = dispatchEvent;
-        }
-
-        if (Window !== undefined) {
-            Window.prototype.addEventListener = addListener;
-            Window.prototype.removeEventListener = removeListener;
-            Window.prototype.dispatchEvent = dispatchEvent;
-        }
-
-        document.attachEvent('onreadystatechange', function() {
-            if (document.readyState == 'complete') {
-                var eventObject = document.createEventObject();
-                // eventObject.srcElement = window;
-
-                for (var i = 0, length = eventListeners.length; i < length; i++) {
-                    if (eventListeners[i].object === document && eventListeners[i].type === 'DOMContentLoaded') {
-                        eventListeners[i].wrapper(eventObject);
-                    }
-                }
-            }
-        });
-    }
-
-    if (!('textContent' in Element.prototype)) {
-        var innerText = Object.getOwnPropertyDescriptor(Element.prototype, 'innerText');
-
-        Object.defineProperty(Element.prototype, 'textContent', {
-            get: function() {
-                return innerText.get.call(this);
-            },
-            set: function(value) {
-                return innerText.set.call(this, value);
-            }
-        });
-    }
-
-    if (!('getAttribute' in Element.prototype)) {
-        Element.prototype.getAttribute = function(attribute) {
-            return this.attributes[attribute].value;
-        };
-    }
-
-    if (!('setAttribute' in Element.prototype)) {
-        Element.prototype.setAttribute = function(attribute, value) {
-            this.attributes[attribute].value = value;
-        };
-    }
-
-    if (!('removeAttribute' in Element.prototype)) {
-        Element.prototype.removeAttribute = function(attribute) {
-            this.attributes.removeNamedItem(attribute);
-        };
-    }
-
-    if (!('firstElementChild' in Element.prototype)) {
-        Object.defineProperty(Element.prototype, 'firstElementChild', {
-            get: function() {
-                return this.children[0];
-            }
-        });
-    }
-
-    if (!('classList' in Element.prototype)) {
-        Object.defineProperty(Element.prototype, 'classList', {
-            get: function() {
-                var self = this;
-
-                return {
-                    add: function(className) {
-                        self.className = self.className.trim() + ' ' + className;
-                    },
-
-                    remove: function(className) {
-                        self.className = self.className.replace(
-                            new RegExp('(^|\\b)' + className.split(' ').join('|') + '(\\b|$)', 'gi'),
-                            ' '
-                        );
-                    },
-
-                    contains: function(className) {
-                        return (new RegExp('(^| )' + className + '( |$)', 'gi').test(self.className));
-                    }
-                };
-            }
-        });
-    }
-
-    if (!('textContent' in Text.prototype)) {
-        var nodeValue = Object.getOwnPropertyDescriptor(Text.prototype, 'nodeValue');
-
-        Object.defineProperty(Text.prototype, 'textContent', {
-            get: function() {
-                return nodeValue.get.call(this);
-            },
-            set: function(value) {
-                return nodeValue.set.call(this, value);
-            }
-        });
-    }
-
-    if (!('trim' in String.prototype)) {
-        String.prototype.trim = function() {
-            return this.replace(/^\s+|\s+$/g, '');
-        };
-    }
-
-    if (!('observe' in Object)) {
-        Object.observe = function() {};
-    }
-
-    if (!('keys' in Object)) {
-        Object.keys = function(object) {
-            var keys = [];
-
-            for (var item in object) {
-                if (!object.hasOwnProperty(item)) {
-                    continue;
-                }
-
-                keys.push(item);
-            }
-
-            return keys;
-        };
-    }
-
-    /*
-    if (!('forEach' in Object.prototype)) {
-        Object.prototype.forEach = function(callback) {
-            for (var item in this) {
-                if (!this.hasOwnProperty(item)) {
-                    continue;
-                }
-
-                callback.apply(this, [this[item], item, this]);
-            }
-        };
-    }
-
-    if (!('map' in Object.prototype)) {
-        Object.prototype.map = function(callback) {
-            var results = [];
-
-            for (var item in this) {
-                if (!this.hasOwnProperty(item)) {
-                    continue;
-                }
-
-                results.push(callback.apply(this, [this[item], item, this]));
-            }
-
-            return results;
-        };
-    }
-
-    if (!('forEach' in Array.prototype)) {
-        Array.prototype.forEach = function(callback) {
-            for (var i = 0; i < this.length; i++) {
-                callback.apply(this, [this[i], i, this]);
-            }
-        };
-    }
-
-    if (!('map' in Array.prototype)) {
-        Array.prototype.map = function(callback) {
-            var results = [];
-
-            for (var i = 0; i < this.length; i++) {
-                results.push(callback.apply(this, [this[i], i, this]));
-            }
-
-            return results;
-        };
-    }
-
-    if (!('indexOf' in Array.prototype)) {
-        Array.prototype.indexOf = function(object, start) {
-            for (var i = (start || 0), length = this.length; i < length; i++) {
-                if (this[i] === object) {
-                    return i;
-                }
-            }
-
-            return -1;
-        };
-    }
-    */
-
-})(this);
-;(function(global) {
+exports['default'] = (function () {
     'use strict';
-
-    // core
-    var laroux = function(selector, parent) {
-        if (selector instanceof Array) {
-            return laroux.helpers.toArray(
-                (parent || document).querySelectorAll(selector)
-            );
-        }
-
-        /*
-        // FIXME: non-chrome optimization
-        var re = /^#([^\+\>\[\]\.# ]*)$/.exec(selector);
-        if (re) {
-            if (parent === undefined) {
-                return document.getElementById(re[1]);
-            }
-
-            return parent.getElementById(re[1]);
-        }
-        */
-
-        return (parent || document).querySelector(selector);
-    };
-
-    laroux.cached = {
-        single: {},
-        array: {},
-        id: {}
-    };
-
-    laroux.c = function(selector) {
-        if (selector instanceof Array) {
-            return laroux.cached.array[selector] || (
-                laroux.cached.array[selector] = laroux.helpers.toArray(
-                    document.querySelectorAll(selector)
-                )
-            );
-        }
-
-        return laroux.cached.single[selector] || (
-            laroux.cached.single[selector] = document.querySelector(selector)
-        );
-    };
-
-    laroux.id = function(selector, parent) {
-        return (parent || document).getElementById(selector);
-    };
-
-    laroux.idc = function(selector) {
-        return laroux.cached.id[selector] ||
-            (laroux.cached.id[selector] = document.getElementById(selector));
-    };
-
-    laroux.parent = global;
-    laroux.popupFunc = alert;
-    laroux.readyPassed = false;
-
-    laroux.ready = function(fnc) {
-        if (!laroux.readyPassed) {
-            laroux.events.add('ContentLoaded', fnc);
-            return;
-        }
-
-        fnc();
-    };
-
-    laroux.extend = function() {
-        Array.prototype.unshift.call(arguments, laroux);
-        laroux.extendObject.apply(this, arguments);
-    };
-
-    laroux.extendObject = function() {
-        var target = Array.prototype.shift.call(arguments),
-            isArray = target instanceof Array;
-
-        for (var item in arguments) {
-            for (var name in arguments[item]) {
-                // if (isArray) {
-                //     target.push(arguments[item][name]);
-                //     continue;
-                // }
-
-                /* target[name].constructor === Object */
-                if (target.hasOwnProperty(name) && target[name] instanceof Object) {
-                    laroux.extendObject(target[name], arguments[item][name]);
-                    continue;
-                }
-
-                target[name] = arguments[item][name];
-            }
-        }
-    };
-
-    laroux.each = function(arr, fnc, testOwnProperties) {
-        for (var item in arr) {
-            if (testOwnProperties && !arr.hasOwnProperty(item)) {
-                continue;
-            }
-
-            if (fnc(item, arr[item]) === false) {
-                break;
-            }
-        }
-
-        return arr;
-    };
-
-    laroux.map = function(arr, fnc, dontSkipReturns, testOwnProperties) {
-        var results = [];
-
-        for (var item in arr) {
-            if (testOwnProperties && !arr.hasOwnProperty(item)) {
-                continue;
-            }
-
-            var result = fnc(arr[item], item);
-            if (result === false) {
-                break;
-            }
-
-            if (!dontSkipReturns && result !== undefined) {
-                results.push(result);
-            }
-        }
-
-        return results;
-    };
-
-    laroux.index = function(arr, value, testOwnProperties) {
-        for (var item in arr) {
-            if (testOwnProperties && !arr.hasOwnProperty(item)) {
-                continue;
-            }
-
-            if (arr[item] === object) {
-                return item;
-            }
-        }
-
-        return null;
-    };
-
-    laroux.aeach = function(arr, fnc) {
-        for (var i = 0, length = arr.length; i < length; i++) {
-            if (fnc(i, arr[i]) === false) {
-                break;
-            }
-        }
-
-        return arr;
-    };
-
-    laroux.amap = function(arr, fnc, dontSkipReturns) {
-        var results = [];
-
-        for (var i = 0, length = arr.length; i < length; i++) {
-            var result = fnc(arr[i], i);
-            if (result === false) {
-                break;
-            }
-
-            if (!dontSkipReturns && result !== undefined) {
-                results.unshift(result);
-            }
-        }
-
-        return results;
-    };
-
-    laroux.aindex = function(arr, value, start) {
-        for (var i = (start || 0), length = arr.length; i < length; i++) {
-            if (arr[i] === value) {
-                return i;
-            }
-        }
-
-        return -1;
-    };
-
-    // initialization
-    // if (typeof module !== 'undefined' && module.exports !== undefined) {
-    //     module.exports = laroux;
-    // } else {
-    //     global.$l = global.laroux = laroux;
-    // }
-    global.$l = global.laroux = laroux;
-
-    document.addEventListener(
-        'DOMContentLoaded',
-        function() {
-            if (!laroux.readyPassed) {
-                laroux.events.invoke('ContentLoaded');
-                laroux.readyPassed = true;
-            }
-        }
-    );
-
-})(this);
-;(function(laroux) {
-    'use strict';
-
-    // requires $l.dom
-
-    // wrapper
-    laroux.wrapper = function(selector, parent) {
-        var selection;
-
-        if (selector instanceof Array) {
-            selection = selector;
-        } else if (selector instanceof NodeList) {
-            selection = laroux.helpers.toArray(selector);
-        } else if (selector instanceof Node) {
-            selection = [selector];
-        } else {
-            selection = laroux.dom.select(selector, parent);
-        }
-
-        if (selection.length === 1) {
-            return new laroux.wrapper.singleTemplate(selection[0]);
-        }
-
-        return new laroux.wrapper.arrayTemplate(selection);
-    };
-
-    laroux.wrapper.singleTemplate = function(element) {
-        this.source = element;
-        this.isArray = false;
-
-        this.get = function(index) {
-            if (index === 0 || index === undefined) {
-                return this.source;
-            }
-
-            return undefined;
-        };
-
-        this.find = function(selector) {
-            return laroux.wrapper(selector, this.source);
-        };
-    };
-
-    laroux.wrapper.arrayTemplate = function(elements) {
-        this.source = elements;
-        this.isArray = true;
-
-        this.get = function(index) {
-            return this.source[index];
-        };
-    };
-
-    laroux.wrapper.registerBoth = 0;
-    laroux.wrapper.registerSingle = 1;
-    laroux.wrapper.registerArray = 2;
-
-    laroux.wrapper.register = function(name, fnc, scope) {
-        var newFnc = function() {
-            var result = fnc.apply(
-                this,
-                [this.source].concat(laroux.helpers.toArray(arguments))
-            );
-
-            return (result === undefined) ? this : result;
-        };
-
-        switch (scope) {
-            case laroux.wrapper.registerSingle:
-                laroux.wrapper.singleTemplate.prototype[name] = newFnc;
-                break;
-            case laroux.wrapper.registerArray:
-                laroux.wrapper.arrayTemplate.prototype[name] = newFnc;
-                break;
-            default:
-                laroux.wrapper.singleTemplate.prototype[name] = newFnc;
-                laroux.wrapper.arrayTemplate.prototype[name] = newFnc;
-                break;
-        }
-    };
-
-})(this.laroux);
-;(function(laroux) {
-    'use strict';
-
-    // requires $l
-    // requires $l.events
-    // requires $l.helpers
 
     // ajax - partially taken from 'jquery in parts' project
     //        can be found at: https://github.com/mythz/jquip/
-    laroux.ajax = {
+    var ajax = {
         corsDefault: false,
 
-        wrappers: {
-            registry: {
-                'laroux.js': function(data) {
-                    if (!data.isSuccess) {
-                        laroux.popupFunc('Error: ' + data.errorMessage);
-                        return;
-                    }
-
-                    var obj;
-
-                    if (data.format == 'json') {
-                        obj = JSON.parse(data.object);
-                    } else if (data.format == 'script') {
-                        /* jshint evil:true */
-                        obj = eval(data.object);
-                    } else { // if (data.format == 'xml') {
-                        obj = data.object;
-                    }
-
-                    return obj;
-                }
-            },
-
-            set: function(name, fnc) {
-                laroux.ajax.wrappers.registry[name] = fnc;
-            }
-        },
-
         xDomainObject: false,
-        _xmlHttpRequestObject: null,
-        _xDomainRequestObject: null,
-        _xhr: function(crossDomain) {
-            if (laroux.ajax._xmlHttpRequestObject === null) {
-                laroux.ajax._xmlHttpRequestObject = new XMLHttpRequest();
+        xmlHttpRequestObject: null,
+        xDomainRequestObject: null,
+        xhr: function xhr(crossDomain) {
+            if (ajax.xmlHttpRequestObject === null) {
+                ajax.xmlHttpRequestObject = new XMLHttpRequest();
             }
 
             if (crossDomain) {
-                if (!('withCredentials' in laroux.ajax._xmlHttpRequestObject) && XDomainRequest !== undefined) {
-                    laroux.ajax.xDomainObject = true;
+                if (!('withCredentials' in ajax.xmlHttpRequestObject) && typeof XDomainRequest !== 'undefined') {
+                    ajax.xDomainObject = true;
 
-                    if (laroux.ajax._xDomainRequestObject === null) {
-                        laroux.ajax._xDomainRequestObject = new XDomainRequest();
+                    if (ajax.xDomainRequestObject === null) {
+                        ajax.xDomainRequestObject = new XDomainRequest();
                     }
 
-                    return laroux.ajax._xDomainRequestObject;
+                    return ajax.xDomainRequestObject;
                 }
             } else {
-                laroux.ajax.xDomainObject = false;
+                ajax.xDomainObject = false;
             }
 
-            return laroux.ajax._xmlHttpRequestObject;
+            return ajax.xmlHttpRequestObject;
         },
 
-        _xhrResp: function(xhr, options) {
-            var wrapperFunction = xhr.getResponseHeader('X-Response-Wrapper-Function');
+        xhrResp: function xhrResp(xhr, options) {
             var response;
 
             if (options.datatype === undefined) {
                 response = xhr.responseText;
-            } else if (options.datatype == 'json') {
+            } else if (options.datatype === 'json') {
                 response = JSON.parse(xhr.responseText);
-            } else if (options.datatype == 'script') {
-                /* jshint evil:true */
+            } else if (options.datatype === 'script') {
+                /*jshint evil:true */
+                /*jslint evil:true */
                 response = eval(xhr.responseText);
-            } else if (options.datatype == 'xml') {
+            } else if (options.datatype === 'xml') {
                 response = xhr.responseXML;
             } else {
                 response = xhr.responseText;
             }
 
-            if (wrapperFunction && (wrapperFunction in laroux.ajax.wrappers.registry)) {
-                response = laroux.ajax.wrappers.registry[wrapperFunction](response);
-            }
-
             return {
-                'response': response,
-                'wrapperFunc': wrapperFunction
+                response: response
             };
         },
 
-        makeRequest: function(options) {
-            var cors = options.cors || laroux.ajax.corsDefault,
-                xhr = laroux.ajax._xhr(cors),
+        makeRequest: function makeRequest(options) {
+            var deferred = new _larouxDeferredJs2['default'](),
+                cors = options.cors || ajax.corsDefault,
+                xhr = ajax.xhr(cors),
+                url = options.url,
                 timer = null,
                 n = 0;
 
             if (options.timeout !== undefined) {
-                timer = setTimeout(
-                    function() {
-                        xhr.abort();
-                        if (options.timeoutFn !== undefined) {
-                            options.timeoutFn(options.url);
-                        }
-                    },
-                    options.timeout
-                );
+                timer = setTimeout(function () {
+                    xhr.abort();
+                    deferred.reject('timeout', options.url);
+                }, options.timeout);
             }
 
-            xhr.onreadystatechange = function() {
-                if (xhr.readyState == 4) {
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4) {
                     if (timer !== null) {
                         clearTimeout(timer);
                     }
 
                     if (xhr.status < 300) {
-                        var res = null;
-                        var isSuccess = true;
+                        var res = null,
+                            isSuccess = true;
 
                         try {
-                            res = laroux.ajax._xhrResp(xhr, options);
-                        } catch (e) {
-                            if (options.error !== undefined) {
-                                options.error(xhr, xhr.status, xhr.statusText);
-                            }
-
-                            laroux.events.invoke('ajaxError', [xhr, xhr.status, xhr.statusText, options]);
+                            res = ajax.xhrResp(xhr, options);
+                        } catch (err) {
+                            deferred.reject(err, xhr);
+                            _larouxEventsJs2['default'].invoke('ajaxError', { exception: err, xhr: xhr });
                             isSuccess = false;
                         }
 
-                        if (isSuccess) {
-                            if (options.success !== undefined && res !== null) {
-                                options.success(res.response, res.wrapperFunc);
-                            }
-
-                            laroux.events.invoke('ajaxSuccess', [xhr, res.response, res.wrapperFunc, options]);
+                        if (isSuccess && res !== null) {
+                            deferred.resolve(res.response, xhr);
+                            _larouxEventsJs2['default'].invoke('ajaxSuccess', { res: res, xhr: xhr });
                         }
                     } else {
-                        if (options.error !== undefined) {
-                            options.error(xhr, xhr.status, xhr.statusText);
-                        }
-
-                        laroux.events.invoke('ajaxError', [xhr, xhr.status, xhr.statusText, options]);
+                        deferred.reject(xhr);
+                        _larouxEventsJs2['default'].invoke('ajaxError', xhr);
                     }
 
-                    if (options.complete !== undefined) {
-                        options.complete(xhr, xhr.statusText);
-                    }
-
-                    laroux.events.invoke('ajaxComplete', [xhr, xhr.statusText, options]);
+                    _larouxEventsJs2['default'].invoke('ajaxComplete', { xhr: xhr });
                 } else if (options.progress !== undefined) {
+                    /*jslint plusplus: true */
                     options.progress(++n);
                 }
             };
 
-            var url = options.url;
             if (options.getdata !== undefined && options.getdata !== null) {
                 if (options.getdata.constructor === Object) {
-                    var queryString = laroux.helpers.buildQueryString(options.getdata);
+                    var queryString = _larouxHelpersJs2['default'].buildQueryString(options.getdata);
                     if (queryString.length > 0) {
-                        url += ((url.indexOf('?') < 0) ? '?' : '&') + queryString;
+                        url += (url.indexOf('?') < 0 ? '?' : '&') + queryString;
                     }
                 } else {
-                    url += ((url.indexOf('?') < 0) ? '?' : '&') + options.getdata;
+                    url += (url.indexOf('?') < 0 ? '?' : '&') + options.getdata;
                 }
             }
 
             if (options.jsonp !== undefined) {
-                url += ((url.indexOf('?') < 0) ? '?' : '&') + 'jsonp=' + options.jsonp;
+                url += (url.indexOf('?') < 0 ? '?' : '&') + 'jsonp=' + options.jsonp;
             }
 
-            if (!laroux.ajax.xDomainObject) {
+            if (!ajax.xDomainObject) {
                 xhr.open(options.type, url, true);
             } else {
                 xhr.open(options.type, url);
             }
 
-            try {
-                if (options.xhrFields !== undefined) {
-                    for (var i in options.xhrFields) {
-                        if (!options.xhrFields.hasOwnProperty(i)) {
-                            continue;
-                        }
-
-                        xhr[i] = options.xhrFields[i];
-                    }
-                }
-
-                var headers = options.headers || {};
-
-                if (!cors) {
-                    headers['X-Requested-With'] = 'XMLHttpRequest';
-
-                    if (options.wrapper) {
-                        headers['X-Wrapper-Function'] = 'laroux.js';
-                    }
-                }
-
-                for (var j in headers) {
-                    if (!headers.hasOwnProperty(j)) {
+            if (options.xhrFields !== undefined) {
+                for (var i in options.xhrFields) {
+                    if (!options.xhrFields.hasOwnProperty(i)) {
                         continue;
                     }
 
-                    xhr.setRequestHeader(j, headers[j]);
+                    xhr[i] = options.xhrFields[i];
                 }
-            } catch(e) {
-                console.log(e);
+            }
+
+            var headers = options.headers || {};
+
+            if (!cors) {
+                headers['X-Requested-With'] = 'XMLHttpRequest';
+            }
+
+            for (var j in headers) {
+                if (!headers.hasOwnProperty(j)) {
+                    continue;
+                }
+
+                xhr.setRequestHeader(j, headers[j]);
             }
 
             if (options.postdata === undefined || options.postdata === null) {
                 xhr.send(null);
-                return;
+                return deferred;
             }
 
             switch (options.postdatatype) {
@@ -814,83 +251,70 @@
                     xhr.send(JSON.stringify(options.postdata));
                     break;
                 case 'form':
-                    xhr.send(laroux.helpers.buildFormData(options.postdata));
+                    xhr.send(_larouxHelpersJs2['default'].buildFormData(options.postdata));
                     break;
                 default:
                     xhr.send(options.postdata);
                     break;
             }
+
+            return deferred;
         },
 
-        get: function(path, values, successfnc, errorfnc, cors) {
-            laroux.ajax.makeRequest({
+        get: function get(path, values, cors) {
+            return ajax.makeRequest({
                 type: 'GET',
                 url: path,
                 datatype: 'html',
                 getdata: values,
-                wrapper: true,
-                cors: cors || laroux.ajax.corsDefault,
-                success: successfnc,
-                error: errorfnc
+                cors: cors || ajax.corsDefault
             });
         },
 
-        getJson: function(path, values, successfnc, errorfnc, cors) {
-            laroux.ajax.makeRequest({
+        getJson: function getJson(path, values, cors) {
+            return ajax.makeRequest({
                 type: 'GET',
                 url: path,
                 datatype: 'json',
                 getdata: values,
-                wrapper: true,
-                cors: cors || laroux.ajax.corsDefault,
-                success: successfnc,
-                error: errorfnc
+                cors: cors || ajax.corsDefault
             });
         },
 
-        getJsonP: function(path, values, method, successfnc, errorfnc, cors) {
-            laroux.ajax.makeRequest({
+        getJsonP: function getJsonP(path, values, method, cors) {
+            return ajax.makeRequest({
                 type: 'GET',
                 url: path,
                 datatype: 'script',
                 getdata: values,
                 jsonp: method,
-                wrapper: false,
-                cors: cors || laroux.ajax.corsDefault,
-                success: successfnc,
-                error: errorfnc
+                cors: cors || ajax.corsDefault
             });
         },
 
-        getScript: function(path, values, successfnc, errorfnc, cors) {
-            laroux.ajax.makeRequest({
+        getScript: function getScript(path, values, cors) {
+            return ajax.makeRequest({
                 type: 'GET',
                 url: path,
                 datatype: 'script',
                 getdata: values,
-                wrapper: false,
-                cors: cors || laroux.ajax.corsDefault,
-                success: successfnc,
-                error: errorfnc
+                cors: cors || ajax.corsDefault
             });
         },
 
-        post: function(path, values, successfnc, errorfnc, cors) {
-            laroux.ajax.makeRequest({
+        post: function post(path, values, cors) {
+            return ajax.makeRequest({
                 type: 'POST',
                 url: path,
                 datatype: 'json',
                 postdata: values,
                 postdatatype: 'form',
-                wrapper: true,
-                cors: cors || laroux.ajax.corsDefault,
-                success: successfnc,
-                error: errorfnc
+                cors: cors || ajax.corsDefault
             });
         },
 
-        postJson: function(path, values, successfnc, errorfnc, cors) {
-            laroux.ajax.makeRequest({
+        postJson: function postJson(path, values, cors) {
+            return ajax.makeRequest({
                 type: 'POST',
                 url: path,
                 datatype: 'json',
@@ -899,1014 +323,497 @@
                 headers: {
                     'Content-Type': 'application/json; charset=UTF-8'
                 },
-                wrapper: true,
-                cors: cors || laroux.ajax.corsDefault,
-                success: successfnc,
-                error: errorfnc
+                cors: cors || ajax.corsDefault
             });
         }
     };
 
-})(this.laroux);
-;(function(laroux) {
+    return ajax;
+})();
+
+module.exports = exports['default'];
+},{"./laroux.deferred.js":4,"./laroux.events.js":5,"./laroux.helpers.js":6}],3:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, '__esModule', {
+    value: true
+});
+
+exports['default'] = (function () {
     'use strict';
 
-    // requires $l.helpers
-    // requires $l.dom
+    var date = {
+        shortDateFormat: 'dd.MM.yyyy',
+        longDateFormat: 'dd MMMM yyyy',
+        timeFormat: 'HH:mm',
 
-    // css
-    laroux.css = {
-        // class features
-        hasClass: function(element, className) {
-            return element.classList.contains(className);
+        monthsShort: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+        monthsLong: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+
+        strings: {
+            now: 'now',
+            later: 'later',
+            ago: 'ago',
+            seconds: 'seconds',
+            aminute: 'a minute',
+            minutes: 'minutes',
+            ahour: 'a hour',
+            hours: 'hours',
+            aday: 'a day',
+            days: 'days',
+            aweek: 'a week',
+            weeks: 'weeks',
+            amonth: 'a month',
+            months: 'months',
+            ayear: 'a year',
+            years: 'years'
         },
 
-        addClass: function(element, className) {
-            var elements = laroux.helpers.getAsArray(element);
+        parseEpoch: function parseEpoch(timespan, limitWithWeeks) {
+            if (timespan < 60 * 1000) {
+                timespan = Math.ceil(timespan / 1000);
 
-            for (var i = 0, length = elements.length; i < length; i++) {
-                elements[i].classList.add(className);
-            }
-        },
-
-        removeClass: function(element, className) {
-            var elements = laroux.helpers.getAsArray(element);
-
-            for (var i = 0, length = elements.length; i < length; i++) {
-                elements[i].classList.remove(className);
-            }
-        },
-
-        toggleClass: function(element, className) {
-            var elements = laroux.helpers.getAsArray(element);
-
-            for (var i = 0, length = elements.length; i < length; i++) {
-                if (elements[i].classList.contains(className)) {
-                    elements[i].classList.remove(className);
-                } else {
-                    elements[i].classList.add(className);
-                }
-            }
-        },
-
-        cycleClass: function(elements, className) {
-            for (var i = 0, length = elements.length; i < length; i++) {
-                if (elements[i].classList.contains(className)) {
-                    elements[i].classList.remove(className);
-                    elements[(i + 1) % length].classList.add(className);
-                    return;
-                }
-            }
-        },
-
-        // style features
-        getProperty: function(element, styleName) {
-            var style = getComputedStyle(element);
-
-            styleName = laroux.helpers.antiCamelCase(styleName);
-
-            return style.getPropertyValue(styleName);
-        },
-
-        setProperty: function(element, properties, value) {
-            var elements = laroux.helpers.getAsArray(element);
-
-            if (typeof properties == 'string') {
-                var oldProperties = properties;
-                properties = {};
-                properties[oldProperties] = value;
+                return timespan + ' ' + date.strings.seconds;
             }
 
-            for (var styleName in properties) {
-                if (!properties.hasOwnProperty(styleName)) {
-                    continue;
+            if (timespan < 60 * 60 * 1000) {
+                timespan = Math.ceil(timespan / (60 * 1000));
+
+                if (timespan === 1) {
+                    return date.strings.aminute;
                 }
 
-                var newStyleName = laroux.helpers.camelCase(styleName);
-
-                for (var i = 0, length = elements.length; i < length; i++) {
-                    elements[i].style[newStyleName] = properties[styleName];
-                }
-            }
-        },
-
-        // transition features
-        defaultTransition: '2s ease',
-
-        setTransitionSingle: function(element, transition) {
-            var transitions = laroux.helpers.getAsArray(transition),
-                style = getComputedStyle(element),
-                currentTransitions = style.getPropertyValue('transition') || style.getPropertyValue('-webkit-transition') ||
-                    style.getPropertyValue('-ms-transition') || '',
-                currentTransitionsArray;
-
-            if (currentTransitions.length > 0) {
-                currentTransitionsArray = currentTransitions.split(',');
-            } else {
-                currentTransitionsArray = [];
+                return timespan + ' ' + date.strings.minutes;
             }
 
-            for (var item in transitions) {
-                if (!transitions.hasOwnProperty(item)) {
-                    continue;
+            if (timespan < 24 * 60 * 60 * 1000) {
+                timespan = Math.ceil(timespan / (60 * 60 * 1000));
+
+                if (timespan === 1) {
+                    return date.strings.ahour;
                 }
 
-                var styleName,
-                    transitionProperties,
-                    pos = transitions[item].indexOf(' ');
+                return timespan + ' ' + date.strings.hours;
+            }
 
-                if (pos !== -1) {
-                    styleName = transitions[item].substring(0, pos);
-                    transitionProperties = transitions[item].substring(pos + 1);
-                } else {
-                    styleName = transitions[item];
-                    transitionProperties = laroux.css.defaultTransition;
+            if (timespan < 7 * 24 * 60 * 60 * 1000) {
+                timespan = Math.ceil(timespan / (24 * 60 * 60 * 1000));
+
+                if (timespan === 1) {
+                    return date.strings.aday;
                 }
 
-                var found = false;
-                for (var j = 0; j < currentTransitionsArray.length; j++) {
-                    if (currentTransitionsArray[j].trim().localeCompare(styleName) === 0) {
-                        currentTransitionsArray[j] = styleName + ' ' + transitionProperties;
-                        found = true;
-                        break;
-                    }
+                return timespan + ' ' + date.strings.days;
+            }
+
+            if (timespan < 4 * 7 * 24 * 60 * 60 * 1000) {
+                timespan = Math.ceil(timespan / (7 * 24 * 60 * 60 * 1000));
+
+                if (timespan === 1) {
+                    return date.strings.aweek;
                 }
 
-                if (!found) {
-                    currentTransitionsArray.push(styleName + ' ' + transitionProperties);
+                return timespan + ' ' + date.strings.weeks;
+            }
+
+            if (limitWithWeeks === true) {
+                return null;
+            }
+
+            if (timespan < 30 * 7 * 24 * 60 * 60 * 1000) {
+                timespan = Math.ceil(timespan / (30 * 24 * 60 * 60 * 1000));
+
+                if (timespan === 1) {
+                    return date.strings.amonth;
                 }
+
+                return timespan + ' ' + date.strings.months;
             }
 
-            var value = currentTransitionsArray.join(', ');
+            timespan = Math.ceil(timespan / (365 * 24 * 60 * 60 * 1000));
 
-            element.style.transition = value;
-            element.style.webkitTransition = value;
-            element.style.msTransition = value;
-        },
-
-        setTransition: function(element, transition) {
-            var elements = laroux.helpers.getAsArray(element);
-
-            for (var i = 0, length = elements.length; i < length; i++) {
-                laroux.css.setTransitionSingle(elements[i], transition);
-            }
-        },
-
-        show: function(element, transitionProperties) {
-            if (transitionProperties !== undefined) {
-                laroux.css.setTransition(element, 'opacity ' + transitionProperties);
-            } else {
-                laroux.css.setTransition(element, 'opacity');
+            if (timespan === 1) {
+                return date.strings.ayear;
             }
 
-            laroux.css.setProperty(element, {opacity: 1});
+            return timespan + ' ' + date.strings.years;
         },
 
-        hide: function(element, transitionProperties) {
-            if (transitionProperties !== undefined) {
-                laroux.css.setTransition(element, 'opacity ' + transitionProperties);
-            } else {
-                laroux.css.setTransition(element, 'opacity');
+        getCustomDateString: function getCustomDateString(format, timestamp) {
+            var now = timestamp || new Date();
+
+            return format.replace(/yyyy|yy|MMMM|MMM|MM|M|dd|d|hh|h|HH|H|mm|m|ss|s|tt|t/g, function (match) {
+                switch (match) {
+                    case 'yyyy':
+                        return now.getFullYear();
+
+                    case 'yy':
+                        return now.getYear();
+
+                    case 'MMMM':
+                        return date.monthsLong[now.getMonth()];
+
+                    case 'MMM':
+                        return date.monthsShort[now.getMonth()];
+
+                    case 'MM':
+                        return ('0' + (now.getMonth() + 1)).substr(-2, 2);
+
+                    case 'M':
+                        return now.getMonth() + 1;
+
+                    case 'dd':
+                        return ('0' + now.getDate()).substr(-2, 2);
+
+                    case 'd':
+                        return now.getDate();
+
+                    case 'hh':
+                        var hour1 = now.getHours();
+                        return ('0' + (hour1 % 12 > 0 ? hour1 % 12 : 12)).substr(-2, 2);
+
+                    case 'h':
+                        var hour2 = now.getHours();
+                        return hour2 % 12 > 0 ? hour2 % 12 : 12;
+
+                    case 'HH':
+                        return ('0' + now.getHours()).substr(-2, 2);
+
+                    case 'H':
+                        return now.getHours();
+
+                    case 'mm':
+                        return ('0' + now.getMinutes()).substr(-2, 2);
+
+                    case 'm':
+                        return now.getMinutes();
+
+                    case 'ss':
+                        return ('0' + now.getSeconds()).substr(-2, 2);
+
+                    case 's':
+                        return now.getSeconds();
+
+                    case 'tt':
+                        if (now.getHours() >= 12) {
+                            return 'pm';
+                        }
+
+                        return 'am';
+
+                    case 't':
+                        if (now.getHours() >= 12) {
+                            return 'p';
+                        }
+
+                        return 'a';
+                }
+
+                return match;
+            });
+        },
+
+        getDateDiffString: function getDateDiffString(timestamp) {
+            var now = Date.now(),
+                timespan = now - timestamp.getTime(),
+                absTimespan = Math.abs(timespan),
+                past = timespan > 0;
+
+            if (absTimespan <= 3000) {
+                return date.strings.now;
             }
 
-            laroux.css.setProperty(element, {opacity: 0});
-        },
-
-        // measurement features
-        // height of element without padding, margin and border
-        height: function(element) {
-            var style = getComputedStyle(element),
-                height = style.getPropertyCSSValue('height');
-
-            return height.getFloatValue(height.primitiveType);
-        },
-
-        // height of element with padding but without margin and border
-        innerHeight: function(element) {
-            return element.clientHeight;
-        },
-
-        // height of element with padding and border but margin optional
-        outerHeight: function(element, includeMargin) {
-            if (includeMargin || false) {
-                return element.offsetHeight;
+            var timespanstring = date.parseEpoch(absTimespan, true);
+            if (timespanstring !== null) {
+                return timespanstring + ' ' + (past ? date.strings.ago : date.strings.later);
             }
 
-            var style = getComputedStyle(element),
-                marginTop = style.getPropertyCSSValue('margin-top'),
-                marginBottom = style.getPropertyCSSValue('margin-bottom'),
-                margins = marginTop.getFloatValue(marginTop.primitiveType) +
-                    marginBottom.getFloatValue(marginBottom.primitiveType);
-
-            return Math.ceil(element.offsetHeight + margins);
+            return date.getShortDateString(timestamp, true);
         },
 
-        // width of element without padding, margin and border
-        width: function(element) {
-            var style = getComputedStyle(element),
-                height = style.getPropertyCSSValue('width');
-
-            return height.getFloatValue(height.primitiveType);
+        getShortDateString: function getShortDateString(timestamp, includeTime) {
+            return date.getCustomDateString(includeTime ? date.shortDateFormat + ' ' + date.timeFormat : date.shortDateFormat, timestamp);
         },
 
-        // width of element with padding but without margin and border
-        innerWidth: function(element) {
-            return element.clientWidth;
-        },
-
-        // width of element with padding and border but margin optional
-        outerWidth: function(element, includeMargin) {
-            if (includeMargin || false) {
-                return element.offsetWidth;
-            }
-
-            var style = getComputedStyle(element),
-                marginLeft = style.getPropertyCSSValue('margin-left'),
-                marginRight = style.getPropertyCSSValue('margin-right'),
-                margins = marginLeft.getFloatValue(marginLeft.primitiveType) +
-                    marginRight.getFloatValue(marginRight.primitiveType);
-
-            return Math.ceil(element.offsetWidth + margins);
-        },
-
-        top: function(element) {
-            return element.getBoundingClientRect().top +
-                ((document.documentElement && document.documentElement.scrollTop) || document.body.scrollTop);
-        },
-
-        left: function(element) {
-            return element.getBoundingClientRect().left +
-                ((document.documentElement && document.documentElement.scrollLeft) || document.body.scrollLeft);
-        },
-
-        aboveTheTop: function(element) {
-            return element.getBoundingClientRect().bottom <= 0;
-        },
-
-        belowTheFold: function(element) {
-            return element.getBoundingClientRect().top > laroux.parent.innerHeight;
-        },
-
-        leftOfScreen: function(element) {
-            return element.getBoundingClientRect().right <= 0;
-        },
-
-        rightOfScreen: function(element) {
-            return element.getBoundingClientRect().left > laroux.parent.innerWidth;
-        },
-
-        inViewport: function(element) {
-            var rect = element.getBoundingClientRect();
-
-            return !(rect.bottom <= 0 || rect.top > laroux.parent.innerHeight ||
-                rect.right <= 0 || rect.left > laroux.parent.innerWidth);
+        getLongDateString: function getLongDateString(timestamp, includeTime) {
+            return date.getCustomDateString(includeTime ? date.longDateFormat + ' ' + date.timeFormat : date.longDateFormat, timestamp);
         }
     };
 
-    // wrapper support
-    if (laroux.wrapper !== undefined) {
-        laroux.wrapper.register('hasClass', laroux.css.hasClass, laroux.wrapper.registerSingle);
-        laroux.wrapper.register('addClass', laroux.css.addClass, laroux.wrapper.registerBoth);
-        laroux.wrapper.register('removeClass', laroux.css.removeClass, laroux.wrapper.registerBoth);
-        laroux.wrapper.register('toggleClass', laroux.css.toggleClass, laroux.wrapper.registerBoth);
-        laroux.wrapper.register('getProperty', laroux.css.getProperty, laroux.wrapper.registerSingle);
-        laroux.wrapper.register('setProperty', laroux.css.setProperty, laroux.wrapper.registerBoth);
-        laroux.wrapper.register('setTransition', laroux.css.setTransition, laroux.wrapper.registerBoth);
-        laroux.wrapper.register('show', laroux.css.show, laroux.wrapper.registerBoth);
-        laroux.wrapper.register('hide', laroux.css.hide, laroux.wrapper.registerBoth);
-        laroux.wrapper.register('height', laroux.css.height, laroux.wrapper.registerSingle);
-        laroux.wrapper.register('innerHeight', laroux.css.innerHeight, laroux.wrapper.registerSingle);
-        laroux.wrapper.register('outerHeight', laroux.css.outerHeight, laroux.wrapper.registerSingle);
-        laroux.wrapper.register('width', laroux.css.width, laroux.wrapper.registerSingle);
-        laroux.wrapper.register('innerWidth', laroux.css.innerWidth, laroux.wrapper.registerSingle);
-        laroux.wrapper.register('outerWidth', laroux.css.outerWidth, laroux.wrapper.registerSingle);
-        laroux.wrapper.register('top', laroux.css.top, laroux.wrapper.registerSingle);
-        laroux.wrapper.register('left', laroux.css.left, laroux.wrapper.registerSingle);
-        laroux.wrapper.register('aboveTheTop', laroux.css.aboveTheTop, laroux.wrapper.registerSingle);
-        laroux.wrapper.register('belowTheFold', laroux.css.belowTheFold, laroux.wrapper.registerSingle);
-        laroux.wrapper.register('leftOfScreen', laroux.css.leftOfScreen, laroux.wrapper.registerSingle);
-        laroux.wrapper.register('rightOfScreen', laroux.css.rightOfScreen, laroux.wrapper.registerSingle);
-        laroux.wrapper.register('inViewport', laroux.css.inViewport, laroux.wrapper.registerSingle);
+    return date;
+})();
+
+module.exports = exports['default'];
+},{}],4:[function(require,module,exports){
+/*jslint node: true */
+'use strict';
+
+Object.defineProperty(exports, '__esModule', {
+    value: true
+});
+
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+var _larouxHelpersJs = require('./laroux.helpers.js');
+
+var _larouxHelpersJs2 = _interopRequireDefault(_larouxHelpersJs);
+
+var Deferred = (function () {
+    function Deferred() {
+        _classCallCheck(this, Deferred);
+
+        this.events = {};
     }
 
-})(this.laroux);
-;(function(laroux) {
+    _createClass(Deferred, [{
+        key: 'invoke',
+        value: function invoke() {
+            var args = _larouxHelpersJs2['default'].toArray(arguments),
+                eventName = args.shift(),
+                finalEvent = eventName === 'done' || eventName === 'fail';
+
+            if (eventName in this.events) {
+                this.events[eventName].invoked = true;
+                this.events[eventName].result = args;
+
+                this.invokeCallback(this.events[eventName], args);
+            } else {
+                this.events[eventName] = { callbacks: [], invoked: true, result: args };
+            }
+
+            if (finalEvent && 'completed' in this.events) {
+                this.invokeCallback(this.events.completed, [eventName].concat(args));
+            }
+
+            return this;
+        }
+    }, {
+        key: 'invokeCallback',
+        value: function invokeCallback(event, args) {
+            if (!('callbacks' in event)) {
+                return;
+            }
+
+            var callbacks = event.callbacks;
+
+            while (callbacks.length > 0) {
+                var callback = callbacks.shift();
+                callback.apply(this, args);
+            }
+        }
+    }, {
+        key: 'resolve',
+        value: function resolve() {
+            var args = _larouxHelpersJs2['default'].toArray(arguments);
+            args.unshift('done');
+
+            return this.invoke.apply(this, args);
+        }
+    }, {
+        key: 'reject',
+        value: function reject() {
+            var args = _larouxHelpersJs2['default'].toArray(arguments);
+            args.unshift('fail');
+
+            return this.invoke.apply(this, args);
+        }
+    }, {
+        key: 'on',
+        value: function on(eventName, callback) {
+            if (!(eventName in this.events)) {
+                this.events[eventName] = {
+                    callbacks: [callback],
+                    invoked: false,
+                    result: undefined
+                };
+
+                return this;
+            }
+
+            var event = this.events[eventName];
+
+            if (event.invoked) {
+                callback.apply(this, event.result);
+
+                return this;
+            }
+
+            event.callbacks.push(callback);
+
+            return this;
+        }
+    }, {
+        key: 'done',
+        value: function done(callback) {
+            return this.on('done', callback);
+        }
+    }, {
+        key: 'fail',
+        value: function fail(callback) {
+            return this.on('fail', callback);
+        }
+    }, {
+        key: 'completed',
+        value: function completed(callback) {
+            return this.on('completed', callback);
+        }
+    }, {
+        key: 'is',
+        value: function is(eventName) {
+            if (!(eventName in this.events)) {
+                return false;
+            }
+
+            return this.events[eventName].invoked;
+        }
+    }], [{
+        key: 'async',
+        value: function async() {
+            var deferred = new Deferred(),
+                args = _larouxHelpersJs2['default'].toArray(arguments),
+                fnc = args.shift();
+
+            setTimeout(function () {
+                try {
+                    var result = fnc.apply(deferred, args);
+                    deferred.resolve(result);
+                } catch (err) {
+                    deferred.reject(err);
+                }
+            }, 0);
+
+            return deferred;
+        }
+    }]);
+
+    return Deferred;
+})();
+
+exports['default'] = Deferred;
+module.exports = exports['default'];
+},{"./laroux.helpers.js":6}],5:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, '__esModule', {
+    value: true
+});
+
+exports['default'] = (function () {
     'use strict';
 
-    // requires $l.helpers
-    // requires $l.triggers
-
-    // dom
-    laroux.dom = {
-        docprop: function(propName) {
-            return document.documentElement.classList.contains(propName);
-        },
-
-        select: function(selector, parent) {
-            return laroux.helpers.toArray(
-                (parent || document).querySelectorAll(selector)
-            );
-        },
-
-        selectByClass: function(selector, parent) {
-            return laroux.helpers.toArray(
-                (parent || document).getElementsByClassName(selector)
-            );
-        },
-
-        selectByTag: function(selector, parent) {
-            return laroux.helpers.toArray(
-                (parent || document).getElementsByTagName(selector)
-            );
-        },
-
-        selectById: function(selector, parent) {
-            return (parent || document).getElementById(selector);
-        },
-
-        selectSingle: function(selector, parent) {
-            return (parent || document).querySelector(selector);
-        },
-
-        attr: function(element, attributes, value) {
-            if (value === undefined && attributes.constructor !== Object) {
-                return element.getAttribute(attributes);
-            }
-
-            var elements = laroux.helpers.getAsArray(element);
-            if (typeof attributes == 'string') {
-                var oldAttributes = attributes;
-                attributes = {};
-                attributes[oldAttributes] = value;
-            }
-
-            for (var attributeName in attributes) {
-                if (!attributes.hasOwnProperty(attributeName)) {
-                    continue;
-                }
-
-                for (var i = 0, length = elements.length; i < length; i++) {
-                    if (attributes[attributeName] === null) {
-                        element.removeAttribute(attributeName);
-                    } else {
-                        element.setAttribute(attributeName, attributes[attributeName]);
-                    }
-                }
-            }
-        },
-
-        data: function(element, datanames, value) {
-            if (value === undefined && datanames.constructor !== Object) {
-                return element.getAttribute('data-' + datanames);
-            }
-
-            var elements = laroux.helpers.getAsArray(element);
-            if (typeof datanames == 'string') {
-                var oldDatanames = datanames;
-                datanames = {};
-                datanames[oldDatanames] = value;
-            }
-
-            for (var dataName in datanames) {
-                if (!datanames.hasOwnProperty(dataName)) {
-                    continue;
-                }
-
-                for (var i = 0, length = elements.length; i < length; i++) {
-                    if (datanames[dataName] === null) {
-                        element.removeAttribute('data-' + dataName);
-                    } else {
-                        element.setAttribute('data-' + dataName, datanames[dataName]);
-                    }
-                }
-            }
-        },
-
-        eventHistory: [],
-        setEvent: function(element, eventname, fnc) {
-            var elements = laroux.helpers.getAsArray(element);
-
-            for (var i = 0, length = elements.length; i < length; i++) {
-                laroux.dom.setEventSingle(elements[i], eventname, fnc);
-            }
-        },
-
-        setEventSingle: function(element, eventname, fnc) {
-            var fncWrapper = function(e) {
-                if (fnc(e, element) === false) {
-                    if (e.preventDefault) {
-                        e.preventDefault();
-                    } else {
-                        laroux.parent.event.returnValue = false;
-                    }
-                }
-            };
-
-            laroux.dom.eventHistory.push({element: element, eventname: eventname, fnc: fnc, fncWrapper: fncWrapper});
-            element.addEventListener(eventname, fncWrapper, false);
-        },
-
-        unsetEvent: function(element, eventname, fnc) {
-            var elements = laroux.helpers.getAsArray(element);
-
-            for (var i1 = 0, length1 = elements.length; i1 < length1; i1++) {
-                for (var i2 = 0, length2 = laroux.dom.eventHistory.length; i2 < length2; i2++) {
-                    var item = laroux.dom.eventHistory[i2];
-
-                    if (item === undefined) {
-                        continue;
-                    }
-
-                    if (item.element !== elements[i1]) {
-                        continue;
-                    }
-
-                    if (eventname !== undefined && item.eventname !== eventname) {
-                        continue;
-                    }
-
-                    if (fnc !== undefined && item.fnc !== fnc) {
-                        continue;
-                    }
-
-                    item.element.removeEventListener(item.eventname, item.fncWrapper, false);
-                    delete laroux.dom.eventHistory[i2];
-                }
-            }
-        },
-
-        dispatchEvent: function(element, eventname, data) {
-            var customEvent = document.createEvent('Event');
-            for (var item in data) {
-                if (!data.hasOwnProperty(item)) {
-                    continue;
-                }
-
-                customEvent[item] = data[item];
-            }
-
-            customEvent.initEvent(eventname, true, true);
-            element.dispatchEvent(customEvent);
-        },
-
-        create: function(html) {
-            var frag = document.createDocumentFragment(),
-                temp = document.createElement('DIV');
-
-            temp.insertAdjacentHTML('beforeend', html);
-            while (temp.firstChild) {
-                frag.appendChild(temp.firstChild);
-            }
-
-            // nulling out the reference, there is no obvious dispose method
-            temp = null;
-
-            return frag;
-        },
-
-        createElement: function(element, attributes, children) {
-            var elem = document.createElement(element);
-
-            if (attributes !== undefined && attributes.constructor === Object) {
-                for (var item in attributes) {
-                    if (!attributes.hasOwnProperty(item)) {
-                        continue;
-                    }
-
-                    elem.setAttribute(item, attributes[item]);
-                }
-            }
-
-            if (children !== undefined) {
-                if (children.constructor === Object) {
-                    for (var item2 in children) {
-                        if (!children.hasOwnProperty(item2)) {
-                            continue;
-                        }
-
-                        elem.setAttribute(item2, children[item2]);
-                    }
-                } else if (/* typeof children == 'string' && */children.length > 0) {
-                    laroux.dom.append(elem, children);
-                }
-            }
-
-            return elem;
-        },
-
-        createOption: function(element, key, value, isDefault) {
-            /* old behaviour, does not support optgroups as parents.
-            var count = element.options.length;
-            element.options[count] = new Option(value, key);
-
-            if (isDefault === true) {
-                element.options.selectedIndex = count - 1;
-            }
-            */
-
-            var option = document.createElement('OPTION');
-            option.setAttribute('value', key);
-            if (isDefault === true) {
-                option.setAttribute('checked', 'checked');
-            }
-
-            laroux.dom.append(option, value);
-            element.appendChild(option);
-        },
-
-        selectByValue: function(element, value) {
-            for (var i = 0, length = element.options.length; i < length; i++) {
-                if (element.options[i].getAttribute('value') == value) {
-                    element.selectedIndex = i;
-                    break;
-                }
-            }
-        },/*,
-
-        // TODO: it's redundant for now
-        loadImage: function() {
-            var images = [];
-
-            for (var i = 0, length = arguments.length; i < length; i++) {
-                var image = document.createElement('IMG');
-                image.setAttribute('src', arguments[i]);
-
-                images.push(image);
-            }
-
-            return images;
-        },
-
-        loadAsyncScript: function(path, triggerName, async) {
-            var elem = document.createElement('script');
-
-            elem.type = 'text/javascript';
-            elem.async = (async !== undefined) ? async : true;
-            elem.src = path;
-
-            var loaded = false;
-            elem.onload = elem.onreadystatechange = function() {
-                if ((elem.readyState && elem.readyState !== 'complete' && elem.readyState !== 'loaded') || loaded) {
-                    return false;
-                }
-
-                elem.onload = elem.onreadystatechange = null;
-                loaded = true;
-                if (triggerName) {
-                    if (typeof triggerName == 'function') {
-                        triggerName();
-                    } else {
-                        laroux.triggers.ontrigger(triggerName);
-                    }
-                }
-            };
-
-            var head = document.getElementsByTagName('head')[0];
-            head.appendChild(elem);
-        },
-
-        loadAsyncStyle: function(path, triggerName, async) {
-            var elem = document.createElement('LINK');
-
-            elem.type = 'text/css';
-            elem.async = (async !== undefined) ? async : true;
-            elem.href = path;
-            elem.rel = 'stylesheet';
-
-            var loaded = false;
-            elem.onload = elem.onreadystatechange = function() {
-                if ((elem.readyState && elem.readyState !== 'complete' && elem.readyState !== 'loaded') || loaded) {
-                    return false;
-                }
-
-                elem.onload = elem.onreadystatechange = null;
-                loaded = true;
-                if (triggerName) {
-                    if (typeof triggerName == 'function') {
-                        triggerName();
-                    } else {
-                        laroux.triggers.ontrigger(triggerName);
-                    }
-                }
-            };
-
-            var head = document.getElementsByTagName('head')[0];
-            head.appendChild(elem);
-        },*/
-
-        clear: function(element) {
-            while (element.hasChildNodes()) {
-                element.removeChild(element.firstChild);
-            }
-        },
-
-        insert: function(element, position, content) {
-            element.insertAdjacentHTML(position, content);
-        },
-
-        prepend: function(element, content) {
-            element.insertAdjacentHTML('afterbegin', content);
-        },
-
-        append: function(element, content) {
-            element.insertAdjacentHTML('beforeend', content);
-        },
-
-        replace: function(element, content) {
-            laroux.dom.clear(element);
-            element.insertAdjacentHTML('afterbegin', content);
-        },
-
-        replaceText: function(element, content) {
-            // laroux.dom.clear(element);
-            element.textContent = content;
-        },
-
-        remove: function(element) {
-            element.remove();
-        },
-
-        cloneReturn: 0,
-        cloneAppend: 1,
-        cloneInsertAfter: 2,
-        cloneInsertBefore: 3,
-
-        clone: function(element, type, container, target) {
-            var newElement = element.cloneNode(true);
-
-            if (container === undefined) {
-                container = element.parentNode;
-            }
-            if (target === undefined) {
-                target = element;
-            }
-
-            if (type !== undefined && type != laroux.dom.cloneReturn) {
-                if (type == laroux.dom.cloneAppend) {
-                    container.appendChild(newElement);
-                } else if (type == laroux.dom.cloneInsertAfter) {
-                    container.insertBefore(newElement, target.nextSibling);
-                } else { // type == laroux.dom.cloneInsertBefore
-                    container.insertBefore(newElement, target);
-                }
-            }
-
-            return newElement;
-        }/*,
-
-        // TODO: it's redundant for now
-        applyOperations: function(element, operations) {
-            for (var operation in operations) {
-                if (!operations.hasOwnProperty(operation)) {
-                    continue;
-                }
-
-                for (var binding in operations[operation]) {
-                    if (!operations[operation].hasOwnProperty(binding)) {
-                        continue;
-                    }
-
-                    var value = operations[operation][binding];
-
-                    switch (operation) {
-                        case 'setprop':
-                            if (binding.substring(0, 1) == '_') {
-                                element.setAttribute(binding.substring(1), value);
-                                continue;
-                            }
-
-                            if (binding == 'content') {
-                                laroux.dom.replace(element, value);
-                                continue;
-                            }
-                            break;
-                        case 'addprop':
-                            if (binding.substring(0, 1) == '_') {
-                                element.setAttribute(binding.substring(1), element.getAttribute(binding.substring(1)) + value);
-                                continue;
-                            }
-
-                            if (binding == 'content') {
-                                laroux.dom.append(element, value);
-                                continue;
-                            }
-                            break;
-                        case 'removeprop':
-                            if (value.substring(0, 1) == '_') {
-                                element.removeAttribute(value.substring(1));
-                                continue;
-                            }
-
-                            if (value == 'content') {
-                                laroux.dom.clear(element);
-                                continue;
-                            }
-                            break;
-                        case 'addclass':
-                            laroux.css.addClass(element, value);
-                            break;
-                        case 'removeclass':
-                            laroux.css.removeClass(element, value);
-                            break;
-                        case 'addstyle':
-                            laroux.css.setProperty(element, binding, value);
-                            break;
-                        case 'removestyle':
-                            laroux.css.setProperty(element, value, 'inherit !important');
-                            break;
-                        case 'repeat':
-                            break;
-                        default:
-                            console.log(operation);
-                    }
-                }
-            }
-        }*/
-    };
-
-    // wrapper support
-    if (laroux.wrapper !== undefined) {
-        laroux.wrapper.register('attr', laroux.dom.attr, laroux.wrapper.registerSingle);
-        laroux.wrapper.register('data', laroux.dom.data, laroux.wrapper.registerSingle);
-        laroux.wrapper.register('on', laroux.dom.setEventSingle, laroux.wrapper.registerSingle);
-        laroux.wrapper.register('on', laroux.dom.setEvent, laroux.wrapper.registerArray);
-        laroux.wrapper.register('off', laroux.dom.unsetEvent, laroux.wrapper.registerBoth);
-        laroux.wrapper.register('clear', laroux.dom.clear, laroux.wrapper.registerSingle);
-        laroux.wrapper.register('insert', laroux.dom.insert, laroux.wrapper.registerSingle);
-        laroux.wrapper.register('prepend', laroux.dom.prepend, laroux.wrapper.registerSingle);
-        laroux.wrapper.register('append', laroux.dom.append, laroux.wrapper.registerSingle);
-        laroux.wrapper.register('replace', laroux.dom.replace, laroux.wrapper.registerSingle);
-        laroux.wrapper.register('replaceText', laroux.dom.replaceText, laroux.wrapper.registerSingle);
-        laroux.wrapper.register('remove', laroux.dom.remove, laroux.wrapper.registerSingle);
-    }
-
-    // a fix for Internet Explorer
-    if (Element.prototype.remove === undefined) {
-        Element.prototype.remove = function() {
-            if (this.parentElement !== null) {
-                this.parentElement.removeChild(this);
-            }
-        };
-    }
-
-})(this.laroux);
-;(function(laroux) {
-    'use strict';
-
-    // events
-    laroux.events = {
+    var events = {
         delegates: [],
 
-        add: function(event, fnc) {
-            laroux.events.delegates.push({event: event, fnc: fnc});
+        add: function add(event, fnc) {
+            events.delegates.push({ event: event, fnc: fnc });
         },
 
-        invoke: function(event, args) {
-            for (var item in laroux.events.delegates) {
-                if (!laroux.events.delegates.hasOwnProperty(item)) {
+        invoke: function invoke(event, args) {
+            for (var item in events.delegates) {
+                if (!events.delegates.hasOwnProperty(item)) {
                     continue;
                 }
 
-                if (laroux.events.delegates[item].event != event) {
+                if (events.delegates[item].event != event) {
                     continue;
                 }
 
-                laroux.events.delegates[item].fnc(args);
-            }
-        },
-    };
-
-})(this.laroux);
-;(function(laroux) {
-    'use strict';
-
-    // forms
-    laroux.forms = {
-        ajaxForm: function(formobj, fnc, fncBegin) {
-            laroux.dom.setEvent(formobj, 'submit', function() {
-                if (fncBegin !== undefined) {
-                    fncBegin();
-                }
-
-                laroux.ajax.post(
-                    formobj.getAttribute('action'),
-                    laroux.forms.serializeFormData(formobj),
-                    fnc
-                );
-
-                return false;
-            });
-        },
-
-        isFormField: function(element) {
-            if (element.tagName == 'SELECT') {
-                return true;
-            }
-
-            if (element.tagName == 'INPUT') {
-                var type = element.getAttribute('type').toUpperCase();
-
-                if (type == 'FILE' || type == 'CHECKBOX' || type == 'RADIO' || type == 'TEXT' || type == 'PASSWORD' || type == 'HIDDEN') {
-                    return true;
-                }
-
-                return false;
-            }
-
-            if (element.tagName == 'TEXTAREA') {
-                return true;
-            }
-
-            return false;
-        },
-
-        getFormFieldValue: function(element) {
-            if (element.disabled === true) {
-                return null;
-            }
-
-            if (element.tagName == 'SELECT') {
-                return element.options[element.selectedIndex].value;
-            }
-
-            if (element.tagName == 'INPUT') {
-                var type = element.getAttribute('type').toUpperCase();
-
-                if (type == 'FILE') {
-                    return element.files[0];
-                }
-
-                if (type == 'CHECKBOX' || type == 'RADIO') {
-                    if (element.checked) {
-                        return element.value;
-                    }
-
-                    return null;
-                }
-
-                if (type == 'TEXT' || type == 'PASSWORD' || type == 'HIDDEN') {
-                    return element.value;
-                }
-
-                return null;
-            }
-
-            if (element.tagName == 'TEXTAREA') {
-                return element.value;
-            }
-
-            return null;
-        },
-
-        setFormFieldValue: function(element, value) {
-            if (element.disabled === true) {
-                return;
-            }
-
-            if (element.tagName == 'SELECT') {
-                for (var option in element.options) {
-                    if (!element.options.hasOwnProperty(option)) {
-                        continue;
-                    }
-
-                    if (element.options[option].value == value) {
-                        element.selectedIndex = option;
-                        return;
-                    }
-                }
-
-                return;
-            }
-
-            if (element.tagName == 'INPUT') {
-                var type = element.getAttribute('type').toUpperCase();
-
-                if (type == 'FILE') {
-                    element.files[0] = value;
-                    return;
-                }
-
-                if (type == 'CHECKBOX' || type == 'RADIO') {
-                    if (value === true || value == element.value) {
-                        element.checked = true;
-                    }
-
-                    return;
-                }
-
-                if (type == 'TEXT' || type == 'PASSWORD' || type == 'HIDDEN') {
-                    element.value = value;
-                    return;
-                }
-
-                return;
-            }
-
-            if (element.tagName == 'TEXTAREA') {
-                element.value = value;
-                return;
-            }
-        },
-
-        toggleFormEditing: function(formobj, value) {
-            var selection = formobj.querySelectorAll('*[name]');
-
-            if (value === undefined) {
-                if (formobj.getAttribute('data-last-enabled') === null) {
-                    formobj.setAttribute('data-last-enabled', 'enabled');
-                    value = false;
-                } else {
-                    formobj.removeAttribute('data-last-enabled');
-                    value = true;
-                }
-            }
-
-            for (var selected = 0, length = selection.length; selected < length; selected++) {
-                if (!laroux.forms.isFormField(selection[selected])) {
-                    continue;
-                }
-
-                var lastDisabled = selection[selected].getAttribute('data-last-disabled');
-                if (!value) {
-                    if (lastDisabled === null) {
-                        if (selection[selected].getAttribute('disabled') !== null) {
-                            selection[selected].setAttribute('data-last-disabled', 'disabled');
-                        }
-                    }
-
-                    selection[selected].setAttribute('disabled', 'disabled');
-                    continue;
-                }
-
-                if (lastDisabled !== null) {
-                    selection[selected].removeAttribute('data-last-disabled');
-                } else {
-                    selection[selected].removeAttribute('disabled');
-                }
-            }
-        },
-
-        serializeFormData: function(formobj) {
-            var formdata = new FormData();
-            var selection = formobj.querySelectorAll('*[name]');
-
-            for (var selected = 0, length = selection.length; selected < length; selected++) {
-                var value = laroux.forms.getFormFieldValue(selection[selected]);
-
-                if (value !== null) {
-                    formdata.append(selection[selected].getAttribute('name'), value);
-                }
-            }
-
-            return formdata;
-        },
-
-        serialize: function(formobj) {
-            var values = {};
-            var selection = formobj.querySelectorAll('*[name]');
-
-            for (var selected = 0, length = selection.length; selected < length; selected++) {
-                var value = laroux.forms.getFormFieldValue(selection[selected]);
-
-                if (value !== null) {
-                    values[selection[selected].getAttribute('name')] = value;
-                }
-            }
-
-            return values;
-        },
-
-        deserialize: function(formobj, data) {
-            var selection = formobj.querySelectorAll('*[name]');
-
-            for (var selected = 0, length = selection.length; selected < length; selected++) {
-                laroux.forms.setFormFieldValue(selection[selected], data[selection[selected].getAttribute('name')]);
+                events.delegates[item].fnc(args);
             }
         }
     };
 
-})(this.laroux);
-;(function(laroux) {
+    return events;
+})();
+
+module.exports = exports['default'];
+},{}],6:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, '__esModule', {
+    value: true
+});
+
+exports['default'] = (function () {
     'use strict';
 
-    // helpers
-    laroux.helpers = {
+    var helpers = {
         uniqueId: 0,
 
-        getUniqueId: function() {
-            return 'uid-' + (++laroux.helpers.uniqueId);
+        getUniqueId: function getUniqueId() {
+            /*jslint plusplus: true */
+            return 'uid-' + ++helpers.uniqueId;
         },
 
-        buildQueryString: function(values, rfc3986) {
-            var uri = '';
-            var regEx = /%20/g;
+        extend: (function (_extend) {
+            function extend(_x, _x2) {
+                return _extend.apply(this, arguments);
+            }
+
+            extend.toString = function () {
+                return _extend.toString();
+            };
+
+            return extend;
+        })(function (target, source) {
+            var keys = Object.keys(source);
+
+            for (var i = 0, length = keys.length; i < length; i++) {
+                var key = keys[i];
+
+                if (target[key] instanceof Array) {
+                    target[key] = target[key].concat(source[key]);
+                    continue;
+                }
+
+                if (target[key] instanceof Object) {
+                    extend(target[key], source[key]);
+                    continue;
+                }
+
+                target[key] = source[key];
+            }
+
+            return target;
+        }),
+
+        extendNs: function extendNs(target, path, source) {
+            var ptr = target,
+                pathSlices = path.split('.'),
+                keys = Object.keys(source);
+
+            for (var i = 0, length = pathSlices.length; i < length; i++) {
+                var current = pathSlices[i];
+
+                if (ptr[current] === undefined) {
+                    ptr[current] = {};
+                }
+
+                ptr = ptr[current];
+            }
+
+            if (source !== undefined) {
+                // might be replaced w/ $l.extend method
+                helpers.extend(ptr, source);
+            }
+
+            return target;
+        },
+
+        buildQueryString: function buildQueryString(values, rfc3986) {
+            var uri = '',
+                regEx = /%20/g;
 
             for (var name in values) {
                 if (!values.hasOwnProperty(name)) {
                     continue;
                 }
 
-                if (typeof values[name] != 'function') {
+                if (typeof values[name] !== 'function') {
                     if (rfc3986 || false) {
                         uri += '&' + encodeURIComponent(name).replace(regEx, '+') + '=' + encodeURIComponent(values[name].toString()).replace(regEx, '+');
                     } else {
@@ -1918,7 +825,7 @@
             return uri.substr(1);
         },
 
-        buildFormData: function(values) {
+        buildFormData: function buildFormData(values) {
             var data = new FormData();
 
             for (var name in values) {
@@ -1926,7 +833,7 @@
                     continue;
                 }
 
-                if (typeof values[name] != 'function') {
+                if (typeof values[name] !== 'function') {
                     data.append(name, values[name]);
                 }
             }
@@ -1934,46 +841,45 @@
             return data;
         },
 
-        format: function() {
+        format: function format() {
             var args = arguments;
-            return Array.prototype.shift.call(args).replace(/%s/g, function() { return Array.prototype.shift.call(args); });
+            return Array.prototype.shift.call(args).replace(/%s/g, function () {
+                return Array.prototype.shift.call(args);
+            });
         },
 
-        replaceAll: function(text, dictionary) {
+        replaceAll: function replaceAll(text, dictionary) {
             var re = new RegExp(Object.keys(dictionary).join('|'), 'g');
 
-            return text.replace(
-                re,
-                function(match) {
-                    return dictionary[match];
-                }
-            );
+            return text.replace(re, function (match) {
+                return dictionary[match];
+            });
         },
 
-        camelCase: function(value) {
+        camelCase: function camelCase(value) {
             var flag = false;
             var output = '';
 
             for (var j = 0; j < value.length; j++) {
                 var currChar = value.charAt(j);
-                if (currChar == '-') {
+                if (currChar === '-') {
                     flag = true;
                     continue;
                 }
 
-                output += (!flag) ? currChar : currChar.toUpperCase();
+                output += !flag ? currChar : currChar.toUpperCase();
                 flag = false;
             }
 
             return output;
         },
 
-        antiCamelCase: function(value) {
+        antiCamelCase: function antiCamelCase(value) {
             var output = '';
 
             for (var j = 0; j < value.length; j++) {
                 var currChar = value.charAt(j);
-                if (currChar != '-' && currChar == currChar.toUpperCase()) {
+                if (currChar !== '-' && currChar == currChar.toUpperCase()) {
                     output += '-' + currChar.toLowerCase();
                     continue;
                 }
@@ -1984,29 +890,22 @@
             return output;
         },
 
-        quoteAttr: function(value) {
-            return value.replace(/&/g, '&amp;')
-                        .replace(/'/g, '&apos;')
-                        .replace(/"/g, '&quot;')
-                        .replace(/</g, '&lt;')
-                        .replace(/>/g, '&gt;')
-                        .replace(/"/g, '&quot;')
-                        .replace(/\r\n/g, '&#13;')
-                        .replace(/[\r\n]/g, '&#13;');
+        quoteAttr: function quoteAttr(value) {
+            return value.replace(/&/g, '&amp;').replace(/'/g, '&apos;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/\r\n/g, '&#13;').replace(/[\r\n]/g, '&#13;');
         },
 
-        spliceString: function(value, index, count, add) {
+        spliceString: function spliceString(value, index, count, add) {
             return value.slice(0, index) + (add || '') + value.slice(index + count);
         },
 
-        random: function(min, max) {
+        random: function random(min, max) {
             return min + Math.floor(Math.random() * (max - min + 1));
         },
 
-        find: function(obj, iterator, context) {
+        find: function find(obj, iterator, context) {
             var result;
 
-            obj.some(function(value, index, list) {
+            obj.some(function (value, index, list) {
                 if (iterator.call(context, value, index, list)) {
                     result = value;
                     return true;
@@ -2016,11 +915,99 @@
             return result;
         },
 
-        column: function(obj, key) {
-            return laroux.map(obj, function(value) { return value[key]; }, true);
+        each: function each(arr, fnc, testOwnProperties) {
+            for (var item in arr) {
+                if (testOwnProperties && !arr.hasOwnProperty(item)) {
+                    continue;
+                }
+
+                if (fnc(item, arr[item]) === false) {
+                    break;
+                }
+            }
+
+            return arr;
         },
 
-        shuffle: function(obj) {
+        map: function map(arr, fnc, dontSkipReturns, testOwnProperties) {
+            var results = [];
+
+            for (var item in arr) {
+                if (testOwnProperties && !arr.hasOwnProperty(item)) {
+                    continue;
+                }
+
+                var result = fnc(arr[item], item);
+                if (result === false) {
+                    break;
+                }
+
+                if (dontSkipReturns || result !== undefined) {
+                    results.push(result);
+                }
+            }
+
+            return results;
+        },
+
+        index: function index(arr, value, testOwnProperties) {
+            for (var item in arr) {
+                if (testOwnProperties && !arr.hasOwnProperty(item)) {
+                    continue;
+                }
+
+                if (arr[item] === value) {
+                    return item;
+                }
+            }
+
+            return null;
+        },
+
+        aeach: function aeach(arr, fnc) {
+            for (var i = 0, length = arr.length; i < length; i++) {
+                if (fnc(i, arr[i]) === false) {
+                    break;
+                }
+            }
+
+            return arr;
+        },
+
+        amap: function amap(arr, fnc, dontSkipReturns) {
+            var results = [];
+
+            for (var i = 0, length = arr.length; i < length; i++) {
+                var result = fnc(arr[i], i);
+                if (result === false) {
+                    break;
+                }
+
+                if (dontSkipReturns || result !== undefined) {
+                    results.push(result);
+                }
+            }
+
+            return results;
+        },
+
+        aindex: function aindex(arr, value, start) {
+            for (var i = start || 0, length = arr.length; i < length; i++) {
+                if (arr[i] === value) {
+                    return i;
+                }
+            }
+
+            return -1;
+        },
+
+        column: function column(obj, key) {
+            return helpers.map(obj, function (value) {
+                return value[key];
+            }, true);
+        },
+
+        shuffle: function shuffle(obj) {
             var index = 0,
                 shuffled = [];
 
@@ -2029,7 +1016,7 @@
                     continue;
                 }
 
-                var rand = laroux.helpers.random(0, index);
+                var rand = helpers.random(0, index);
                 shuffled[index++] = shuffled[rand];
                 shuffled[rand] = obj[item];
             }
@@ -2037,7 +1024,7 @@
             return shuffled;
         },
 
-        merge: function() {
+        merge: function merge() {
             var target = Array.prototype.shift.call(arguments),
                 tmp = target,
                 isArray = tmp instanceof Array;
@@ -2060,11 +1047,23 @@
             return tmp;
         },
 
-        duplicate: function(obj) {
+        duplicate: function duplicate(obj) {
             return JSON.parse(JSON.stringify(obj));
         },
 
-        toArray: function(obj) {
+        prependArray: function prependArray(obj, value) {
+            var length = obj.length,
+                items = new Array(length + 1);
+
+            items[0] = value;
+            for (var i = 0, j = 1; i < length; i++, j++) {
+                items[j] = obj[i];
+            }
+
+            return items;
+        },
+
+        toArray: function toArray(obj) {
             var length = obj.length,
                 items = new Array(length);
 
@@ -2075,26 +1074,26 @@
             return items;
         },
 
-        getAsArray: function(obj) {
-            var items;
-
+        getAsArray: function getAsArray(obj) {
             if (obj instanceof Array) {
-                items = obj;
-            } else if (obj instanceof NodeList) {
+                return obj;
+            }
+
+            if (obj instanceof NodeList) {
                 var length = obj.length;
 
-                items = new Array(length);
+                var items = new Array(length);
                 for (var i = 0; i < length; i++) {
                     items[i] = obj[i];
                 }
-            } else {
-                items = [obj];
+
+                return items;
             }
 
-            return items;
+            return [obj];
         },
 
-        getLength: function(obj) {
+        getLength: function getLength(obj) {
             if (obj.constructor === Object) {
                 if (obj.length !== undefined) {
                     return obj.length;
@@ -2106,7 +1105,7 @@
             return -1;
         },
 
-        getKeysRecursive: function(obj, delimiter, prefix, keys) {
+        getKeysRecursive: function getKeysRecursive(obj, delimiter, prefix, keys) {
             if (delimiter === undefined) {
                 delimiter = '.';
             }
@@ -2124,7 +1123,7 @@
                 keys.push(prefix + item);
 
                 if (obj[item] !== undefined && obj[item] !== null && obj[item].constructor === Object) {
-                    laroux.helpers.getKeysRecursive(obj[item], delimiter, prefix + item + delimiter, keys);
+                    helpers.getKeysRecursive(obj[item], delimiter, prefix + item + delimiter, keys);
                     continue;
                 }
             }
@@ -2132,7 +1131,7 @@
             return keys;
         },
 
-        getElement: function(obj, path, defaultValue, delimiter) {
+        getElement: function getElement(obj, path, defaultValue, delimiter) {
             if (defaultValue === undefined) {
                 defaultValue = null;
             }
@@ -2160,42 +1159,464 @@
                 return obj[key];
             }
 
-            return laroux.helpers.getElement(obj[key], rest, defaultValue, delimiter);
-        },
-        /* for javascript 1.7 or later,
-
-        getKeys: function(obj) {
-            var keys = Object.keys(obj);
-            for (var item in keys) {
-                yield keys[item];
-            }
-        } */
+            return helpers.getElement(obj[key], rest, defaultValue, delimiter);
+        }
     };
 
-})(this.laroux);
-;(function(laroux) {
+    return helpers;
+})();
+
+module.exports = exports['default'];
+},{}],7:[function(require,module,exports){
+(function (global){
+'use strict';
+
+Object.defineProperty(exports, '__esModule', {
+    value: true
+});
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+var _larouxAjaxJs = require('./laroux.ajax.js');
+
+var _larouxAjaxJs2 = _interopRequireDefault(_larouxAjaxJs);
+
+var _larouxDateJs = require('./laroux.date.js');
+
+var _larouxDateJs2 = _interopRequireDefault(_larouxDateJs);
+
+var _larouxDeferredJs = require('./laroux.deferred.js');
+
+var _larouxDeferredJs2 = _interopRequireDefault(_larouxDeferredJs);
+
+var _larouxEventsJs = require('./laroux.events.js');
+
+var _larouxEventsJs2 = _interopRequireDefault(_larouxEventsJs);
+
+var _larouxHelpersJs = require('./laroux.helpers.js');
+
+var _larouxHelpersJs2 = _interopRequireDefault(_larouxHelpersJs);
+
+var _larouxStackJs = require('./laroux.stack.js');
+
+var _larouxStackJs2 = _interopRequireDefault(_larouxStackJs);
+
+var _larouxTemplatesJs = require('./laroux.templates.js');
+
+var _larouxTemplatesJs2 = _interopRequireDefault(_larouxTemplatesJs);
+
+var _larouxTimersJs = require('./laroux.timers.js');
+
+var _larouxTimersJs2 = _interopRequireDefault(_larouxTimersJs);
+
+var _larouxVarsJs = require('./laroux.vars.js');
+
+var _larouxVarsJs2 = _interopRequireDefault(_larouxVarsJs);
+
+var _larouxWhenJs = require('./laroux.when.js');
+
+var _larouxWhenJs2 = _interopRequireDefault(_larouxWhenJs);
+
+exports['default'] = (function () {
     'use strict';
 
-    // requires $l
+    var laroux = function laroux(selector, parent) {
+        if (selector instanceof Array) {
+            return _larouxHelpersJs2['default'].toArray((parent || document).querySelectorAll(selector));
+        }
 
-    // timers
-    laroux.timers = {
-        data: [],
+        // FIXME: Laroux: non-chromium optimization, but it runs
+        //                slowly in chromium
+        //
+        // var re = /^#([^\+\>\[\]\.# ]*)$/.exec(selector);
+        // if (re) {
+        //     return (parent || document).getElementById(re[1]);
+        // }
 
-        set: function(timer) {
-            timer.next = Date.now() + timer.timeout;
-            laroux.timers.data.push(timer);
+        return (parent || document).querySelector(selector);
+    };
+
+    _larouxHelpersJs2['default'].extend(laroux, _larouxHelpersJs2['default']);
+    _larouxHelpersJs2['default'].extend(laroux, {
+        ajax: _larouxAjaxJs2['default'],
+        date: _larouxDateJs2['default'],
+        deferred: _larouxDeferredJs2['default'],
+        events: _larouxEventsJs2['default'],
+        stack: _larouxStackJs2['default'],
+        templates: _larouxTemplatesJs2['default'],
+        timers: _larouxTimersJs2['default'],
+        vars: _larouxVarsJs2['default'],
+        when: _larouxWhenJs2['default'],
+
+        cached: {
+            single: {},
+            array: {},
+            id: {}
         },
 
-        remove: function(id) {
-            var targetKey = null;
+        c: function c(selector) {
+            if (selector instanceof Array) {
+                return laroux.cached.array[selector] || (laroux.cached.array[selector] = _larouxHelpersJs2['default'].toArray(document.querySelectorAll(selector)));
+            }
 
-            for (var item in laroux.timers.data) {
-                if (!laroux.timers.data.hasOwnProperty(item)) {
+            return laroux.cached.single[selector] || (laroux.cached.single[selector] = document.querySelector(selector));
+        },
+
+        id: function id(selector, parent) {
+            return (parent || document).getElementById(selector);
+        },
+
+        idc: function idc(selector) {
+            return laroux.cached.id[selector] || (laroux.cached.id[selector] = document.getElementById(selector));
+        },
+
+        readyPassed: false,
+
+        ready: function ready(fnc) {
+            if (!laroux.readyPassed) {
+                _larouxEventsJs2['default'].add('ContentLoaded', fnc);
+                return;
+            }
+
+            fnc();
+        },
+
+        setReady: function setReady() {
+            if (!laroux.readyPassed) {
+                _larouxEventsJs2['default'].invoke('ContentLoaded');
+                setInterval(_larouxTimersJs2['default'].ontick, 100);
+                laroux.readyPassed = true;
+            }
+        }
+    });
+
+    if (global.$l === undefined) {
+        global.$l = laroux;
+    }
+
+    return laroux;
+})();
+
+module.exports = exports['default'];
+}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+},{"./laroux.ajax.js":2,"./laroux.date.js":3,"./laroux.deferred.js":4,"./laroux.events.js":5,"./laroux.helpers.js":6,"./laroux.stack.js":8,"./laroux.templates.js":9,"./laroux.timers.js":10,"./laroux.vars.js":11,"./laroux.when.js":12}],8:[function(require,module,exports){
+/*jslint node: true */
+'use strict';
+
+Object.defineProperty(exports, '__esModule', {
+    value: true
+});
+
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+var Stack = (function () {
+    function Stack(data, depth, top) {
+        _classCallCheck(this, Stack);
+
+        this._data = {};
+        this._depth = depth;
+        this._top = top || this;
+
+        if (data) {
+            this.setRange(data);
+        }
+    }
+
+    _createClass(Stack, [{
+        key: 'set',
+        value: function set(key, value) {
+            // delete this._data[key];
+
+            var type = typeof value;
+            switch (type) {
+                case 'function':
+                    this._data[key] = value;
+
+                    Object.defineProperty(this, key, {
+                        configurable: true,
+                        get: function get() {
+                            return this._data[key]();
+                        }
+                    });
+                    break;
+
+                default:
+                    /*
+                    if (type === 'object') {
+                        this._data[key] = new Stack(
+                            value,
+                            this._depth ?
+                                this._depth + '.' + key :
+                                key,
+                            this._top
+                        );
+                    } else {
+                        this._data[key] = value;
+                    }
+                    */
+                    this._data[key] = value;
+
+                    Object.defineProperty(this, key, {
+                        configurable: true,
+                        get: function get() {
+                            return this._data[key];
+                        },
+                        set: function set(newValue) {
+                            var oldValue = this._data[key];
+                            if (this._data[key] === newValue) {
+                                return;
+                            }
+
+                            // this.set(this, key, newValue);
+                            this._data[key] = newValue;
+                            this._top.onupdate({ scope: this, key: key, oldValue: oldValue, newValue: newValue });
+                        }
+                    });
+                    break;
+            }
+        }
+    }, {
+        key: 'setRange',
+        value: function setRange(values) {
+            for (var valueKey in values) {
+                if (!values.hasOwnProperty(valueKey)) {
                     continue;
                 }
 
-                var currentItem = laroux.timers.data[item];
+                this.set(valueKey, values[valueKey]);
+            }
+        }
+    }, {
+        key: 'get',
+        value: function get(key, defaultValue) {
+            return this[key] || defaultValue || null;
+        }
+    }, {
+        key: 'getRange',
+        value: function getRange(keys) {
+            var values = {};
+
+            for (var item in keys) {
+                if (!keys.hasOwnProperty(item)) {
+                    continue;
+                }
+
+                values[keys[item]] = this[keys[item]];
+            }
+
+            return values;
+        }
+    }, {
+        key: 'keys',
+        value: function keys() {
+            return Object.keys(this._data);
+        }
+    }, {
+        key: 'length',
+        value: function length() {
+            return Object.keys(this._data).length;
+        }
+    }, {
+        key: 'exists',
+        value: function exists(key) {
+            return key in this._data;
+        }
+    }, {
+        key: 'remove',
+        value: function remove(key) {
+            if (key in this._data) {
+                delete this[key];
+                delete this._data[key];
+            }
+        }
+    }, {
+        key: 'clear',
+        value: function clear() {
+            for (var item in this._data) {
+                if (!this._data.hasOwnProperty(item)) {
+                    continue;
+                }
+
+                delete this[item];
+                delete this._data[item];
+            }
+
+            this._data = {};
+        }
+    }, {
+        key: 'onupdate',
+        value: function onupdate(event) {}
+    }]);
+
+    return Stack;
+})();
+
+exports['default'] = Stack;
+module.exports = exports['default'];
+},{}],9:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, '__esModule', {
+    value: true
+});
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+var _larouxHelpersJs = require('./laroux.helpers.js');
+
+var _larouxHelpersJs2 = _interopRequireDefault(_larouxHelpersJs);
+
+exports['default'] = (function () {
+    'use strict';
+
+    var templates = {
+        engines: {
+            plain: {
+                compile: function compile(template, options) {
+                    return [template, options];
+                },
+
+                render: function render(compiled, model) {
+                    var result = compiled[0],
+                        dict = [],
+                        lastIndex = 0,
+                        nextIndex;
+
+                    while ((nextIndex = result.indexOf('{{', lastIndex)) !== -1) {
+                        nextIndex += 2;
+                        var closeIndex = result.indexOf('}}', nextIndex);
+                        if (closeIndex === -1) {
+                            break;
+                        }
+
+                        var key = result.substring(nextIndex, closeIndex);
+                        dict['{{' + key + '}}'] = _larouxHelpersJs2['default'].getElement(model, key, '');
+                        lastIndex = closeIndex + 2;
+                    }
+
+                    return _larouxHelpersJs2['default'].replaceAll(result, dict);
+                }
+            },
+
+            hogan: {
+                compile: function compile(template, options) {
+                    return Hogan.compile(template, options);
+                },
+
+                render: function render(compiled, model) {
+                    return compiled.render(model);
+                }
+            },
+
+            mustache: {
+                compile: function compile(template, options) {
+                    return Mustache.compile(template, options);
+                },
+
+                render: function render(compiled, model) {
+                    return compiled(model);
+                }
+            },
+
+            handlebars: {
+                compile: function compile(template, options) {
+                    return Handlebars.compile(template, options);
+                },
+
+                render: function render(compiled, model) {
+                    return compiled(model);
+                }
+            },
+
+            lodash: {
+                compile: function compile(template, options) {
+                    /*jslint nomen: true */
+                    return _.compile(template, null, options);
+                },
+
+                render: function render(compiled, model) {
+                    return compiled(model);
+                }
+            },
+
+            underscore: {
+                compile: function compile(template, options) {
+                    /*jslint nomen: true */
+                    return _.compile(template, null, options);
+                },
+
+                render: function render(compiled, model) {
+                    return compiled(model);
+                }
+            }
+        },
+        engine: 'plain',
+
+        apply: function apply(element, model, options) {
+            var content,
+                engine = templates.engines[templates.engine];
+
+            if (element.nodeType === 1 || element.nodeType === 3 || element.nodeType === 11) {
+                content = element.textContent;
+            } else {
+                content = element.nodeValue;
+            }
+
+            var compiled = engine.compile(content, options);
+            return engine.render(compiled, model);
+        }
+
+        /*
+        insert: function (element, model, target, position, options) {
+            var output = templates.apply(element, model, options);
+             dom.insert(target, position || 'beforeend', output);
+        },
+         replace: function (element, model, target, options) {
+            var output = templates.apply(element, model, options);
+             dom.replace(target, output);
+        }
+        */
+    };
+
+    return templates;
+})();
+
+module.exports = exports['default'];
+},{"./laroux.helpers.js":6}],10:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, '__esModule', {
+    value: true
+});
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+var _larouxHelpersJs = require('./laroux.helpers.js');
+
+var _larouxHelpersJs2 = _interopRequireDefault(_larouxHelpersJs);
+
+exports['default'] = (function () {
+    'use strict';
+
+    var timers = {
+        data: [],
+
+        set: function set(timer) {
+            timer.next = Date.now() + timer.timeout;
+            timers.data.push(timer);
+        },
+
+        remove: function remove(id) {
+            var targetKey = null;
+
+            for (var item in timers.data) {
+                if (!timers.data.hasOwnProperty(item)) {
+                    continue;
+                }
+
+                var currentItem = timers.data[item];
 
                 if (currentItem.id !== undefined && currentItem.id == id) {
                     targetKey = item;
@@ -2204,23 +1625,23 @@
             }
 
             if (targetKey !== null) {
-                laroux.timers.data.splice(targetKey, 1);
+                timers.data.splice(targetKey, 1);
                 return true;
             }
 
             return false;
         },
 
-        ontick: function() {
-            var now = Date.now();
+        ontick: function ontick() {
+            var now = Date.now(),
+                removeKeys = [];
 
-            var removeKeys = [];
-            for (var item in laroux.timers.data) {
-                if (!laroux.timers.data.hasOwnProperty(item)) {
+            for (var item in timers.data) {
+                if (!timers.data.hasOwnProperty(item)) {
                     continue;
                 }
 
-                var currentItem = laroux.timers.data[item];
+                var currentItem = timers.data[item];
 
                 if (currentItem.next <= now) {
                     var result = currentItem.ontick(currentItem.state);
@@ -2228,7 +1649,7 @@
                     if (result !== false && currentItem.reset) {
                         currentItem.next = now + currentItem.timeout;
                     } else {
-                        removeKeys.unshift(item);
+                        removeKeys = _larouxHelpersJs2['default'].prependArray(removeKeys, item);
                     }
                 }
             }
@@ -2238,239 +1659,303 @@
                     continue;
                 }
 
-                laroux.timers.data.splice(removeKeys[item2], 1);
+                timers.data.splice(removeKeys[item2], 1);
             }
         }
     };
 
-    laroux.ready(function() {
-        setInterval(laroux.timers.ontick, 100);
-    });
+    return timers;
+})();
 
-})(this.laroux);
-;(function(laroux) {
+module.exports = exports['default'];
+},{"./laroux.helpers.js":6}],11:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, '__esModule', {
+    value: true
+});
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+var _larouxHelpersJs = require('./laroux.helpers.js');
+
+var _larouxHelpersJs2 = _interopRequireDefault(_larouxHelpersJs);
+
+exports['default'] = (function () {
     'use strict';
 
-    // requires $l.helpers
+    var vars = {
+        storages: {
+            cookie: {
+                defaultPath: '/',
 
-    // triggers
-    laroux.triggers = {
-        delegates: [],
-        list: [],
+                get: function get(name, defaultValue) {
+                    var re = new RegExp(encodeURIComponent(name) + '=[^;]+', 'i'),
+                        match = document.cookie.match(re);
 
-        set: function(condition, fnc, state) {
-            var conditions = laroux.helpers.getAsArray(condition);
-
-            for (var item in conditions) {
-                if (!conditions.hasOwnProperty(item)) {
-                    continue;
-                }
-
-                if (laroux.aindex(laroux.triggers.list, conditions[item]) === -1) {
-                    laroux.triggers.list.push(conditions[item]);
-                }
-            }
-
-            laroux.triggers.delegates.push({
-                conditions: conditions,
-                fnc: fnc,
-                state: state
-            });
-        },
-
-        ontrigger: function(triggerName, args) {
-            var eventIdx = laroux.aindex(laroux.triggers.list, triggerName);
-            if (eventIdx !== -1) {
-                laroux.triggers.list.splice(eventIdx, 1);
-            }
-
-            var removeKeys = [];
-            for (var item in laroux.triggers.delegates) {
-                if (!laroux.triggers.delegates.hasOwnProperty(item)) {
-                    continue;
-                }
-
-                var count = 0;
-                var currentItem = laroux.triggers.delegates[item];
-
-                for (var conditionKey in currentItem.conditions) {
-                    if (!currentItem.conditions.hasOwnProperty(conditionKey)) {
-                        continue;
+                    if (!match) {
+                        return defaultValue || null;
                     }
 
-                    var conditionObj = currentItem.conditions[conditionKey];
+                    return decodeURIComponent(match[0].split('=')[1]);
+                },
 
-                    if (laroux.aindex(laroux.triggers.list, conditionObj) !== -1) {
-                        count++;
-                        // break;
+                set: function set(name, value, expires, path) {
+                    var expireValue = '';
+                    if (expires) {
+                        expireValue = '; expires=' + expires.toGMTString();
+                    }
+
+                    document.cookie = encodeURIComponent(name) + '=' + encodeURIComponent(value) + expireValue + '; path=' + (path || vars.storages.cookie.defaultPath);
+                },
+
+                remove: function remove(name, path) {
+                    document.cookie = encodeURIComponent(name) + '=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=' + (path || vars.storages.cookie.defaultPath);
+                }
+            },
+
+            local: {
+                get: function get(name, defaultValue) {
+                    if (!(name in localStorage)) {
+                        return defaultValue || null;
+                    }
+
+                    return JSON.parse(localStorage[name]);
+                },
+
+                set: function set(name, value) {
+                    localStorage[name] = JSON.stringify(value);
+                },
+
+                remove: function remove(name) {
+                    delete localStorage[name];
+                }
+            },
+
+            session: {
+                get: function get(name, defaultValue) {
+                    if (!(name in sessionStorage)) {
+                        return defaultValue || null;
+                    }
+
+                    return JSON.parse(sessionStorage[name]);
+                },
+
+                set: function set(name, value) {
+                    sessionStorage[name] = JSON.stringify(value);
+                },
+
+                remove: function remove(name) {
+                    delete sessionStorage[name];
+                }
+            }
+        },
+        storage: 'local',
+
+        get: function get() {
+            var args = _larouxHelpersJs2['default'].toArray(arguments),
+                storage = args.shift();
+
+            return vars.storages[storage].get.apply(this, args);
+        },
+
+        set: function set() {
+            var args = _larouxHelpersJs2['default'].toArray(arguments),
+                storage = args.shift();
+
+            return vars.storages[storage].set.apply(this, args);
+        },
+
+        remove: function remove() {
+            var args = _larouxHelpersJs2['default'].toArray(arguments),
+                storage = args.shift();
+
+            return vars.storages[storage].remove.apply(this, args);
+        }
+    };
+
+    return vars;
+})();
+
+module.exports = exports['default'];
+},{"./laroux.helpers.js":6}],12:[function(require,module,exports){
+/*jslint node: true */
+'use strict';
+
+Object.defineProperty(exports, '__esModule', {
+    value: true
+});
+
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+var _larouxDeferredJs = require('./laroux.deferred.js');
+
+var _larouxDeferredJs2 = _interopRequireDefault(_larouxDeferredJs);
+
+var _larouxHelpersJs = require('./laroux.helpers.js');
+
+var _larouxHelpersJs2 = _interopRequireDefault(_larouxHelpersJs);
+
+var When = (function () {
+    function When() {
+        _classCallCheck(this, When);
+
+        var self = this;
+
+        this.queues = [];
+        this.remaining = -1;
+
+        this.deferredCompleted = function () {
+            self.remaining--;
+            self.check();
+        };
+
+        if (arguments.length > 0) {
+            this.then.apply(this, arguments);
+        }
+    }
+
+    _createClass(When, [{
+        key: 'then',
+        value: function then() {
+            var args = _larouxHelpersJs2['default'].toArray(arguments);
+            this.queues.push(args);
+
+            this.check();
+
+            return this;
+        }
+    }, {
+        key: 'check',
+        value: function check() {
+            while (this.remaining <= 0) {
+                if (this.remaining !== -1) {
+                    this.queues.shift();
+                }
+
+                if (this.queues.length === 0) {
+                    this.remaining = -1;
+                    break;
+                }
+
+                var queue = this.queues[0];
+                // console.log('queue: ', queue);
+
+                this.remaining = 0;
+                for (var i = 0, _length = queue.length; i < _length; i++) {
+                    if (queue[i].constructor === Function) {
+                        queue[i] = _larouxDeferredJs2['default'].async(queue[i]);
+                    }
+
+                    if (queue[i] instanceof _larouxDeferredJs2['default'] && !queue[i].is('completed')) {
+                        this.remaining++;
+                        queue[i].completed(this.deferredCompleted);
                     }
                 }
-
-                if (count === 0) {
-                    currentItem.fnc(
-                        {
-                            state: currentItem.state,
-                            args: laroux.helpers.getAsArray(args)
-                        }
-                    );
-                    removeKeys.unshift(item);
-                }
             }
-
-            for (var item2 in removeKeys) {
-                if (!removeKeys.hasOwnProperty(item2)) {
-                    continue;
-                }
-
-                laroux.triggers.delegates.splice(removeKeys[item2], 1);
-            }
-
-            // console.log('trigger name: ' + triggerName);
         }
-    };
+    }]);
 
-})(this.laroux);
-;(function(laroux) {
+    return When;
+})();
+
+exports['default'] = When;
+module.exports = exports['default'];
+},{"./laroux.deferred.js":4,"./laroux.helpers.js":6}],13:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, '__esModule', {
+    value: true
+});
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+var _larouxCssJs = require('./laroux.css.js');
+
+var _larouxCssJs2 = _interopRequireDefault(_larouxCssJs);
+
+var _larouxDeferredJs = require('../laroux.deferred.js');
+
+var _larouxDeferredJs2 = _interopRequireDefault(_larouxDeferredJs);
+
+var _larouxHelpersJs = require('../laroux.helpers.js');
+
+var _larouxHelpersJs2 = _interopRequireDefault(_larouxHelpersJs);
+
+exports['default'] = (function () {
     'use strict';
 
-    // requires $l
-
-    // vars
-    laroux.vars = {
-        cookiePath: '/',
-
-        getCookie: function(name, defaultValue) {
-            var re = new RegExp(encodeURIComponent(name) + '=[^;]+', 'i');
-            var match = document.cookie.match(re);
-            
-            if (!match) {
-                return defaultValue || null;
-            }
-
-            return decodeURIComponent(match[0].split('=')[1]);
-        },
-
-        setCookie: function(name, value, expires, path) {
-            var expireValue = '';
-            if (expires) {
-                expireValue = '; expires=' + expires.toGMTString();
-            }
-
-            document.cookie = encodeURIComponent(name) + '=' + encodeURIComponent(value) + expireValue + '; path=' + (path || laroux.vars.cookiePath);
-        },
-
-        removeCookie: function(name, path) {
-            document.cookie = encodeURIComponent(name) + '=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=' + (path || laroux.vars.cookiePath);
-        },
-
-        getLocal: function(name, defaultValue) {
-            if (!(name in localStorage)) {
-                return defaultValue || null;
-            }
-
-            return JSON.parse(localStorage[name]);
-        },
-
-        setLocal: function(name, value) {
-            localStorage[name] = JSON.stringify(value);
-        },
-
-        removeLocal: function(name) {
-            delete localStorage[name];
-        },
-
-        getSession: function(name, defaultValue) {
-            if (!(name in sessionStorage)) {
-                return defaultValue || null;
-            }
-
-            return JSON.parse(sessionStorage[name]);
-        },
-
-        setSession: function(name, value) {
-            sessionStorage[name] = JSON.stringify(value);
-        },
-
-        removeSession: function(name) {
-            delete sessionStorage[name];
-        }
-    };
-
-})(this.laroux);
-;(function(laroux) {
-    'use strict';
-
-    // requires $l.helpers
-    // requires $l.css
-
-    // anim
-    laroux.anim = {
+    var anim = {
         data: [],
 
         fx: {
-            interpolate: function (source, target, shift) {
-                return (source + (target - source) * shift);
+            interpolate: function interpolate(source, target, shift) {
+                return source + (target - source) * shift;
             },
 
-            easing: function (pos) {
-                return (-Math.cos(pos * Math.PI) / 2) + 0.5;
+            easing: function easing(pos) {
+                return -Math.cos(pos * Math.PI) / 2 + 0.5;
             }
         },
 
         // {object, property, from, to, time, unit, reset}
-        set: function(newanim) {
-            newanim.startTime = null;
+        set: function set(newanim) {
+            newanim.deferred = new _larouxDeferredJs2['default']();
 
-            if (newanim.unit === undefined || newanim.unit === null) {
+            newanim.startTime = undefined;
+
+            if (newanim.unit === null || newanim.unit === undefined) {
                 newanim.unit = '';
             }
 
-            if (newanim.from === undefined || newanim.from === null) {
-                if (newanim.object === document.body && newanim.property == 'scrollTop') {
-                    newanim.from = (document.documentElement && document.documentElement.scrollTop) || document.body.scrollTop;
+            if (newanim.from === null || newanim.from === undefined) {
+                if (newanim.object === document.body && newanim.property === 'scrollTop') {
+                    newanim.from = document.documentElement && document.documentElement.scrollTop || document.body.scrollTop;
                 } else {
                     newanim.from = newanim.object[newanim.property];
                 }
             }
 
-            if (typeof newanim.from == 'string') {
+            if (newanim.from.constructor === String) {
                 newanim.from = Number(newanim.from);
             }
 
-            if (newanim.reset === undefined || newanim.reset === null) {
-                newanim.reset = false;
-            }
-
             // if (newanim.id === undefined) {
-            //     newanim.id = laroux.helpers.getUniqueId();
+            //     newanim.id = helpers.getUniqueId();
             // }
 
-            laroux.anim.data.push(newanim);
-            if (laroux.anim.data.length === 1) {
-                requestAnimationFrame(laroux.anim.onframe);
+            anim.data.push(newanim);
+            if (anim.data.length === 1) {
+                requestAnimationFrame(anim.onframe);
             }
+
+            return newanim.deferred;
         },
 
-        setCss: function(newanim) {
-            if (newanim.from === undefined || newanim.from === null) {
-                newanim.from = laroux.css.getProperty(newanim.object, newanim.property);
+        setCss: function setCss(newanim) {
+            if (newanim.from === null || newanim.from === undefined) {
+                newanim.from = _larouxCssJs2['default'].getProperty(newanim.object, newanim.property);
             }
 
             newanim.object = newanim.object.style;
-            newanim.property = laroux.helpers.camelCase(newanim.property);
+            newanim.property = _larouxHelpersJs2['default'].camelCase(newanim.property);
 
-            laroux.anim.set(newanim);
+            return anim.set(newanim);
         },
 
-        remove: function(id) {
+        remove: function remove(id) {
             var targetKey = null;
 
-            for (var item in laroux.anim.data) {
-                if (!laroux.anim.data.hasOwnProperty(item)) {
+            for (var item in anim.data) {
+                if (!anim.data.hasOwnProperty(item)) {
                     continue;
                 }
 
-                var currentItem = laroux.anim.data[item];
+                var currentItem = anim.data[item];
 
                 if (currentItem.id !== undefined && currentItem.id == id) {
                     targetKey = item;
@@ -2479,40 +1964,44 @@
             }
 
             if (targetKey !== null) {
-                laroux.anim.data.splice(targetKey, 1);
+                var deferred = anim.data[targetKey].deferred;
+
+                deferred.reject('stop');
+
+                anim.data.splice(targetKey, 1);
                 return true;
             }
 
             return false;
         },
 
-        onframe: function(timestamp) {
+        onframe: function onframe(timestamp) {
             var removeKeys = [];
-            for (var item in laroux.anim.data) {
-                if (!laroux.anim.data.hasOwnProperty(item)) {
+
+            for (var item in anim.data) {
+                if (!anim.data.hasOwnProperty(item)) {
                     continue;
                 }
 
-                var currentItem = laroux.anim.data[item];
-                if (currentItem.startTime === null) {
+                var currentItem = anim.data[item];
+                if (currentItem.startTime === undefined) {
                     currentItem.startTime = timestamp;
                 }
 
-                var result = laroux.anim.step(currentItem, timestamp);
+                anim.step(currentItem, timestamp);
 
-                if (result === false) {
-                    removeKeys.unshift(item);
-                } else if (timestamp > currentItem.startTime + currentItem.time) {
-                    if (currentItem.reset) {
+                if (timestamp > currentItem.startTime + currentItem.time) {
+                    if (currentItem.reset === true) {
                         currentItem.startTime = timestamp;
-                        if (newanim.object === document.body && newanim.property == 'scrollTop') {
+                        if (currentItem.object === document.body && currentItem.property === 'scrollTop') {
                             scrollTo(0, currentItem.from);
-                            // setTimeout(function() { scrollTo(0, currentItem.from); }, 1);
+                            // setTimeout(function () { scrollTo(0, currentItem.from); }, 1);
                         } else {
                             currentItem.object[currentItem.property] = currentItem.from;
                         }
                     } else {
-                        removeKeys.unshift(item);
+                        removeKeys = _larouxHelpersJs2['default'].prependArray(removeKeys, item);
+                        currentItem.deferred.resolve();
                     }
                 }
             }
@@ -2522,263 +2011,972 @@
                     continue;
                 }
 
-                laroux.anim.data.splice(removeKeys[item2], 1);
+                anim.data.splice(removeKeys[item2], 1);
             }
 
-            if (laroux.anim.data.length > 0) {
-                requestAnimationFrame(laroux.anim.onframe);
+            if (anim.data.length > 0) {
+                requestAnimationFrame(anim.onframe);
             }
         },
 
-        step: function(newanim, timestamp) {
+        step: function step(newanim, timestamp) {
             var finishT = newanim.startTime + newanim.time,
-                shift = (timestamp > finishT) ? 1 : (timestamp - newanim.startTime) / newanim.time;
+                shift = timestamp > finishT ? 1 : (timestamp - newanim.startTime) / newanim.time;
 
-            var value = laroux.anim.fx.interpolate(
-                newanim.from,
-                newanim.to,
-                laroux.anim.fx.easing(shift)
-            ) + newanim.unit;
+            var value = anim.fx.interpolate(newanim.from, newanim.to, anim.fx.easing(shift)) + newanim.unit;
 
-            if (newanim.object === document.body && newanim.property == 'scrollTop') {
+            if (newanim.object === document.body && newanim.property === 'scrollTop') {
                 scrollTo(0, value);
-                // setTimeout(function() { scrollTo(0, value); }, 1);
+                // setTimeout(function () { scrollTo(0, value); }, 1);
             } else {
                 newanim.object[newanim.property] = value;
             }
         }
     };
 
-})(this.laroux);
-;(function(laroux) {
+    return anim;
+})();
+
+module.exports = exports['default'];
+},{"../laroux.deferred.js":4,"../laroux.helpers.js":6,"./laroux.css.js":14}],14:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, '__esModule', {
+    value: true
+});
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+var _larouxHelpersJs = require('../laroux.helpers.js');
+
+var _larouxHelpersJs2 = _interopRequireDefault(_larouxHelpersJs);
+
+exports['default'] = (function () {
     'use strict';
 
-    // date
-    laroux.date = {
-        shortDateFormat: 'dd.MM.yyyy',
-        longDateFormat: 'dd MMMM yyyy',
-        timeFormat: 'HH:mm',
-
-        monthsShort: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-        monthsLong: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
-
-        strings: {
-            now:     'now',
-            later:   'later',
-            ago:     'ago',
-            seconds: 'seconds',
-            aminute: 'a minute',
-            minutes: 'minutes',
-            ahour:   'a hour',
-            hours:   'hours',
-            aday:    'a day',
-            days:    'days',
-            aweek:   'a week',
-            weeks:   'weeks',
-            amonth:  'a month',
-            months:  'months',
-            ayear:   'a year',
-            years:   'years'
+    var css = {
+        // class features
+        hasClass: function hasClass(element, className) {
+            return element.classList.contains(className);
         },
 
-        parseEpoch: function(timespan, limitWithWeeks) {
-            if (timespan < 60*1000) {
-                timespan = Math.ceil(timespan / 1000);
+        addClass: function addClass(element, className) {
+            var elements = _larouxHelpersJs2['default'].getAsArray(element);
 
-                return timespan + ' ' + laroux.date.strings.seconds;
+            for (var i = 0, length = elements.length; i < length; i++) {
+                elements[i].classList.add(className);
             }
-
-            if (timespan < 60*60*1000) {
-                timespan = Math.ceil(timespan / (60*1000));
-
-                if (timespan == 1) {
-                    return laroux.date.strings.aminute;
-                }
-
-                return timespan + ' ' + laroux.date.strings.minutes;
-            }
-
-            if (timespan < 24*60*60*1000) {
-                timespan = Math.ceil(timespan / (60*60*1000));
-
-                if (timespan == 1) {
-                    return laroux.date.strings.ahour;
-                }
-
-                return timespan + ' ' + laroux.date.strings.hours;
-            }
-
-            if (timespan < 7*24*60*60*1000) {
-                timespan = Math.ceil(timespan / (24*60*60*1000));
-
-                if (timespan == 1) {
-                    return laroux.date.strings.aday;
-                }
-
-                return timespan + ' ' + laroux.date.strings.days;
-            }
-
-            if (timespan < 4*7*24*60*60*1000) {
-                timespan = Math.ceil(timespan / (7*24*60*60*1000));
-
-                if (timespan == 1) {
-                    return laroux.date.strings.aweek;
-                }
-
-                return timespan + ' ' + laroux.date.strings.weeks;
-            }
-
-            if (limitWithWeeks === true) {
-                return null;
-            }
-
-            if (timespan < 30*7*24*60*60*1000) {
-                timespan = Math.ceil(timespan / (30*24*60*60*1000));
-
-                if (timespan == 1) {
-                    return laroux.date.strings.amonth;
-                }
-
-                return timespan + ' ' + laroux.date.strings.months;
-            }
-
-            timespan = Math.ceil(timespan / (365*24*60*60*1000));
-
-            if (timespan == 1) {
-                return laroux.date.strings.ayear;
-            }
-
-            return timespan + ' ' + laroux.date.strings.years;
         },
 
-        getCustomDateString: function(format, date) {
-            var now = date || new Date();
+        removeClass: function removeClass(element, className) {
+            var elements = _larouxHelpersJs2['default'].getAsArray(element);
 
-            return format.replace(
-                /yyyy|yy|MMMM|MMM|MM|M|dd|d|hh|h|HH|H|mm|m|ss|s|tt|t/g,
-                function(match) {
-                    switch (match) {
-                        case 'yyyy':
-                            return now.getFullYear();
+            for (var i = 0, length = elements.length; i < length; i++) {
+                elements[i].classList.remove(className);
+            }
+        },
 
-                        case 'yy':
-                            return now.getYear();
+        toggleClass: function toggleClass(element, className) {
+            var elements = _larouxHelpersJs2['default'].getAsArray(element);
 
-                        case 'MMMM':
-                            return laroux.date.monthsLong[now.getMonth()];
+            for (var i = 0, length = elements.length; i < length; i++) {
+                if (elements[i].classList.contains(className)) {
+                    elements[i].classList.remove(className);
+                } else {
+                    elements[i].classList.add(className);
+                }
+            }
+        },
 
-                        case 'MMM':
-                            return laroux.date.monthsShort[now.getMonth()];
+        cycleClass: function cycleClass(elements, className) {
+            for (var i = 0, length = elements.length; i < length; i++) {
+                if (elements[i].classList.contains(className)) {
+                    elements[i].classList.remove(className);
+                    elements[(i + 1) % length].classList.add(className);
+                    return;
+                }
+            }
+        },
 
-                        case 'MM':
-                            return ('0' + (now.getMonth() + 1)).substr(-2, 2);
+        // style features
+        getProperty: function getProperty(element, styleName) {
+            var style = getComputedStyle(element);
 
-                        case 'M':
-                            return now.getMonth() + 1;
+            styleName = _larouxHelpersJs2['default'].antiCamelCase(styleName);
 
-                        case 'dd':
-                            return ('0' + now.getDate()).substr(-2, 2);
+            return style.getPropertyValue(styleName);
+        },
 
-                        case 'd':
-                            return now.getDate();
+        setProperty: function setProperty(element, properties, value) {
+            var elements = _larouxHelpersJs2['default'].getAsArray(element);
 
-                        case 'hh':
-                            var hour1 = now.getHours();
-                            return ('0' + (((hour1 % 12) > 0) ? hour1 % 12 : 12)).substr(-2, 2);
+            if (typeof properties === 'string') {
+                var oldProperties = properties;
+                properties = {};
+                properties[oldProperties] = value;
+            }
 
-                        case 'h':
-                            var hour2 = now.getHours();
-                            return ((hour2 % 12) > 0) ? hour2 % 12 : 12;
+            for (var styleName in properties) {
+                if (!properties.hasOwnProperty(styleName)) {
+                    continue;
+                }
 
-                        case 'HH':
-                            return ('0' + now.getHours()).substr(-2, 2);
+                var newStyleName = _larouxHelpersJs2['default'].camelCase(styleName);
 
-                        case 'H':
-                            return now.getHours();
+                for (var i = 0, length = elements.length; i < length; i++) {
+                    elements[i].style[newStyleName] = properties[styleName];
+                }
+            }
+        },
 
-                        case 'mm':
-                            return ('0' + now.getMinutes()).substr(-2, 2);
+        // transition features
+        defaultTransition: '2s ease',
 
-                        case 'm':
-                            return now.getMinutes();
+        setTransitionSingle: function setTransitionSingle(element, transition) {
+            var transitions = _larouxHelpersJs2['default'].getAsArray(transition),
+                style = getComputedStyle(element),
+                currentTransitions = style.getPropertyValue('transition') || style.getPropertyValue('-webkit-transition') || style.getPropertyValue('-ms-transition') || '',
+                currentTransitionsArray;
 
-                        case 'ss':
-                            return ('0' + now.getSeconds()).substr(-2, 2);
+            if (currentTransitions.length > 0) {
+                currentTransitionsArray = currentTransitions.split(',');
+            } else {
+                currentTransitionsArray = [];
+            }
 
-                        case 's':
-                            return now.getSeconds();
+            for (var item in transitions) {
+                if (!transitions.hasOwnProperty(item)) {
+                    continue;
+                }
 
-                        case 'tt':
-                            if (now.getHours() >= 12) {
-                                return 'pm';
-                            }
+                var styleName,
+                    transitionProperties,
+                    pos = transitions[item].indexOf(' ');
 
-                            return 'am';
+                if (pos !== -1) {
+                    styleName = transitions[item].substring(0, pos);
+                    transitionProperties = transitions[item].substring(pos + 1);
+                } else {
+                    styleName = transitions[item];
+                    transitionProperties = css.defaultTransition;
+                }
 
-                        case 't':
-                            if (now.getHours() >= 12) {
-                                return 'p';
-                            }
-
-                            return 'a';
+                var found = false;
+                for (var j = 0; j < currentTransitionsArray.length; j++) {
+                    if (currentTransitionsArray[j].trim().localeCompare(styleName) === 0) {
+                        currentTransitionsArray[j] = styleName + ' ' + transitionProperties;
+                        found = true;
+                        break;
                     }
-
-                    return match;
                 }
-            );
-        },
 
-        getDateDiffString: function(date) {
-            var now = Date.now(),
-                timespan = now - date.getTime(),
-                absTimespan = Math.abs(timespan),
-                past = (timespan > 0);
-
-            if (absTimespan <= 3000) {
-                return laroux.date.strings.now;
+                if (!found) {
+                    currentTransitionsArray.push(styleName + ' ' + transitionProperties);
+                }
             }
 
-            var timespanstring = laroux.date.parseEpoch(absTimespan, true);
-            if (timespanstring !== null) {
-                return timespanstring +
-                    ' ' +
-                    (past ?
-                        laroux.date.strings.ago :
-                        laroux.date.strings.later);
+            var value = currentTransitionsArray.join(', ');
+
+            element.style.transition = value;
+            element.style.webkitTransition = value;
+            element.style.msTransition = value;
+        },
+
+        setTransition: function setTransition(element, transition) {
+            var elements = _larouxHelpersJs2['default'].getAsArray(element);
+
+            for (var i = 0, length = elements.length; i < length; i++) {
+                css.setTransitionSingle(elements[i], transition);
+            }
+        },
+
+        show: function show(element, transitionProperties) {
+            if (transitionProperties !== undefined) {
+                css.setTransition(element, 'opacity ' + transitionProperties);
+            } else {
+                css.setTransition(element, 'opacity');
             }
 
-            return laroux.date.getShortDateString(date, true);
+            css.setProperty(element, { opacity: 1 });
         },
 
-        getShortDateString: function(date, includeTime) {
-            return laroux.date.getCustomDateString(
-                includeTime ?
-                    laroux.date.shortDateFormat + ' ' + laroux.date.timeFormat :
-                    laroux.date.shortDateFormat,
-                date
-            );
+        hide: function hide(element, transitionProperties) {
+            if (transitionProperties !== undefined) {
+                css.setTransition(element, 'opacity ' + transitionProperties);
+            } else {
+                css.setTransition(element, 'opacity');
+            }
+
+            css.setProperty(element, { opacity: 0 });
         },
 
-        getLongDateString: function(date, includeTime) {
-            return laroux.date.getCustomDateString(
-                includeTime ?
-                    laroux.date.longDateFormat + ' ' + laroux.date.timeFormat :
-                    laroux.date.longDateFormat,
-                date
-            );
+        // measurement features
+        // height of element without padding, margin and border
+        height: function height(element) {
+            var style = getComputedStyle(element),
+                height = style.getPropertyCSSValue('height');
+
+            return height.getFloatValue(height.primitiveType);
+        },
+
+        // height of element with padding but without margin and border
+        innerHeight: function innerHeight(element) {
+            return element.clientHeight;
+        },
+
+        // height of element with padding and border but margin optional
+        outerHeight: function outerHeight(element, includeMargin) {
+            if (includeMargin || false) {
+                return element.offsetHeight;
+            }
+
+            var style = getComputedStyle(element),
+                marginTop = style.getPropertyCSSValue('margin-top'),
+                marginBottom = style.getPropertyCSSValue('margin-bottom'),
+                margins = marginTop.getFloatValue(marginTop.primitiveType) + marginBottom.getFloatValue(marginBottom.primitiveType);
+
+            return Math.ceil(element.offsetHeight + margins);
+        },
+
+        // width of element without padding, margin and border
+        width: function width(element) {
+            var style = getComputedStyle(element),
+                height = style.getPropertyCSSValue('width');
+
+            return height.getFloatValue(height.primitiveType);
+        },
+
+        // width of element with padding but without margin and border
+        innerWidth: function innerWidth(element) {
+            return element.clientWidth;
+        },
+
+        // width of element with padding and border but margin optional
+        outerWidth: function outerWidth(element, includeMargin) {
+            if (includeMargin || false) {
+                return element.offsetWidth;
+            }
+
+            var style = getComputedStyle(element),
+                marginLeft = style.getPropertyCSSValue('margin-left'),
+                marginRight = style.getPropertyCSSValue('margin-right'),
+                margins = marginLeft.getFloatValue(marginLeft.primitiveType) + marginRight.getFloatValue(marginRight.primitiveType);
+
+            return Math.ceil(element.offsetWidth + margins);
+        },
+
+        top: function top(element) {
+            return element.getBoundingClientRect().top + (document.documentElement && document.documentElement.scrollTop || document.body.scrollTop);
+        },
+
+        left: function left(element) {
+            return element.getBoundingClientRect().left + (document.documentElement && document.documentElement.scrollLeft || document.body.scrollLeft);
+        },
+
+        aboveTheTop: function aboveTheTop(element) {
+            return element.getBoundingClientRect().bottom <= 0;
+        },
+
+        belowTheFold: function belowTheFold(element) {
+            return element.getBoundingClientRect().top > innerHeight;
+        },
+
+        leftOfScreen: function leftOfScreen(element) {
+            return element.getBoundingClientRect().right <= 0;
+        },
+
+        rightOfScreen: function rightOfScreen(element) {
+            return element.getBoundingClientRect().left > innerWidth;
+        },
+
+        inViewport: function inViewport(element) {
+            var rect = element.getBoundingClientRect();
+
+            return !(rect.bottom <= 0 || rect.top > innerHeight || rect.right <= 0 || rect.left > innerWidth);
         }
     };
 
-})(this.laroux);
-;(function(laroux) {
+    return css;
+})();
+
+module.exports = exports['default'];
+},{"../laroux.helpers.js":6}],15:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, '__esModule', {
+    value: true
+});
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+var _larouxHelpersJs = require('../laroux.helpers.js');
+
+var _larouxHelpersJs2 = _interopRequireDefault(_larouxHelpersJs);
+
+exports['default'] = (function () {
     'use strict';
 
-    // requires $l.dom
-    // requires $l.forms
+    var dom = {
+        docprop: function docprop(propName) {
+            return document.documentElement.classList.contains(propName);
+        },
 
-    // keys
-    laroux.keys = {
-        keyName: function(keycode) {
+        select: function select(selector, parent) {
+            return _larouxHelpersJs2['default'].toArray((parent || document).querySelectorAll(selector));
+        },
+
+        selectByClass: function selectByClass(selector, parent) {
+            return _larouxHelpersJs2['default'].toArray((parent || document).getElementsByClassName(selector));
+        },
+
+        selectByTag: function selectByTag(selector, parent) {
+            return _larouxHelpersJs2['default'].toArray((parent || document).getElementsByTagName(selector));
+        },
+
+        selectById: function selectById(selector, parent) {
+            return (parent || document).getElementById(selector);
+        },
+
+        selectSingle: function selectSingle(selector, parent) {
+            return (parent || document).querySelector(selector);
+        },
+
+        attr: function attr(element, attributes, value) {
+            if (value === undefined && attributes.constructor !== Object) {
+                return element.getAttribute(attributes);
+            }
+
+            var elements = _larouxHelpersJs2['default'].getAsArray(element);
+            if (typeof attributes === 'string') {
+                var oldAttributes = attributes;
+                attributes = {};
+                attributes[oldAttributes] = value;
+            }
+
+            for (var attributeName in attributes) {
+                if (!attributes.hasOwnProperty(attributeName)) {
+                    continue;
+                }
+
+                for (var i = 0, length = elements.length; i < length; i++) {
+                    if (attributes[attributeName] === null) {
+                        element.removeAttribute(attributeName);
+                    } else {
+                        element.setAttribute(attributeName, attributes[attributeName]);
+                    }
+                }
+            }
+        },
+
+        data: function data(element, datanames, value) {
+            if (value === undefined && datanames.constructor !== Object) {
+                return element.getAttribute('data-' + datanames);
+            }
+
+            var elements = _larouxHelpersJs2['default'].getAsArray(element);
+            if (typeof datanames === 'string') {
+                var oldDatanames = datanames;
+                datanames = {};
+                datanames[oldDatanames] = value;
+            }
+
+            for (var dataName in datanames) {
+                if (!datanames.hasOwnProperty(dataName)) {
+                    continue;
+                }
+
+                for (var i = 0, length = elements.length; i < length; i++) {
+                    if (datanames[dataName] === null) {
+                        element.removeAttribute('data-' + dataName);
+                    } else {
+                        element.setAttribute('data-' + dataName, datanames[dataName]);
+                    }
+                }
+            }
+        },
+
+        eventHistory: [],
+        setEvent: function setEvent(element, eventname, fnc) {
+            var elements = _larouxHelpersJs2['default'].getAsArray(element);
+
+            for (var i = 0, length = elements.length; i < length; i++) {
+                dom.setEventSingle(elements[i], eventname, fnc);
+            }
+        },
+
+        setEventSingle: function setEventSingle(element, eventname, fnc) {
+            var fncWrapper = function fncWrapper(e) {
+                if (fnc(e, element) === false) {
+                    if (e.preventDefault) {
+                        e.preventDefault();
+                    } else {
+                        event.returnValue = false;
+                    }
+                }
+            };
+
+            dom.eventHistory.push({ element: element, eventname: eventname, fnc: fnc, fncWrapper: fncWrapper });
+            element.addEventListener(eventname, fncWrapper, false);
+        },
+
+        unsetEvent: function unsetEvent(element, eventname, fnc) {
+            var elements = _larouxHelpersJs2['default'].getAsArray(element);
+
+            for (var i1 = 0, length1 = elements.length; i1 < length1; i1++) {
+                for (var i2 = 0, length2 = dom.eventHistory.length; i2 < length2; i2++) {
+                    var item = dom.eventHistory[i2];
+
+                    if (item === undefined) {
+                        continue;
+                    }
+
+                    if (item.element !== elements[i1]) {
+                        continue;
+                    }
+
+                    if (eventname !== undefined && item.eventname !== eventname) {
+                        continue;
+                    }
+
+                    if (fnc !== undefined && item.fnc !== fnc) {
+                        continue;
+                    }
+
+                    item.element.removeEventListener(item.eventname, item.fncWrapper, false);
+                    delete dom.eventHistory[i2];
+                }
+            }
+        },
+
+        dispatchEvent: function dispatchEvent(element, eventname, data) {
+            var customEvent = document.createEvent('Event');
+            for (var item in data) {
+                if (!data.hasOwnProperty(item)) {
+                    continue;
+                }
+
+                customEvent[item] = data[item];
+            }
+
+            customEvent.initEvent(eventname, true, true);
+            element.dispatchEvent(customEvent);
+        },
+
+        create: function create(html) {
+            var frag = document.createDocumentFragment(),
+                temp = document.createElement('DIV');
+
+            temp.insertAdjacentHTML('beforeend', html);
+            while (temp.firstChild) {
+                frag.appendChild(temp.firstChild);
+            }
+
+            // nulling out the reference, there is no obvious dispose method
+            temp = null;
+
+            return frag;
+        },
+
+        createElement: function createElement(element, attributes, children) {
+            var elem = document.createElement(element);
+
+            if (attributes !== undefined && attributes.constructor === Object) {
+                for (var item in attributes) {
+                    if (!attributes.hasOwnProperty(item)) {
+                        continue;
+                    }
+
+                    elem.setAttribute(item, attributes[item]);
+                }
+            }
+
+            if (children !== undefined) {
+                if (children.constructor === Object) {
+                    for (var item2 in children) {
+                        if (!children.hasOwnProperty(item2)) {
+                            continue;
+                        }
+
+                        elem.setAttribute(item2, children[item2]);
+                    }
+                } else if ( /* typeof children === 'string' && */children.length > 0) {
+                    dom.append(elem, children);
+                }
+            }
+
+            return elem;
+        },
+
+        createOption: function createOption(element, key, value, isDefault) {
+            /* old behaviour, does not support optgroups as parents.
+            var count = element.options.length;
+            element.options[count] = new Option(value, key);
+             if (isDefault === true) {
+                element.options.selectedIndex = count - 1;
+            }
+            */
+
+            var option = document.createElement('OPTION');
+            option.setAttribute('value', key);
+            if (isDefault === true) {
+                option.setAttribute('checked', 'checked');
+            }
+
+            dom.append(option, value);
+            element.appendChild(option);
+        },
+
+        selectByValue: function selectByValue(element, value) {
+            for (var i = 0, length = element.options.length; i < length; i++) {
+                if (element.options[i].getAttribute('value') == value) {
+                    element.selectedIndex = i;
+                    break;
+                }
+            }
+        }, /*,
+           // TODO: it's redundant for now
+           loadImage: function () {
+             var images = [];
+              for (var i = 0, length = arguments.length; i < length; i++) {
+                 var image = document.createElement('IMG');
+                 image.setAttribute('src', arguments[i]);
+                  images.push(image);
+             }
+              return images;
+           },
+           loadAsyncScript: function (path, triggerName, async) {
+             var elem = document.createElement('script');
+              elem.type = 'text/javascript';
+             elem.async = (async !== undefined) ? async : true;
+             elem.src = path;
+              var loaded = false;
+             elem.onload = elem.onreadystatechange = function () {
+                 if ((elem.readyState && elem.readyState !== 'complete' && elem.readyState !== 'loaded') || loaded) {
+                     return false;
+                 }
+                  elem.onload = elem.onreadystatechange = null;
+                 loaded = true;
+                 if (triggerName) {
+                     if (typeof triggerName === 'function') {
+                         triggerName();
+                     } else {
+                         triggers.ontrigger(triggerName);
+                     }
+                 }
+             };
+              var head = document.getElementsByTagName('head')[0];
+             head.appendChild(elem);
+           },
+           loadAsyncStyle: function (path, triggerName, async) {
+             var elem = document.createElement('LINK');
+              elem.type = 'text/css';
+             elem.async = (async !== undefined) ? async : true;
+             elem.href = path;
+             elem.rel = 'stylesheet';
+              var loaded = false;
+             elem.onload = elem.onreadystatechange = function () {
+                 if ((elem.readyState && elem.readyState !== 'complete' && elem.readyState !== 'loaded') || loaded) {
+                     return false;
+                 }
+                  elem.onload = elem.onreadystatechange = null;
+                 loaded = true;
+                 if (triggerName) {
+                     if (typeof triggerName === 'function') {
+                         triggerName();
+                     } else {
+                         triggers.ontrigger(triggerName);
+                     }
+                 }
+             };
+              var head = document.getElementsByTagName('head')[0];
+             head.appendChild(elem);
+           },*/
+
+        clear: function clear(element) {
+            while (element.hasChildNodes()) {
+                element.removeChild(element.firstChild);
+            }
+        },
+
+        insert: function insert(element, position, content) {
+            element.insertAdjacentHTML(position, content);
+        },
+
+        prepend: function prepend(element, content) {
+            element.insertAdjacentHTML('afterbegin', content);
+        },
+
+        append: function append(element, content) {
+            element.insertAdjacentHTML('beforeend', content);
+        },
+
+        replace: function replace(element, content) {
+            dom.clear(element);
+            element.insertAdjacentHTML('afterbegin', content);
+        },
+
+        replaceText: function replaceText(element, content) {
+            // dom.clear(element);
+            element.textContent = content;
+        },
+
+        remove: function remove(element) {
+            element.remove();
+        },
+
+        cloneReturn: 0,
+        cloneAppend: 1,
+        cloneInsertAfter: 2,
+        cloneInsertBefore: 3,
+
+        clone: function clone(element, type, container, target) {
+            var newElement = element.cloneNode(true);
+
+            if (container === undefined) {
+                container = element.parentNode;
+            }
+            if (target === undefined) {
+                target = element;
+            }
+
+            if (type !== undefined && type != dom.cloneReturn) {
+                if (type == dom.cloneAppend) {
+                    container.appendChild(newElement);
+                } else if (type == dom.cloneInsertAfter) {
+                    container.insertBefore(newElement, target.nextSibling);
+                } else {
+                    // type == dom.cloneInsertBefore
+                    container.insertBefore(newElement, target);
+                }
+            }
+
+            return newElement;
+        } /*,
+          // TODO: it's redundant for now
+          applyOperations: function (element, operations) {
+             for (var operation in operations) {
+                 if (!operations.hasOwnProperty(operation)) {
+                     continue;
+                 }
+                  for (var binding in operations[operation]) {
+                     if (!operations[operation].hasOwnProperty(binding)) {
+                         continue;
+                     }
+                      var value = operations[operation][binding];
+                      switch (operation) {
+                         case 'setprop':
+                             if (binding.substring(0, 1) === '_') {
+                                 element.setAttribute(binding.substring(1), value);
+                                 continue;
+                             }
+                              if (binding === 'content') {
+                                 dom.replace(element, value);
+                                 continue;
+                             }
+                             break;
+                         case 'addprop':
+                             if (binding.substring(0, 1) === '_') {
+                                 element.setAttribute(binding.substring(1), element.getAttribute(binding.substring(1)) + value);
+                                 continue;
+                             }
+                              if (binding === 'content') {
+                                 dom.append(element, value);
+                                 continue;
+                             }
+                             break;
+                         case 'removeprop':
+                             if (value.substring(0, 1) === '_') {
+                                 element.removeAttribute(value.substring(1));
+                                 continue;
+                             }
+                              if (value === 'content') {
+                                 dom.clear(element);
+                                 continue;
+                             }
+                             break;
+                         case 'addclass':
+                             css.addClass(element, value);
+                             break;
+                         case 'removeclass':
+                             css.removeClass(element, value);
+                             break;
+                         case 'addstyle':
+                             css.setProperty(element, binding, value);
+                             break;
+                         case 'removestyle':
+                             css.setProperty(element, value, 'inherit !important');
+                             break;
+                         case 'repeat':
+                             break;
+                         default:
+                             console.log(operation);
+                     }
+                 }
+             }
+          }*/
+    };
+
+    // a fix for Internet Explorer
+    if (typeof Element !== 'undefined') {
+        if (Element.prototype.remove === undefined) {
+            Element.prototype.remove = function () {
+                if (this.parentElement !== null) {
+                    this.parentElement.removeChild(this);
+                }
+            };
+        }
+    }
+
+    return dom;
+})();
+
+module.exports = exports['default'];
+},{"../laroux.helpers.js":6}],16:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, '__esModule', {
+    value: true
+});
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+var _larouxAjaxJs = require('../laroux.ajax.js');
+
+var _larouxAjaxJs2 = _interopRequireDefault(_larouxAjaxJs);
+
+var _larouxDomJs = require('./laroux.dom.js');
+
+var _larouxDomJs2 = _interopRequireDefault(_larouxDomJs);
+
+exports['default'] = (function () {
+    'use strict';
+
+    var forms = {
+        ajaxForm: function ajaxForm(formobj, fnc, fncBegin) {
+            _larouxDomJs2['default'].setEvent(formobj, 'submit', function () {
+                if (fncBegin !== undefined) {
+                    fncBegin();
+                }
+
+                _larouxAjaxJs2['default'].post(formobj.getAttribute('action'), forms.serializeFormData(formobj), fnc);
+
+                return false;
+            });
+        },
+
+        isFormField: function isFormField(element) {
+            if (element.tagName === 'SELECT') {
+                return true;
+            }
+
+            if (element.tagName === 'INPUT') {
+                var type = element.getAttribute('type').toUpperCase();
+
+                if (type === 'FILE' || type === 'CHECKBOX' || type === 'RADIO' || type === 'TEXT' || type === 'PASSWORD' || type === 'HIDDEN') {
+                    return true;
+                }
+
+                return false;
+            }
+
+            if (element.tagName === 'TEXTAREA') {
+                return true;
+            }
+
+            return false;
+        },
+
+        getFormFieldValue: function getFormFieldValue(element) {
+            if (element.disabled === true) {
+                return null;
+            }
+
+            if (element.tagName === 'SELECT') {
+                return element.options[element.selectedIndex].value;
+            }
+
+            if (element.tagName === 'INPUT') {
+                var type = element.getAttribute('type').toUpperCase();
+
+                if (type === 'FILE') {
+                    return element.files[0];
+                }
+
+                if (type === 'CHECKBOX' || type === 'RADIO') {
+                    if (element.checked) {
+                        return element.value;
+                    }
+
+                    return null;
+                }
+
+                if (type === 'TEXT' || type === 'PASSWORD' || type === 'HIDDEN') {
+                    return element.value;
+                }
+
+                return null;
+            }
+
+            if (element.tagName === 'TEXTAREA') {
+                return element.value;
+            }
+
+            return null;
+        },
+
+        setFormFieldValue: function setFormFieldValue(element, value) {
+            if (element.disabled === true) {
+                return;
+            }
+
+            if (element.tagName === 'SELECT') {
+                for (var option in element.options) {
+                    if (!element.options.hasOwnProperty(option)) {
+                        continue;
+                    }
+
+                    if (element.options[option].value == value) {
+                        element.selectedIndex = option;
+                        return;
+                    }
+                }
+
+                return;
+            }
+
+            if (element.tagName === 'INPUT') {
+                var type = element.getAttribute('type').toUpperCase();
+
+                if (type === 'FILE') {
+                    element.files[0] = value;
+                    return;
+                }
+
+                if (type === 'CHECKBOX' || type === 'RADIO') {
+                    if (value === true || value == element.value) {
+                        element.checked = true;
+                    }
+
+                    return;
+                }
+
+                if (type === 'TEXT' || type === 'PASSWORD' || type === 'HIDDEN') {
+                    element.value = value;
+                    return;
+                }
+
+                return;
+            }
+
+            if (element.tagName === 'TEXTAREA') {
+                element.value = value;
+                return;
+            }
+        },
+
+        toggleFormEditing: function toggleFormEditing(formobj, value) {
+            var selection = formobj.querySelectorAll('*[name]');
+
+            if (value === undefined) {
+                if (formobj.getAttribute('data-last-enabled') === null) {
+                    formobj.setAttribute('data-last-enabled', 'enabled');
+                    value = false;
+                } else {
+                    formobj.removeAttribute('data-last-enabled');
+                    value = true;
+                }
+            }
+
+            for (var selected = 0, length = selection.length; selected < length; selected++) {
+                if (!forms.isFormField(selection[selected])) {
+                    continue;
+                }
+
+                var lastDisabled = selection[selected].getAttribute('data-last-disabled');
+                if (!value) {
+                    if (lastDisabled === null) {
+                        if (selection[selected].getAttribute('disabled') !== null) {
+                            selection[selected].setAttribute('data-last-disabled', 'disabled');
+                        }
+                    }
+
+                    selection[selected].setAttribute('disabled', 'disabled');
+                    continue;
+                }
+
+                if (lastDisabled !== null) {
+                    selection[selected].removeAttribute('data-last-disabled');
+                } else {
+                    selection[selected].removeAttribute('disabled');
+                }
+            }
+        },
+
+        serializeFormData: function serializeFormData(formobj) {
+            var formdata = new FormData();
+            var selection = formobj.querySelectorAll('*[name]');
+
+            for (var selected = 0, length = selection.length; selected < length; selected++) {
+                var value = forms.getFormFieldValue(selection[selected]);
+
+                if (value !== null) {
+                    formdata.append(selection[selected].getAttribute('name'), value);
+                }
+            }
+
+            return formdata;
+        },
+
+        serialize: function serialize(formobj) {
+            var values = {};
+            var selection = formobj.querySelectorAll('*[name]');
+
+            for (var selected = 0, length = selection.length; selected < length; selected++) {
+                var value = forms.getFormFieldValue(selection[selected]);
+
+                if (value !== null) {
+                    values[selection[selected].getAttribute('name')] = value;
+                }
+            }
+
+            return values;
+        },
+
+        deserialize: function deserialize(formobj, data) {
+            var selection = formobj.querySelectorAll('*[name]');
+
+            for (var selected = 0, length = selection.length; selected < length; selected++) {
+                forms.setFormFieldValue(selection[selected], data[selection[selected].getAttribute('name')]);
+            }
+        }
+    };
+
+    return forms;
+})();
+
+module.exports = exports['default'];
+},{"../laroux.ajax.js":2,"./laroux.dom.js":15}],17:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, '__esModule', {
+    value: true
+});
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+var _larouxDomJs = require('./laroux.dom.js');
+
+var _larouxDomJs2 = _interopRequireDefault(_larouxDomJs);
+
+var _larouxFormsJs = require('./laroux.forms.js');
+
+var _larouxFormsJs2 = _interopRequireDefault(_larouxFormsJs);
+
+exports['default'] = (function () {
+    'use strict';
+
+    var keys = {
+        keyName: function keyName(keycode) {
             keycode = keycode.toLowerCase();
 
             switch (keycode) {
@@ -2876,78 +3074,94 @@
         },
 
         // {target, key, shift, ctrl, alt, disableInputs, fnc}
-        assign: function(options) {
-            var wrapper = function(event) {
-                if (!event) {
-                    event = window.event;
+        assign: function assign(options) {
+            var wrapper = function wrapper(ev) {
+                if (!ev) {
+                    ev = event;
                 }
 
-                var element = event.target || event.srcElement;
-                if (/* element.nodeType === 1 || */element.nodeType === 3 || element.nodeType === 11) {
+                var element = ev.target || ev.srcElement;
+                if (element.nodeType === 3 || element.nodeType === 11) {
+                    // element.nodeType === 1 ||
                     element = element.parentNode;
                 }
 
-                if (options.disableInputs && laroux.forms.isFormField(element)) {
+                if (options.disableInputs && _larouxFormsJs2['default'].isFormField(element)) {
                     return;
                 }
 
-                if (options.shift && !event.shiftKey) {
+                if (options.shift && !ev.shiftKey) {
                     return;
                 }
 
-                if (options.ctrl && !event.ctrlKey) {
+                if (options.ctrl && !ev.ctrlKey) {
                     return;
                 }
 
-                if (options.alt && !event.altKey) {
+                if (options.alt && !ev.altKey) {
                     return;
                 }
 
-                var key = laroux.keys.keyName(options.key);
-                if (key !== (event.keyCode || event.which)) {
+                var key = keys.keyName(options.key);
+                if (key !== (ev.keyCode || ev.which)) {
                     return;
                 }
 
-                options.fnc(event);
+                options.fnc(ev);
 
                 return false;
             };
 
-            laroux.dom.setEvent(options.target || document, 'keydown', wrapper);
+            _larouxDomJs2['default'].setEvent(options.target || document, 'keydown', wrapper);
         }
     };
 
-})(this.laroux);
-;(function(laroux) {
+    return keys;
+})();
+
+module.exports = exports['default'];
+},{"./laroux.dom.js":15,"./laroux.forms.js":16}],18:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, '__esModule', {
+    value: true
+});
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+var _larouxDomJs = require('./laroux.dom.js');
+
+var _larouxDomJs2 = _interopRequireDefault(_larouxDomJs);
+
+var _larouxHelpersJs = require('../laroux.helpers.js');
+
+var _larouxHelpersJs2 = _interopRequireDefault(_larouxHelpersJs);
+
+exports['default'] = (function () {
     'use strict';
 
-    // requires $l.dom
-    // requires $l.helpers
-    // requires $l.stack
-
-    // mvc
-    laroux.mvc = {
+    var mvc = {
         apps: {},
         pauseUpdate: false,
 
-        init: function(element, model) {
+        init: function init(element, model) {
             if (element.constructor === String) {
-                element = laroux.dom.selectById(element);
+                element = _larouxDomJs2['default'].selectById(element);
             }
 
-            // if (model.constructor !== laroux.stack) {
-            //     model = new laroux.stack(model);
+            // if (model.constructor !== Stack) {
+            //     model = new Stack(model);
             // }
 
             var appKey = element.getAttribute('id');
 
-            model.onupdate = function(event) {
-                if (!laroux.mvc.pauseUpdate) {
-                    laroux.mvc.update(appKey); // , [event.key]
+            model.onupdate = function (event) {
+                if (!mvc.pauseUpdate) {
+                    mvc.update(appKey); // , [event.key]
                 }
             };
 
-            laroux.mvc.apps[appKey] = {
+            mvc.apps[appKey] = {
                 element: element,
                 model: model // ,
                 // modelKeys: null,
@@ -2955,50 +3169,47 @@
                 // eventElements: null
             };
 
-            laroux.mvc.rebind(appKey);
+            mvc.rebind(appKey);
         },
 
-        rebind: function(appKey) {
-            var app = laroux.mvc.apps[appKey];
-            app.modelKeys = laroux.helpers.getKeysRecursive(app.model._data); // FIXME: works only for $l.stack
+        rebind: function rebind(appKey) {
+            var app = mvc.apps[appKey];
+            /*jslint nomen: true */
+            app.modelKeys = _larouxHelpersJs2['default'].getKeysRecursive(app.model._data); // FIXME: works only for $l.stack
             app.boundElements = {};
             app.eventElements = [];
 
-            laroux.mvc.scanElements(app, app.element);
-            laroux.mvc.update(appKey);
+            mvc.scanElements(app, app.element);
+            mvc.update(appKey);
 
-            var fnc = function(ev, elem) {
-                var binding = laroux.mvc.bindStringParser(elem.getAttribute('lr-event'));
-                // laroux.mvc.pauseUpdate = true;
+            var fnc = function fnc(ev, elem) {
+                var binding = mvc.bindStringParser(elem.getAttribute('lr-event'));
+                // mvc.pauseUpdate = true;
                 for (var item in binding) {
                     if (item === null || !binding.hasOwnProperty(item)) {
                         continue;
                     }
 
-                    if (binding[item].charAt(0) == '\'') {
+                    if (binding[item].charAt(0) === '\'') {
                         app.model[item] = binding[item].substring(1, binding[item].length - 1);
-                    } else if (binding[item].substring(0, 5) == 'attr.') {
+                    } else if (binding[item].substring(0, 5) === 'attr.') {
                         app.model[item] = elem.getAttribute(binding[item].substring(5));
-                    } else if (binding[item].substring(0, 5) == 'prop.') {
+                    } else if (binding[item].substring(0, 5) === 'prop.') {
                         app.model[item] = elem[binding[item].substring(5)];
                     }
                 }
-                // laroux.mvc.pauseUpdate = false;
+                // mvc.pauseUpdate = false;
             };
 
             for (var i = 0, length = app.eventElements.length; i < length; i++) {
-                laroux.dom.setEvent(
-                    app.eventElements[i].element,
-                    app.eventElements[i].binding[null],
-                    fnc
-                );
+                _larouxDomJs2['default'].setEvent(app.eventElements[i].element, app.eventElements[i].binding[null], fnc);
             }
         },
 
-        scanElements: function(app, element) {
+        scanElements: function scanElements(app, element) {
             for (var i = 0, atts = element.attributes, m = atts.length; i < m; i++) {
-                if (atts[i].name == 'lr-bind') {
-                    var binding1 = laroux.mvc.bindStringParser(atts[i].value);
+                if (atts[i].name === 'lr-bind') {
+                    var binding1 = mvc.bindStringParser(atts[i].value);
 
                     for (var item in binding1) {
                         if (!binding1.hasOwnProperty(item)) {
@@ -3014,8 +3225,8 @@
                             target: item
                         });
                     }
-                } else if (atts[i].name == 'lr-event') {
-                    var binding2 = laroux.mvc.bindStringParser(atts[i].value);
+                } else if (atts[i].name === 'lr-event') {
+                    var binding2 = mvc.bindStringParser(atts[i].value);
 
                     app.eventElements.push({
                         element: element,
@@ -3026,15 +3237,15 @@
 
             for (var j = 0, chldrn = element.childNodes, n = chldrn.length; j < n; j++) {
                 if (chldrn[j].nodeType === 1) {
-                    laroux.mvc.scanElements(app, chldrn[j]);
+                    mvc.scanElements(app, chldrn[j]);
                 }
             }
         },
 
-        update: function(appKey, keys) {
-            var app = laroux.mvc.apps[appKey];
+        update: function update(appKey, keys) {
+            var app = mvc.apps[appKey];
 
-            if (typeof keys == 'undefined') {
+            if (typeof keys === 'undefined') {
                 keys = app.modelKeys;
             }
 
@@ -3046,20 +3257,20 @@
                 var boundElement = app.boundElements[keys[i]];
 
                 for (var j = 0, length2 = boundElement.length; j < length2; j++) {
-                    if (boundElement[j].target.substring(0, 6) == 'style.') {
-                        boundElement[j].element.style[boundElement[j].target.substring(6)] = laroux.helpers.getElement(app.model, keys[i]);
-                    } else if (boundElement[j].target.substring(0, 5) == 'attr.') {
+                    if (boundElement[j].target.substring(0, 6) === 'style.') {
+                        boundElement[j].element.style[boundElement[j].target.substring(6)] = _larouxHelpersJs2['default'].getElement(app.model, keys[i]);
+                    } else if (boundElement[j].target.substring(0, 5) === 'attr.') {
                         // FIXME removeAttribute on null value?
-                        boundElement[j].element.setAttribute(boundElement[j].target.substring(5), laroux.helpers.getElement(app.model, keys[i]));
-                    } else if (boundElement[j].target.substring(0, 5) == 'prop.') {
+                        boundElement[j].element.setAttribute(boundElement[j].target.substring(5), _larouxHelpersJs2['default'].getElement(app.model, keys[i]));
+                    } else if (boundElement[j].target.substring(0, 5) === 'prop.') {
                         // FIXME removeAttribute on null value?
-                        boundElement[j].element[boundElement[j].target.substring(5)] = laroux.helpers.getElement(app.model, keys[i]);
+                        boundElement[j].element[boundElement[j].target.substring(5)] = _larouxHelpersJs2['default'].getElement(app.model, keys[i]);
                     }
                 }
             }
         },
 
-        bindStringParser: function(text) {
+        bindStringParser: function bindStringParser(text) {
             var lastBuffer = null,
                 buffer = '',
                 state = 0,
@@ -3069,7 +3280,7 @@
                 var curr = text.charAt(i);
 
                 if (state === 0) {
-                    if (curr == ':') {
+                    if (curr === ':') {
                         state = 1;
                         lastBuffer = buffer.trim();
                         buffer = '';
@@ -3077,7 +3288,7 @@
                     }
                 }
 
-                if (curr == ',') {
+                if (curr === ',') {
                     state = 0;
                     result[lastBuffer] = buffer.trim();
                     buffer = '';
@@ -3095,267 +3306,33 @@
         }
     };
 
-})(this.laroux);
-;(function(laroux) {
+    return mvc;
+})();
+
+module.exports = exports['default'];
+},{"../laroux.helpers.js":6,"./laroux.dom.js":15}],19:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, '__esModule', {
+    value: true
+});
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+var _larouxJs = require('../laroux.js');
+
+var _larouxJs2 = _interopRequireDefault(_larouxJs);
+
+var _larouxDomJs = require('./laroux.dom.js');
+
+var _larouxDomJs2 = _interopRequireDefault(_larouxDomJs);
+
+exports['default'] = (function () {
     'use strict';
-
-    // stack
-    laroux.stack = function(data, depth, top) {
-        this._data = {};
-        this._depth = depth;
-        this._top = top || this;
-
-        this.set = function(key, value) {
-            // delete this._data[key];
-
-            var type = typeof value;
-            switch (type) {
-                case 'function':
-                    this._data[key] = value;
-
-                    Object.defineProperty(
-                        this,
-                        key,
-                        {
-                            configurable: true,
-                            get: function() {
-                                return this._data[key]();
-                            }
-                        }
-                    );
-                    break;
-
-                default:
-                    /*
-                    if (type == 'object') {
-                        this._data[key] = new laroux.stack(
-                            value,
-                            this._depth ?
-                                this._depth + '.' + key :
-                                key,
-                            this._top
-                        );
-                    } else {
-                        this._data[key] = value;
-                    }
-                    */
-                    this._data[key] = value;
-
-                    Object.defineProperty(
-                        this,
-                        key,
-                        {
-                            configurable: true,
-                            get: function() {
-                                return this._data[key];
-                            },
-                            set: function(newValue) {
-                                var oldValue = this._data[key];
-                                if (this._data[key] === newValue) {
-                                    return;
-                                }
-
-                                // this.set(this, key, newValue);
-                                this._data[key] = newValue;
-                                this._top.onupdate({scope: this, key: key, oldValue: oldValue, newValue: newValue});
-                            }
-                        }
-                    );
-                    break;
-            }
-        };
-
-        this.setRange = function(values) {
-            for (var valueKey in values) {
-                if (!values.hasOwnProperty(valueKey)) {
-                    continue;
-                }
-
-                this.set(valueKey, values[valueKey]);
-            }
-        };
-
-        this.get = function(key, defaultValue) {
-            return this[key] || defaultValue || null;
-        };
-
-        this.getRange = function(keys) {
-            var values = {};
-
-            for (var item in keys) {
-                if (!keys.hasOwnProperty(item)) {
-                    continue;
-                }
-
-                values[keys[item]] = this[keys[item]];
-            }
-
-            return values;
-        };
-
-        this.keys = function() {
-            return Object.keys(this._data);
-        };
-
-        this.length = function() {
-            return Object.keys(this._data).length;
-        };
-
-        this.exists = function(key) {
-            return (key in this._data);
-        };
-
-        this.remove = function(key) {
-            if (key in this._data) {
-                delete this[key];
-                delete this._data[key];
-            }
-        };
-
-        this.clear = function() {
-            for (var item in this._data) {
-                if (!this._data.hasOwnProperty(item)) {
-                    continue;
-                }
-
-                delete this[item];
-                delete this._data[item];
-            }
-
-            this._data = {};
-        };
-
-        this.onupdate = function(event) {
-        };
-
-        if (data) {
-            this.setRange(data);
-        }
-    };
-
-})(this.laroux);
-;(function(laroux) {
-    'use strict';
-
-    // requires $l.dom
-
-    // templates
-    laroux.templates = {
-        engines: {
-            plain: {
-                compile: function(template, options) {
-                    return [template, options];
-                },
-
-                render: function(compiled, model) {
-                    var result = compiled[0],
-                        dict = [],
-                        lastIndex = 0,
-                        nextIndex;
-
-                    while ((nextIndex = result.indexOf('{{', lastIndex)) !== -1) {
-                        nextIndex += 2;
-                        var closeIndex = result.indexOf('}}', nextIndex);
-                        if (closeIndex === -1) {
-                            break;
-                        }
-
-                        var key = result.substring(nextIndex, closeIndex);
-                        dict['{{' + key + '}}'] = laroux.helpers.getElement(model, key, '');
-                        lastIndex = closeIndex + 2;
-                    }
-
-                    return laroux.helpers.replaceAll(result, dict);
-                }
-            },
-
-            hogan: {
-                compile: function(template, options) {
-                    return Hogan.compile(template, options);
-                },
-
-                render: function(compiled, model) {
-                    return compiled.render(model);
-                }
-            },
-
-            mustache: {
-                compile: function(template, options) {
-                    return Mustache.compile(template, options);
-                },
-
-                render: function(compiled, model) {
-                    return compiled(model);
-                }
-            },
-
-            handlebars: {
-                compile: function(template, options) {
-                    return Handlebars.compile(template, options);
-                },
-
-                render: function(compiled, model) {
-                    return compiled(model);
-                }
-            },
-
-            lodash: {
-                compile: function(template, options) {
-                    return _.compile(template, null, options);
-                },
-
-                render: function(compiled, model) {
-                    return compiled(model);
-                }
-            },
-
-            underscore: {
-                compile: function(template, options) {
-                    return _.compile(template, null, options);
-                },
-
-                render: function(compiled, model) {
-                    return compiled(model);
-                }
-            }
-        },
-        engine: 'plain',
-
-        apply: function(element, model, options) {
-            var content, engine = laroux.templates.engines[laroux.templates.engine];
-
-            if (element.nodeType === 1 || element.nodeType === 3 || element.nodeType === 11) {
-                content = element.textContent;
-            } else {
-                content = element.nodeValue;
-            }
-
-            var compiled = engine.compile(content, options);
-            return engine.render(compiled, model);
-        },
-
-        insert: function(element, model, target, position, options) {
-            var output = laroux.templates.apply(element, model, options);
-
-            laroux.dom.insert(target, position || 'beforeend', output);
-        },
-
-        replace: function(element, model, target, options) {
-            var output = laroux.templates.apply(element, model, options);
-
-            laroux.dom.replace(target, output);
-        }
-    };
-
-})(this.laroux);
-;(function(laroux) {
-    'use strict';
-
-    // requires $l.dom
 
     // touch - partially taken from 'tocca.js' project
     //         can be found at: https://github.com/GianlucaGuarini/Tocca.js
-    laroux.touch = {
+    var touch = {
         touchStarted: null,
         swipeTreshold: 80,
         precision: 30,
@@ -3372,322 +3349,103 @@
             move: ['touchmove', 'pointermove', 'MSPointerMove', 'mousemove']
         },
 
-        locatePointer: function(event) {
+        locatePointer: function locatePointer(event) {
             if (event.targetTouches) {
                 event = event.targetTouches[0];
             }
 
-            laroux.touch.pos = [event.pageX, event.pageY];
+            touch.pos = [event.pageX, event.pageY];
         },
 
-        onstart: function(event) {
-            laroux.touch.locatePointer(event);
-            laroux.touch.cached = [laroux.touch.pos[0], laroux.touch.pos[1]];
-            laroux.touch.touchStarted = Date.now();
-            laroux.touch.tapCount++;
+        init: function init() {
+            var events = [0, navigator.msPointerEnabled ? 2 : 1, 3];
 
-            var fnc = function() {
-                if (
-                    laroux.touch.cached[0] >= laroux.touch.pos[0] - laroux.touch.precision &&
-                    laroux.touch.cached[0] <= laroux.touch.pos[0] + laroux.touch.precision &&
-                    laroux.touch.cached[1] >= laroux.touch.pos[1] - laroux.touch.precision &&
-                    laroux.touch.cached[1] <= laroux.touch.pos[1] + laroux.touch.precision
-                ) {
-                    if (laroux.touch.touchStarted === null) {
-                        laroux.dom.dispatchEvent(
-                            event.target,
-                            (laroux.touch.tapCount === 2) ? 'dbltap' : 'tap',
-                            {
-                                innerEvent: event,
-                                x: laroux.touch.pos[0],
-                                y: laroux.touch.pos[1],
-                            }
-                        );
+            for (var i = 0, length = events.length; i < length; i++) {
+                _larouxDomJs2['default'].setEventSingle(document, touch.events.start[events[i]], touch.onstart);
+                _larouxDomJs2['default'].setEventSingle(document, touch.events.end[events[i]], touch.onend);
+                _larouxDomJs2['default'].setEventSingle(document, touch.events.move[events[i]], touch.locatePointer);
+            }
+        },
 
-                        laroux.touch.tapCount = 0;
+        onstart: function onstart(event) {
+            touch.locatePointer(event);
+            touch.cached = [touch.pos[0], touch.pos[1]];
+            touch.touchStarted = Date.now();
+            /*jslint plusplus: true */
+            touch.tapCount++;
+
+            var fnc = function fnc() {
+                if (touch.cached[0] >= touch.pos[0] - touch.precision && touch.cached[0] <= touch.pos[0] + touch.precision && touch.cached[1] >= touch.pos[1] - touch.precision && touch.cached[1] <= touch.pos[1] + touch.precision) {
+                    if (touch.touchStarted === null) {
+                        _larouxDomJs2['default'].dispatchEvent(event.target, touch.tapCount === 2 ? 'dbltap' : 'tap', {
+                            innerEvent: event,
+                            x: touch.pos[0],
+                            y: touch.pos[1]
+                        });
+
+                        touch.tapCount = 0;
                         return;
                     }
 
-                    if (Date.now() - laroux.touch.touchStarted > laroux.touch.longTapTreshold) {
-                        laroux.dom.dispatchEvent(
-                            event.target,
-                            'longtap',
-                            {
-                                innerEvent: event,
-                                x: laroux.touch.pos[0],
-                                y: laroux.touch.pos[1],
-                            }
-                        );
+                    if (Date.now() - touch.touchStarted > touch.longTapTreshold) {
+                        _larouxDomJs2['default'].dispatchEvent(event.target, 'longtap', {
+                            innerEvent: event,
+                            x: touch.pos[0],
+                            y: touch.pos[1]
+                        });
 
-                        laroux.touch.touchStarted = null;
-                        laroux.touch.tapCount = 0;
+                        touch.touchStarted = null;
+                        touch.tapCount = 0;
                         return;
                     }
 
-                    laroux.tapTimer = setTimeout(fnc, laroux.touch.tapTreshold);
+                    touch.tapTimer = setTimeout(fnc, touch.tapTreshold);
                     return;
                 }
 
-                laroux.touch.tapCount = 0;
+                touch.tapCount = 0;
             };
 
-            clearTimeout(laroux.tapTimer);
-            laroux.tapTimer = setTimeout(fnc, laroux.touch.tapTreshold);
+            clearTimeout(touch.tapTimer);
+            touch.tapTimer = setTimeout(fnc, touch.tapTreshold);
         },
 
-        onend: function(event) {
-            var delta = [
-                    laroux.touch.pos[0] - laroux.touch.cached[0],
-                    laroux.touch.pos[1] - laroux.touch.cached[1]
-                ],
+        onend: function onend(event) {
+            var delta = [touch.pos[0] - touch.cached[0], touch.pos[1] - touch.cached[1]],
                 data = {
-                    innerEvent: event,
-                    x: laroux.touch.pos[0],
-                    y: laroux.touch.pos[1],
-                    distance: {
-                        x: Math.abs(delta[0]),
-                        y: Math.abs(delta[1])
-                    }
-                };
+                innerEvent: event,
+                x: touch.pos[0],
+                y: touch.pos[1],
+                distance: {
+                    x: Math.abs(delta[0]),
+                    y: Math.abs(delta[1])
+                }
+            };
 
-            laroux.touch.touchStarted = null;
+            touch.touchStarted = null;
 
-            if (delta[0] <= -laroux.touch.swipeTreshold) {
-                laroux.dom.dispatchEvent(event.target, 'swiperight', data);
+            if (delta[0] <= -touch.swipeTreshold) {
+                _larouxDomJs2['default'].dispatchEvent(event.target, 'swiperight', data);
             }
 
-            if (delta[0] >= laroux.touch.swipeTreshold) {
-                laroux.dom.dispatchEvent(event.target, 'swipeleft', data);
+            if (delta[0] >= touch.swipeTreshold) {
+                _larouxDomJs2['default'].dispatchEvent(event.target, 'swipeleft', data);
             }
 
-            if (delta[1] <= -laroux.touch.swipeTreshold) {
-                laroux.dom.dispatchEvent(event.target, 'swipedown', data);
+            if (delta[1] <= -touch.swipeTreshold) {
+                _larouxDomJs2['default'].dispatchEvent(event.target, 'swipedown', data);
             }
 
-            if (delta[1] >= laroux.touch.swipeTreshold) {
-                laroux.dom.dispatchEvent(event.target, 'swipeup', data);
+            if (delta[1] >= touch.swipeTreshold) {
+                _larouxDomJs2['default'].dispatchEvent(event.target, 'swipeup', data);
             }
         }
     };
 
-    laroux.ready(function() {
-        var events = [
-            0,
-            (navigator.msPointerEnabled) ? 2 : 1,
-            3
-        ];
+    _larouxJs2['default'].ready(touch.init);
 
-        for (var i = 0, length = events.length; i < length; i++) {
-            laroux.dom.setEventSingle(document, laroux.touch.events.start[events[i]], laroux.touch.onstart);
-            laroux.dom.setEventSingle(document, laroux.touch.events.end[events[i]], laroux.touch.onend);
-            laroux.dom.setEventSingle(document, laroux.touch.events.move[events[i]], laroux.touch.locatePointer);
-        }
-    });
+    return touch;
+})();
 
-})(this.laroux);
-;(function(laroux) {
-    'use strict';
-
-    // requires $l
-    // requires $l.dom
-    // requires $l.helpers
-    // requires $l.css
-    // requires $l.timers
-    // requires $l.date
-
-    // ui
-    laroux.ui = {
-        floatContainer: null,
-
-        popup: {
-            defaultTimeout: 500,
-
-            createBox: function(id, xclass, message) {
-                return laroux.dom.createElement('DIV', {id: id, 'class': xclass},
-                    message
-                );
-            },
-
-            msgbox: function(timeout, message) {
-                var id = laroux.helpers.getUniqueId();
-                var obj = laroux.ui.popup.createBox(id, 'laroux_msgbox', message);
-                laroux.ui.floatContainer.appendChild(obj);
-
-                laroux.css.setProperty(obj, {opacity: 1});
-
-                laroux.timers.set({
-                    timeout: timeout,
-                    reset: false,
-                    ontick: function(x) {
-                        // laroux.css.setProperty(x, {opacity: 0});
-                        laroux.dom.remove(x);
-                    },
-                    state: obj
-                });
-            },
-
-            init: function() {
-                laroux.popupFunc = function(message) {
-                    laroux.ui.popup.msgbox(laroux.ui.popup.defaultTimeout, message);
-                };
-            }
-        },
-
-        loading: {
-            elementSelector: null,
-            element: null,
-            defaultDelay: 1500,
-            timer: null,
-
-            killTimer: function() {
-                clearTimeout(laroux.ui.loading.timer);
-            },
-
-            hide: function() {
-                laroux.ui.loading.killTimer();
-
-                laroux.css.setProperty(laroux.ui.loading.element, {display: 'none'});
-                localStorage.loadingIndicator = 'false';
-            },
-
-            show: function(delay) {
-                laroux.ui.loading.killTimer();
-
-                if (delay === undefined) {
-                    delay = laroux.ui.loading.defaultDelay;
-                }
-
-                if (delay > 0) {
-                    setTimeout(function() { laroux.ui.loading.show(0); }, delay);
-                } else {
-                    laroux.css.setProperty(laroux.ui.loading.element, {display: 'block'});
-                    localStorage.loadingIndicator = 'true';
-                }
-            },
-
-            init: function() {
-                if (laroux.ui.loading.element === null && laroux.ui.loading.elementSelector !== null) {
-                    laroux.ui.loading.element = laroux.dom.selectSingle(laroux.ui.loading.elementSelector);
-                }
-
-                if (laroux.ui.loading.element !== null) {
-                    laroux.dom.setEvent(window, 'load', laroux.ui.loading.hide);
-                    laroux.dom.setEvent(window, 'beforeunload', laroux.ui.loading.show);
-
-                    if (localStorage.loadingIndicator !== undefined && localStorage.loadingIndicator == 'true') {
-                        laroux.ui.loading.show(0);
-                    } else {
-                        laroux.ui.loading.show();
-                    }
-                }
-            }
-        },
-
-        dynamicDates: {
-            updateDatesElements: null,
-
-            updateDates: function() {
-                if (laroux.ui.dynamicDates.updateDatesElements === null) {
-                    laroux.ui.dynamicDates.updateDatesElements = laroux.dom.select('*[data-epoch]');
-                }
-
-                for (var item in laroux.ui.dynamicDates.updateDatesElements) {
-                    if (!laroux.ui.dynamicDates.updateDatesElements.hasOwnProperty(item)) {
-                        continue;
-                    }
-
-                    var obj = laroux.ui.dynamicDates.updateDatesElements[item];
-                    // bitshifting (str >> 0) used instead of parseInt(str, 10)
-                    var date = new Date((obj.getAttribute('data-epoch') >> 0) * 1000);
-
-                    laroux.dom.replace(
-                        obj,
-                        laroux.date.getDateString(date)
-                    );
-
-                    obj.setAttribute('title', laroux.date.getLongDateString(date));
-                }
-            },
-
-            init: function() {
-                laroux.timers.set({
-                    timeout: 500,
-                    reset: true,
-                    ontick: laroux.ui.dynamicDates.updateDates
-                });
-            }
-        },
-
-        scrollView: {
-            selectedElements: [],
-
-            onhidden: function(elements) {
-                laroux.css.setProperty(elements, {opacity: 0});
-                laroux.css.setTransition(elements, ['opacity']);
-            },
-
-            onreveal: function(elements) {
-                laroux.css.setProperty(elements, {opacity: 1});
-            },
-
-            set: function(element) {
-                var elements = laroux.helpers.getAsArray(element);
-
-                for (var i = 0, length = elements.length; i < length; i++) {
-                    if (!laroux.css.inViewport(elements[i])) {
-                        laroux.ui.scrollView.selectedElements.push(elements[i]);
-                    }
-                }
-
-                laroux.ui.scrollView.onhidden(laroux.ui.scrollView.selectedElements);
-                laroux.dom.setEvent(window, 'scroll', laroux.ui.scrollView.reveal);
-            },
-
-            reveal: function() {
-                var removeKeys = [],
-                    elements = [];
-
-                laroux.each(
-                    laroux.ui.scrollView.selectedElements,
-                    function(i, element) {
-                        if (laroux.css.inViewport(element)) {
-                            removeKeys.unshift(i);
-                            elements.push(element);
-                        }
-                    }
-                );
-
-                for (var item in removeKeys) {
-                    if (!removeKeys.hasOwnProperty(item)) {
-                        continue;
-                    }
-
-                    laroux.ui.scrollView.selectedElements.splice(removeKeys[item], 1);
-                }
-
-                if (laroux.ui.scrollView.selectedElements.length === 0) {
-                    laroux.dom.unsetEvent(window, 'scroll', laroux.ui.scrollView.reveal);
-                }
-
-                if (elements.length > 0) {
-                    laroux.ui.scrollView.onreveal(elements);
-                }
-            }
-        },
-
-        createFloatContainer: function() {
-            if (!laroux.ui.floatContainer) {
-                laroux.ui.floatContainer = laroux.dom.createElement('DIV', {id: 'laroux_floatdiv'});
-                document.body.insertBefore(laroux.ui.floatContainer, document.body.firstChild);
-            }
-        },
-
-        init: function() {
-            laroux.ui.createFloatContainer();
-            laroux.ui.popup.init();
-            laroux.ui.loading.init();
-            laroux.ui.dynamicDates.init();
-        }
-    };
-
-})(this.laroux);
+module.exports = exports['default'];
+},{"../laroux.js":7,"./laroux.dom.js":15}]},{},[1]);

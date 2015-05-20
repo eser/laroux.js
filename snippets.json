@@ -45,17 +45,5 @@
         "file":         "toggle-all-checkboxes.js",
         "description":  "Toggles check of all comboboxes",
         "onload":       true
-    },
-    {
-        "name":         "Enable Loading Indicator",
-        "file":         "enable-loading-indicator.js",
-        "description":  "Enables displaying a loading indicator during the page load",
-        "onload":       true
-    },
-    {
-        "name":         "Lazy Image Rendering",
-        "file":         "lazy-image-rendering.js",
-        "description":  "Starts image rendering when they shown in the viewport",
-        "onload":       true
     }
 ]

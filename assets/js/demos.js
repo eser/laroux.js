@@ -17,12 +17,15 @@
             'click',
             function() {
                 $l.ajax.getJson(
-                    'test.json',
-                    null,
-                    function(response) {
-                        $l.dom.replace(text, response.testResponse);
-                    }
-                );
+                    'test.json'
+
+                ).done(function (response) {
+                    $l.dom.replace(text, response.testResponse);
+
+                }).fail(function (error) {
+                    $l.dom.replace(text, 'Error: ' + error.message);
+
+                });
 
                 return false;
             }
@@ -223,43 +226,43 @@
                 $l.dom.clear(text);
 
                 $l.dom.append(text, '<div><strong>Unique Id Generator:</strong></div>');
-                $l.dom.append(text, $l.helpers.getUniqueId() + crlf);
-                $l.dom.append(text, $l.helpers.getUniqueId() + crlf);
+                $l.dom.append(text, $l.getUniqueId() + crlf);
+                $l.dom.append(text, $l.getUniqueId() + crlf);
 
                 $l.dom.append(text, '<div><strong>Query String Generation:</strong></div>');
-                $l.dom.append(text, $l.helpers.buildQueryString({pageId: 5, showAll: 'yes'}) + crlf);
+                $l.dom.append(text, $l.buildQueryString({pageId: 5, showAll: 'yes'}) + crlf);
 
                 $l.dom.append(text, '<div><strong>Transform string into camel case:</strong></div>');
-                $l.dom.append(text, $l.helpers.camelCase('text-align') + crlf);
+                $l.dom.append(text, $l.camelCase('text-align') + crlf);
 
                 $l.dom.append(text, '<div><strong>Transform string back from camel case:</strong></div>');
-                $l.dom.append(text, $l.helpers.antiCamelCase('textAlign') + crlf);
+                $l.dom.append(text, $l.antiCamelCase('textAlign') + crlf);
 
                 $l.dom.append(text, '<div><strong>Encoding special characters:</strong></div>');
-                $l.dom.append(text, $l.helpers.quoteAttr('<br clear="all" />') + crlf);
+                $l.dom.append(text, $l.quoteAttr('<br clear="all" />') + crlf);
 
                 $l.dom.append(text, '<div><strong>Generating random value:</strong></div>');
-                $l.dom.append(text, $l.helpers.random(1, 15) + crlf);
-                $l.dom.append(text, $l.helpers.random(1, 15) + crlf);
+                $l.dom.append(text, $l.random(1, 15) + crlf);
+                $l.dom.append(text, $l.random(1, 15) + crlf);
 
                 $l.dom.append(text, '<div><strong>Getting values from a single column:</strong></div>');
                 var arr = [{id: 1, count: 5}, {id: 2, count: 12}];
-                $l.dom.append(text, JSON.stringify($l.helpers.column(arr, 'count')) + crlf);
+                $l.dom.append(text, JSON.stringify($l.column(arr, 'count')) + crlf);
 
                 $l.dom.append(text, '<div><strong>Shuffling values:</strong></div>');
-                $l.dom.append(text, $l.helpers.shuffle([1, 2, 3, 4, 5]) + crlf);
+                $l.dom.append(text, $l.shuffle([1, 2, 3, 4, 5]) + crlf);
 
                 $l.dom.append(text, '<div><strong>Merging two arrays:</strong></div>');
-                $l.dom.append(text, JSON.stringify($l.helpers.merge({id: 1}, {name: 'eser', count: 5})) + crlf);
+                $l.dom.append(text, JSON.stringify($l.merge({id: 1}, {name: 'eser', count: 5})) + crlf);
 
                 $l.dom.append(text, '<div><strong>Getting count of elements:</strong></div>');
-                $l.dom.append(text, $l.helpers.getLength({id: 1, name: 'eser', count: 5}) + crlf);
+                $l.dom.append(text, $l.getLength({id: 1, name: 'eser', count: 5}) + crlf);
 
                 $l.dom.append(text, '<div><strong>Getting elements with dot notation:</strong></div>');
-                $l.dom.append(text, $l.helpers.getElement({id: 1, child: {a: 1, b: 2}}, 'child.a') + crlf);
+                $l.dom.append(text, $l.getElement({id: 1, child: {a: 1, b: 2}}, 'child.a') + crlf);
 
                 $l.dom.append(text, '<div><strong>Getting keys for dot notation:</strong></div>');
-                $l.dom.append(text, JSON.stringify($l.helpers.getKeysRecursive({id: 1, child: {a: 1, b: 2}})) + crlf);
+                $l.dom.append(text, JSON.stringify($l.getKeysRecursive({id: 1, child: {a: 1, b: 2}})) + crlf);
 
                 return false;
             }
@@ -382,7 +385,8 @@
             'click',
             function() {
                 var model = { name: { first: 'Jane', last: 'Doe' }, age: 25 };
-                $l.templates.replace(script, model, text);
+                var result = $l.templates.apply(script, model);
+                $l.dom.replace(text, result);
                 return false;
             }
         );
@@ -444,23 +448,76 @@
         );
     });
 
-    // triggers - Set
+    // vars - Set / Read / Remove
     $l.ready(function() {
-        var button1 = $l.id('button-triggers-set-1');
-        var button2 = $l.id('button-triggers-set-2');
-        var buttonReset = $l.id('button-triggers-set-reset');
-        var text = $l.id('text-triggers-set');
+        var text = $l.id('text-vars');
+        var select = $l.id('select-vars');
+        var buttonSet = $l.id('button-vars-set');
+        var buttonRead = $l.id('button-vars-read');
+        var buttonRemove = $l.id('button-vars-remove');
+
+        $l.dom.setEvent(
+            buttonSet,
+            'click',
+            function() {
+                var storage = select.options[select.selectedIndex].value;
+                $l.vars.set(storage, 'demopage', 'a ' + storage + ' test');
+                $l.dom.append(text, storage + ' set' + crlf);
+
+                return false;
+            }
+        );
+
+        $l.dom.setEvent(
+            buttonRead,
+            'click',
+            function() {
+                var storage = select.options[select.selectedIndex].value;
+                var value = $l.vars.get(storage, 'demopage');
+                if (value !== null) {
+                    $l.dom.append(text, storage + '\'s value is: ' + value + crlf);
+                } else {
+                    $l.dom.append(text, 'you need to set a ' + storage + ' first' + crlf);
+                }
+
+                return false;
+            }
+        );
+
+        $l.dom.setEvent(
+            buttonRemove,
+            'click',
+            function() {
+                var storage = select.options[select.selectedIndex].value;
+                $l.vars.remove(storage, 'demopage');
+                $l.dom.append(text, storage + ' is removed' + crlf);
+
+                return false;
+            }
+        );
+    });
+
+    // when - Set
+    $l.ready(function() {
+        var button1 = $l.id('button-when-set-1');
+        var button2 = $l.id('button-when-set-2');
+        var buttonReset = $l.id('button-when-set-reset');
+        var text = $l.id('text-when-set');
 
         $l.dom.append(text, 'click both buttons in any order' + crlf);
 
+        var promise1;
+        var promise2;
+
         var resetFunc = function() {
-            $l.triggers.set(
-                ['condition1', 'condition2'],
-                function() {
+            promise1 = new $l.deferred();
+            promise2 = new $l.deferred();
+
+            new $l.when(promise1, promise2)
+                .then(function() {
                     $l.dom.append(text, 'all set' + crlf);
                     $l.dom.attr(buttonReset, 'disabled', null);
-                }
-            );
+                });
 
             $l.dom.attr(buttonReset, 'disabled', 'disabled');
         };
@@ -471,7 +528,7 @@
             'click',
             function() {
                 $l.dom.append(text, 'button1 clicked...' + crlf);
-                $l.triggers.ontrigger('condition1');
+                promise1.resolve();
 
                 return false;
             }
@@ -482,7 +539,7 @@
             'click',
             function() {
                 $l.dom.append(text, 'button2 clicked...' + crlf);
-                $l.triggers.ontrigger('condition2');
+                promise2.resolve();
 
                 return false;
             }
@@ -493,161 +550,6 @@
             'click',
             function() {
                 resetFunc();
-
-                return false;
-            }
-        );
-    });
-
-    // ui
-    $l.ready(function() {
-        $l.ui.init();
-    });
-
-    // ui - Popup
-    $l.ready(function() {
-        var button = $l.id('button-ui-popup');
-
-        $l.dom.setEvent(
-            button,
-            'click',
-            function() {
-                $l.ui.popup.msgbox(2000, 'test message');
-
-                return false;
-            }
-        );
-    });
-
-    // vars - Cookie
-    $l.ready(function() {
-        var text = $l.id('text-vars-cookies');
-        var buttonSet = $l.id('button-vars-cookies-set');
-        var buttonRead = $l.id('button-vars-cookies-read');
-        var buttonRemove = $l.id('button-vars-cookies-remove');
-
-        $l.dom.setEvent(
-            buttonSet,
-            'click',
-            function() {
-                $l.vars.setCookie('demopage', 'a cookie test');
-                $l.dom.append(text, 'cookie set' + crlf);
-
-                return false;
-            }
-        );
-
-        $l.dom.setEvent(
-            buttonRead,
-            'click',
-            function() {
-                var value = $l.vars.getCookie('demopage');
-                if (value !== null) {
-                    $l.dom.append(text, 'cookie\'s value is: ' + value + crlf);
-                } else {
-                    $l.dom.append(text, 'you need to set a cookie first' + crlf);
-                }
-
-                return false;
-            }
-        );
-
-        $l.dom.setEvent(
-            buttonRemove,
-            'click',
-            function() {
-                $l.vars.removeCookie('demopage');
-                $l.dom.append(text, 'cookie is removed' + crlf);
-
-                return false;
-            }
-        );
-    });
-
-    // vars - Local Storage
-    $l.ready(function() {
-        var text = $l.id('text-vars-local');
-        var buttonSet = $l.id('button-vars-local-set');
-        var buttonRead = $l.id('button-vars-local-read');
-        var buttonRemove = $l.id('button-vars-local-remove');
-
-        $l.dom.setEvent(
-            buttonSet,
-            'click',
-            function() {
-                $l.vars.setLocal('demopage', 'a local storage test');
-                $l.dom.append(text, 'local storage variable set' + crlf);
-
-                return false;
-            }
-        );
-
-        $l.dom.setEvent(
-            buttonRead,
-            'click',
-            function() {
-                var value = $l.vars.getLocal('demopage');
-                if (value !== null) {
-                    $l.dom.append(text, 'local storage variable\'s value is: ' + value + crlf);
-                } else {
-                    $l.dom.append(text, 'you need to set a local storage variable first' + crlf);
-                }
-
-                return false;
-            }
-        );
-
-        $l.dom.setEvent(
-            buttonRemove,
-            'click',
-            function() {
-                $l.vars.removeLocal('demopage');
-                $l.dom.append(text, 'local storage variable is removed' + crlf);
-
-                return false;
-            }
-        );
-    });
-
-    // vars - Session Storage
-    $l.ready(function() {
-        var text = $l.id('text-vars-session');
-        var buttonSet = $l.id('button-vars-session-set');
-        var buttonRead = $l.id('button-vars-session-read');
-        var buttonRemove = $l.id('button-vars-session-remove');
-
-        $l.dom.setEvent(
-            buttonSet,
-            'click',
-            function() {
-                $l.vars.setSession('demopage', 'a session storage test');
-                $l.dom.append(text, 'session storage variable set' + crlf);
-
-                return false;
-            }
-        );
-
-        $l.dom.setEvent(
-            buttonRead,
-            'click',
-            function() {
-                var value = $l.vars.getSession('demopage');
-                if (value !== null) {
-                    $l.dom.append(text, 'session storage variable\'s value is: ' + value + crlf);
-                } else {
-                    $l.dom.append(text, 'you need to set a session storage variable first' + crlf);
-                }
-
-                return false;
-            }
-        );
-
-        $l.dom.setEvent(
-            buttonRemove,
-            'click',
-            function() {
-                $l.vars.removeSession('demopage');
-                $l.dom.append(text, 'session storage variable is removed' + crlf);
 
                 return false;
             }
