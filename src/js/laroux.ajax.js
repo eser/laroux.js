@@ -69,8 +69,7 @@ export default (function () {
                 timer = setTimeout(
                     function () {
                         xhr.abort();
-                        deferred.invoke('timeout', options.url);
-                        deferred.invoke('completed');
+                        deferred.reject('timeout', options.url);
                     },
                     options.timeout
                 );
@@ -89,22 +88,21 @@ export default (function () {
                         try {
                             res = ajax.xhrResp(xhr, options);
                         } catch (err) {
-                            deferred.invoke('fail', xhr, err);
-                            events.invoke('ajaxError', [xhr, xhr.status, xhr.statusText, options]);
+                            deferred.reject(err, xhr);
+                            events.invoke('ajaxError', { exception: err, xhr: xhr });
                             isSuccess = false;
                         }
 
                         if (isSuccess && res !== null) {
-                            deferred.invoke('done', res.response);
-                            events.invoke('ajaxSuccess', [xhr, res.response, options]);
+                            deferred.resolve(res.response, xhr);
+                            events.invoke('ajaxSuccess', { res: res, xhr: xhr });
                         }
                     } else {
-                        deferred.invoke('fail', xhr);
-                        events.invoke('ajaxError', [xhr, xhr.status, xhr.statusText, options]);
+                        deferred.reject(xhr);
+                        events.invoke('ajaxError', xhr);
                     }
 
-                    deferred.invoke('completed');
-                    events.invoke('ajaxComplete', [xhr, xhr.statusText, options]);
+                    events.invoke('ajaxComplete', { xhr: xhr });
                 } else if (options.progress !== undefined) {
                     /*jslint plusplus: true */
                     options.progress(++n);

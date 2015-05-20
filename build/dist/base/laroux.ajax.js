@@ -91,8 +91,7 @@ exports['default'] = (function () {
             if (options.timeout !== undefined) {
                 timer = setTimeout(function () {
                     xhr.abort();
-                    deferred.invoke('timeout', options.url);
-                    deferred.invoke('completed');
+                    deferred.reject('timeout', options.url);
                 }, options.timeout);
             }
 
@@ -109,22 +108,21 @@ exports['default'] = (function () {
                         try {
                             res = ajax.xhrResp(xhr, options);
                         } catch (err) {
-                            deferred.invoke('fail', xhr, err);
-                            _larouxEventsJs2['default'].invoke('ajaxError', [xhr, xhr.status, xhr.statusText, options]);
+                            deferred.reject(err, xhr);
+                            _larouxEventsJs2['default'].invoke('ajaxError', { exception: err, xhr: xhr });
                             isSuccess = false;
                         }
 
                         if (isSuccess && res !== null) {
-                            deferred.invoke('done', res.response);
-                            _larouxEventsJs2['default'].invoke('ajaxSuccess', [xhr, res.response, options]);
+                            deferred.resolve(res.response, xhr);
+                            _larouxEventsJs2['default'].invoke('ajaxSuccess', { res: res, xhr: xhr });
                         }
                     } else {
-                        deferred.invoke('fail', xhr);
-                        _larouxEventsJs2['default'].invoke('ajaxError', [xhr, xhr.status, xhr.statusText, options]);
+                        deferred.reject(xhr);
+                        _larouxEventsJs2['default'].invoke('ajaxError', xhr);
                     }
 
-                    deferred.invoke('completed');
-                    _larouxEventsJs2['default'].invoke('ajaxComplete', [xhr, xhr.statusText, options]);
+                    _larouxEventsJs2['default'].invoke('ajaxComplete', { xhr: xhr });
                 } else if (options.progress !== undefined) {
                     /*jslint plusplus: true */
                     options.progress(++n);

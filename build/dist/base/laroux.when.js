@@ -65,18 +65,21 @@ var When = (function () {
 
                 if (this.queues.length === 0) {
                     this.remaining = -1;
-                    return;
+                    break;
                 }
 
                 var queue = this.queues[0];
-                console.log('queue: ', queue);
+                // console.log('queue: ', queue);
 
                 this.remaining = 0;
                 for (var i = 0, _length = queue.length; i < _length; i++) {
-                    if (queue[i] instanceof _larouxDeferredJs2['default']) {
-                        // and still pending
+                    if (queue[i].constructor === Function) {
+                        queue[i] = _larouxDeferredJs2['default'].async(queue[i]);
+                    }
+
+                    if (queue[i] instanceof _larouxDeferredJs2['default'] && !queue[i].is('completed')) {
                         this.remaining++;
-                        queue[i].on('completed', this.deferredCompleted);
+                        queue[i].completed(this.deferredCompleted);
                     }
                 }
             }

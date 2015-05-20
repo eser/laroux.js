@@ -33,25 +33,53 @@ var Deferred = (function () {
         key: 'invoke',
         value: function invoke() {
             var args = _larouxHelpersJs2['default'].toArray(arguments),
-                eventName = args.shift();
+                eventName = args.shift(),
+                finalEvent = eventName === 'done' || eventName === 'fail';
 
             if (eventName in this.events) {
-                this.events[eventName].completed = true;
+                this.events[eventName].invoked = true;
                 this.events[eventName].result = args;
+
+                this.invokeCallback(this.events[eventName], args);
             } else {
-                this.events[eventName] = { callbacks: [], completed: true, result: args };
+                this.events[eventName] = { callbacks: [], invoked: true, result: args };
             }
 
-            if ('callbacks' in this.events[eventName]) {
-                var callbacks = this.events[eventName].callbacks;
-
-                while (callbacks.length > 0) {
-                    var callback = callbacks.shift();
-                    callback.apply(undefined, args);
-                }
+            if (finalEvent && 'completed' in this.events) {
+                this.invokeCallback(this.events.completed, [eventName].concat(args));
             }
 
             return this;
+        }
+    }, {
+        key: 'invokeCallback',
+        value: function invokeCallback(event, args) {
+            if (!('callbacks' in event)) {
+                return;
+            }
+
+            var callbacks = event.callbacks;
+
+            while (callbacks.length > 0) {
+                var callback = callbacks.shift();
+                callback.apply(undefined, args);
+            }
+        }
+    }, {
+        key: 'resolve',
+        value: function resolve() {
+            var args = _larouxHelpersJs2['default'].toArray(arguments);
+            args.unshift('done');
+
+            return this.invoke.apply(this, args);
+        }
+    }, {
+        key: 'reject',
+        value: function reject() {
+            var args = _larouxHelpersJs2['default'].toArray(arguments);
+            args.unshift('fail');
+
+            return this.invoke.apply(this, args);
         }
     }, {
         key: 'on',
@@ -59,7 +87,7 @@ var Deferred = (function () {
             if (!(eventName in this.events)) {
                 this.events[eventName] = {
                     callbacks: [callback],
-                    completed: false,
+                    invoked: false,
                     result: undefined
                 };
 
@@ -68,7 +96,7 @@ var Deferred = (function () {
 
             var event = this.events[eventName];
 
-            if (event.completed) {
+            if (event.invoked) {
                 callback.apply(undefined, event.result);
 
                 return this;
@@ -77,6 +105,30 @@ var Deferred = (function () {
             event.callbacks.push(callback);
 
             return this;
+        }
+    }, {
+        key: 'done',
+        value: function done(callback) {
+            return this.on('done', callback);
+        }
+    }, {
+        key: 'fail',
+        value: function fail(callback) {
+            return this.on('fail', callback);
+        }
+    }, {
+        key: 'completed',
+        value: function completed(callback) {
+            return this.on('completed', callback);
+        }
+    }, {
+        key: 'is',
+        value: function is(eventName) {
+            if (!(eventName in this.events)) {
+                return false;
+            }
+
+            return this.events[eventName].invoked;
         }
     }], [{
         key: 'async',
@@ -87,9 +139,9 @@ var Deferred = (function () {
             setTimeout(function () {
                 try {
                     var result = fnc.apply(undefined, args);
-                    deferred.invoke('done', result);
+                    deferred.resolve(result);
                 } catch (err) {
-                    deferred.invoke('fail', err);
+                    deferred.reject(err);
                 }
             }, 0);
 

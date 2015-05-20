@@ -38,17 +38,21 @@ export default class When {
 
             if (this.queues.length === 0) {
                 this.remaining = -1;
-                return;
+                break;
             }
 
             let queue = this.queues[0];
-            console.log('queue: ', queue);
+            // console.log('queue: ', queue);
 
             this.remaining = 0;
             for (let i = 0, length = queue.length; i < length; i++) {
-                if (queue[i] instanceof Deferred) { // and still pending
+                if (queue[i].constructor === Function) {
+                    queue[i] = Deferred.async(queue[i]);
+                }
+
+                if (queue[i] instanceof Deferred && !queue[i].is('completed')) {
                     this.remaining++;
-                    queue[i].on('completed', this.deferredCompleted);
+                    queue[i].completed(this.deferredCompleted);
                 }
             }
         }

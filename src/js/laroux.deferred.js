@@ -10,32 +10,57 @@ export default class Deferred {
 
     invoke() {
         let args = helpers.toArray(arguments),
-            eventName = args.shift();
+            eventName = args.shift(),
+            finalEvent = (eventName === 'done' || eventName === 'fail');
 
         if (eventName in this.events) {
-            this.events[eventName].completed = true;
+            this.events[eventName].invoked = true;
             this.events[eventName].result = args;
+
+            this.invokeCallback(this.events[eventName], args);
         } else {
-            this.events[eventName] = { callbacks: [], completed: true, result: args };
+            this.events[eventName] = { callbacks: [], invoked: true, result: args };
         }
 
-        if ('callbacks' in this.events[eventName]) {
-            let callbacks = this.events[eventName].callbacks;
-
-            while (callbacks.length > 0) {
-                let callback = callbacks.shift();
-                callback.apply(undefined, args);
-            }
+        if (finalEvent && 'completed' in this.events) {
+            this.invokeCallback(this.events.completed, [eventName].concat(args));
         }
 
         return this;
+    }
+
+    invokeCallback(event, args) {
+        if (!('callbacks' in event)) {
+            return;
+        }
+
+        let callbacks = event.callbacks;
+
+        while (callbacks.length > 0) {
+            let callback = callbacks.shift();
+            callback.apply(undefined, args);
+        }
+    }
+
+    resolve() {
+        let args = helpers.toArray(arguments);
+        args.unshift('done');
+
+        return this.invoke.apply(this, args);
+    }
+
+    reject() {
+        let args = helpers.toArray(arguments);
+        args.unshift('fail');
+
+        return this.invoke.apply(this, args);
     }
 
     on(eventName, callback) {
         if (!(eventName in this.events)) {
             this.events[eventName] = {
                 callbacks: [callback],
-                completed: false,
+                invoked: false,
                 result: undefined
             };
 
@@ -44,7 +69,7 @@ export default class Deferred {
 
         let event = this.events[eventName];
 
-        if (event.completed) {
+        if (event.invoked) {
             callback.apply(undefined, event.result);
 
             return this;
@@ -55,6 +80,26 @@ export default class Deferred {
         return this;
     }
 
+    done(callback) {
+        return this.on('done', callback);
+    }
+
+    fail(callback) {
+        return this.on('fail', callback);
+    }
+
+    completed(callback) {
+        return this.on('completed', callback);
+    }
+
+    is(eventName) {
+        if (!(eventName in this.events)) {
+            return false;
+        }
+
+        return this.events[eventName].invoked;
+    }
+
     static async(fnc) {
         let deferred = new Deferred(),
             args = arguments;
@@ -62,9 +107,9 @@ export default class Deferred {
         setTimeout(function () {
             try {
                 let result = fnc.apply(undefined, args);
-                deferred.invoke('done', result);
+                deferred.resolve(result);
             } catch (err) {
-                deferred.invoke('fail', err);
+                deferred.reject(err);
             }
         }, 0);
 
