@@ -5,7 +5,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <title>laroux.js - Demos</title>
         <meta name="description" content="" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
 
         <!-- Latest compiled and minified CSS -->
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" />
@@ -1006,6 +1006,7 @@ $l.dom.setEvent(
                 <h3>Setting a when</h3>
                 <div class="row">
                     <div class="col-sm-4">
+                        Click both buttons in any order<br />
                         <button id="button-when-set-1" class="btn btn-default">Button 1</button>
                         <button id="button-when-set-2" class="btn btn-default">Button 2</button>
                         <button id="button-when-set-reset" class="btn btn-default" disabled="disabled">Reset</button>
@@ -1022,7 +1023,6 @@ $l.dom.setEvent(
                         <h4>Javascript</h4>
                         <pre class="prettyprint">
 var text = $l.id('text-when-set');
-$l.dom.replace(text, 'click both buttons in any order&lt;br /&gt;');
 
 var promise1 = new $l.deferred();
 var promise2 = new $l.deferred();

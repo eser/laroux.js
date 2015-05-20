@@ -504,8 +504,6 @@
         var buttonReset = $l.id('button-when-set-reset');
         var text = $l.id('text-when-set');
 
-        $l.dom.append(text, 'click both buttons in any order' + crlf);
-
         var promise1;
         var promise2;
 
