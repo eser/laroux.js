@@ -1,0 +1,49 @@
+[
+    {
+        "name":         "Include laroux.js",
+        "file":         "include-laroux-js.html",
+        "description":  "Includes laroux.js to your page in order to use its features"
+    },
+    {
+        "name":         "Confirmation Buttons",
+        "file":         "confirmation-buttons.js",
+        "description":  "Requests confirmation before link and button actions, if the element has .confirm-action class",
+        "onload":       true
+    },
+    {
+        "name":         "Auto Select Texts",
+        "file":         "auto-select-texts.js",
+        "description":  "Automatically selects all contents of text fields on the page when they get focus",
+        "onload":       true
+    },
+    {
+        "name":         "Auto Clear Texts",
+        "file":         "auto-clear-texts.js",
+        "description":  "Automatically clears all contents of text fields on the page when they get focus",
+        "onload":       true
+    },
+    {
+        "name":         "Smooth Page Scroll",
+        "file":         "smooth-page-scroll.js",
+        "description":  "Scrolls smoothly to anchors in page, if the clicked link has .scroll-link class",
+        "onload":       true
+    },
+    {
+        "name":         "Remove Class After Delay",
+        "file":         "remove-class-after-delay.js",
+        "description":  "Removes specified class from the element after 5 seconds passed",
+        "onload":       true
+    },
+    {
+        "name":         "Toggle Class In Every 2 Seconds",
+        "file":         "toggle-class-in-every-two-seconds.js",
+        "description":  "Toggles specified class for the element in every 2 seconds",
+        "onload":       true
+    },
+    {
+        "name":         "Toggle All Checkboxes",
+        "file":         "toggle-all-checkboxes.js",
+        "description":  "Toggles check of all comboboxes",
+        "onload":       true
+    }
+]

@@ -12,6 +12,7 @@
 
 * Sevket Bulamaz - @sevket
 * Burak Babir
+* Burak Can - @burakcan
 * Yalcin Ceylan - @yali4
 * Huseyin Mert - @hmert
 

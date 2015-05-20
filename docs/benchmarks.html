@@ -1,0 +1,459 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <title>laroux.js - Benchmarks</title>
+        <meta name="description" content="" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+        <!-- Latest compiled and minified CSS -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" />
+        <link rel="stylesheet" href="assets/css/prettify.css" />
+        <link rel="stylesheet" href="assets/css/fonts.css" />
+        <link rel="stylesheet" href="assets/css/style.css" />
+
+        <link rel="shortcut icon" type="image/x-icon" href="favicon.ico" />
+        <link rel="icon" type="image/x-icon" href="favicon.ico" />
+    </head>
+    <body id="home">
+
+        <div class="container">
+            <!-- Static navbar -->
+            <nav class="navbar navbar-default" role="navigation">
+                <div class="navbar-collapse">
+                    <ul class="nav navbar-nav">
+                        <li id="dropdown-toggle-element" class="dropdown mega-dropdown">
+                            <a href="#" id="dropdown-toggle-button" class="dropdown-toggle" data-toggle="dropdown">laroux.js <span class="glyphicon glyphicon-chevron-down pull-right"></span></a>
+                            <ul class="dropdown-menu mega-dropdown-menu row">
+                                <li class="col-sm-3">
+                                    <ul>
+                                        <li class="dropdown-header">Stable Version</li>
+                                    </ul>
+
+                                    <div class="box-large vertical-spaces">
+                                        <h2>2.0.0</h2>
+                                    </div>
+
+                                    <button data-href="https://github.com/larukedi/laroux.js/releases/latest" class="btn btn-primary btn-href">Download</button>
+                                    <button data-href="https://github.com/larukedi/laroux.js/releases" class="btn btn-default btn-href">All Releases</button>
+                                </li>
+                                <li class="col-sm-3">
+                                    <ul>
+                                        <li class="dropdown-header">Base Components</li>
+                                        <li><a href="https://github.com/larukedi/laroux.js/wiki/ajax">Ajax</a></li>
+                                        <li><a href="https://github.com/larukedi/laroux.js/wiki/date">Date</a></li>
+                                        <li><a href="https://github.com/larukedi/laroux.js/wiki/deferred">Deferred</a></li>
+                                        <li><a href="https://github.com/larukedi/laroux.js/wiki/events">Events</a></li>
+                                        <li><a href="https://github.com/larukedi/laroux.js/wiki/helpers">Helpers</a></li>
+                                        <li><a href="https://github.com/larukedi/laroux.js/wiki/stack">Stack</a></li>
+                                        <li><a href="https://github.com/larukedi/laroux.js/wiki/templates">Templates</a></li>
+                                    </ul>
+                                </li>
+                                <li class="col-sm-3">
+                                    <ul>
+                                        <li><a href="https://github.com/larukedi/laroux.js/wiki/timers">Timers</a></li>
+                                        <li><a href="https://github.com/larukedi/laroux.js/wiki/vars">Vars</a></li>
+                                        <li><a href="https://github.com/larukedi/laroux.js/wiki/when">When</a></li>
+                                        <li class="divider"></li>
+                                        <li class="dropdown-header">Web Components</li>
+                                        <li><a href="https://github.com/larukedi/laroux.js/wiki/anim">Anim</a></li>
+                                        <li><a href="https://github.com/larukedi/laroux.js/wiki/css">CSS</a></li>
+                                        <li><a href="https://github.com/larukedi/laroux.js/wiki/dom">DOM</a></li>
+                                    </ul>
+                                </li>
+                                <li class="col-sm-3">
+                                    <ul>
+                                        <li><a href="https://github.com/larukedi/laroux.js/wiki/forms">Forms</a></li>
+                                        <li><a href="https://github.com/larukedi/laroux.js/wiki/keys">Keys</a></li>
+                                        <li><a href="https://github.com/larukedi/laroux.js/wiki/mvc">MVC</a></li>
+                                        <li><a href="https://github.com/larukedi/laroux.js/wiki/touch">Touch</a></li>
+                                        <li class="divider"></li>
+                                        <li class="dropdown-header">Need Help?</li>
+                                        <li><a href="https://github.com/larukedi/laroux.js/issues">GitHub Issues <span class="glyphicon glyphicon-chevron-right pull-right"></span></a></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+                        <li><a href="./">Demos</a></li>
+                        <li><a href="./snippets.html">Snippets</a></li>
+                        <li><a href="./benchmarks.html">Benchmarks</a></li>
+                        <li><a href="./faq.html">FAQ</a></li>
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><a href="https://github.com/larukedi/laroux.js">GitHub Repository</a></li>
+                    </ul>
+                </div>
+            </nav>
+
+            <div class="jumbotron">
+                <div class="row">
+                    <div class="col-md-3">
+                        <img src="assets/images/logo-medium.png" />
+                    </div>
+                    <div class="col-md-9">
+                        <div id="slider">
+
+                            <!-- Slides -->
+                            <div id="one" class="slide active">
+                                <h1>laroux.js 2.0.0</h1>
+                                <div class="lead">
+                                    This project is a jQuery substitute for modern browsers and mobile devices. But instead of offering some wrappers and own dynamics, it simply provides helper functions to achieve the same objectives as jQuery or Zepto.
+                                </div>
+                            </div>
+
+                            <div id="two" class="slide">
+                                <h3><em>laroux.js</em> is right for you if you:</h3>
+                                <ul>
+                                    <li>Complain about people who do not know the difference between jQuery and Javascript.</li>
+                                    <li>Love working with more compact, organized libraries in smaller sizes (~39K).</li>
+                                    <li>Want to be working with native DOM objects instead of wrappers.</li>
+                                    <li>Want to leverage the debug console's autocomplete/fluent typing.</li>
+                                    <li>Are not satisfied with the performance of other libraries on mobile devices.</li>
+                                    <li>Looking for a light abstraction layer to build your toolkit on.</li>
+                                    <li>See <a href="faq.html">FAQ</a> for more.</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="button-bar text-right">
+                    <a class="btn btn-default" href="./" role="button">Demos</a>
+                    <a class="btn btn-default" href="./snippets.html" role="button">Snippets</a>
+                    <a class="btn btn-default" href="./faq.html" role="button">FAQ</a>
+                    <a class="btn btn-primary" href="https://github.com/larukedi/laroux.js/releases" role="button">Downloads &raquo;</a>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="container">
+
+            <div class="row header-row">
+                <div class="col-sm-6">
+                    <h2 class="nomargin">Selectors by Tagname</h2>
+                </div>
+                <div class="col-sm-6 text-right">
+                    <button id="button-selectors-tagname" class="btn btn-sm btn-default">Start Local Benchmark</button>
+                </div>
+            </div>
+            <div class="benchmark-area">
+                <div class="row">
+                    <div class="col-sm-5">
+                        <div id="graph-selectors-tagname" class="benchmark-graph"></div>
+                        <div class="benchmark-description">operations per second (higher is better)</div>
+                        <div id="text-selectors-tagname"></div>
+                    </div>
+                    <div class="col-sm-7">
+                        <h4>laroux.js</h4>
+                        <pre class="prettyprint">
+$l('body');
+                        </pre>
+                        <h4>jQuery/Zepto</h4>
+                        <pre class="prettyprint">
+$('body');
+                        </pre>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row header-row">
+                <div class="col-sm-6">
+                    <h2 class="nomargin">Selectors by Element Id</h2>
+                </div>
+                <div class="col-sm-6 text-right">
+                    <button id="button-selectors-elementid" class="btn btn-default">Start Local Benchmark</button>
+                </div>
+            </div>
+            <div class="benchmark-area">
+                <div class="row">
+                    <div class="col-sm-5">
+                        <div id="graph-selectors-elementid" class="benchmark-graph"></div>
+                        <div class="benchmark-description">operations per second (higher is better)</div>
+                        <div id="text-selectors-elementid"></div>
+                    </div>
+                    <div class="col-sm-7">
+                        <h4>laroux.js</h4>
+                        <pre class="prettyprint">
+$l('#home');
+                        </pre>
+                        <h4>laroux.js (Alternative)</h4>
+                        <pre class="prettyprint">
+$l.id('home');
+                        </pre>
+                        <h4>laroux.js (Alternative 2)</h4>
+                        <pre class="prettyprint">
+$l.idc('home');
+                        </pre>
+                        <h4>jQuery/Zepto</h4>
+                        <pre class="prettyprint">
+$('#home');
+                        </pre>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row header-row">
+                <div class="col-sm-6">
+                    <h2 class="nomargin">Selectors by Class</h2>
+                </div>
+                <div class="col-sm-6 text-right">
+                    <button id="button-selectors-class" class="btn btn-default">Start Local Benchmark</button>
+                </div>
+            </div>
+            <div class="benchmark-area">
+                <div class="row">
+                    <div class="col-sm-5">
+                        <div id="graph-selectors-class" class="benchmark-graph"></div>
+                        <div class="benchmark-description">operations per second (higher is better)</div>
+                        <div id="text-selectors-class"></div>
+                    </div>
+                    <div class="col-sm-7">
+                        <h4>laroux.js</h4>
+                        <pre class="prettyprint">
+$l('.container');
+                        </pre>
+                        <h4>laroux.js (Alternative)</h4>
+                        <pre class="prettyprint">
+$l.dom.selectByClass('container');
+                        </pre>
+                        <h4>jQuery/Zepto</h4>
+                        <pre class="prettyprint">
+$('.container');
+                        </pre>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row header-row">
+                <div class="col-sm-6">
+                    <h2 class="nomargin">Each on Arrays</h2>
+                </div>
+                <div class="col-sm-6 text-right">
+                    <button id="button-main-each-arrays" class="btn btn-default">Start Local Benchmark</button>
+                </div>
+            </div>
+            <div class="benchmark-area">
+                <div class="row">
+                    <div class="col-sm-5">
+                        <div id="graph-main-each-arrays" class="benchmark-graph"></div>
+                        <div class="benchmark-description">operations per second (higher is better)</div>
+                        <div id="text-main-each-arrays"></div>
+                    </div>
+                    <div class="col-sm-7">
+                        <h4>laroux.js</h4>
+                        <pre class="prettyprint">
+$l.each([52, 97], function(index, value) {
+    console.log(index + ': ' + value);
+});
+                        </pre>
+                        <h4>laroux.js (Alternative)</h4>
+                        <pre class="prettyprint">
+$l.aeach([52, 97], function(index, value) {
+    console.log(index + ': ' + value);
+});
+                        </pre>
+                        <h4>jQuery/Zepto</h4>
+                        <pre class="prettyprint">
+$.each([52, 97], function(index, value) {
+    console.log(index + ': ' + value);
+});
+                        </pre>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row header-row">
+                <div class="col-sm-6">
+                    <h2 class="nomargin">Each on Objects</h2>
+                </div>
+                <div class="col-sm-6 text-right">
+                    <button id="button-main-each-objects" class="btn btn-default">Start Local Benchmark</button>
+                </div>
+            </div>
+            <div class="benchmark-area">
+                <div class="row">
+                    <div class="col-sm-5">
+                        <div id="graph-main-each-objects" class="benchmark-graph"></div>
+                        <div class="benchmark-description">operations per second (higher is better)</div>
+                        <div id="text-main-each-objects"></div>
+                    </div>
+                    <div class="col-sm-7">
+                        <h4>laroux.js</h4>
+                        <pre class="prettyprint">
+$l.each({a: 1, b: 2}, function(index, value) {
+    console.log(index + ': ' + value);
+});
+                        </pre>
+                        <h4>jQuery/Zepto</h4>
+                        <pre class="prettyprint">
+$.each({a: 1, b: 2}, function(index, value) {
+    console.log(index + ': ' + value);
+});
+                        </pre>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row header-row">
+                <div class="col-sm-6">
+                    <h2 class="nomargin">Map on Arrays</h2>
+                </div>
+                <div class="col-sm-6 text-right">
+                    <button id="button-main-map-arrays" class="btn btn-default">Start Local Benchmark</button>
+                </div>
+            </div>
+            <div class="benchmark-area">
+                <div class="row">
+                    <div class="col-sm-5">
+                        <div id="graph-main-map-arrays" class="benchmark-graph"></div>
+                        <div class="benchmark-description">operations per second (higher is better)</div>
+                        <div id="text-main-map-arrays"></div>
+                    </div>
+                    <div class="col-sm-7">
+                        <h4>laroux.js</h4>
+                        <pre class="prettyprint">
+$l.map(['eser', 'ozvataf'], function(value) {
+    return value;
+});
+                        </pre>
+                        <h4>laroux.js (Alternative)</h4>
+                        <pre class="prettyprint">
+$l.amap(['eser', 'ozvataf'], function(value) {
+    return value;
+});
+                        </pre>
+                        <h4>jQuery/Zepto</h4>
+                        <pre class="prettyprint">
+$.map(['eser', 'ozvataf'], function(value) {
+    return value;
+});
+                        </pre>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row header-row">
+                <div class="col-sm-6">
+                    <h2 class="nomargin">Map on Objects</h2>
+                </div>
+                <div class="col-sm-6 text-right">
+                    <button id="button-main-map-objects" class="btn btn-default">Start Local Benchmark</button>
+                </div>
+            </div>
+            <div class="benchmark-area">
+                <div class="row">
+                    <div class="col-sm-5">
+                        <div id="graph-main-map-objects" class="benchmark-graph"></div>
+                        <div class="benchmark-description">operations per second (higher is better)</div>
+                        <div id="text-main-map-objects"></div>
+                    </div>
+                    <div class="col-sm-7">
+                        <h4>laroux.js</h4>
+                        <pre class="prettyprint">
+$l.map({a: 'eser', b: 'ozvataf'}, function(value) {
+    return value;
+});
+                        </pre>
+                        <h4>jQuery/Zepto</h4>
+                        <pre class="prettyprint">
+$.map({a: 'eser', b: 'ozvataf'}, function(value) {
+    return value;
+});
+                        </pre>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row header-row">
+                <div class="col-sm-6">
+                    <h2 class="nomargin">Create DOM Element</h2>
+                </div>
+                <div class="col-sm-6 text-right">
+                    <button id="button-dom-create-element" class="btn btn-default">Start Local Benchmark</button>
+                </div>
+            </div>
+            <div class="benchmark-area">
+                <div class="row">
+                    <div class="col-sm-5">
+                        <div id="graph-dom-create-element" class="benchmark-graph"></div>
+                        <div class="benchmark-description">operations per second (higher is better)</div>
+                        <div id="text-dom-create-element"></div>
+                    </div>
+                    <div class="col-sm-7">
+                        <h4>laroux.js</h4>
+                        <pre class="prettyprint">
+$l.dom.createElement('DIV', { class: 'x' }, 'y');
+                        </pre>
+                        <h4>laroux.js (Alternative)</h4>
+                        <pre class="prettyprint">
+$l.dom.create('&lt;div class="x"&gt;y&lt;/div&gt;');
+                        </pre>
+                        <h4>jQuery/Zepto</h4>
+                        <pre class="prettyprint">
+$('&lt;div class="x"&gt;y&lt;/div&gt;');
+                        </pre>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row header-row">
+                <div class="col-sm-6">
+                    <h2 class="nomargin">DOM Manipulations</h2>
+                </div>
+                <div class="col-sm-6 text-right">
+                    <button id="button-dom-manipulations" class="btn btn-default">Start Local Benchmark</button>
+                </div>
+            </div>
+            <div class="benchmark-area">
+                <div class="row">
+                    <div class="col-sm-5">
+                        <div id="graph-dom-manipulations" class="benchmark-graph"></div>
+                        <div class="benchmark-description">operations per second (higher is better)</div>
+                        <div id="text-dom-manipulations"></div>
+                    </div>
+                    <div class="col-sm-7">
+                        <h4>laroux.js</h4>
+                        <pre class="prettyprint">
+var div = $l.dom.createElement('DIV');
+$l.dom.append(div, 'appended');
+$l.dom.prepend(div, 'prepended');
+$l.dom.clear(div);
+$l.dom.remove(div);
+                        </pre>
+                        <h4>jQuery/Zepto</h4>
+                        <pre class="prettyprint">
+$('&lt;div&gt;')
+    .append('appended')
+    .prepend('prepended')
+    .empty()
+    .remove();
+                        </pre>
+                    </div>
+                </div>
+            </div>
+
+            <div class="example-area">
+                <div class="well">
+                    To add your own benchmarks to this page, please don't hesitate to send your pull requests to
+                    <a href="https://github.com/larukedi/laroux.js/tree/gh-pages">this branch</a>, all you need to do is
+                    editing <code>benchmarks.html</code> and placing your values into <code>assets/js/benchmarks.js</code> file.
+                </div>
+            </div>
+
+            <footer>
+                <p>laroux.js GitHub Demo Page - Documented by <a href="http://eser.ozvataf.com/">Eser Ozvataf</a> and Onur Babacan 2014</p>
+            </footer>
+        </div>
+
+        <script src="assets/js/prettify.min.js"></script>
+        <script src="assets/js/laroux.min.js"></script>
+        <script src="assets/js/benchmark.js"></script>
+        <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/zepto/1.1.4/zepto.min.js"></script>
+        <script src="assets/js/canvasjs.min.js"></script>
+        <script src="assets/js/common.js"></script>
+        <script src="assets/js/benchmarks.js"></script>
+    </body>
+</html>

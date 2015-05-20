@@ -1,7 +1,12 @@
-describe('laroux', function() {
+/*global describe, it */
+(function () {
+    'use strict';
 
-    it('laroux is initialized', function() {
-        return true;
+    describe('laroux', function () {
+
+        it('laroux is initialized', function () {
+            expect(true).toBe(true);
+        });
+
     });
-
-});
+}());
