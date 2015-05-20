@@ -62,7 +62,7 @@ var Deferred = (function () {
 
             while (callbacks.length > 0) {
                 var callback = callbacks.shift();
-                callback.apply(undefined, args);
+                callback.apply(this, args);
             }
         }
     }, {
@@ -97,7 +97,7 @@ var Deferred = (function () {
             var event = this.events[eventName];
 
             if (event.invoked) {
-                callback.apply(undefined, event.result);
+                callback.apply(this, event.result);
 
                 return this;
             }
@@ -132,13 +132,14 @@ var Deferred = (function () {
         }
     }], [{
         key: 'async',
-        value: function async(fnc) {
+        value: function async() {
             var deferred = new Deferred(),
-                args = arguments;
+                args = _larouxHelpersJs2['default'].toArray(arguments),
+                fnc = args.shift();
 
             setTimeout(function () {
                 try {
-                    var result = fnc.apply(undefined, args);
+                    var result = fnc.apply(deferred, args);
                     deferred.resolve(result);
                 } catch (err) {
                     deferred.reject(err);
