@@ -398,56 +398,36 @@ Object.defineProperty(exports, '__esModule', {
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
+var _larouxDeferredJs = require('./laroux.deferred.js');
+
+var _larouxDeferredJs2 = _interopRequireDefault(_larouxDeferredJs);
+
 var Async = (function () {
-    function Async(fnc, completedCallback) {
+    function Async(fnc) {
         _classCallCheck(this, Async);
 
         this.fnc = fnc;
-        this.completedCallbacks = [];
-        this.isCompleted = false;
-        this.result = undefined;
+        this.deferred = new _larouxDeferredJs2['default']();
 
-        if (completedCallback) {
-            this.completedCallbacks.push(completedCallback);
-        }
+        this.invoke();
     }
 
     _createClass(Async, [{
-        key: 'onCompleted',
-        value: function onCompleted(completedCallback) {
-            if (this.isCompleted) {
-                completedCallback.call(undefined, this.result);
-                return this;
-            }
-
-            this.completedCallbacks.push(completedCallback);
-            return this;
-        }
-    }, {
         key: 'invoke',
         value: function invoke() {
             var self = this,
                 args = arguments;
 
             setTimeout(function () {
-                var result = {};
-
                 try {
-                    result.result = self.fnc.apply(undefined, args);
-                    result.success = true;
+                    var result = self.fnc.apply(undefined, args);
+                    self.deferred.invoke('done', result);
                 } catch (err) {
-                    result.exception = err;
-                    result.success = false;
-                }
-
-                self.result = result;
-                self.isCompleted = true;
-
-                while (self.completedCallbacks.length > 0) {
-                    var fnc = self.completedCallbacks.shift();
-                    fnc.call(undefined, self.result);
+                    self.deferred.invoke('fail', err);
                 }
             }, 0);
 
@@ -460,7 +440,7 @@ var Async = (function () {
 
 exports['default'] = Async;
 module.exports = exports['default'];
-},{}],4:[function(require,module,exports){
+},{"./laroux.deferred.js":5}],4:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -673,139 +653,85 @@ exports['default'] = (function () {
 
 module.exports = exports['default'];
 },{}],5:[function(require,module,exports){
+/*jslint node: true */
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
     value: true
 });
 
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
 var _larouxHelpersJs = require('./laroux.helpers.js');
 
 var _larouxHelpersJs2 = _interopRequireDefault(_larouxHelpersJs);
 
-exports['default'] = (function () {
-    'use strict';
+var Deferred = (function () {
+    function Deferred() {
+        _classCallCheck(this, Deferred);
 
-    var Deferred = function Deferred(fnc, isAsync) {
-        if (!(this instanceof Deferred)) {
-            return new Deferred(fnc, isAsync);
-        }
+        this.events = {};
+    }
 
-        this._delegates = [];
-        this._delegateQueue = null;
-        this._events = [];
-        this._eventStack = null;
-        this.completed = false;
+    _createClass(Deferred, [{
+        key: 'invoke',
+        value: function invoke() {
+            var args = _larouxHelpersJs2['default'].toArray(arguments),
+                eventName = args.shift();
 
-        if (fnc !== undefined) {
-            this.then(fnc, isAsync);
-        }
-    };
-
-    Deferred.prototype.then = function (fnc, isAsync) {
-        var delegate = { fnc: fnc, isAsync: isAsync };
-
-        this._delegates.push(delegate);
-
-        return this;
-    };
-
-    Deferred.prototype.on = function (condition, fnc) {
-        var conditions = _larouxHelpersJs2['default'].getAsArray(condition),
-            ev = {
-            conditions: conditions,
-            fnc: fnc
-        };
-
-        this._events.push(ev);
-
-        return this;
-    };
-
-    Deferred.prototype.invoke = function () {
-        var eventName = Array.prototype.shift.call(arguments),
-            removeKeys = [];
-
-        for (var item in this._eventStack) {
-            if (!this._eventStack.hasOwnProperty(item)) {
-                continue;
+            if (eventName in this.events) {
+                this.events[eventName].completed = true;
+                this.events[eventName].result = args;
+            } else {
+                this.events[eventName] = { callbacks: [], completed: true, result: args };
             }
 
-            var eventItem = this._eventStack[item],
-                eventIdx = _larouxHelpersJs2['default'].aindex(eventItem.conditions, eventName);
+            if ('callbacks' in this.events[eventName]) {
+                var callbacks = this.events[eventName].callbacks;
 
-            if (eventIdx !== -1) {
-                eventItem.conditions.splice(eventIdx, 1);
-            }
-
-            if (eventItem.conditions.length > 0) {
-                continue;
-            }
-
-            removeKeys = _larouxHelpersJs2['default'].prependArray(removeKeys, item);
-            eventItem.fnc.apply(this, arguments);
-        }
-
-        for (var item2 in removeKeys) {
-            if (!removeKeys.hasOwnProperty(item2)) {
-                continue;
-            }
-
-            this._eventStack.splice(removeKeys[item2], 1);
-        }
-    };
-
-    Deferred.prototype.complete = function () {
-        this.completed = true;
-        this.invoke('complete');
-    };
-
-    Deferred.prototype.next = function () {
-        var self = this,
-            delegate = this._delegateQueue.shift(),
-            args = _larouxHelpersJs2['default'].toArray(arguments);
-
-        if (this.completed) {
-            return this;
-        }
-
-        if (delegate === undefined) {
-            var parameters = ['success'].concat(args);
-
-            this.invoke.apply(this, parameters);
-            this.complete();
-
-            return this;
-        }
-
-        setTimeout(function () {
-            try {
-                var lastReturn = delegate.fnc.apply(self, args);
-                if (delegate.isAsync !== true) {
-                    self.next.call(self, lastReturn);
+                while (callbacks.length > 0) {
+                    var callback = callbacks.shift();
+                    callback.apply(undefined, args);
                 }
-            } catch (err) {
-                self.invoke('error', err);
-                self.complete();
             }
-        }, 0);
 
-        return this;
-    };
+            return this;
+        }
+    }, {
+        key: 'on',
+        value: function on(eventName, callback) {
+            if (!(eventName in this.events)) {
+                this.events[eventName] = {
+                    callbacks: [callback],
+                    completed: false,
+                    result: undefined
+                };
 
-    Deferred.prototype.start = function () {
-        this._delegateQueue = this._delegates.slice();
-        this._eventStack = this._events.slice();
-        this.completed = false;
+                return this;
+            }
 
-        return this.next.apply(this, arguments);
-    };
+            var event = this.events[eventName];
+
+            if (event.completed) {
+                callback.apply(undefined, event.result);
+
+                return this;
+            }
+
+            event.callbacks.push(callback);
+
+            return this;
+        }
+    }]);
 
     return Deferred;
 })();
 
+exports['default'] = Deferred;
 module.exports = exports['default'];
 },{"./laroux.helpers.js":7}],6:[function(require,module,exports){
 'use strict';

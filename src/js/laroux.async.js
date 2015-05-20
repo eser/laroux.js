@@ -1,26 +1,14 @@
 /*jslint node: true */
 'use strict';
 
+import Deferred from './laroux.deferred.js';
+
 export default class Async {
-    constructor(fnc, completedCallback) {
+    constructor(fnc) {
         this.fnc = fnc;
-        this.completedCallbacks = [];
-        this.isCompleted = false;
-        this.result = undefined;
+        this.deferred = new Deferred();
 
-        if (completedCallback) {
-            this.completedCallbacks.push(completedCallback);
-        }
-    }
-
-    onCompleted(completedCallback) {
-        if (this.isCompleted) {
-            completedCallback.call(undefined, this.result);
-            return this;
-        }
-
-        this.completedCallbacks.push(completedCallback);
-        return this;
+        this.invoke();
     }
 
     invoke() {
@@ -28,22 +16,11 @@ export default class Async {
             args = arguments;
 
         setTimeout(function () {
-            let result = {};
-
             try {
-                result.result = self.fnc.apply(undefined, args);
-                result.success = true;
+                let result = self.fnc.apply(undefined, args);
+                self.deferred.invoke('done', result);
             } catch (err) {
-                result.exception = err;
-                result.success = false;
-            }
-
-            self.result = result;
-            self.isCompleted = true;
-
-            while (self.completedCallbacks.length > 0) {
-                var fnc = self.completedCallbacks.shift();
-                fnc.call(undefined, self.result);
+                self.deferred.invoke('fail', err);
             }
         }, 0);
 
