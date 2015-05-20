@@ -83,7 +83,7 @@ export default (function () {
                 var deferred = anim.data[targetKey].deferred;
 
                 deferred.invoke('stop');
-                deferred.invoke('complete');
+                deferred.invoke('completed');
 
                 anim.data.splice(targetKey, 1);
                 return true;
@@ -119,7 +119,7 @@ export default (function () {
                     } else {
                         removeKeys = helpers.prependArray(removeKeys, item);
                         currentItem.deferred.invoke('done');
-                        currentItem.deferred.invoke('complete');
+                        currentItem.deferred.invoke('completed');
                     }
                 }
             }

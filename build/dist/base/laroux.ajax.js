@@ -33,36 +33,6 @@ exports['default'] = (function () {
     var ajax = {
         corsDefault: false,
 
-        wrappers: {
-            registry: {
-                'laroux.js': function larouxJs(data) {
-                    if (!data.isSuccess) {
-                        console.log('Error: ' + data.errorMessage);
-                        return;
-                    }
-
-                    var obj;
-
-                    if (data.format === 'json') {
-                        obj = JSON.parse(data.object);
-                    } else if (data.format === 'script') {
-                        /*jshint evil:true */
-                        /*jslint evil:true */
-                        obj = eval(data.object);
-                    } else {
-                        // if (data.format === 'xml') {
-                        obj = data.object;
-                    }
-
-                    return obj;
-                }
-            },
-
-            set: function set(name, fnc) {
-                ajax.wrappers.registry[name] = fnc;
-            }
-        },
-
         xDomainObject: false,
         xmlHttpRequestObject: null,
         xDomainRequestObject: null,
@@ -89,8 +59,7 @@ exports['default'] = (function () {
         },
 
         xhrResp: function xhrResp(xhr, options) {
-            var wrapperFunction = xhr.getResponseHeader('X-Response-Wrapper-Function'),
-                response;
+            var response;
 
             if (options.datatype === undefined) {
                 response = xhr.responseText;
@@ -106,13 +75,8 @@ exports['default'] = (function () {
                 response = xhr.responseText;
             }
 
-            if (wrapperFunction && wrapperFunction in ajax.wrappers.registry) {
-                response = ajax.wrappers.registry[wrapperFunction](response);
-            }
-
             return {
-                response: response,
-                wrapperFunc: wrapperFunction
+                response: response
             };
         },
 
@@ -128,7 +92,7 @@ exports['default'] = (function () {
                 timer = setTimeout(function () {
                     xhr.abort();
                     deferred.invoke('timeout', options.url);
-                    deferred.invoke('complete');
+                    deferred.invoke('completed');
                 }, options.timeout);
             }
 
@@ -144,22 +108,22 @@ exports['default'] = (function () {
 
                         try {
                             res = ajax.xhrResp(xhr, options);
-                        } catch (e) {
-                            deferred.invoke('fail', e, xhr);
+                        } catch (err) {
+                            deferred.invoke('fail', xhr, err);
                             _larouxEventsJs2['default'].invoke('ajaxError', [xhr, xhr.status, xhr.statusText, options]);
                             isSuccess = false;
                         }
 
                         if (isSuccess && res !== null) {
-                            deferred.invoke('done', res.response, res.wrapperFunc);
-                            _larouxEventsJs2['default'].invoke('ajaxSuccess', [xhr, res.response, res.wrapperFunc, options]);
+                            deferred.invoke('done', res.response);
+                            _larouxEventsJs2['default'].invoke('ajaxSuccess', [xhr, res.response, options]);
                         }
                     } else {
-                        deferred.invoke('fail', e, xhr);
+                        deferred.invoke('fail', xhr);
                         _larouxEventsJs2['default'].invoke('ajaxError', [xhr, xhr.status, xhr.statusText, options]);
                     }
 
-                    deferred.invoke('complete');
+                    deferred.invoke('completed');
                     _larouxEventsJs2['default'].invoke('ajaxComplete', [xhr, xhr.statusText, options]);
                 } else if (options.progress !== undefined) {
                     /*jslint plusplus: true */
@@ -188,41 +152,33 @@ exports['default'] = (function () {
                 xhr.open(options.type, url);
             }
 
-            try {
-                if (options.xhrFields !== undefined) {
-                    for (var i in options.xhrFields) {
-                        if (!options.xhrFields.hasOwnProperty(i)) {
-                            continue;
-                        }
-
-                        xhr[i] = options.xhrFields[i];
-                    }
-                }
-
-                var headers = options.headers || {};
-
-                if (!cors) {
-                    headers['X-Requested-With'] = 'XMLHttpRequest';
-
-                    if (options.wrapper) {
-                        headers['X-Wrapper-Function'] = 'laroux.js';
-                    }
-                }
-
-                for (var j in headers) {
-                    if (!headers.hasOwnProperty(j)) {
+            if (options.xhrFields !== undefined) {
+                for (var i in options.xhrFields) {
+                    if (!options.xhrFields.hasOwnProperty(i)) {
                         continue;
                     }
 
-                    xhr.setRequestHeader(j, headers[j]);
+                    xhr[i] = options.xhrFields[i];
                 }
-            } catch (e) {
-                console.log(e);
+            }
+
+            var headers = options.headers || {};
+
+            if (!cors) {
+                headers['X-Requested-With'] = 'XMLHttpRequest';
+            }
+
+            for (var j in headers) {
+                if (!headers.hasOwnProperty(j)) {
+                    continue;
+                }
+
+                xhr.setRequestHeader(j, headers[j]);
             }
 
             if (options.postdata === undefined || options.postdata === null) {
                 xhr.send(null);
-                return;
+                return deferred;
             }
 
             switch (options.postdatatype) {
@@ -246,7 +202,6 @@ exports['default'] = (function () {
                 url: path,
                 datatype: 'html',
                 getdata: values,
-                wrapper: true,
                 cors: cors || ajax.corsDefault
             });
         },
@@ -257,7 +212,6 @@ exports['default'] = (function () {
                 url: path,
                 datatype: 'json',
                 getdata: values,
-                wrapper: true,
                 cors: cors || ajax.corsDefault
             });
         },
@@ -269,7 +223,6 @@ exports['default'] = (function () {
                 datatype: 'script',
                 getdata: values,
                 jsonp: method,
-                wrapper: false,
                 cors: cors || ajax.corsDefault
             });
         },
@@ -280,7 +233,6 @@ exports['default'] = (function () {
                 url: path,
                 datatype: 'script',
                 getdata: values,
-                wrapper: false,
                 cors: cors || ajax.corsDefault
             });
         },
@@ -292,7 +244,6 @@ exports['default'] = (function () {
                 datatype: 'json',
                 postdata: values,
                 postdatatype: 'form',
-                wrapper: true,
                 cors: cors || ajax.corsDefault
             });
         },
@@ -307,7 +258,6 @@ exports['default'] = (function () {
                 headers: {
                     'Content-Type': 'application/json; charset=UTF-8'
                 },
-                wrapper: true,
                 cors: cors || ajax.corsDefault
             });
         }

@@ -9,7 +9,7 @@ export default class Deferred {
     }
 
     invoke() {
-        var args = helpers.toArray(arguments),
+        let args = helpers.toArray(arguments),
             eventName = args.shift();
 
         if (eventName in this.events) {
@@ -20,10 +20,10 @@ export default class Deferred {
         }
 
         if ('callbacks' in this.events[eventName]) {
-            var callbacks = this.events[eventName].callbacks;
+            let callbacks = this.events[eventName].callbacks;
 
             while (callbacks.length > 0) {
-                var callback = callbacks.shift();
+                let callback = callbacks.shift();
                 callback.apply(undefined, args);
             }
         }
@@ -42,7 +42,7 @@ export default class Deferred {
             return this;
         }
 
-        var event = this.events[eventName];
+        let event = this.events[eventName];
 
         if (event.completed) {
             callback.apply(undefined, event.result);
@@ -56,7 +56,7 @@ export default class Deferred {
     }
 
     static async(fnc) {
-        var deferred = new Deferred(),
+        let deferred = new Deferred(),
             args = arguments;
 
         setTimeout(function () {

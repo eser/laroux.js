@@ -19,13 +19,13 @@
                 $l.ajax.getJson(
                     'test.json'
 
-                ).then(function (response) {
+                ).on('done', function (response) {
                     $l.dom.replace(text, response.testResponse);
 
-                }).on('error', function (error) {
+                }).on('fail', function (error) {
                     $l.dom.replace(text, 'Error: ' + error.message);
 
-                }).start();
+                });
 
                 return false;
             }
@@ -48,7 +48,7 @@
                     time:     800,
                     unit:     '',
                     reset:    false
-                }).start();
+                });
 
                 return false;
             }
@@ -72,7 +72,7 @@
                     time:     1200,
                     unit:     'px',
                     reset:    false
-                }).start();
+                });
 
                 return false;
             }
@@ -448,23 +448,27 @@
         );
     });
 
-    // triggers - Set
+    // when - Set
     $l.ready(function() {
-        var button1 = $l.id('button-triggers-set-1');
-        var button2 = $l.id('button-triggers-set-2');
-        var buttonReset = $l.id('button-triggers-set-reset');
-        var text = $l.id('text-triggers-set');
+        var button1 = $l.id('button-when-set-1');
+        var button2 = $l.id('button-when-set-2');
+        var buttonReset = $l.id('button-when-set-reset');
+        var text = $l.id('text-when-set');
 
         $l.dom.append(text, 'click both buttons in any order' + crlf);
 
+        var promise1;
+        var promise2;
+
         var resetFunc = function() {
-            // $l.triggers.set(
-            //     ['condition1', 'condition2'],
-            //     function() {
-            //         $l.dom.append(text, 'all set' + crlf);
-            //         $l.dom.attr(buttonReset, 'disabled', null);
-            //     }
-            // );
+            promise1 = new $l.deferred();
+            promise2 = new $l.deferred();
+
+            new $l.when(promise1, promise2)
+                .then(function() {
+                    $l.dom.append(text, 'all set' + crlf);
+                    $l.dom.attr(buttonReset, 'disabled', null);
+                });
 
             $l.dom.attr(buttonReset, 'disabled', 'disabled');
         };
@@ -475,7 +479,7 @@
             'click',
             function() {
                 $l.dom.append(text, 'button1 clicked...' + crlf);
-                $l.triggers.ontrigger('condition1');
+                promise1.invoke('completed');
 
                 return false;
             }
@@ -486,7 +490,7 @@
             'click',
             function() {
                 $l.dom.append(text, 'button2 clicked...' + crlf);
-                $l.triggers.ontrigger('condition2');
+                promise2.invoke('completed');
 
                 return false;
             }

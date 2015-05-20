@@ -155,13 +155,13 @@
 $l.ajax.getJson(
     'test.json'
 
-).then(function (response) {
+).on('done', function (response) {
     $l.dom.replace($l.id('text-ajax-get-request'), response.testResponse);
 
-}).on('error', function (error) {
+}).on('fail', function (error) {
     $l.dom.replace(text, 'Error: ' + error.message);
 
-}).start();
+});
                         </pre>
                     </div>
                 </div>
@@ -906,70 +906,6 @@ $l.dom.setEvent(
 
             <div class="row header-row">
                 <div class="col-sm-6">
-                    <h2 class="nomargin">Triggers Examples</h2>
-                </div>
-                <div class="col-sm-6 text-right">
-                    <a class="btn btn-sm btn-default" href="https://github.com/larukedi/laroux.js/wiki/triggers" role="button">Wiki Page</a>
-                </div>
-            </div>
-
-            <div class="example-area">
-                <h3>Setting a trigger</h3>
-                <div class="row">
-                    <div class="col-sm-4">
-                        <button id="button-triggers-set-1" class="btn btn-default">Button 1</button>
-                        <button id="button-triggers-set-2" class="btn btn-default">Button 2</button>
-                        <button id="button-triggers-set-reset" class="btn btn-default" disabled="disabled">Reset</button>
-                        <div id="text-triggers-set"></div>
-                    </div>
-                    <div class="col-sm-8">
-                        <h4>HTML</h4>
-                        <pre class="prettyprint">
-&lt;button id="button-triggers-set-1" class="btn btn-default"&gt;Button 1&lt;/button&gt;
-&lt;button id="button-triggers-set-2" class="btn btn-default"&gt;Button 2&lt;/button&gt;
-&lt;div id="text-triggers-set"&gt;&lt;/div&gt;
-                        </pre>
-
-                        <h4>Javascript</h4>
-                        <pre class="prettyprint">
-var text = $l.id('text-triggers-set');
-$l.dom.replace(text, 'click both buttons in any order&lt;br /&gt;');
-
-$l.triggers.set(
-    ['condition1', 'condition2'],
-    function() {
-        $l.dom.append(text, 'all set&lt;br /&gt;');
-    }
-);
-
-$l.dom.setEvent(
-    $l.id('button-triggers-set-1'),
-    'click',
-    function() {
-        $l.dom.append(text, 'button1 clicked...&lt;br /&gt;');
-        $l.triggers.ontrigger('condition1');
-
-        return false;
-    }
-);
-
-$l.dom.setEvent(
-    $l.id('button-triggers-set-2'),
-    'click',
-    function() {
-        $l.dom.append(text, 'button2 clicked...&lt;br /&gt;');
-        $l.triggers.ontrigger('condition2');
-
-        return false;
-    }
-);
-                        </pre>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row header-row">
-                <div class="col-sm-6">
                     <h2 class="nomargin">Vars Examples</h2>
                 </div>
                 <div class="col-sm-6 text-right">
@@ -1153,6 +1089,71 @@ $l.dom.setEvent(
     function() {
         $l.vars.removeSession('demopage');
         $l.dom.append(text, 'session storage variable is removed&lt;br /&gt;');
+
+        return false;
+    }
+);
+                        </pre>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row header-row">
+                <div class="col-sm-6">
+                    <h2 class="nomargin">When Examples</h2>
+                </div>
+                <div class="col-sm-6 text-right">
+                    <a class="btn btn-sm btn-default" href="https://github.com/larukedi/laroux.js/wiki/when" role="button">Wiki Page</a>
+                </div>
+            </div>
+
+            <div class="example-area">
+                <h3>Setting a when</h3>
+                <div class="row">
+                    <div class="col-sm-4">
+                        <button id="button-when-set-1" class="btn btn-default">Button 1</button>
+                        <button id="button-when-set-2" class="btn btn-default">Button 2</button>
+                        <button id="button-when-set-reset" class="btn btn-default" disabled="disabled">Reset</button>
+                        <div id="text-when-set"></div>
+                    </div>
+                    <div class="col-sm-8">
+                        <h4>HTML</h4>
+                        <pre class="prettyprint">
+&lt;button id="button-when-set-1" class="btn btn-default"&gt;Button 1&lt;/button&gt;
+&lt;button id="button-when-set-2" class="btn btn-default"&gt;Button 2&lt;/button&gt;
+&lt;div id="text-when-set"&gt;&lt;/div&gt;
+                        </pre>
+
+                        <h4>Javascript</h4>
+                        <pre class="prettyprint">
+var text = $l.id('text-when-set');
+$l.dom.replace(text, 'click both buttons in any order&lt;br /&gt;');
+
+var promise1 = new $l.deferred();
+var promise2 = new $l.deferred();
+
+new $l.when(promise1, promise2)
+    .then(function() {
+        $l.dom.append(text, 'all set&lt;br /&gt;');
+    });
+
+$l.dom.setEvent(
+    $l.id('button-when-set-1'),
+    'click',
+    function() {
+        $l.dom.append(text, 'button1 clicked...&lt;br /&gt;');
+        promise1.invoke('completed');
+
+        return false;
+    }
+);
+
+$l.dom.setEvent(
+    $l.id('button-when-set-2'),
+    'click',
+    function() {
+        $l.dom.append(text, 'button2 clicked...&lt;br /&gt;');
+        promise2.invoke('completed');
 
         return false;
     }

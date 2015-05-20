@@ -7,6 +7,7 @@ import Stack from './laroux.stack.js';
 import templates from './laroux.templates.js';
 import timers from './laroux.timers.js';
 import vars from './laroux.vars.js';
+import When from './laroux.when.js';
 
 export default (function () {
     'use strict';
@@ -39,6 +40,7 @@ export default (function () {
         templates,
         timers,
         vars,
+        when: When,
 
         cached: {
             single: {},

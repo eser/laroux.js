@@ -49,6 +49,10 @@ var _larouxVarsJs = require('./laroux.vars.js');
 
 var _larouxVarsJs2 = _interopRequireDefault(_larouxVarsJs);
 
+var _larouxWhenJs = require('./laroux.when.js');
+
+var _larouxWhenJs2 = _interopRequireDefault(_larouxWhenJs);
+
 exports['default'] = (function () {
     'use strict';
 
@@ -78,6 +82,7 @@ exports['default'] = (function () {
         templates: _larouxTemplatesJs2['default'],
         timers: _larouxTimersJs2['default'],
         vars: _larouxVarsJs2['default'],
+        when: _larouxWhenJs2['default'],
 
         cached: {
             single: {},

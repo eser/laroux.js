@@ -46,6 +46,7 @@ module.exports = {
                         '~/base/js/laroux.ajax.js',
                         '~/base/js/laroux.timers.js',
                         '~/base/js/laroux.deferred.js',
+                        '~/base/js/laroux.when.js',
                         '~/base/js/laroux.vars.js',
                         '~/base/js/laroux.date.js',
                         '~/base/js/laroux.stack.js',

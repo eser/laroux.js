@@ -15,7 +15,7 @@ export default class Stack {
     set(key, value) {
         // delete this._data[key];
 
-        var type = typeof value;
+        let type = typeof value;
         switch (type) {
         case 'function':
             this._data[key] = value;
@@ -57,7 +57,7 @@ export default class Stack {
                         return this._data[key];
                     },
                     set: function (newValue) {
-                        var oldValue = this._data[key];
+                        let oldValue = this._data[key];
                         if (this._data[key] === newValue) {
                             return;
                         }
@@ -73,7 +73,7 @@ export default class Stack {
     }
 
     setRange(values) {
-        for (var valueKey in values) {
+        for (let valueKey in values) {
             if (!values.hasOwnProperty(valueKey)) {
                 continue;
             }
@@ -87,9 +87,9 @@ export default class Stack {
     }
 
     getRange(keys) {
-        var values = {};
+        let values = {};
 
-        for (var item in keys) {
+        for (let item in keys) {
             if (!keys.hasOwnProperty(item)) {
                 continue;
             }
@@ -120,7 +120,7 @@ export default class Stack {
     }
 
     clear() {
-        for (var item in this._data) {
+        for (let item in this._data) {
             if (!this._data.hasOwnProperty(item)) {
                 continue;
             }
