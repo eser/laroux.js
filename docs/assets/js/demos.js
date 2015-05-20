@@ -479,7 +479,7 @@
             'click',
             function() {
                 $l.dom.append(text, 'button1 clicked...' + crlf);
-                promise1.invoke('completed');
+                promise1.resolve();
 
                 return false;
             }
@@ -490,7 +490,7 @@
             'click',
             function() {
                 $l.dom.append(text, 'button2 clicked...' + crlf);
-                promise2.invoke('completed');
+                promise2.resolve();
 
                 return false;
             }
