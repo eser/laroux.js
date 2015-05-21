@@ -291,29 +291,6 @@ export default (function () {
             return shuffled;
         },
 
-        merge: function () {
-            var target = Array.prototype.shift.call(arguments),
-                tmp = target,
-                isArray = tmp instanceof Array;
-
-            for (var item in arguments) {
-                if (isArray) {
-                    tmp = tmp.concat(arguments[item]);
-                    continue;
-                }
-
-                for (var attr in arguments[item]) {
-                    if (!arguments[item].hasOwnProperty(attr)) {
-                        continue;
-                    }
-
-                    tmp[attr] = arguments[item][attr];
-                }
-            }
-
-            return tmp;
-        },
-
         duplicate: function (obj) {
             return JSON.parse(JSON.stringify(obj));
         },

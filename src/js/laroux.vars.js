@@ -69,7 +69,6 @@ export default (function () {
                 }
             }
         },
-        storage: 'local',
 
         get: function () {
             let args = helpers.toArray(arguments),
