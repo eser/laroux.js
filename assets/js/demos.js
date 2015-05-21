@@ -252,8 +252,8 @@
                 $l.dom.append(text, '<div><strong>Shuffling values:</strong></div>');
                 $l.dom.append(text, $l.shuffle([1, 2, 3, 4, 5]) + crlf);
 
-                $l.dom.append(text, '<div><strong>Merging two arrays:</strong></div>');
-                $l.dom.append(text, JSON.stringify($l.merge({id: 1}, {name: 'eser', count: 5})) + crlf);
+                $l.dom.append(text, '<div><strong>Extending an object:</strong></div>');
+                $l.dom.append(text, JSON.stringify($l.extend({id: 1}, {name: 'eser', count: 5})) + crlf);
 
                 $l.dom.append(text, '<div><strong>Getting count of elements:</strong></div>');
                 $l.dom.append(text, $l.getLength({id: 1, name: 'eser', count: 5}) + crlf);

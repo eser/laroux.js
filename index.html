@@ -511,43 +511,43 @@ var text = $l.id('text-helpers-helpers');
 $l.dom.clear(text);
 
 $l.dom.append(text, '&lt;div&gt;&lt;strong&gt;Unique Id Generator:&lt;/strong&gt;&lt;/div&gt;');
-$l.dom.append(text, $l.helpers.getUniqueId() + '&lt;br /&gt;');
-$l.dom.append(text, $l.helpers.getUniqueId() + '&lt;br /&gt;');
+$l.dom.append(text, $l.getUniqueId() + '&lt;br /&gt;');
+$l.dom.append(text, $l.getUniqueId() + '&lt;br /&gt;');
 
 $l.dom.append(text, '&lt;div&gt;&lt;strong&gt;Query String Generation:&lt;/strong&gt;&lt;/div&gt;');
-$l.dom.append(text, $l.helpers.buildQueryString({ pageId: 5, showAll: 'yes' }) + '&lt;br /&gt;');
+$l.dom.append(text, $l.buildQueryString({ pageId: 5, showAll: 'yes' }) + '&lt;br /&gt;');
 
 $l.dom.append(text, '&lt;div&gt;&lt;strong&gt;Transform string into camel case:&lt;/strong&gt;&lt;/div&gt;');
-$l.dom.append(text, $l.helpers.camelCase('text-align') + '&lt;br /&gt;');
+$l.dom.append(text, $l.camelCase('text-align') + '&lt;br /&gt;');
 
 $l.dom.append(text, '&lt;div&gt;&lt;strong&gt;Transform string back from camel case:&lt;/strong&gt;&lt;/div&gt;');
-$l.dom.append(text, $l.helpers.antiCamelCase('textAlign') + '&lt;br /&gt;');
+$l.dom.append(text, $l.antiCamelCase('textAlign') + '&lt;br /&gt;');
 
 $l.dom.append(text, '&lt;div&gt;&lt;strong&gt;Encoding special characters:&lt;/strong&gt;&lt;/div&gt;');
-$l.dom.append(text, $l.helpers.quoteAttr('&lt;br clear="all" /&gt;') + '&lt;br /&gt;');
+$l.dom.append(text, $l.quoteAttr('&lt;br clear="all" /&gt;') + '&lt;br /&gt;');
 
 $l.dom.append(text, '&lt;div&gt;&lt;strong&gt;Generating random value:&lt;/strong&gt;&lt;/div&gt;');
-$l.dom.append(text, $l.helpers.random(1, 15) + '&lt;br /&gt;');
-$l.dom.append(text, $l.helpers.random(1, 15) + '&lt;br /&gt;');
+$l.dom.append(text, $l.random(1, 15) + '&lt;br /&gt;');
+$l.dom.append(text, $l.random(1, 15) + '&lt;br /&gt;');
 
 $l.dom.append(text, '&lt;div&gt;&lt;strong&gt;Getting values from a single column:&lt;/strong&gt;&lt;/div&gt;');
 var arr = [{id: 1, count: 5}, {id: 2, count: 12}];
-$l.dom.append(text, JSON.stringify($l.helpers.column(arr, 'count')) + '&lt;br /&gt;');
+$l.dom.append(text, JSON.stringify($l.column(arr, 'count')) + '&lt;br /&gt;');
 
 $l.dom.append(text, '&lt;div&gt;&lt;strong&gt;Shuffling values:&lt;/strong&gt;&lt;/div&gt;');
-$l.dom.append(text, $l.helpers.shuffle([1, 2, 3, 4, 5]) + '&lt;br /&gt;');
+$l.dom.append(text, $l.shuffle([1, 2, 3, 4, 5]) + '&lt;br /&gt;');
 
-$l.dom.append(text, '&lt;div&gt;&lt;strong&gt;Merging two arrays:&lt;/strong&gt;&lt;/div&gt;');
-$l.dom.append(text, JSON.stringify($l.helpers.merge({id: 1}, {name: 'eser', count: 5})) + '&lt;br /&gt;');
+$l.dom.append(text, '&lt;div&gt;&lt;strong&gt;Extending an object:&lt;/strong&gt;&lt;/div&gt;');
+$l.dom.append(text, JSON.stringify($l.extend({id: 1}, {name: 'eser', count: 5})) + '&lt;br /&gt;');
 
 $l.dom.append(text, '&lt;div&gt;&lt;strong&gt;Getting count of elements:&lt;/strong&gt;&lt;/div&gt;');
-$l.dom.append(text, $l.helpers.getLength({id: 1, name: 'eser', count: 5}) + '&lt;br /&gt;');
+$l.dom.append(text, $l.getLength({id: 1, name: 'eser', count: 5}) + '&lt;br /&gt;');
 
 $l.dom.append(text, '&lt;div&gt;&lt;strong&gt;Getting elements with dot notation:&lt;/strong&gt;&lt;/div&gt;');
-$l.dom.append(text, $l.helpers.getElement({id: 1, child: { a: 1, b: 2 }}, 'child.a') + '&lt;br /&gt;');
+$l.dom.append(text, $l.getElement({id: 1, child: { a: 1, b: 2 }}, 'child.a') + '&lt;br /&gt;');
 
 $l.dom.append(text, '&lt;div&gt;&lt;strong&gt;Getting keys for dot notation:&lt;/strong&gt;&lt;/div&gt;');
-$l.dom.append(text, JSON.stringify($l.helpers.getKeysRecursive({id: 1, child: { a: 1, b: 2 }})) + '&lt;br /&gt;');
+$l.dom.append(text, JSON.stringify($l.getKeysRecursive({id: 1, child: { a: 1, b: 2 }})) + '&lt;br /&gt;');
 
                         </pre>
                     </div>
