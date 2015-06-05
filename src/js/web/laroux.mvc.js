@@ -13,17 +13,17 @@ export default (function () {
                 element = dom.selectById(element);
             }
 
-            // if (model.constructor !== Stack) {
-            //     model = new Stack(model);
+            // if (model.constructor !== types.Model) {
+            //     model = new types.Model(model);
             // }
 
-            var appKey = element.getAttribute('id');
+            let appKey = element.getAttribute('id');
 
-            model.onupdate = function (event) {
+            model.on(function (event) {
                 if (!mvc.pauseUpdate) {
                     mvc.update(appKey); // , [event.key]
                 }
-            };
+            });
 
             mvc.apps[appKey] = {
                 element: element,
@@ -37,19 +37,19 @@ export default (function () {
         },
 
         rebind: function (appKey) {
-            var app = mvc.apps[appKey];
+            let app = mvc.apps[appKey];
             /*jslint nomen: true */
-            app.modelKeys = helpers.getKeysRecursive(app.model._data); // FIXME: works only for $l.stack
+            app.modelKeys = helpers.getKeysRecursive(app.model); // FIXME: works only for $l.types.Model
             app.boundElements = {};
             app.eventElements = [];
 
             mvc.scanElements(app, app.element);
             mvc.update(appKey);
 
-            var fnc = function (ev, elem) {
-                var binding = mvc.bindStringParser(elem.getAttribute('lr-event'));
+            let fnc = function (ev, elem) {
+                let binding = mvc.bindStringParser(elem.getAttribute('lr-event'));
                 // mvc.pauseUpdate = true;
-                for (var item in binding) {
+                for (let item in binding) {
                     if (item === null || !binding.hasOwnProperty(item)) {
                         continue;
                     }
@@ -65,7 +65,7 @@ export default (function () {
                 // mvc.pauseUpdate = false;
             };
 
-            for (var i = 0, length = app.eventElements.length; i < length; i++) {
+            for (let i = 0, length = app.eventElements.length; i < length; i++) {
                 dom.setEvent(
                     app.eventElements[i].element,
                     app.eventElements[i].binding[null],
@@ -75,11 +75,11 @@ export default (function () {
         },
 
         scanElements: function (app, element) {
-            for (var i = 0, atts = element.attributes, m = atts.length; i < m; i++) {
+            for (let i = 0, atts = element.attributes, m = atts.length; i < m; i++) {
                 if (atts[i].name === 'lr-bind') {
-                    var binding1 = mvc.bindStringParser(atts[i].value);
+                    let binding1 = mvc.bindStringParser(atts[i].value);
 
-                    for (var item in binding1) {
+                    for (let item in binding1) {
                         if (!binding1.hasOwnProperty(item)) {
                             continue;
                         }
@@ -94,7 +94,7 @@ export default (function () {
                         });
                     }
                 } else if (atts[i].name === 'lr-event') {
-                    var binding2 = mvc.bindStringParser(atts[i].value);
+                    let binding2 = mvc.bindStringParser(atts[i].value);
 
                     app.eventElements.push({
                         element: element,
@@ -103,7 +103,7 @@ export default (function () {
                 }
             }
 
-            for (var j = 0, chldrn = element.childNodes, n = chldrn.length; j < n; j++) {
+            for (let j = 0, chldrn = element.childNodes, n = chldrn.length; j < n; j++) {
                 if (chldrn[j].nodeType === 1) {
                     mvc.scanElements(app, chldrn[j]);
                 }
@@ -111,41 +111,46 @@ export default (function () {
         },
 
         update: function (appKey, keys) {
-            var app = mvc.apps[appKey];
+            let app = mvc.apps[appKey];
 
             if (typeof keys === 'undefined') {
                 keys = app.modelKeys;
             }
 
-            for (var i = 0, length1 = keys.length; i < length1; i++) {
+            for (let i = 0, length1 = keys.length; i < length1; i++) {
                 if (!(keys[i] in app.boundElements)) {
                     continue;
                 }
 
-                var boundElement = app.boundElements[keys[i]];
+                let boundElement = app.boundElements[keys[i]],
+                    value = helpers.getElement(app.model, keys[i]);
 
-                for (var j = 0, length2 = boundElement.length; j < length2; j++) {
+                if (value instanceof Function) {
+                    value = value.call(app.model);
+                }
+
+                for (let j = 0, length2 = boundElement.length; j < length2; j++) {
                     if (boundElement[j].target.substring(0, 6) === 'style.') {
-                        boundElement[j].element.style[boundElement[j].target.substring(6)] = helpers.getElement(app.model, keys[i]);
+                        boundElement[j].element.style[boundElement[j].target.substring(6)] = value;
                     } else if (boundElement[j].target.substring(0, 5) === 'attr.') {
                         // FIXME removeAttribute on null value?
-                        boundElement[j].element.setAttribute(boundElement[j].target.substring(5), helpers.getElement(app.model, keys[i]));
+                        boundElement[j].element.setAttribute(boundElement[j].target.substring(5), value);
                     } else if (boundElement[j].target.substring(0, 5) === 'prop.') {
                         // FIXME removeAttribute on null value?
-                        boundElement[j].element[boundElement[j].target.substring(5)] = helpers.getElement(app.model, keys[i]);
+                        boundElement[j].element[boundElement[j].target.substring(5)] = value;
                     }
                 }
             }
         },
 
         bindStringParser: function (text) {
-            var lastBuffer = null,
+            let lastBuffer = null,
                 buffer = '',
                 state = 0,
                 result = {};
 
-            for (var i = 0, length = text.length; i < length; i++) {
-                var curr = text.charAt(i);
+            for (let i = 0, length = text.length; i < length; i++) {
+                let curr = text.charAt(i);
 
                 if (state === 0) {
                     if (curr === ':') {

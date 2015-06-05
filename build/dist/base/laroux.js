@@ -33,9 +33,9 @@ var _larouxHelpersJs = require('./laroux.helpers.js');
 
 var _larouxHelpersJs2 = _interopRequireDefault(_larouxHelpersJs);
 
-var _larouxStackJs = require('./laroux.stack.js');
+var _larouxTypesJs = require('./laroux.types.js');
 
-var _larouxStackJs2 = _interopRequireDefault(_larouxStackJs);
+var _larouxTypesJs2 = _interopRequireDefault(_larouxTypesJs);
 
 var _larouxTemplatesJs = require('./laroux.templates.js');
 
@@ -78,7 +78,7 @@ exports['default'] = (function () {
         date: _larouxDateJs2['default'],
         deferred: _larouxDeferredJs2['default'],
         events: _larouxEventsJs2['default'],
-        stack: _larouxStackJs2['default'],
+        types: _larouxTypesJs2['default'],
         templates: _larouxTemplatesJs2['default'],
         timers: _larouxTimersJs2['default'],
         vars: _larouxVarsJs2['default'],

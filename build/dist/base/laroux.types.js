@@ -22,72 +22,48 @@ var _larouxHelpersJs = require('./laroux.helpers.js');
 
 var _larouxHelpersJs2 = _interopRequireDefault(_larouxHelpersJs);
 
-var Map = (function () {
-    function Map(data) {
-        _classCallCheck(this, Map);
+var staticKeys = ['_callbacks', '_onupdate'];
 
-        this._data = {};
-        // this._changes = [];
+var Model = (function () {
+    function Model(data) {
+        _classCallCheck(this, Model);
+
+        var self = this;
+
+        this._callbacks = [];
+        this._onupdate = function (changes) {
+            _larouxHelpersJs2['default'].callAll(self._callbacks, self, [changes]);
+        };
+
+        Object.observe(this, this._onupdate);
 
         if (data) {
             this.setRange(data);
         }
     }
 
-    _createClass(Map, [{
+    _createClass(Model, [{
         key: 'set',
         value: function set(key, value) {
-            // delete this._data[key];
-
-            var type = typeof value;
-            switch (type) {
-                case 'function':
-                    this._data[key] = value;
-
-                    Object.defineProperty(this, key, {
-                        configurable: true,
-                        get: function get() {
-                            return this._data[key]();
-                        }
-                    });
-                    break;
-
-                default:
-                    this._data[key] = value;
-
-                    Object.defineProperty(this, key, {
-                        configurable: true,
-                        get: function get() {
-                            return this._data[key];
-                        },
-                        set: function set(newValue) {
-                            var oldValue = this._data[key];
-                            if (this._data[key] === newValue) {
-                                return;
-                            }
-
-                            this._data[key] = newValue;
-                            // this._changes.push({ scope: this, key: key, operation: 'set', oldValue: oldValue, newValue: newValue });
-                        }
-                    });
-                    break;
+            if (staticKeys.indexOf(key) === -1) {
+                this[key] = value;
             }
         }
     }, {
         key: 'setRange',
         value: function setRange(values) {
             for (var valueKey in values) {
-                if (!values.hasOwnProperty(valueKey)) {
-                    continue;
-                }
-
                 this.set(valueKey, values[valueKey]);
             }
         }
     }, {
         key: 'get',
         value: function get(key, defaultValue) {
-            return this[key] || defaultValue || null;
+            if (key in this && staticKeys.indexOf(key) === -1) {
+                return this[key];
+            }
+
+            return defaultValue || null;
         }
     }, {
         key: 'getRange',
@@ -95,10 +71,6 @@ var Map = (function () {
             var values = {};
 
             for (var item in keys) {
-                if (!keys.hasOwnProperty(item)) {
-                    continue;
-                }
-
                 values[keys[item]] = this[keys[item]];
             }
 
@@ -107,51 +79,72 @@ var Map = (function () {
     }, {
         key: 'keys',
         value: function keys() {
-            return Object.keys(this._data);
+            var keys = [];
+
+            for (var item in this) {
+                if (staticKeys.indexOf(item) === -1) {
+                    keys.push(item);
+                }
+            }
+
+            return keys;
         }
     }, {
         key: 'length',
         value: function length() {
-            return Object.keys(this._data).length;
+            return this.keys().length;
         }
     }, {
         key: 'exists',
         value: function exists(key) {
-            return key in this._data;
+            return key in this;
         }
     }, {
         key: 'remove',
         value: function remove(key) {
-            if (key in this._data) {
-                // this._changes.push({ scope: this, key: key, operation: 'remove', oldValue: this._data[key] });
-
+            if (staticKeys.indexOf(key) === -1) {
                 delete this[key];
-                delete this._data[key];
             }
         }
     }, {
         key: 'clear',
         value: function clear() {
-            for (var item in this._data) {
-                if (!this._data.hasOwnProperty(item)) {
+            for (var item in this) {
+                if (!this.hasOwnProperty(item) || staticKeys.indexOf(item) !== -1) {
                     continue;
                 }
 
                 delete this[item];
-                delete this._data[item];
             }
-
-            this._data = {};
-            // this._changes = [];
+        }
+    }, {
+        key: 'observe',
+        value: function observe(obj) {
+            Object.observe(obj, this._onupdate);
+        }
+    }, {
+        key: 'unobserve',
+        value: function unobserve(obj) {
+            Object.unobserve(obj);
+        }
+    }, {
+        key: 'on',
+        value: function on(fnc) {
+            this._callbacks.push(fnc);
+        }
+    }, {
+        key: 'off',
+        value: function off(fnc) {
+            _larouxHelpersJs2['default'].removeFromArray(this._callbacks, fnc);
         }
     }]);
 
-    return Map;
+    return Model;
 })();
 
 exports['default'] = (function () {
     var types = {
-        map: Map
+        model: Model
     };
 
     return types;

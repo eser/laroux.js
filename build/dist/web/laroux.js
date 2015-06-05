@@ -1024,29 +1024,6 @@ exports['default'] = (function () {
             return shuffled;
         },
 
-        merge: function merge() {
-            var target = Array.prototype.shift.call(arguments),
-                tmp = target,
-                isArray = tmp instanceof Array;
-
-            for (var item in arguments) {
-                if (isArray) {
-                    tmp = tmp.concat(arguments[item]);
-                    continue;
-                }
-
-                for (var attr in arguments[item]) {
-                    if (!arguments[item].hasOwnProperty(attr)) {
-                        continue;
-                    }
-
-                    tmp[attr] = arguments[item][attr];
-                }
-            }
-
-            return tmp;
-        },
-
         duplicate: function duplicate(obj) {
             return JSON.parse(JSON.stringify(obj));
         },
@@ -1061,6 +1038,28 @@ exports['default'] = (function () {
             }
 
             return items;
+        },
+
+        removeFromArray: function removeFromArray(obj, value) {
+            var targetKey = null;
+
+            for (var item in obj) {
+                if (!obj.hasOwnProperty(item)) {
+                    continue;
+                }
+
+                if (obj[item] === value) {
+                    targetKey = item;
+                    break;
+                }
+            }
+
+            if (targetKey !== null) {
+                obj.splice(targetKey, 1);
+                return true;
+            }
+
+            return false;
         },
 
         toArray: function toArray(obj) {
@@ -1160,6 +1159,12 @@ exports['default'] = (function () {
             }
 
             return helpers.getElement(obj[key], rest, defaultValue, delimiter);
+        },
+
+        callAll: function callAll(callbacks, scope, parameters) {
+            for (var i = 0, _length = callbacks.length; i < _length; i++) {
+                callbacks[i].apply(scope, parameters);
+            }
         }
     };
 
@@ -1197,9 +1202,9 @@ var _larouxHelpersJs = require('./laroux.helpers.js');
 
 var _larouxHelpersJs2 = _interopRequireDefault(_larouxHelpersJs);
 
-var _larouxStackJs = require('./laroux.stack.js');
+var _larouxTypesJs = require('./laroux.types.js');
 
-var _larouxStackJs2 = _interopRequireDefault(_larouxStackJs);
+var _larouxTypesJs2 = _interopRequireDefault(_larouxTypesJs);
 
 var _larouxTemplatesJs = require('./laroux.templates.js');
 
@@ -1242,7 +1247,7 @@ exports['default'] = (function () {
         date: _larouxDateJs2['default'],
         deferred: _larouxDeferredJs2['default'],
         events: _larouxEventsJs2['default'],
-        stack: _larouxStackJs2['default'],
+        types: _larouxTypesJs2['default'],
         templates: _larouxTemplatesJs2['default'],
         timers: _larouxTimersJs2['default'],
         vars: _larouxVarsJs2['default'],
@@ -1299,163 +1304,7 @@ exports['default'] = (function () {
 
 module.exports = exports['default'];
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./laroux.ajax.js":2,"./laroux.date.js":3,"./laroux.deferred.js":4,"./laroux.events.js":5,"./laroux.helpers.js":6,"./laroux.stack.js":8,"./laroux.templates.js":9,"./laroux.timers.js":10,"./laroux.vars.js":11,"./laroux.when.js":12}],8:[function(require,module,exports){
-/*jslint node: true */
-'use strict';
-
-Object.defineProperty(exports, '__esModule', {
-    value: true
-});
-
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
-
-var Stack = (function () {
-    function Stack(data, depth, top) {
-        _classCallCheck(this, Stack);
-
-        this._data = {};
-        this._depth = depth;
-        this._top = top || this;
-
-        if (data) {
-            this.setRange(data);
-        }
-    }
-
-    _createClass(Stack, [{
-        key: 'set',
-        value: function set(key, value) {
-            // delete this._data[key];
-
-            var type = typeof value;
-            switch (type) {
-                case 'function':
-                    this._data[key] = value;
-
-                    Object.defineProperty(this, key, {
-                        configurable: true,
-                        get: function get() {
-                            return this._data[key]();
-                        }
-                    });
-                    break;
-
-                default:
-                    /*
-                    if (type === 'object') {
-                        this._data[key] = new Stack(
-                            value,
-                            this._depth ?
-                                this._depth + '.' + key :
-                                key,
-                            this._top
-                        );
-                    } else {
-                        this._data[key] = value;
-                    }
-                    */
-                    this._data[key] = value;
-
-                    Object.defineProperty(this, key, {
-                        configurable: true,
-                        get: function get() {
-                            return this._data[key];
-                        },
-                        set: function set(newValue) {
-                            var oldValue = this._data[key];
-                            if (this._data[key] === newValue) {
-                                return;
-                            }
-
-                            // this.set(this, key, newValue);
-                            this._data[key] = newValue;
-                            this._top.onupdate({ scope: this, key: key, oldValue: oldValue, newValue: newValue });
-                        }
-                    });
-                    break;
-            }
-        }
-    }, {
-        key: 'setRange',
-        value: function setRange(values) {
-            for (var valueKey in values) {
-                if (!values.hasOwnProperty(valueKey)) {
-                    continue;
-                }
-
-                this.set(valueKey, values[valueKey]);
-            }
-        }
-    }, {
-        key: 'get',
-        value: function get(key, defaultValue) {
-            return this[key] || defaultValue || null;
-        }
-    }, {
-        key: 'getRange',
-        value: function getRange(keys) {
-            var values = {};
-
-            for (var item in keys) {
-                if (!keys.hasOwnProperty(item)) {
-                    continue;
-                }
-
-                values[keys[item]] = this[keys[item]];
-            }
-
-            return values;
-        }
-    }, {
-        key: 'keys',
-        value: function keys() {
-            return Object.keys(this._data);
-        }
-    }, {
-        key: 'length',
-        value: function length() {
-            return Object.keys(this._data).length;
-        }
-    }, {
-        key: 'exists',
-        value: function exists(key) {
-            return key in this._data;
-        }
-    }, {
-        key: 'remove',
-        value: function remove(key) {
-            if (key in this._data) {
-                delete this[key];
-                delete this._data[key];
-            }
-        }
-    }, {
-        key: 'clear',
-        value: function clear() {
-            for (var item in this._data) {
-                if (!this._data.hasOwnProperty(item)) {
-                    continue;
-                }
-
-                delete this[item];
-                delete this._data[item];
-            }
-
-            this._data = {};
-        }
-    }, {
-        key: 'onupdate',
-        value: function onupdate(event) {}
-    }]);
-
-    return Stack;
-})();
-
-exports['default'] = Stack;
-module.exports = exports['default'];
-},{}],9:[function(require,module,exports){
+},{"./laroux.ajax.js":2,"./laroux.date.js":3,"./laroux.deferred.js":4,"./laroux.events.js":5,"./laroux.helpers.js":6,"./laroux.templates.js":8,"./laroux.timers.js":9,"./laroux.types.js":10,"./laroux.vars.js":11,"./laroux.when.js":12}],8:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -1584,7 +1433,7 @@ exports['default'] = (function () {
 })();
 
 module.exports = exports['default'];
-},{"./laroux.helpers.js":6}],10:[function(require,module,exports){
+},{"./laroux.helpers.js":6}],9:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -1665,6 +1514,153 @@ exports['default'] = (function () {
     };
 
     return timers;
+})();
+
+module.exports = exports['default'];
+},{"./laroux.helpers.js":6}],10:[function(require,module,exports){
+/*jslint node: true */
+'use strict';
+
+Object.defineProperty(exports, '__esModule', {
+    value: true
+});
+
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+var _larouxHelpersJs = require('./laroux.helpers.js');
+
+var _larouxHelpersJs2 = _interopRequireDefault(_larouxHelpersJs);
+
+var staticKeys = ['_callbacks', '_onupdate'];
+
+var Model = (function () {
+    function Model(data) {
+        _classCallCheck(this, Model);
+
+        var self = this;
+
+        this._callbacks = [];
+        this._onupdate = function (changes) {
+            _larouxHelpersJs2['default'].callAll(self._callbacks, self, [changes]);
+        };
+
+        Object.observe(this, this._onupdate);
+
+        if (data) {
+            this.setRange(data);
+        }
+    }
+
+    _createClass(Model, [{
+        key: 'set',
+        value: function set(key, value) {
+            if (staticKeys.indexOf(key) === -1) {
+                this[key] = value;
+            }
+        }
+    }, {
+        key: 'setRange',
+        value: function setRange(values) {
+            for (var valueKey in values) {
+                this.set(valueKey, values[valueKey]);
+            }
+        }
+    }, {
+        key: 'get',
+        value: function get(key, defaultValue) {
+            if (key in this && staticKeys.indexOf(key) === -1) {
+                return this[key];
+            }
+
+            return defaultValue || null;
+        }
+    }, {
+        key: 'getRange',
+        value: function getRange(keys) {
+            var values = {};
+
+            for (var item in keys) {
+                values[keys[item]] = this[keys[item]];
+            }
+
+            return values;
+        }
+    }, {
+        key: 'keys',
+        value: function keys() {
+            var keys = [];
+
+            for (var item in this) {
+                if (staticKeys.indexOf(item) === -1) {
+                    keys.push(item);
+                }
+            }
+
+            return keys;
+        }
+    }, {
+        key: 'length',
+        value: function length() {
+            return this.keys().length;
+        }
+    }, {
+        key: 'exists',
+        value: function exists(key) {
+            return key in this;
+        }
+    }, {
+        key: 'remove',
+        value: function remove(key) {
+            if (staticKeys.indexOf(key) === -1) {
+                delete this[key];
+            }
+        }
+    }, {
+        key: 'clear',
+        value: function clear() {
+            for (var item in this) {
+                if (!this.hasOwnProperty(item) || staticKeys.indexOf(item) !== -1) {
+                    continue;
+                }
+
+                delete this[item];
+            }
+        }
+    }, {
+        key: 'observe',
+        value: function observe(obj) {
+            Object.observe(obj, this._onupdate);
+        }
+    }, {
+        key: 'unobserve',
+        value: function unobserve(obj) {
+            Object.unobserve(obj);
+        }
+    }, {
+        key: 'on',
+        value: function on(fnc) {
+            this._callbacks.push(fnc);
+        }
+    }, {
+        key: 'off',
+        value: function off(fnc) {
+            _larouxHelpersJs2['default'].removeFromArray(this._callbacks, fnc);
+        }
+    }]);
+
+    return Model;
+})();
+
+exports['default'] = (function () {
+    var types = {
+        model: Model
+    };
+
+    return types;
 })();
 
 module.exports = exports['default'];
@@ -1750,7 +1746,6 @@ exports['default'] = (function () {
                 }
             }
         },
-        storage: 'local',
 
         get: function get() {
             var args = _larouxHelpersJs2['default'].toArray(arguments),
@@ -3149,17 +3144,17 @@ exports['default'] = (function () {
                 element = _larouxDomJs2['default'].selectById(element);
             }
 
-            // if (model.constructor !== Stack) {
-            //     model = new Stack(model);
+            // if (model.constructor !== types.Model) {
+            //     model = new types.Model(model);
             // }
 
             var appKey = element.getAttribute('id');
 
-            model.onupdate = function (event) {
+            model.on(function (event) {
                 if (!mvc.pauseUpdate) {
                     mvc.update(appKey); // , [event.key]
                 }
-            };
+            });
 
             mvc.apps[appKey] = {
                 element: element,
@@ -3175,7 +3170,7 @@ exports['default'] = (function () {
         rebind: function rebind(appKey) {
             var app = mvc.apps[appKey];
             /*jslint nomen: true */
-            app.modelKeys = _larouxHelpersJs2['default'].getKeysRecursive(app.model._data); // FIXME: works only for $l.stack
+            app.modelKeys = _larouxHelpersJs2['default'].getKeysRecursive(app.model); // FIXME: works only for $l.types.Model
             app.boundElements = {};
             app.eventElements = [];
 
@@ -3201,7 +3196,7 @@ exports['default'] = (function () {
                 // mvc.pauseUpdate = false;
             };
 
-            for (var i = 0, length = app.eventElements.length; i < length; i++) {
+            for (var i = 0, _length = app.eventElements.length; i < _length; i++) {
                 _larouxDomJs2['default'].setEvent(app.eventElements[i].element, app.eventElements[i].binding[null], fnc);
             }
         },
@@ -3254,17 +3249,22 @@ exports['default'] = (function () {
                     continue;
                 }
 
-                var boundElement = app.boundElements[keys[i]];
+                var boundElement = app.boundElements[keys[i]],
+                    value = _larouxHelpersJs2['default'].getElement(app.model, keys[i]);
+
+                if (value instanceof Function) {
+                    value = value.call(app.model);
+                }
 
                 for (var j = 0, length2 = boundElement.length; j < length2; j++) {
                     if (boundElement[j].target.substring(0, 6) === 'style.') {
-                        boundElement[j].element.style[boundElement[j].target.substring(6)] = _larouxHelpersJs2['default'].getElement(app.model, keys[i]);
+                        boundElement[j].element.style[boundElement[j].target.substring(6)] = value;
                     } else if (boundElement[j].target.substring(0, 5) === 'attr.') {
                         // FIXME removeAttribute on null value?
-                        boundElement[j].element.setAttribute(boundElement[j].target.substring(5), _larouxHelpersJs2['default'].getElement(app.model, keys[i]));
+                        boundElement[j].element.setAttribute(boundElement[j].target.substring(5), value);
                     } else if (boundElement[j].target.substring(0, 5) === 'prop.') {
                         // FIXME removeAttribute on null value?
-                        boundElement[j].element[boundElement[j].target.substring(5)] = _larouxHelpersJs2['default'].getElement(app.model, keys[i]);
+                        boundElement[j].element[boundElement[j].target.substring(5)] = value;
                     }
                 }
             }
@@ -3276,7 +3276,7 @@ exports['default'] = (function () {
                 state = 0,
                 result = {};
 
-            for (var i = 0, length = text.length; i < length; i++) {
+            for (var i = 0, _length2 = text.length; i < _length2; i++) {
                 var curr = text.charAt(i);
 
                 if (state === 0) {

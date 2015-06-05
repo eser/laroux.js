@@ -49,7 +49,7 @@ module.exports = {
                         '~/base/js/laroux.when.js',
                         '~/base/js/laroux.vars.js',
                         '~/base/js/laroux.date.js',
-                        '~/base/js/laroux.stack.js',
+                        '~/base/js/laroux.types.js',
                         '~/base/js/laroux.templates.js'
                         /*
                         '~/base/js/web/laroux.web.js',

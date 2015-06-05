@@ -3,7 +3,7 @@ import date from './laroux.date.js';
 import Deferred from './laroux.deferred.js';
 import events from './laroux.events.js';
 import helpers from './laroux.helpers.js';
-import Stack from './laroux.stack.js';
+import types from './laroux.types.js';
 import templates from './laroux.templates.js';
 import timers from './laroux.timers.js';
 import vars from './laroux.vars.js';
@@ -36,7 +36,7 @@ export default (function () {
         date,
         deferred: Deferred,
         events,
-        stack: Stack,
+        types,
         templates,
         timers,
         vars,

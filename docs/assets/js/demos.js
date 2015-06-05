@@ -252,8 +252,8 @@
                 $l.dom.append(text, '<div><strong>Shuffling values:</strong></div>');
                 $l.dom.append(text, $l.shuffle([1, 2, 3, 4, 5]) + crlf);
 
-                $l.dom.append(text, '<div><strong>Merging two arrays:</strong></div>');
-                $l.dom.append(text, JSON.stringify($l.merge({id: 1}, {name: 'eser', count: 5})) + crlf);
+                $l.dom.append(text, '<div><strong>Extending an object:</strong></div>');
+                $l.dom.append(text, JSON.stringify($l.extend({id: 1}, {name: 'eser', count: 5})) + crlf);
 
                 $l.dom.append(text, '<div><strong>Getting count of elements:</strong></div>');
                 $l.dom.append(text, $l.getLength({id: 1, name: 'eser', count: 5}) + crlf);
@@ -297,7 +297,7 @@
     // mvc - Simple Model Binding
     $l.ready(function() {
         var textbox = $l.id('textbox-mvc-simple');
-        var myModel = new $l.stack({
+        var myModel = new $l.types.model({
             name: ''
         });
 
@@ -316,7 +316,7 @@
 
     // mvc - Model Binding with Calculation
     $l.ready(function() {
-        var myModel = new $l.stack({
+        var myModel = new $l.types.model({
             a: 3,
             b: 5,
             total: function() {
@@ -329,7 +329,7 @@
 
     // mvc - Model Binding in two-way
     $l.ready(function() {
-        var myModel = new $l.stack({
+        var myModel = new $l.types.model({
             text: 'initial'
         });
 
@@ -345,7 +345,7 @@
             button,
             'click',
             function() {
-                var stack = new $l.stack();
+                var stack = new $l.types.model();
                 stack.set('id', 1);
                 stack.setRange({count: 15, name: 'eser'});
 
@@ -365,9 +365,6 @@
 
                 $l.dom.append(text, '<div><strong>Check if it has element with key \'name\':</strong></div>');
                 $l.dom.append(text, JSON.stringify(stack.exists('name')) + crlf);
-
-                $l.dom.append(text, '<div><strong>All data:</strong></div>');
-                $l.dom.append(text, JSON.stringify(stack._data) + crlf);
 
                 return false;
             }

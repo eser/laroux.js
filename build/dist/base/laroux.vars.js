@@ -86,7 +86,6 @@ exports['default'] = (function () {
                 }
             }
         },
-        storage: 'local',
 
         get: function get() {
             var args = _larouxHelpersJs2['default'].toArray(arguments),

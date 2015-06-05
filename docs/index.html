@@ -537,8 +537,8 @@ $l.dom.append(text, JSON.stringify($l.helpers.column(arr, 'count')) + '&lt;br /&
 $l.dom.append(text, '&lt;div&gt;&lt;strong&gt;Shuffling values:&lt;/strong&gt;&lt;/div&gt;');
 $l.dom.append(text, $l.helpers.shuffle([1, 2, 3, 4, 5]) + '&lt;br /&gt;');
 
-$l.dom.append(text, '&lt;div&gt;&lt;strong&gt;Merging two arrays:&lt;/strong&gt;&lt;/div&gt;');
-$l.dom.append(text, JSON.stringify($l.helpers.merge({id: 1}, {name: 'eser', count: 5})) + '&lt;br /&gt;');
+$l.dom.append(text, '&lt;div&gt;&lt;strong&gt;Extending an object:&lt;/strong&gt;&lt;/div&gt;');
+$l.dom.append(text, JSON.stringify($l.extend({id: 1}, {name: 'eser', count: 5})) + '&lt;br /&gt;');
 
 $l.dom.append(text, '&lt;div&gt;&lt;strong&gt;Getting count of elements:&lt;/strong&gt;&lt;/div&gt;');
 $l.dom.append(text, $l.helpers.getLength({id: 1, name: 'eser', count: 5}) + '&lt;br /&gt;');
@@ -624,7 +624,7 @@ $l.keys.assign({
 
                         <h4>Javascript</h4>
                         <pre class="prettyprint">
-var myModel = new $l.stack({
+var myModel = new $l.types.model({
     name: ''
 });
 
@@ -666,7 +666,7 @@ $l.dom.setEvent(
 
                         <h4>Javascript</h4>
                         <pre class="prettyprint">
-var myModel = new $l.stack({
+var myModel = new $l.types.model({
     a: 3,
     b: 5,
     total: function() {
@@ -702,7 +702,7 @@ $l.mvc.init('mvccalculation', myModel);
 
                         <h4>Javascript</h4>
                         <pre class="prettyprint">
-var myModel = new $l.stack({
+var myModel = new $l.types.model({
     text: 'initial'
 });
 
@@ -736,7 +736,7 @@ $l.mvc.init('mvctwoway', myModel);
 
                         <h4>Javascript</h4>
                         <pre class="prettyprint">
-var stack = new $l.stack();
+var stack = new $l.types.model();
 stack.set('id', 1);
 stack.setRange({count: 15, name: 'eser'});
 
@@ -756,10 +756,6 @@ $l.dom.append(text, JSON.stringify(stack.length()) + '&lt;br /&gt;');
 
 $l.dom.append(text, '&lt;div&gt;&lt;strong&gt;Check if it has element with key \'name\':&lt;/strong&gt;&lt;/div&gt;');
 $l.dom.append(text, JSON.stringify(stack.exists('name')) + '&lt;br /&gt;');
-
-$l.dom.append(text, '&lt;div&gt;&lt;strong&gt;All data:&lt;/strong&gt;&lt;/div&gt;');
-$l.dom.append(text, JSON.stringify(stack._data) + '&lt;br /&gt;');
-
                         </pre>
                     </div>
                 </div>
@@ -1072,7 +1068,7 @@ $l.dom.setEvent(
         </div>
 
         <script src="assets/js/prettify.min.js"></script>
-        <script src="assets/js/laroux.js"></script>
+        <script src="../build/dist/web/laroux.js"></script>
         <script src="assets/js/common.js"></script>
         <script src="assets/js/demos.js"></script>
     </body>

@@ -297,29 +297,6 @@ exports['default'] = (function () {
             return shuffled;
         },
 
-        merge: function merge() {
-            var target = Array.prototype.shift.call(arguments),
-                tmp = target,
-                isArray = tmp instanceof Array;
-
-            for (var item in arguments) {
-                if (isArray) {
-                    tmp = tmp.concat(arguments[item]);
-                    continue;
-                }
-
-                for (var attr in arguments[item]) {
-                    if (!arguments[item].hasOwnProperty(attr)) {
-                        continue;
-                    }
-
-                    tmp[attr] = arguments[item][attr];
-                }
-            }
-
-            return tmp;
-        },
-
         duplicate: function duplicate(obj) {
             return JSON.parse(JSON.stringify(obj));
         },
@@ -334,6 +311,28 @@ exports['default'] = (function () {
             }
 
             return items;
+        },
+
+        removeFromArray: function removeFromArray(obj, value) {
+            var targetKey = null;
+
+            for (var item in obj) {
+                if (!obj.hasOwnProperty(item)) {
+                    continue;
+                }
+
+                if (obj[item] === value) {
+                    targetKey = item;
+                    break;
+                }
+            }
+
+            if (targetKey !== null) {
+                obj.splice(targetKey, 1);
+                return true;
+            }
+
+            return false;
         },
 
         toArray: function toArray(obj) {
@@ -433,6 +432,12 @@ exports['default'] = (function () {
             }
 
             return helpers.getElement(obj[key], rest, defaultValue, delimiter);
+        },
+
+        callAll: function callAll(callbacks, scope, parameters) {
+            for (var i = 0, _length = callbacks.length; i < _length; i++) {
+                callbacks[i].apply(scope, parameters);
+            }
         }
     };
 

@@ -307,6 +307,28 @@ export default (function () {
             return items;
         },
 
+        removeFromArray: function (obj, value) {
+            var targetKey = null;
+
+            for (var item in obj) {
+                if (!obj.hasOwnProperty(item)) {
+                    continue;
+                }
+
+                if (obj[item] === value) {
+                    targetKey = item;
+                    break;
+                }
+            }
+
+            if (targetKey !== null) {
+                obj.splice(targetKey, 1);
+                return true;
+            }
+
+            return false;
+        },
+
         toArray: function (obj) {
             var length = obj.length,
                 items = new Array(length);
@@ -404,6 +426,12 @@ export default (function () {
             }
 
             return helpers.getElement(obj[key], rest, defaultValue, delimiter);
+        },
+
+        callAll: function (callbacks, scope, parameters) {
+            for (let i = 0, length = callbacks.length; i < length; i++) {
+                callbacks[i].apply(scope, parameters);
+            }
         }
     };
 
