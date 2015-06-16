@@ -3469,27 +3469,78 @@ exports['default'] = (function () {
     'use strict';
 
     var routes = {
-        maps: [],
+        map: {},
 
-        add: function add(path, callback) {
-            var keys = ['path'],
-                regex = '^#?!?' + path.replace(/[\/\=\?\$\^]/g, '\\$&').replace(/\*/g, '.*').replace(/\{(\w+)\}/g, function (match, key) {
-                keys.push(key);
-                return '([\\w\\-]+)';
-            }) + '$';
+        regexConverter: function regexConverter(path, sensitive, strict) {
+            var keys = [],
+                regexString = path.concat(strict ? '' : '/?').replace(/\/\(/g, '(?:/').replace(/\+/g, '__plus__').replace(/(\/)?(\.)?:(\w+)(?:(\(.*?\)))?(\?)?/g, function (_, slash, format, key, capture, optional) {
+                keys.push({ name: key, optional: !!optional });
+                slash = slash || '';
 
-            routes.maps.push({
-                regex: new Regex(regex),
-                keys: keys,
-                callback: callback
-            });
+                return '' + (optional ? '' : slash) + '(?:' + (optional ? slash : '') + (format || '') + (capture || (format && '([^/.]+?)' || '([^/]+?)')) + ')' + (optional || '');
+            }).replace(/([\/.])/g, '\\$1').replace(/__plus__/g, '(.+)').replace(/\*/g, '(.*)');
+
+            return {
+                regex: new RegExp('^' + regexString + '$', sensitive ? '' : 'i'),
+                keys: keys
+            };
         },
 
-        go: function go(path, callback) {
-            for (var i = 0, _length = routes.maps.length; i < _length; i++) {
-                routes.execute(path, routes.maps[i]);
+        add: function add(path, callback) {
+            routes.addNamed(null, path, callback);
+        },
+
+        addNamed: function addNamed(name, path, callback) {
+            if (!(path in routes.map)) {
+                var converted = routes.regexConverter(path);
+
+                routes.map[path] = {
+                    name: name,
+                    callbacks: [callback],
+                    params: {},
+                    keys: converted.keys,
+                    regex: converted.regex
+                };
+            } else {
+                routes.map[path].callbacks.push(callback);
             }
-        }
+        },
+
+        get: function get(path) {
+            for (var item in routes.map) {
+                if (!routes.map.hasOwnProperty(item)) {
+                    continue;
+                }
+
+                var route = routes.map[item],
+                    match = route.regex.exec(path);
+
+                if (!match) {
+                    continue;
+                }
+
+                var params = {};
+                for (var i = 1, _length = match.length; i < _length; i++) {
+                    var key = route.keys[i - 1];
+
+                    if (key !== undefined) {
+                        params[key.name] = typeof match[i] == 'string' ? decodeURIComponent(match[i]) : match[i];
+                    }
+                }
+
+                return {
+                    route: item,
+                    params: params,
+                    callbacks: route.callbacks
+                };
+            }
+
+            return null;
+        },
+
+        reload: function reload() {},
+
+        go: function go(path) {}
     };
 
     return routes;
