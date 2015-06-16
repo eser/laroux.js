@@ -51,16 +51,6 @@ module.exports = {
                         '~/base/js/laroux.date.js',
                         '~/base/js/laroux.types.js',
                         '~/base/js/laroux.templates.js'
-                        /*
-                        '~/base/js/web/laroux.web.js',
-                        '~/base/js/web/laroux.anim.js',
-                        '~/base/js/web/laroux.css.js',
-                        '~/base/js/web/laroux.dom.js',
-                        '~/base/js/web/laroux.forms.js',
-                        '~/base/js/web/laroux.keys.js',
-                        '~/base/js/web/laroux.mvc.js',
-                        '~/base/js/web/laroux.touch.js'
-                        */
                     ]
                 }
             ]

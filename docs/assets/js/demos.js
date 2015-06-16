@@ -252,8 +252,8 @@
                 $l.dom.append(text, '<div><strong>Shuffling values:</strong></div>');
                 $l.dom.append(text, $l.shuffle([1, 2, 3, 4, 5]) + crlf);
 
-                $l.dom.append(text, '<div><strong>Extending an object:</strong></div>');
-                $l.dom.append(text, JSON.stringify($l.extend({id: 1}, {name: 'eser', count: 5})) + crlf);
+                $l.dom.append(text, '<div><strong>Merging objects:</strong></div>');
+                $l.dom.append(text, JSON.stringify($l.merge({id: 1}, {name: 'eser', count: 5})) + crlf);
 
                 $l.dom.append(text, '<div><strong>Getting count of elements:</strong></div>');
                 $l.dom.append(text, $l.getLength({id: 1, name: 'eser', count: 5}) + crlf);
@@ -284,7 +284,7 @@
                 $l.keys.assign({
                     target: document,
                     key: 'f7',
-                    fnc: function() {
+                    callback: function() {
                         $l.dom.replace(text, 'pressed: ' + ++pressCount);
                     }
                 });
@@ -297,7 +297,7 @@
     // mvc - Simple Model Binding
     $l.ready(function() {
         var textbox = $l.id('textbox-mvc-simple');
-        var myModel = new $l.types.model({
+        var myModel = new $l.types.observable({
             name: ''
         });
 
@@ -316,7 +316,7 @@
 
     // mvc - Model Binding with Calculation
     $l.ready(function() {
-        var myModel = new $l.types.model({
+        var myModel = new $l.types.observable({
             a: 3,
             b: 5,
             total: function() {
@@ -329,7 +329,7 @@
 
     // mvc - Model Binding in two-way
     $l.ready(function() {
-        var myModel = new $l.types.model({
+        var myModel = new $l.types.observable({
             text: 'initial'
         });
 
@@ -345,26 +345,26 @@
             button,
             'click',
             function() {
-                var stack = new $l.types.model();
-                stack.set('id', 1);
-                stack.setRange({count: 15, name: 'eser'});
+                var myModel = new $l.types.observable();
+                myModel.set('id', 1);
+                myModel.setRange({count: 15, name: 'eser'});
 
                 $l.dom.clear(text);
 
                 $l.dom.append(text, '<div><strong>Element with key \'id\':</strong></div>');
-                $l.dom.append(text, stack.get('id') + crlf);
+                $l.dom.append(text, myModel.get('id') + crlf);
 
                 $l.dom.append(text, '<div><strong>Elements with keys \'id\' and \'name\':</strong></div>');
-                $l.dom.append(text, JSON.stringify(stack.getRange(['id', 'name'])) + crlf);
+                $l.dom.append(text, JSON.stringify(myModel.getRange(['id', 'name'])) + crlf);
 
                 $l.dom.append(text, '<div><strong>Keys:</strong></div>');
-                $l.dom.append(text, JSON.stringify(stack.keys()) + crlf);
+                $l.dom.append(text, JSON.stringify(myModel.keys()) + crlf);
 
                 $l.dom.append(text, '<div><strong>Length:</strong></div>');
-                $l.dom.append(text, JSON.stringify(stack.length()) + crlf);
+                $l.dom.append(text, JSON.stringify(myModel.length()) + crlf);
 
                 $l.dom.append(text, '<div><strong>Check if it has element with key \'name\':</strong></div>');
-                $l.dom.append(text, JSON.stringify(stack.exists('name')) + crlf);
+                $l.dom.append(text, JSON.stringify(myModel.exists('name')) + crlf);
 
                 return false;
             }
@@ -381,8 +381,8 @@
             button,
             'click',
             function() {
-                var model = { name: { first: 'Jane', last: 'Doe' }, age: 25 };
-                var result = $l.templates.apply(script, model);
+                var myModel = { name: { first: 'Jane', last: 'Doe' }, age: 25 };
+                var result = $l.templates.apply(script, myModel);
                 $l.dom.replace(text, result);
                 return false;
             }

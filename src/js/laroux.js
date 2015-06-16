@@ -3,6 +3,7 @@ import date from './laroux.date.js';
 import Deferred from './laroux.deferred.js';
 import events from './laroux.events.js';
 import helpers from './laroux.helpers.js';
+import Storyboard from './laroux.storyboard.js';
 import types from './laroux.types.js';
 import templates from './laroux.templates.js';
 import timers from './laroux.timers.js';
@@ -12,7 +13,7 @@ import When from './laroux.when.js';
 export default (function () {
     'use strict';
 
-    var laroux = function (selector, parent) {
+    let laroux = function (selector, parent) {
         if (selector instanceof Array) {
             return helpers.toArray(
                 (parent || document).querySelectorAll(selector)
@@ -22,7 +23,7 @@ export default (function () {
         // FIXME: Laroux: non-chromium optimization, but it runs
         //                slowly in chromium
         //
-        // var re = /^#([^\+\>\[\]\.# ]*)$/.exec(selector);
+        // let re = /^#([^\+\>\[\]\.# ]*)$/.exec(selector);
         // if (re) {
         //     return (parent || document).getElementById(re[1]);
         // }
@@ -30,56 +31,36 @@ export default (function () {
         return (parent || document).querySelector(selector);
     };
 
-    helpers.extend(laroux, helpers);
-    helpers.extend(laroux, {
+    helpers.merge(laroux, helpers);
+    helpers.merge(laroux, {
         ajax,
         date,
         deferred: Deferred,
         events,
+        storyboard: Storyboard,
         types,
         templates,
         timers,
         vars,
         when: When,
 
-        cached: {
-            single: {},
-            array: {},
-            id: {}
+        extend: function (source) {
+            return helpers.merge(laroux, source);
         },
 
-        c: function (selector) {
-            if (selector instanceof Array) {
-                return laroux.cached.array[selector] || (
-                    laroux.cached.array[selector] = helpers.toArray(
-                        document.querySelectorAll(selector)
-                    )
-                );
-            }
-
-            return laroux.cached.single[selector] || (
-                laroux.cached.single[selector] = document.querySelector(selector)
-            );
-        },
-
-        id: function (selector, parent) {
-            return (parent || document).getElementById(selector);
-        },
-
-        idc: function (selector) {
-            return laroux.cached.id[selector] ||
-                (laroux.cached.id[selector] = document.getElementById(selector));
+        extendNs: function (path, source) {
+            return helpers.mergeNs(laroux, path, source);
         },
 
         readyPassed: false,
 
-        ready: function (fnc) {
+        ready: function (callback) {
             if (!laroux.readyPassed) {
-                events.add('ContentLoaded', fnc);
+                events.add('ContentLoaded', callback);
                 return;
             }
 
-            fnc();
+            callback();
         },
 
         setReady: function () {

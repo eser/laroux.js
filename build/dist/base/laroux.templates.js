@@ -31,7 +31,7 @@ exports['default'] = (function () {
                     var result = compiled[0],
                         dict = [],
                         lastIndex = 0,
-                        nextIndex;
+                        nextIndex = undefined;
 
                     while ((nextIndex = result.indexOf('{{', lastIndex)) !== -1) {
                         nextIndex += 2;
@@ -104,7 +104,7 @@ exports['default'] = (function () {
         engine: 'plain',
 
         apply: function apply(element, model, options) {
-            var content,
+            var content = undefined,
                 engine = templates.engines[templates.engine];
 
             if (element.nodeType === 1 || element.nodeType === 3 || element.nodeType === 11) {
@@ -119,11 +119,11 @@ exports['default'] = (function () {
 
         /*
         insert: function (element, model, target, position, options) {
-            var output = templates.apply(element, model, options);
+            let output = templates.apply(element, model, options);
              dom.insert(target, position || 'beforeend', output);
         },
          replace: function (element, model, target, options) {
-            var output = templates.apply(element, model, options);
+            let output = templates.apply(element, model, options);
              dom.replace(target, output);
         }
         */

@@ -5,7 +5,7 @@ import helpers from '../laroux.helpers.js';
 export default (function () {
     'use strict';
 
-    var anim = {
+    let anim = {
         data: [],
 
         fx: {
@@ -64,14 +64,14 @@ export default (function () {
         },
 
         remove: function (id) {
-            var targetKey = null;
+            let targetKey = null;
 
-            for (var item in anim.data) {
+            for (let item in anim.data) {
                 if (!anim.data.hasOwnProperty(item)) {
                     continue;
                 }
 
-                var currentItem = anim.data[item];
+                let currentItem = anim.data[item];
 
                 if (currentItem.id !== undefined && currentItem.id == id) {
                     targetKey = item;
@@ -80,7 +80,7 @@ export default (function () {
             }
 
             if (targetKey !== null) {
-                var deferred = anim.data[targetKey].deferred;
+                let deferred = anim.data[targetKey].deferred;
 
                 deferred.reject('stop');
 
@@ -92,14 +92,14 @@ export default (function () {
         },
 
         onframe: function (timestamp) {
-            var removeKeys = [];
+            let removeKeys = [];
 
-            for (var item in anim.data) {
+            for (let item in anim.data) {
                 if (!anim.data.hasOwnProperty(item)) {
                     continue;
                 }
 
-                var currentItem = anim.data[item];
+                let currentItem = anim.data[item];
                 if (currentItem.startTime === undefined) {
                     currentItem.startTime = timestamp;
                 }
@@ -122,7 +122,7 @@ export default (function () {
                 }
             }
 
-            for (var item2 in removeKeys) {
+            for (let item2 in removeKeys) {
                 if (!removeKeys.hasOwnProperty(item2)) {
                     continue;
                 }
@@ -136,10 +136,10 @@ export default (function () {
         },
 
         step: function (newanim, timestamp) {
-            var finishT = newanim.startTime + newanim.time,
+            let finishT = newanim.startTime + newanim.time,
                 shift = (timestamp > finishT) ? 1 : (timestamp - newanim.startTime) / newanim.time;
 
-            var value = anim.fx.interpolate(
+            let value = anim.fx.interpolate(
                 newanim.from,
                 newanim.to,
                 anim.fx.easing(shift)

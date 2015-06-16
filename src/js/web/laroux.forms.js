@@ -4,17 +4,17 @@ import dom from './laroux.dom.js';
 export default (function () {
     'use strict';
 
-    var forms = {
-        ajaxForm: function (formobj, fnc, fncBegin) {
+    let forms = {
+        ajaxForm: function (formobj, callback, callbackBegin) {
             dom.setEvent(formobj, 'submit', function () {
-                if (fncBegin !== undefined) {
-                    fncBegin();
+                if (callbackBegin !== undefined) {
+                    callbackBegin();
                 }
 
                 ajax.post(
                     formobj.getAttribute('action'),
                     forms.serializeFormData(formobj),
-                    fnc
+                    callback
                 );
 
                 return false;
@@ -27,7 +27,7 @@ export default (function () {
             }
 
             if (element.tagName === 'INPUT') {
-                var type = element.getAttribute('type').toUpperCase();
+                let type = element.getAttribute('type').toUpperCase();
 
                 if (type === 'FILE' || type === 'CHECKBOX' || type === 'RADIO' || type === 'TEXT' || type === 'PASSWORD' || type === 'HIDDEN') {
                     return true;
@@ -53,7 +53,7 @@ export default (function () {
             }
 
             if (element.tagName === 'INPUT') {
-                var type = element.getAttribute('type').toUpperCase();
+                let type = element.getAttribute('type').toUpperCase();
 
                 if (type === 'FILE') {
                     return element.files[0];
@@ -87,7 +87,7 @@ export default (function () {
             }
 
             if (element.tagName === 'SELECT') {
-                for (var option in element.options) {
+                for (let option in element.options) {
                     if (!element.options.hasOwnProperty(option)) {
                         continue;
                     }
@@ -102,7 +102,7 @@ export default (function () {
             }
 
             if (element.tagName === 'INPUT') {
-                var type = element.getAttribute('type').toUpperCase();
+                let type = element.getAttribute('type').toUpperCase();
 
                 if (type === 'FILE') {
                     element.files[0] = value;
@@ -132,7 +132,7 @@ export default (function () {
         },
 
         toggleFormEditing: function (formobj, value) {
-            var selection = formobj.querySelectorAll('*[name]');
+            let selection = formobj.querySelectorAll('*[name]');
 
             if (value === undefined) {
                 if (formobj.getAttribute('data-last-enabled') === null) {
@@ -144,12 +144,12 @@ export default (function () {
                 }
             }
 
-            for (var selected = 0, length = selection.length; selected < length; selected++) {
+            for (let selected = 0, length = selection.length; selected < length; selected++) {
                 if (!forms.isFormField(selection[selected])) {
                     continue;
                 }
 
-                var lastDisabled = selection[selected].getAttribute('data-last-disabled');
+                let lastDisabled = selection[selected].getAttribute('data-last-disabled');
                 if (!value) {
                     if (lastDisabled === null) {
                         if (selection[selected].getAttribute('disabled') !== null) {
@@ -170,11 +170,11 @@ export default (function () {
         },
 
         serializeFormData: function (formobj) {
-            var formdata = new FormData();
-            var selection = formobj.querySelectorAll('*[name]');
+            let formdata = new FormData();
+            let selection = formobj.querySelectorAll('*[name]');
 
-            for (var selected = 0, length = selection.length; selected < length; selected++) {
-                var value = forms.getFormFieldValue(selection[selected]);
+            for (let selected = 0, length = selection.length; selected < length; selected++) {
+                let value = forms.getFormFieldValue(selection[selected]);
 
                 if (value !== null) {
                     formdata.append(selection[selected].getAttribute('name'), value);
@@ -185,11 +185,11 @@ export default (function () {
         },
 
         serialize: function (formobj) {
-            var values = {};
-            var selection = formobj.querySelectorAll('*[name]');
+            let values = {};
+            let selection = formobj.querySelectorAll('*[name]');
 
-            for (var selected = 0, length = selection.length; selected < length; selected++) {
-                var value = forms.getFormFieldValue(selection[selected]);
+            for (let selected = 0, length = selection.length; selected < length; selected++) {
+                let value = forms.getFormFieldValue(selection[selected]);
 
                 if (value !== null) {
                     values[selection[selected].getAttribute('name')] = value;
@@ -200,9 +200,9 @@ export default (function () {
         },
 
         deserialize: function (formobj, data) {
-            var selection = formobj.querySelectorAll('*[name]');
+            let selection = formobj.querySelectorAll('*[name]');
 
-            for (var selected = 0, length = selection.length; selected < length; selected++) {
+            for (let selected = 0, length = selection.length; selected < length; selected++) {
                 forms.setFormFieldValue(selection[selected], data[selection[selected].getAttribute('name')]);
             }
         }

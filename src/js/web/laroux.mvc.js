@@ -4,7 +4,7 @@ import helpers from '../laroux.helpers.js';
 export default (function () {
     'use strict';
 
-    var mvc = {
+    let mvc = {
         apps: {},
         pauseUpdate: false,
 
@@ -13,8 +13,8 @@ export default (function () {
                 element = dom.selectById(element);
             }
 
-            // if (model.constructor !== types.Model) {
-            //     model = new types.Model(model);
+            // if (model.constructor !== types.Observable) {
+            //     model = new types.Observable(model);
             // }
 
             let appKey = element.getAttribute('id');
@@ -39,14 +39,14 @@ export default (function () {
         rebind: function (appKey) {
             let app = mvc.apps[appKey];
             /*jslint nomen: true */
-            app.modelKeys = helpers.getKeysRecursive(app.model); // FIXME: works only for $l.types.Model
+            app.modelKeys = helpers.getKeysRecursive(app.model); // FIXME: works only for $l.types.Observable
             app.boundElements = {};
             app.eventElements = [];
 
             mvc.scanElements(app, app.element);
             mvc.update(appKey);
 
-            let fnc = function (ev, elem) {
+            let callback = function (ev, elem) {
                 let binding = mvc.bindStringParser(elem.getAttribute('lr-event'));
                 // mvc.pauseUpdate = true;
                 for (let item in binding) {
@@ -69,7 +69,7 @@ export default (function () {
                 dom.setEvent(
                     app.eventElements[i].element,
                     app.eventElements[i].binding[null],
-                    fnc
+                    callback
                 );
             }
         },

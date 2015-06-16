@@ -8,10 +8,8 @@ export default class Deferred {
         this.events = {};
     }
 
-    invoke() {
-        let args = helpers.toArray(arguments),
-            eventName = args.shift(),
-            finalEvent = (eventName === 'done' || eventName === 'fail');
+    invoke(eventName, ...args) {
+        let finalEvent = (eventName === 'done' || eventName === 'fail');
 
         if (eventName in this.events) {
             this.events[eventName].invoked = true;
@@ -42,18 +40,12 @@ export default class Deferred {
         }
     }
 
-    resolve() {
-        let args = helpers.toArray(arguments);
-        args.unshift('done');
-
-        return this.invoke.apply(this, args);
+    resolve(...args) {
+        return this.invoke.call(this, 'done', ...args);
     }
 
-    reject() {
-        let args = helpers.toArray(arguments);
-        args.unshift('fail');
-
-        return this.invoke.apply(this, args);
+    reject(...args) {
+        return this.invoke.call(this, 'fail', ...args);
     }
 
     on(eventName, callback) {
@@ -100,14 +92,12 @@ export default class Deferred {
         return this.events[eventName].invoked;
     }
 
-    static async() {
-        let deferred = new Deferred(),
-            args = helpers.toArray(arguments),
-            fnc = args.shift();
+    static async(callback, ...args) {
+        let deferred = new Deferred();
 
         setTimeout(function () {
             try {
-                let result = fnc.apply(deferred, args);
+                let result = callback.apply(deferred, args);
                 deferred.resolve(result);
             } catch (err) {
                 deferred.reject(err);

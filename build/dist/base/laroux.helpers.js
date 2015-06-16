@@ -22,44 +22,39 @@ exports['default'] = (function () {
             return 'uid-' + ++helpers.uniqueId;
         },
 
-        extend: (function (_extend) {
-            function extend(_x, _x2) {
-                return _extend.apply(this, arguments);
-            }
+        clone: function clone(obj) {
+            return JSON.parse(JSON.stringify(obj));
+        },
 
-            extend.toString = function () {
-                return _extend.toString();
-            };
+        merge: function merge(target, source, clone) {
+            var result = clone ? helpers.clone(target) : target,
+                keys = Object.keys(source);
 
-            return extend;
-        })(function (target, source) {
-            var keys = Object.keys(source);
-
-            for (var i = 0, length = keys.length; i < length; i++) {
+            for (var i = 0, _length = keys.length; i < _length; i++) {
                 var key = keys[i];
 
-                if (target[key] instanceof Array) {
-                    target[key] = target[key].concat(source[key]);
+                if (result[key] instanceof Array) {
+                    result[key] = result[key].concat(source[key]);
                     continue;
                 }
 
-                if (target[key] instanceof Object) {
-                    extend(target[key], source[key]);
+                if (result[key] instanceof Object) {
+                    helpers.merge(result[key], source[key]);
                     continue;
                 }
 
-                target[key] = source[key];
+                result[key] = source[key];
             }
 
-            return target;
-        }),
+            return result;
+        },
 
-        extendNs: function extendNs(target, path, source) {
+        mergeNs: function mergeNs(target, path, source) {
             var ptr = target,
                 pathSlices = path.split('.'),
                 keys = Object.keys(source);
 
-            for (var i = 0, length = pathSlices.length; i < length; i++) {
+            for (var i = 0, _length2 = pathSlices.length; i < _length2; i++) {
                 var current = pathSlices[i];
 
                 if (ptr[current] === undefined) {
@@ -70,8 +65,8 @@ exports['default'] = (function () {
             }
 
             if (source !== undefined) {
-                // might be replaced w/ $l.extend method
-                helpers.extend(ptr, source);
+                // might be replaced w/ $l.merge method
+                helpers.merge(ptr, source);
             }
 
             return target;
@@ -81,16 +76,16 @@ exports['default'] = (function () {
             var uri = '',
                 regEx = /%20/g;
 
-            for (var name in values) {
-                if (!values.hasOwnProperty(name)) {
+            for (var _name in values) {
+                if (!values.hasOwnProperty(_name)) {
                     continue;
                 }
 
-                if (typeof values[name] !== 'function') {
+                if (typeof values[_name] !== 'function') {
                     if (rfc3986 || false) {
-                        uri += '&' + encodeURIComponent(name).replace(regEx, '+') + '=' + encodeURIComponent(values[name].toString()).replace(regEx, '+');
+                        uri += '&' + encodeURIComponent(_name).replace(regEx, '+') + '=' + encodeURIComponent(values[_name].toString()).replace(regEx, '+');
                     } else {
-                        uri += '&' + encodeURIComponent(name) + '=' + encodeURIComponent(values[name].toString());
+                        uri += '&' + encodeURIComponent(_name) + '=' + encodeURIComponent(values[_name].toString());
                     }
                 }
             }
@@ -101,13 +96,13 @@ exports['default'] = (function () {
         buildFormData: function buildFormData(values) {
             var data = new FormData();
 
-            for (var name in values) {
-                if (!values.hasOwnProperty(name)) {
+            for (var _name2 in values) {
+                if (!values.hasOwnProperty(_name2)) {
                     continue;
                 }
 
-                if (typeof values[name] !== 'function') {
-                    data.append(name, values[name]);
+                if (typeof values[_name2] !== 'function') {
+                    data.append(_name2, values[_name2]);
                 }
             }
 
@@ -115,7 +110,10 @@ exports['default'] = (function () {
         },
 
         format: function format() {
-            var args = arguments;
+            for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+                args[_key] = arguments[_key];
+            }
+
             return Array.prototype.shift.call(args).replace(/%s/g, function () {
                 return Array.prototype.shift.call(args);
             });
@@ -176,7 +174,7 @@ exports['default'] = (function () {
         },
 
         find: function find(obj, iterator, context) {
-            var result;
+            var result = undefined;
 
             obj.some(function (value, index, list) {
                 if (iterator.call(context, value, index, list)) {
@@ -188,13 +186,13 @@ exports['default'] = (function () {
             return result;
         },
 
-        each: function each(arr, fnc, testOwnProperties) {
+        each: function each(arr, callback, testOwnProperties) {
             for (var item in arr) {
                 if (testOwnProperties && !arr.hasOwnProperty(item)) {
                     continue;
                 }
 
-                if (fnc(item, arr[item]) === false) {
+                if (callback(item, arr[item]) === false) {
                     break;
                 }
             }
@@ -202,7 +200,7 @@ exports['default'] = (function () {
             return arr;
         },
 
-        map: function map(arr, fnc, dontSkipReturns, testOwnProperties) {
+        map: function map(arr, callback, dontSkipReturns, testOwnProperties) {
             var results = [];
 
             for (var item in arr) {
@@ -210,7 +208,7 @@ exports['default'] = (function () {
                     continue;
                 }
 
-                var result = fnc(arr[item], item);
+                var result = callback(arr[item], item);
                 if (result === false) {
                     break;
                 }
@@ -237,9 +235,9 @@ exports['default'] = (function () {
             return null;
         },
 
-        aeach: function aeach(arr, fnc) {
-            for (var i = 0, length = arr.length; i < length; i++) {
-                if (fnc(i, arr[i]) === false) {
+        aeach: function aeach(arr, callback) {
+            for (var i = 0, _length3 = arr.length; i < _length3; i++) {
+                if (callback(i, arr[i]) === false) {
                     break;
                 }
             }
@@ -247,11 +245,11 @@ exports['default'] = (function () {
             return arr;
         },
 
-        amap: function amap(arr, fnc, dontSkipReturns) {
+        amap: function amap(arr, callback, dontSkipReturns) {
             var results = [];
 
-            for (var i = 0, length = arr.length; i < length; i++) {
-                var result = fnc(arr[i], i);
+            for (var i = 0, _length4 = arr.length; i < _length4; i++) {
+                var result = callback(arr[i], i);
                 if (result === false) {
                     break;
                 }
@@ -265,7 +263,7 @@ exports['default'] = (function () {
         },
 
         aindex: function aindex(arr, value, start) {
-            for (var i = start || 0, length = arr.length; i < length; i++) {
+            for (var i = start || 0, _length5 = arr.length; i < _length5; i++) {
                 if (arr[i] === value) {
                     return i;
                 }
@@ -295,10 +293,6 @@ exports['default'] = (function () {
             }
 
             return shuffled;
-        },
-
-        duplicate: function duplicate(obj) {
-            return JSON.parse(JSON.stringify(obj));
         },
 
         prependArray: function prependArray(obj, value) {
@@ -352,10 +346,10 @@ exports['default'] = (function () {
             }
 
             if (obj instanceof NodeList) {
-                var length = obj.length;
+                var _length6 = obj.length;
 
-                var items = new Array(length);
-                for (var i = 0; i < length; i++) {
+                var items = new Array(_length6);
+                for (var i = 0; i < _length6; i++) {
                     items[i] = obj[i];
                 }
 
@@ -413,8 +407,8 @@ exports['default'] = (function () {
             }
 
             var pos = path.indexOf(delimiter);
-            var key;
-            var rest;
+            var key = undefined;
+            var rest = undefined;
             if (pos === -1) {
                 key = path;
                 rest = null;
@@ -435,7 +429,7 @@ exports['default'] = (function () {
         },
 
         callAll: function callAll(callbacks, scope, parameters) {
-            for (var i = 0, _length = callbacks.length; i < _length; i++) {
+            for (var i = 0, _length7 = callbacks.length; i < _length7; i++) {
                 callbacks[i].apply(scope, parameters);
             }
         }

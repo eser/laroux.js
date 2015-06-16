@@ -7,7 +7,7 @@ export default (function () {
 
     // ajax - partially taken from 'jquery in parts' project
     //        can be found at: https://github.com/mythz/jquip/
-    var ajax = {
+    let ajax = {
         corsDefault: false,
 
         xDomainObject: false,
@@ -36,7 +36,7 @@ export default (function () {
         },
 
         xhrResp: function (xhr, options) {
-            var response;
+            let response;
 
             if (options.datatype === undefined) {
                 response = xhr.responseText;
@@ -58,7 +58,7 @@ export default (function () {
         },
 
         makeRequest: function (options) {
-            var deferred = new Deferred(),
+            let deferred = new Deferred(),
                 cors = options.cors || ajax.corsDefault,
                 xhr = ajax.xhr(cors),
                 url = options.url,
@@ -82,7 +82,7 @@ export default (function () {
                     }
 
                     if (xhr.status < 300) {
-                        var res = null,
+                        let res = null,
                             isSuccess = true;
 
                         try {
@@ -111,7 +111,7 @@ export default (function () {
 
             if (options.getdata !== undefined && options.getdata !== null) {
                 if (options.getdata.constructor === Object) {
-                    var queryString = helpers.buildQueryString(options.getdata);
+                    let queryString = helpers.buildQueryString(options.getdata);
                     if (queryString.length > 0) {
                         url += ((url.indexOf('?') < 0) ? '?' : '&') + queryString;
                     }
@@ -131,7 +131,7 @@ export default (function () {
             }
 
             if (options.xhrFields !== undefined) {
-                for (var i in options.xhrFields) {
+                for (let i in options.xhrFields) {
                     if (!options.xhrFields.hasOwnProperty(i)) {
                         continue;
                     }
@@ -140,13 +140,13 @@ export default (function () {
                 }
             }
 
-            var headers = options.headers || {};
+            let headers = options.headers || {};
 
             if (!cors) {
                 headers['X-Requested-With'] = 'XMLHttpRequest';
             }
 
-            for (var j in headers) {
+            for (let j in headers) {
                 if (!headers.hasOwnProperty(j)) {
                     continue;
                 }

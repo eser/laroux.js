@@ -48,9 +48,11 @@ var When = (function () {
     _createClass(When, [{
         key: 'then',
         value: function then() {
-            var args = _larouxHelpersJs2['default'].toArray(arguments);
-            this.queues.push(args);
+            for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+                args[_key] = arguments[_key];
+            }
 
+            this.queues.push(args);
             this.check();
 
             return this;

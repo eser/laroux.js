@@ -537,8 +537,8 @@ $l.dom.append(text, JSON.stringify($l.helpers.column(arr, 'count')) + '&lt;br /&
 $l.dom.append(text, '&lt;div&gt;&lt;strong&gt;Shuffling values:&lt;/strong&gt;&lt;/div&gt;');
 $l.dom.append(text, $l.helpers.shuffle([1, 2, 3, 4, 5]) + '&lt;br /&gt;');
 
-$l.dom.append(text, '&lt;div&gt;&lt;strong&gt;Extending an object:&lt;/strong&gt;&lt;/div&gt;');
-$l.dom.append(text, JSON.stringify($l.extend({id: 1}, {name: 'eser', count: 5})) + '&lt;br /&gt;');
+$l.dom.append(text, '&lt;div&gt;&lt;strong&gt;Merging objects:&lt;/strong&gt;&lt;/div&gt;');
+$l.dom.append(text, JSON.stringify($l.merge({id: 1}, {name: 'eser', count: 5})) + '&lt;br /&gt;');
 
 $l.dom.append(text, '&lt;div&gt;&lt;strong&gt;Getting count of elements:&lt;/strong&gt;&lt;/div&gt;');
 $l.dom.append(text, $l.helpers.getLength({id: 1, name: 'eser', count: 5}) + '&lt;br /&gt;');
@@ -584,7 +584,7 @@ var pressCount = 0;
 $l.keys.assign({
     target: document,
     key: 'f7',
-    fnc: function() {
+    callback: function() {
         $l.dom.replace(text, 'pressed: ' + ++pressCount);
     }
 });
@@ -624,7 +624,7 @@ $l.keys.assign({
 
                         <h4>Javascript</h4>
                         <pre class="prettyprint">
-var myModel = new $l.types.model({
+var myModel = new $l.types.observable({
     name: ''
 });
 
@@ -666,7 +666,7 @@ $l.dom.setEvent(
 
                         <h4>Javascript</h4>
                         <pre class="prettyprint">
-var myModel = new $l.types.model({
+var myModel = new $l.types.observable({
     a: 3,
     b: 5,
     total: function() {
@@ -702,7 +702,7 @@ $l.mvc.init('mvccalculation', myModel);
 
                         <h4>Javascript</h4>
                         <pre class="prettyprint">
-var myModel = new $l.types.model({
+var myModel = new $l.types.observable({
     text: 'initial'
 });
 
@@ -736,26 +736,26 @@ $l.mvc.init('mvctwoway', myModel);
 
                         <h4>Javascript</h4>
                         <pre class="prettyprint">
-var stack = new $l.types.model();
-stack.set('id', 1);
-stack.setRange({count: 15, name: 'eser'});
+var myModel = new $l.types.observable();
+myModel.set('id', 1);
+myModel.setRange({count: 15, name: 'eser'});
 
 $l.dom.clear(text);
 
 $l.dom.append(text, '&lt;div&gt;&lt;strong&gt;Element with key \'id\':&lt;/strong&gt;&lt;/div&gt;');
-$l.dom.append(text, stack.get('id') + '&lt;br /&gt;');
+$l.dom.append(text, myModel.get('id') + '&lt;br /&gt;');
 
 $l.dom.append(text, '&lt;div&gt;&lt;strong&gt;Elements with keys \'id\' and \'name\':&lt;/strong&gt;&lt;/div&gt;');
-$l.dom.append(text, JSON.stringify(stack.getRange(['id', 'name'])) + '&lt;br /&gt;');
+$l.dom.append(text, JSON.stringify(myModel.getRange(['id', 'name'])) + '&lt;br /&gt;');
 
 $l.dom.append(text, '&lt;div&gt;&lt;strong&gt;Keys:&lt;/strong&gt;&lt;/div&gt;');
-$l.dom.append(text, JSON.stringify(stack.keys()) + '&lt;br /&gt;');
+$l.dom.append(text, JSON.stringify(myModel.keys()) + '&lt;br /&gt;');
 
 $l.dom.append(text, '&lt;div&gt;&lt;strong&gt;Length:&lt;/strong&gt;&lt;/div&gt;');
-$l.dom.append(text, JSON.stringify(stack.length()) + '&lt;br /&gt;');
+$l.dom.append(text, JSON.stringify(myModel.length()) + '&lt;br /&gt;');
 
 $l.dom.append(text, '&lt;div&gt;&lt;strong&gt;Check if it has element with key \'name\':&lt;/strong&gt;&lt;/div&gt;');
-$l.dom.append(text, JSON.stringify(stack.exists('name')) + '&lt;br /&gt;');
+$l.dom.append(text, JSON.stringify(myModel.exists('name')) + '&lt;br /&gt;');
                         </pre>
                     </div>
                 </div>

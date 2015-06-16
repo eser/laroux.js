@@ -1,15 +1,15 @@
 export default (function () {
     'use strict';
 
-    var events = {
+    let events = {
         delegates: [],
 
-        add: function (event, fnc) {
-            events.delegates.push({ event: event, fnc: fnc });
+        add: function (event, callback) {
+            events.delegates.push({ event: event, callback: callback });
         },
 
         invoke: function (event, args) {
-            for (var item in events.delegates) {
+            for (let item in events.delegates) {
                 if (!events.delegates.hasOwnProperty(item)) {
                     continue;
                 }
@@ -18,7 +18,7 @@ export default (function () {
                     continue;
                 }
 
-                events.delegates[item].fnc(args);
+                events.delegates[item].callback(args);
             }
         }
     };

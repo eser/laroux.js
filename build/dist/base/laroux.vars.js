@@ -87,23 +87,26 @@ exports['default'] = (function () {
             }
         },
 
-        get: function get() {
-            var args = _larouxHelpersJs2['default'].toArray(arguments),
-                storage = args.shift();
+        get: function get(storage) {
+            for (var _len = arguments.length, args = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+                args[_key - 1] = arguments[_key];
+            }
 
             return vars.storages[storage].get.apply(this, args);
         },
 
-        set: function set() {
-            var args = _larouxHelpersJs2['default'].toArray(arguments),
-                storage = args.shift();
+        set: function set(storage) {
+            for (var _len2 = arguments.length, args = Array(_len2 > 1 ? _len2 - 1 : 0), _key2 = 1; _key2 < _len2; _key2++) {
+                args[_key2 - 1] = arguments[_key2];
+            }
 
             return vars.storages[storage].set.apply(this, args);
         },
 
-        remove: function remove() {
-            var args = _larouxHelpersJs2['default'].toArray(arguments),
-                storage = args.shift();
+        remove: function remove(storage) {
+            for (var _len3 = arguments.length, args = Array(_len3 > 1 ? _len3 - 1 : 0), _key3 = 1; _key3 < _len3; _key3++) {
+                args[_key3 - 1] = arguments[_key3];
+            }
 
             return vars.storages[storage].remove.apply(this, args);
         }

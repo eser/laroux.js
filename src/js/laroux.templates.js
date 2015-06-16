@@ -3,7 +3,7 @@ import helpers from './laroux.helpers.js';
 export default (function () {
     'use strict';
 
-    var templates = {
+    let templates = {
         engines: {
             plain: {
                 compile: function (template, options) {
@@ -11,19 +11,19 @@ export default (function () {
                 },
 
                 render: function (compiled, model) {
-                    var result = compiled[0],
+                    let result = compiled[0],
                         dict = [],
                         lastIndex = 0,
                         nextIndex;
 
                     while ((nextIndex = result.indexOf('{{', lastIndex)) !== -1) {
                         nextIndex += 2;
-                        var closeIndex = result.indexOf('}}', nextIndex);
+                        let closeIndex = result.indexOf('}}', nextIndex);
                         if (closeIndex === -1) {
                             break;
                         }
 
-                        var key = result.substring(nextIndex, closeIndex);
+                        let key = result.substring(nextIndex, closeIndex);
                         dict['{{' + key + '}}'] = helpers.getElement(model, key, '');
                         lastIndex = closeIndex + 2;
                     }
@@ -87,7 +87,7 @@ export default (function () {
         engine: 'plain',
 
         apply: function (element, model, options) {
-            var content, engine = templates.engines[templates.engine];
+            let content, engine = templates.engines[templates.engine];
 
             if (element.nodeType === 1 || element.nodeType === 3 || element.nodeType === 11) {
                 content = element.textContent;
@@ -95,19 +95,19 @@ export default (function () {
                 content = element.nodeValue;
             }
 
-            var compiled = engine.compile(content, options);
+            let compiled = engine.compile(content, options);
             return engine.render(compiled, model);
         }
 
         /*
         insert: function (element, model, target, position, options) {
-            var output = templates.apply(element, model, options);
+            let output = templates.apply(element, model, options);
 
             dom.insert(target, position || 'beforeend', output);
         },
 
         replace: function (element, model, target, options) {
-            var output = templates.apply(element, model, options);
+            let output = templates.apply(element, model, options);
 
             dom.replace(target, output);
         }

@@ -3,7 +3,7 @@ import helpers from './laroux.helpers.js';
 export default (function () {
     'use strict';
 
-    var timers = {
+    let timers = {
         data: [],
 
         set: function (timer) {
@@ -12,14 +12,14 @@ export default (function () {
         },
 
         remove: function (id) {
-            var targetKey = null;
+            let targetKey = null;
 
-            for (var item in timers.data) {
+            for (let item in timers.data) {
                 if (!timers.data.hasOwnProperty(item)) {
                     continue;
                 }
 
-                var currentItem = timers.data[item];
+                let currentItem = timers.data[item];
 
                 if (currentItem.id !== undefined && currentItem.id == id) {
                     targetKey = item;
@@ -36,18 +36,18 @@ export default (function () {
         },
 
         ontick: function () {
-            var now = Date.now(),
+            let now = Date.now(),
                 removeKeys = [];
 
-            for (var item in timers.data) {
+            for (let item in timers.data) {
                 if (!timers.data.hasOwnProperty(item)) {
                     continue;
                 }
 
-                var currentItem = timers.data[item];
+                let currentItem = timers.data[item];
 
                 if (currentItem.next <= now) {
-                    var result = currentItem.ontick(currentItem.state);
+                    let result = currentItem.ontick(currentItem.state);
 
                     if (result !== false && currentItem.reset) {
                         currentItem.next = now + currentItem.timeout;
@@ -57,7 +57,7 @@ export default (function () {
                 }
             }
 
-            for (var item2 in removeKeys) {
+            for (let item2 in removeKeys) {
                 if (!removeKeys.hasOwnProperty(item2)) {
                     continue;
                 }

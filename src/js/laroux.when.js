@@ -21,10 +21,8 @@ export default class When {
         }
     }
 
-    then() {
-        let args = helpers.toArray(arguments);
+    then(...args) {
         this.queues.push(args);
-
         this.check();
 
         return this;

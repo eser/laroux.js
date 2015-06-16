@@ -3,7 +3,7 @@ import helpers from './laroux.helpers.js';
 export default (function () {
     'use strict';
 
-    var vars = {
+    let vars = {
         storages: {
             cookie: {
                 defaultPath: '/',
@@ -70,24 +70,15 @@ export default (function () {
             }
         },
 
-        get: function () {
-            let args = helpers.toArray(arguments),
-                storage = args.shift();
-
+        get: function (storage, ...args) {
             return vars.storages[storage].get.apply(this, args);
         },
 
-        set: function () {
-            let args = helpers.toArray(arguments),
-                storage = args.shift();
-
+        set: function (storage, ...args) {
             return vars.storages[storage].set.apply(this, args);
         },
 
-        remove: function () {
-            let args = helpers.toArray(arguments),
-                storage = args.shift();
-
+        remove: function (storage, ...args) {
             return vars.storages[storage].remove.apply(this, args);
         }
     };

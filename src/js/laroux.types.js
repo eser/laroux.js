@@ -3,9 +3,9 @@
 
 import helpers from './laroux.helpers.js';
 
-var staticKeys = ['_callbacks', '_onupdate'];
+let staticKeys = ['_callbacks', '_onupdate'];
 
-class Model {
+class Observable {
     constructor(data) {
         let self = this;
 
@@ -99,18 +99,18 @@ class Model {
         Object.unobserve(obj);
     }
 
-    on(fnc) {
-        this._callbacks.push(fnc);
+    on(callback) {
+        this._callbacks.push(callback);
     }
 
-    off(fnc) {
-        helpers.removeFromArray(this._callbacks, fnc);
+    off(callback) {
+        helpers.removeFromArray(this._callbacks, callback);
     }
 }
 
 export default (function () {
-    var types = {
-        model: Model
+    let types = {
+        observable: Observable
     };
 
     return types;

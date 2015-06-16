@@ -4,7 +4,7 @@ import forms from './laroux.forms.js';
 export default (function () {
     'use strict';
 
-    var keys = {
+    let keys = {
         keyName: function (keycode) {
             keycode = keycode.toLowerCase();
 
@@ -102,14 +102,14 @@ export default (function () {
             return String.fromCharCode(keycode);
         },
 
-        // {target, key, shift, ctrl, alt, disableInputs, fnc}
+        // {target, key, shift, ctrl, alt, disableInputs, callback}
         assign: function (options) {
-            var wrapper = function (ev) {
+            let wrapper = function (ev) {
                 if (!ev) {
                     ev = event;
                 }
 
-                var element = ev.target || ev.srcElement;
+                let element = ev.target || ev.srcElement;
                 if (element.nodeType === 3 || element.nodeType === 11) { // element.nodeType === 1 ||
                     element = element.parentNode;
                 }
@@ -130,12 +130,12 @@ export default (function () {
                     return;
                 }
 
-                var key = keys.keyName(options.key);
+                let key = keys.keyName(options.key);
                 if (key !== (ev.keyCode || ev.which)) {
                     return;
                 }
 
-                options.fnc(ev);
+                options.callback(ev);
 
                 return false;
             };

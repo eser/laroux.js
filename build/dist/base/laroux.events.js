@@ -17,8 +17,8 @@ exports['default'] = (function () {
     var events = {
         delegates: [],
 
-        add: function add(event, fnc) {
-            events.delegates.push({ event: event, fnc: fnc });
+        add: function add(event, callback) {
+            events.delegates.push({ event: event, callback: callback });
         },
 
         invoke: function invoke(event, args) {
@@ -31,7 +31,7 @@ exports['default'] = (function () {
                     continue;
                 }
 
-                events.delegates[item].fnc(args);
+                events.delegates[item].callback(args);
             }
         }
     };

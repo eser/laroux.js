@@ -3,7 +3,7 @@ import helpers from '../laroux.helpers.js';
 export default (function () {
     'use strict';
 
-    var dom = {
+    let dom = {
         docprop: function (propName) {
             return document.documentElement.classList.contains(propName);
         },
@@ -39,19 +39,19 @@ export default (function () {
                 return element.getAttribute(attributes);
             }
 
-            var elements = helpers.getAsArray(element);
+            let elements = helpers.getAsArray(element);
             if (typeof attributes === 'string') {
-                var oldAttributes = attributes;
+                let oldAttributes = attributes;
                 attributes = {};
                 attributes[oldAttributes] = value;
             }
 
-            for (var attributeName in attributes) {
+            for (let attributeName in attributes) {
                 if (!attributes.hasOwnProperty(attributeName)) {
                     continue;
                 }
 
-                for (var i = 0, length = elements.length; i < length; i++) {
+                for (let i = 0, length = elements.length; i < length; i++) {
                     if (attributes[attributeName] === null) {
                         element.removeAttribute(attributeName);
                     } else {
@@ -66,19 +66,19 @@ export default (function () {
                 return element.getAttribute('data-' + datanames);
             }
 
-            var elements = helpers.getAsArray(element);
+            let elements = helpers.getAsArray(element);
             if (typeof datanames === 'string') {
-                var oldDatanames = datanames;
+                let oldDatanames = datanames;
                 datanames = {};
                 datanames[oldDatanames] = value;
             }
 
-            for (var dataName in datanames) {
+            for (let dataName in datanames) {
                 if (!datanames.hasOwnProperty(dataName)) {
                     continue;
                 }
 
-                for (var i = 0, length = elements.length; i < length; i++) {
+                for (let i = 0, length = elements.length; i < length; i++) {
                     if (datanames[dataName] === null) {
                         element.removeAttribute('data-' + dataName);
                     } else {
@@ -89,17 +89,17 @@ export default (function () {
         },
 
         eventHistory: [],
-        setEvent: function (element, eventname, fnc) {
-            var elements = helpers.getAsArray(element);
+        setEvent: function (element, eventname, callback) {
+            let elements = helpers.getAsArray(element);
 
-            for (var i = 0, length = elements.length; i < length; i++) {
-                dom.setEventSingle(elements[i], eventname, fnc);
+            for (let i = 0, length = elements.length; i < length; i++) {
+                dom.setEventSingle(elements[i], eventname, callback);
             }
         },
 
-        setEventSingle: function (element, eventname, fnc) {
-            var fncWrapper = function (e) {
-                if (fnc(e, element) === false) {
+        setEventSingle: function (element, eventname, callback) {
+            let callbackWrapper = function (e) {
+                if (callback(e, element) === false) {
                     if (e.preventDefault) {
                         e.preventDefault();
                     } else {
@@ -108,16 +108,16 @@ export default (function () {
                 }
             };
 
-            dom.eventHistory.push({ element: element, eventname: eventname, fnc: fnc, fncWrapper: fncWrapper });
-            element.addEventListener(eventname, fncWrapper, false);
+            dom.eventHistory.push({ element: element, eventname: eventname, callback: callback, callbackWrapper: callbackWrapper });
+            element.addEventListener(eventname, callbackWrapper, false);
         },
 
-        unsetEvent: function (element, eventname, fnc) {
-            var elements = helpers.getAsArray(element);
+        unsetEvent: function (element, eventname, callback) {
+            let elements = helpers.getAsArray(element);
 
-            for (var i1 = 0, length1 = elements.length; i1 < length1; i1++) {
-                for (var i2 = 0, length2 = dom.eventHistory.length; i2 < length2; i2++) {
-                    var item = dom.eventHistory[i2];
+            for (let i1 = 0, length1 = elements.length; i1 < length1; i1++) {
+                for (let i2 = 0, length2 = dom.eventHistory.length; i2 < length2; i2++) {
+                    let item = dom.eventHistory[i2];
 
                     if (item === undefined) {
                         continue;
@@ -131,19 +131,19 @@ export default (function () {
                         continue;
                     }
 
-                    if (fnc !== undefined && item.fnc !== fnc) {
+                    if (callback !== undefined && item.callback !== callback) {
                         continue;
                     }
 
-                    item.element.removeEventListener(item.eventname, item.fncWrapper, false);
+                    item.element.removeEventListener(item.eventname, item.callbackWrapper, false);
                     delete dom.eventHistory[i2];
                 }
             }
         },
 
         dispatchEvent: function (element, eventname, data) {
-            var customEvent = document.createEvent('Event');
-            for (var item in data) {
+            let customEvent = document.createEvent('Event');
+            for (let item in data) {
                 if (!data.hasOwnProperty(item)) {
                     continue;
                 }
@@ -156,7 +156,7 @@ export default (function () {
         },
 
         create: function (html) {
-            var frag = document.createDocumentFragment(),
+            let frag = document.createDocumentFragment(),
                 temp = document.createElement('DIV');
 
             temp.insertAdjacentHTML('beforeend', html);
@@ -171,10 +171,10 @@ export default (function () {
         },
 
         createElement: function (element, attributes, children) {
-            var elem = document.createElement(element);
+            let elem = document.createElement(element);
 
             if (attributes !== undefined && attributes.constructor === Object) {
-                for (var item in attributes) {
+                for (let item in attributes) {
                     if (!attributes.hasOwnProperty(item)) {
                         continue;
                     }
@@ -185,7 +185,7 @@ export default (function () {
 
             if (children !== undefined) {
                 if (children.constructor === Object) {
-                    for (var item2 in children) {
+                    for (let item2 in children) {
                         if (!children.hasOwnProperty(item2)) {
                             continue;
                         }
@@ -202,7 +202,7 @@ export default (function () {
 
         createOption: function (element, key, value, isDefault) {
             /* old behaviour, does not support optgroups as parents.
-            var count = element.options.length;
+            let count = element.options.length;
             element.options[count] = new Option(value, key);
 
             if (isDefault === true) {
@@ -210,7 +210,7 @@ export default (function () {
             }
             */
 
-            var option = document.createElement('OPTION');
+            let option = document.createElement('OPTION');
             option.setAttribute('value', key);
             if (isDefault === true) {
                 option.setAttribute('checked', 'checked');
@@ -221,7 +221,7 @@ export default (function () {
         },
 
         selectByValue: function (element, value) {
-            for (var i = 0, length = element.options.length; i < length; i++) {
+            for (let i = 0, length = element.options.length; i < length; i++) {
                 if (element.options[i].getAttribute('value') == value) {
                     element.selectedIndex = i;
                     break;
@@ -231,10 +231,10 @@ export default (function () {
 
         // TODO: it's redundant for now
         loadImage: function () {
-            var images = [];
+            let images = [];
 
-            for (var i = 0, length = arguments.length; i < length; i++) {
-                var image = document.createElement('IMG');
+            for (let i = 0, length = arguments.length; i < length; i++) {
+                let image = document.createElement('IMG');
                 image.setAttribute('src', arguments[i]);
 
                 images.push(image);
@@ -244,13 +244,13 @@ export default (function () {
         },
 
         loadAsyncScript: function (path, triggerName, async) {
-            var elem = document.createElement('script');
+            let elem = document.createElement('script');
 
             elem.type = 'text/javascript';
             elem.async = (async !== undefined) ? async : true;
             elem.src = path;
 
-            var loaded = false;
+            let loaded = false;
             elem.onload = elem.onreadystatechange = function () {
                 if ((elem.readyState && elem.readyState !== 'complete' && elem.readyState !== 'loaded') || loaded) {
                     return false;
@@ -267,19 +267,19 @@ export default (function () {
                 }
             };
 
-            var head = document.getElementsByTagName('head')[0];
+            let head = document.getElementsByTagName('head')[0];
             head.appendChild(elem);
         },
 
         loadAsyncStyle: function (path, triggerName, async) {
-            var elem = document.createElement('LINK');
+            let elem = document.createElement('LINK');
 
             elem.type = 'text/css';
             elem.async = (async !== undefined) ? async : true;
             elem.href = path;
             elem.rel = 'stylesheet';
 
-            var loaded = false;
+            let loaded = false;
             elem.onload = elem.onreadystatechange = function () {
                 if ((elem.readyState && elem.readyState !== 'complete' && elem.readyState !== 'loaded') || loaded) {
                     return false;
@@ -296,7 +296,7 @@ export default (function () {
                 }
             };
 
-            var head = document.getElementsByTagName('head')[0];
+            let head = document.getElementsByTagName('head')[0];
             head.appendChild(elem);
         },*/
 
@@ -338,7 +338,7 @@ export default (function () {
         cloneInsertBefore: 3,
 
         clone: function (element, type, container, target) {
-            var newElement = element.cloneNode(true);
+            let newElement = element.cloneNode(true);
 
             if (container === undefined) {
                 container = element.parentNode;
@@ -362,17 +362,17 @@ export default (function () {
 
         // TODO: it's redundant for now
         applyOperations: function (element, operations) {
-            for (var operation in operations) {
+            for (let operation in operations) {
                 if (!operations.hasOwnProperty(operation)) {
                     continue;
                 }
 
-                for (var binding in operations[operation]) {
+                for (let binding in operations[operation]) {
                     if (!operations[operation].hasOwnProperty(binding)) {
                         continue;
                     }
 
-                    var value = operations[operation][binding];
+                    let value = operations[operation][binding];
 
                     switch (operation) {
                         case 'setprop':

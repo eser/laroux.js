@@ -1,7 +1,7 @@
 export default (function () {
     'use strict';
 
-    var helpers = {
+    let helpers = {
         uniqueId: 0,
 
         getUniqueId: function () {
@@ -9,35 +9,40 @@ export default (function () {
             return 'uid-' + (++helpers.uniqueId);
         },
 
-        extend: function (target, source) {
-            var keys = Object.keys(source);
-
-            for (var i = 0, length = keys.length; i < length; i++) {
-                var key = keys[i];
-
-                if (target[key] instanceof Array) {
-                    target[key] = target[key].concat(source[key]);
-                    continue;
-                }
-
-                if (target[key] instanceof Object) {
-                    extend(target[key], source[key]);
-                    continue;
-                }
-
-                target[key] = source[key];
-            }
-
-            return target;
+        clone: function (obj) {
+            return JSON.parse(JSON.stringify(obj));
         },
 
-        extendNs: function (target, path, source) {
-            var ptr = target,
+        merge: function (target, source, clone) {
+            let result = clone ? helpers.clone(target) : target,
+                keys = Object.keys(source);
+
+            for (let i = 0, length = keys.length; i < length; i++) {
+                let key = keys[i];
+
+                if (result[key] instanceof Array) {
+                    result[key] = result[key].concat(source[key]);
+                    continue;
+                }
+
+                if (result[key] instanceof Object) {
+                    helpers.merge(result[key], source[key]);
+                    continue;
+                }
+
+                result[key] = source[key];
+            }
+
+            return result;
+        },
+
+        mergeNs: function (target, path, source) {
+            let ptr = target,
                 pathSlices = path.split('.'),
                 keys = Object.keys(source);
 
-            for (var i = 0, length = pathSlices.length; i < length; i++) {
-                var current = pathSlices[i];
+            for (let i = 0, length = pathSlices.length; i < length; i++) {
+                let current = pathSlices[i];
 
                 if (ptr[current] === undefined) {
                     ptr[current] = {};
@@ -47,18 +52,18 @@ export default (function () {
             }
 
             if (source !== undefined) {
-                // might be replaced w/ $l.extend method
-                helpers.extend(ptr, source);
+                // might be replaced w/ $l.merge method
+                helpers.merge(ptr, source);
             }
 
             return target;
         },
 
         buildQueryString: function (values, rfc3986) {
-            var uri = '',
+            let uri = '',
                 regEx = /%20/g;
 
-            for (var name in values) {
+            for (let name in values) {
                 if (!values.hasOwnProperty(name)) {
                     continue;
                 }
@@ -76,9 +81,9 @@ export default (function () {
         },
 
         buildFormData: function (values) {
-            var data = new FormData();
+            let data = new FormData();
 
-            for (var name in values) {
+            for (let name in values) {
                 if (!values.hasOwnProperty(name)) {
                     continue;
                 }
@@ -91,8 +96,7 @@ export default (function () {
             return data;
         },
 
-        format: function () {
-            var args = arguments;
+        format: function (...args) {
             return Array.prototype.shift.call(args).replace(
                 /%s/g,
                 function () {
@@ -102,7 +106,7 @@ export default (function () {
         },
 
         replaceAll: function (text, dictionary) {
-            var re = new RegExp(Object.keys(dictionary).join('|'), 'g');
+            let re = new RegExp(Object.keys(dictionary).join('|'), 'g');
 
             return text.replace(
                 re,
@@ -113,11 +117,11 @@ export default (function () {
         },
 
         camelCase: function (value) {
-            var flag = false;
-            var output = '';
+            let flag = false;
+            let output = '';
 
-            for (var j = 0; j < value.length; j++) {
-                var currChar = value.charAt(j);
+            for (let j = 0; j < value.length; j++) {
+                let currChar = value.charAt(j);
                 if (currChar === '-') {
                     flag = true;
                     continue;
@@ -131,10 +135,10 @@ export default (function () {
         },
 
         antiCamelCase: function (value) {
-            var output = '';
+            let output = '';
 
-            for (var j = 0; j < value.length; j++) {
-                var currChar = value.charAt(j);
+            for (let j = 0; j < value.length; j++) {
+                let currChar = value.charAt(j);
                 if (currChar !== '-' && currChar == currChar.toUpperCase()) {
                     output += '-' + currChar.toLowerCase();
                     continue;
@@ -166,7 +170,7 @@ export default (function () {
         },
 
         find: function (obj, iterator, context) {
-            var result;
+            let result;
 
             obj.some(function (value, index, list) {
                 if (iterator.call(context, value, index, list)) {
@@ -178,13 +182,13 @@ export default (function () {
             return result;
         },
 
-        each: function (arr, fnc, testOwnProperties) {
-            for (var item in arr) {
+        each: function (arr, callback, testOwnProperties) {
+            for (let item in arr) {
                 if (testOwnProperties && !arr.hasOwnProperty(item)) {
                     continue;
                 }
 
-                if (fnc(item, arr[item]) === false) {
+                if (callback(item, arr[item]) === false) {
                     break;
                 }
             }
@@ -192,15 +196,15 @@ export default (function () {
             return arr;
         },
 
-        map: function (arr, fnc, dontSkipReturns, testOwnProperties) {
-            var results = [];
+        map: function (arr, callback, dontSkipReturns, testOwnProperties) {
+            let results = [];
 
-            for (var item in arr) {
+            for (let item in arr) {
                 if (testOwnProperties && !arr.hasOwnProperty(item)) {
                     continue;
                 }
 
-                var result = fnc(arr[item], item);
+                let result = callback(arr[item], item);
                 if (result === false) {
                     break;
                 }
@@ -214,7 +218,7 @@ export default (function () {
         },
 
         index: function (arr, value, testOwnProperties) {
-            for (var item in arr) {
+            for (let item in arr) {
                 if (testOwnProperties && !arr.hasOwnProperty(item)) {
                     continue;
                 }
@@ -227,9 +231,9 @@ export default (function () {
             return null;
         },
 
-        aeach: function (arr, fnc) {
-            for (var i = 0, length = arr.length; i < length; i++) {
-                if (fnc(i, arr[i]) === false) {
+        aeach: function (arr, callback) {
+            for (let i = 0, length = arr.length; i < length; i++) {
+                if (callback(i, arr[i]) === false) {
                     break;
                 }
             }
@@ -237,11 +241,11 @@ export default (function () {
             return arr;
         },
 
-        amap: function (arr, fnc, dontSkipReturns) {
-            var results = [];
+        amap: function (arr, callback, dontSkipReturns) {
+            let results = [];
 
-            for (var i = 0, length = arr.length; i < length; i++) {
-                var result = fnc(arr[i], i);
+            for (let i = 0, length = arr.length; i < length; i++) {
+                let result = callback(arr[i], i);
                 if (result === false) {
                     break;
                 }
@@ -255,7 +259,7 @@ export default (function () {
         },
 
         aindex: function (arr, value, start) {
-            for (var i = (start || 0), length = arr.length; i < length; i++) {
+            for (let i = (start || 0), length = arr.length; i < length; i++) {
                 if (arr[i] === value) {
                     return i;
                 }
@@ -275,15 +279,15 @@ export default (function () {
         },
 
         shuffle: function (obj) {
-            var index = 0,
+            let index = 0,
                 shuffled = [];
 
-            for (var item in obj) {
+            for (let item in obj) {
                 if (!obj.hasOwnProperty(item)) {
                     continue;
                 }
 
-                var rand = helpers.random(0, index);
+                let rand = helpers.random(0, index);
                 shuffled[index++] = shuffled[rand];
                 shuffled[rand] = obj[item];
             }
@@ -291,16 +295,12 @@ export default (function () {
             return shuffled;
         },
 
-        duplicate: function (obj) {
-            return JSON.parse(JSON.stringify(obj));
-        },
-
         prependArray: function (obj, value) {
-            var length = obj.length,
+            let length = obj.length,
                 items = new Array(length + 1);
 
             items[0] = value;
-            for (var i = 0, j = 1; i < length; i++, j++) {
+            for (let i = 0, j = 1; i < length; i++, j++) {
                 items[j] = obj[i];
             }
 
@@ -308,9 +308,9 @@ export default (function () {
         },
 
         removeFromArray: function (obj, value) {
-            var targetKey = null;
+            let targetKey = null;
 
-            for (var item in obj) {
+            for (let item in obj) {
                 if (!obj.hasOwnProperty(item)) {
                     continue;
                 }
@@ -330,10 +330,10 @@ export default (function () {
         },
 
         toArray: function (obj) {
-            var length = obj.length,
+            let length = obj.length,
                 items = new Array(length);
 
-            for (var i = 0; i < length; i++) {
+            for (let i = 0; i < length; i++) {
                 items[i] = obj[i];
             }
 
@@ -346,10 +346,10 @@ export default (function () {
             }
 
             if (obj instanceof NodeList) {
-                var length = obj.length;
+                let length = obj.length;
 
-                var items = new Array(length);
-                for (var i = 0; i < length; i++) {
+                let items = new Array(length);
+                for (let i = 0; i < length; i++) {
                     items[i] = obj[i];
                 }
 
@@ -381,7 +381,7 @@ export default (function () {
                 keys = [];
             }
 
-            for (var item in obj) {
+            for (let item in obj) {
                 if (!obj.hasOwnProperty(item)) {
                     continue;
                 }
@@ -406,9 +406,9 @@ export default (function () {
                 delimiter = '.';
             }
 
-            var pos = path.indexOf(delimiter);
-            var key;
-            var rest;
+            let pos = path.indexOf(delimiter);
+            let key;
+            let rest;
             if (pos === -1) {
                 key = path;
                 rest = null;

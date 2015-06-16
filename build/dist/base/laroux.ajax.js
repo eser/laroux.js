@@ -59,7 +59,7 @@ exports['default'] = (function () {
         },
 
         xhrResp: function xhrResp(xhr, options) {
-            var response;
+            var response = undefined;
 
             if (options.datatype === undefined) {
                 response = xhr.responseText;

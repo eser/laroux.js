@@ -7,7 +7,7 @@ export default (function () {
 
     // touch - partially taken from 'tocca.js' project
     //         can be found at: https://github.com/GianlucaGuarini/Tocca.js
-    var touch = {
+    let touch = {
         touchStarted: null,
         swipeTreshold: 80,
         precision: 30,
@@ -33,13 +33,13 @@ export default (function () {
         },
 
         init: function () {
-            var events = [
+            let events = [
                 0,
                 (navigator.msPointerEnabled) ? 2 : 1,
                 3
             ];
 
-            for (var i = 0, length = events.length; i < length; i++) {
+            for (let i = 0, length = events.length; i < length; i++) {
                 dom.setEventSingle(document, touch.events.start[events[i]], touch.onstart);
                 dom.setEventSingle(document, touch.events.end[events[i]], touch.onend);
                 dom.setEventSingle(document, touch.events.move[events[i]], touch.locatePointer);
@@ -53,7 +53,7 @@ export default (function () {
             /*jslint plusplus: true */
             touch.tapCount++;
 
-            var fnc = function () {
+            let callback = function () {
                 if (touch.cached[0] >= touch.pos[0] - touch.precision &&
                         touch.cached[0] <= touch.pos[0] + touch.precision &&
                         touch.cached[1] >= touch.pos[1] - touch.precision &&
@@ -89,7 +89,7 @@ export default (function () {
                         return;
                     }
 
-                    touch.tapTimer = setTimeout(fnc, touch.tapTreshold);
+                    touch.tapTimer = setTimeout(callback, touch.tapTreshold);
                     return;
                 }
 
@@ -97,11 +97,11 @@ export default (function () {
             };
 
             clearTimeout(touch.tapTimer);
-            touch.tapTimer = setTimeout(fnc, touch.tapTreshold);
+            touch.tapTimer = setTimeout(callback, touch.tapTreshold);
         },
 
         onend: function (event) {
-            var delta = [
+            let delta = [
                     touch.pos[0] - touch.cached[0],
                     touch.pos[1] - touch.cached[1]
                 ],

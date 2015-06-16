@@ -1,7 +1,7 @@
 export default (function () {
     'use strict';
 
-    var date = {
+    let date = {
         shortDateFormat: 'dd.MM.yyyy',
         longDateFormat: 'dd MMMM yyyy',
         timeFormat: 'HH:mm',
@@ -99,7 +99,7 @@ export default (function () {
         },
 
         getCustomDateString: function (format, timestamp) {
-            var now = timestamp || new Date();
+            let now = timestamp || new Date();
 
             return format.replace(
                 /yyyy|yy|MMMM|MMM|MM|M|dd|d|hh|h|HH|H|mm|m|ss|s|tt|t/g,
@@ -130,11 +130,11 @@ export default (function () {
                         return now.getDate();
 
                     case 'hh':
-                        var hour1 = now.getHours();
+                        let hour1 = now.getHours();
                         return ('0' + (((hour1 % 12) > 0) ? hour1 % 12 : 12)).substr(-2, 2);
 
                     case 'h':
-                        var hour2 = now.getHours();
+                        let hour2 = now.getHours();
                         return ((hour2 % 12) > 0) ? hour2 % 12 : 12;
 
                     case 'HH':
@@ -176,7 +176,7 @@ export default (function () {
         },
 
         getDateDiffString: function (timestamp) {
-            var now = Date.now(),
+            let now = Date.now(),
                 timespan = now - timestamp.getTime(),
                 absTimespan = Math.abs(timespan),
                 past = (timespan > 0);
@@ -185,7 +185,7 @@ export default (function () {
                 return date.strings.now;
             }
 
-            var timespanstring = date.parseEpoch(absTimespan, true);
+            let timespanstring = date.parseEpoch(absTimespan, true);
             if (timespanstring !== null) {
                 return timespanstring +
                     ' ' +

@@ -24,9 +24,9 @@ var _larouxHelpersJs2 = _interopRequireDefault(_larouxHelpersJs);
 
 var staticKeys = ['_callbacks', '_onupdate'];
 
-var Model = (function () {
-    function Model(data) {
-        _classCallCheck(this, Model);
+var Observable = (function () {
+    function Observable(data) {
+        _classCallCheck(this, Observable);
 
         var self = this;
 
@@ -42,7 +42,7 @@ var Model = (function () {
         }
     }
 
-    _createClass(Model, [{
+    _createClass(Observable, [{
         key: 'set',
         value: function set(key, value) {
             if (staticKeys.indexOf(key) === -1) {
@@ -129,22 +129,22 @@ var Model = (function () {
         }
     }, {
         key: 'on',
-        value: function on(fnc) {
-            this._callbacks.push(fnc);
+        value: function on(callback) {
+            this._callbacks.push(callback);
         }
     }, {
         key: 'off',
-        value: function off(fnc) {
-            _larouxHelpersJs2['default'].removeFromArray(this._callbacks, fnc);
+        value: function off(callback) {
+            _larouxHelpersJs2['default'].removeFromArray(this._callbacks, callback);
         }
     }]);
 
-    return Model;
+    return Observable;
 })();
 
 exports['default'] = (function () {
     var types = {
-        model: Model
+        observable: Observable
     };
 
     return types;

@@ -31,10 +31,12 @@ var Deferred = (function () {
 
     _createClass(Deferred, [{
         key: 'invoke',
-        value: function invoke() {
-            var args = _larouxHelpersJs2['default'].toArray(arguments),
-                eventName = args.shift(),
-                finalEvent = eventName === 'done' || eventName === 'fail';
+        value: function invoke(eventName) {
+            for (var _len = arguments.length, args = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+                args[_key - 1] = arguments[_key];
+            }
+
+            var finalEvent = eventName === 'done' || eventName === 'fail';
 
             if (eventName in this.events) {
                 this.events[eventName].invoked = true;
@@ -68,18 +70,24 @@ var Deferred = (function () {
     }, {
         key: 'resolve',
         value: function resolve() {
-            var args = _larouxHelpersJs2['default'].toArray(arguments);
-            args.unshift('done');
+            var _invoke;
 
-            return this.invoke.apply(this, args);
+            for (var _len2 = arguments.length, args = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
+                args[_key2] = arguments[_key2];
+            }
+
+            return (_invoke = this.invoke).call.apply(_invoke, [this, 'done'].concat(args));
         }
     }, {
         key: 'reject',
         value: function reject() {
-            var args = _larouxHelpersJs2['default'].toArray(arguments);
-            args.unshift('fail');
+            var _invoke2;
 
-            return this.invoke.apply(this, args);
+            for (var _len3 = arguments.length, args = Array(_len3), _key3 = 0; _key3 < _len3; _key3++) {
+                args[_key3] = arguments[_key3];
+            }
+
+            return (_invoke2 = this.invoke).call.apply(_invoke2, [this, 'fail'].concat(args));
         }
     }, {
         key: 'on',
@@ -132,14 +140,16 @@ var Deferred = (function () {
         }
     }], [{
         key: 'async',
-        value: function async() {
-            var deferred = new Deferred(),
-                args = _larouxHelpersJs2['default'].toArray(arguments),
-                fnc = args.shift();
+        value: function async(callback) {
+            for (var _len4 = arguments.length, args = Array(_len4 > 1 ? _len4 - 1 : 0), _key4 = 1; _key4 < _len4; _key4++) {
+                args[_key4 - 1] = arguments[_key4];
+            }
+
+            var deferred = new Deferred();
 
             setTimeout(function () {
                 try {
-                    var result = fnc.apply(deferred, args);
+                    var result = callback.apply(deferred, args);
                     deferred.resolve(result);
                 } catch (err) {
                     deferred.reject(err);

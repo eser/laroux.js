@@ -33,6 +33,10 @@ var _larouxHelpersJs = require('./laroux.helpers.js');
 
 var _larouxHelpersJs2 = _interopRequireDefault(_larouxHelpersJs);
 
+var _larouxStoryboardJs = require('./laroux.storyboard.js');
+
+var _larouxStoryboardJs2 = _interopRequireDefault(_larouxStoryboardJs);
+
 var _larouxTypesJs = require('./laroux.types.js');
 
 var _larouxTypesJs2 = _interopRequireDefault(_larouxTypesJs);
@@ -64,7 +68,7 @@ exports['default'] = (function () {
         // FIXME: Laroux: non-chromium optimization, but it runs
         //                slowly in chromium
         //
-        // var re = /^#([^\+\>\[\]\.# ]*)$/.exec(selector);
+        // let re = /^#([^\+\>\[\]\.# ]*)$/.exec(selector);
         // if (re) {
         //     return (parent || document).getElementById(re[1]);
         // }
@@ -72,49 +76,36 @@ exports['default'] = (function () {
         return (parent || document).querySelector(selector);
     };
 
-    _larouxHelpersJs2['default'].extend(laroux, _larouxHelpersJs2['default']);
-    _larouxHelpersJs2['default'].extend(laroux, {
+    _larouxHelpersJs2['default'].merge(laroux, _larouxHelpersJs2['default']);
+    _larouxHelpersJs2['default'].merge(laroux, {
         ajax: _larouxAjaxJs2['default'],
         date: _larouxDateJs2['default'],
         deferred: _larouxDeferredJs2['default'],
         events: _larouxEventsJs2['default'],
+        storyboard: _larouxStoryboardJs2['default'],
         types: _larouxTypesJs2['default'],
         templates: _larouxTemplatesJs2['default'],
         timers: _larouxTimersJs2['default'],
         vars: _larouxVarsJs2['default'],
         when: _larouxWhenJs2['default'],
 
-        cached: {
-            single: {},
-            array: {},
-            id: {}
+        extend: function extend(source) {
+            return _larouxHelpersJs2['default'].merge(laroux, source);
         },
 
-        c: function c(selector) {
-            if (selector instanceof Array) {
-                return laroux.cached.array[selector] || (laroux.cached.array[selector] = _larouxHelpersJs2['default'].toArray(document.querySelectorAll(selector)));
-            }
-
-            return laroux.cached.single[selector] || (laroux.cached.single[selector] = document.querySelector(selector));
-        },
-
-        id: function id(selector, parent) {
-            return (parent || document).getElementById(selector);
-        },
-
-        idc: function idc(selector) {
-            return laroux.cached.id[selector] || (laroux.cached.id[selector] = document.getElementById(selector));
+        extendNs: function extendNs(path, source) {
+            return _larouxHelpersJs2['default'].mergeNs(laroux, path, source);
         },
 
         readyPassed: false,
 
-        ready: function ready(fnc) {
+        ready: function ready(callback) {
             if (!laroux.readyPassed) {
-                _larouxEventsJs2['default'].add('ContentLoaded', fnc);
+                _larouxEventsJs2['default'].add('ContentLoaded', callback);
                 return;
             }
 
-            fnc();
+            callback();
         },
 
         setReady: function setReady() {
