@@ -5,7 +5,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <title>laroux.js - Demos</title>
         <meta name="description" content="" />
-        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
 
         <!-- Latest compiled and minified CSS -->
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" />
@@ -32,7 +32,7 @@
                                     </ul>
 
                                     <div class="box-large vertical-spaces">
-                                        <h2>2.0.0</h2>
+                                        <h2>2.1.0</h2>
                                     </div>
 
                                     <button data-href="https://github.com/larukedi/laroux.js/releases/latest" class="btn btn-primary btn-href">Download</button>
@@ -46,13 +46,14 @@
                                         <li><a href="https://github.com/larukedi/laroux.js/wiki/deferred">Deferred</a></li>
                                         <li><a href="https://github.com/larukedi/laroux.js/wiki/events">Events</a></li>
                                         <li><a href="https://github.com/larukedi/laroux.js/wiki/helpers">Helpers</a></li>
-                                        <li><a href="https://github.com/larukedi/laroux.js/wiki/stack">Stack</a></li>
+                                        <li><a href="https://github.com/larukedi/laroux.js/wiki/storyboard">Storyboard</a></li>
                                         <li><a href="https://github.com/larukedi/laroux.js/wiki/templates">Templates</a></li>
+                                        <li><a href="https://github.com/larukedi/laroux.js/wiki/timers">Timers</a></li>
                                     </ul>
                                 </li>
                                 <li class="col-sm-3">
                                     <ul>
-                                        <li><a href="https://github.com/larukedi/laroux.js/wiki/timers">Timers</a></li>
+                                        <li><a href="https://github.com/larukedi/laroux.js/wiki/types">Types</a></li>
                                         <li><a href="https://github.com/larukedi/laroux.js/wiki/vars">Vars</a></li>
                                         <li><a href="https://github.com/larukedi/laroux.js/wiki/when">When</a></li>
                                         <li class="divider"></li>
@@ -60,13 +61,14 @@
                                         <li><a href="https://github.com/larukedi/laroux.js/wiki/anim">Anim</a></li>
                                         <li><a href="https://github.com/larukedi/laroux.js/wiki/css">CSS</a></li>
                                         <li><a href="https://github.com/larukedi/laroux.js/wiki/dom">DOM</a></li>
+                                        <li><a href="https://github.com/larukedi/laroux.js/wiki/forms">Forms</a></li>
                                     </ul>
                                 </li>
                                 <li class="col-sm-3">
                                     <ul>
-                                        <li><a href="https://github.com/larukedi/laroux.js/wiki/forms">Forms</a></li>
                                         <li><a href="https://github.com/larukedi/laroux.js/wiki/keys">Keys</a></li>
                                         <li><a href="https://github.com/larukedi/laroux.js/wiki/mvc">MVC</a></li>
+                                        <li><a href="https://github.com/larukedi/laroux.js/wiki/routes">Routes</a></li>
                                         <li><a href="https://github.com/larukedi/laroux.js/wiki/touch">Touch</a></li>
                                         <li class="divider"></li>
                                         <li class="dropdown-header">Need Help?</li>
@@ -96,7 +98,7 @@
 
                             <!-- Slides -->
                             <div id="one" class="slide active">
-                                <h1>laroux.js 2.0.0</h1>
+                                <h1>laroux.js 2.1.0</h1>
                                 <div class="lead">
                                     This project is a jQuery substitute for modern browsers and mobile devices. But instead of offering some wrappers and own dynamics, it simply provides helper functions to achieve the same objectives as jQuery or Zepto.
                                 </div>
@@ -106,7 +108,7 @@
                                 <h3><em>laroux.js</em> is right for you if you:</h3>
                                 <ul>
                                     <li>Complain about people who do not know the difference between jQuery and Javascript.</li>
-                                    <li>Love working with more compact, organized libraries in smaller sizes (~39K).</li>
+                                    <li>Love working with more compact, organized libraries in smaller sizes (~45K).</li>
                                     <li>Want to be working with native DOM objects instead of wrappers.</li>
                                     <li>Want to leverage the debug console's autocomplete/fluent typing.</li>
                                     <li>Are not satisfied with the performance of other libraries on mobile devices.</li>
@@ -511,44 +513,120 @@ var text = $l.id('text-helpers-helpers');
 $l.dom.clear(text);
 
 $l.dom.append(text, '&lt;div&gt;&lt;strong&gt;Unique Id Generator:&lt;/strong&gt;&lt;/div&gt;');
-$l.dom.append(text, $l.getUniqueId() + '&lt;br /&gt;');
-$l.dom.append(text, $l.getUniqueId() + '&lt;br /&gt;');
+$l.dom.append(text, $l.helpers.getUniqueId() + '&lt;br /&gt;');
+$l.dom.append(text, $l.helpers.getUniqueId() + '&lt;br /&gt;');
 
 $l.dom.append(text, '&lt;div&gt;&lt;strong&gt;Query String Generation:&lt;/strong&gt;&lt;/div&gt;');
-$l.dom.append(text, $l.buildQueryString({ pageId: 5, showAll: 'yes' }) + '&lt;br /&gt;');
+$l.dom.append(text, $l.helpers.buildQueryString({ pageId: 5, showAll: 'yes' }) + '&lt;br /&gt;');
 
 $l.dom.append(text, '&lt;div&gt;&lt;strong&gt;Transform string into camel case:&lt;/strong&gt;&lt;/div&gt;');
-$l.dom.append(text, $l.camelCase('text-align') + '&lt;br /&gt;');
+$l.dom.append(text, $l.helpers.camelCase('text-align') + '&lt;br /&gt;');
 
 $l.dom.append(text, '&lt;div&gt;&lt;strong&gt;Transform string back from camel case:&lt;/strong&gt;&lt;/div&gt;');
-$l.dom.append(text, $l.antiCamelCase('textAlign') + '&lt;br /&gt;');
+$l.dom.append(text, $l.helpers.antiCamelCase('textAlign') + '&lt;br /&gt;');
 
 $l.dom.append(text, '&lt;div&gt;&lt;strong&gt;Encoding special characters:&lt;/strong&gt;&lt;/div&gt;');
-$l.dom.append(text, $l.quoteAttr('&lt;br clear="all" /&gt;') + '&lt;br /&gt;');
+$l.dom.append(text, $l.helpers.quoteAttr('&lt;br clear="all" /&gt;') + '&lt;br /&gt;');
 
 $l.dom.append(text, '&lt;div&gt;&lt;strong&gt;Generating random value:&lt;/strong&gt;&lt;/div&gt;');
-$l.dom.append(text, $l.random(1, 15) + '&lt;br /&gt;');
-$l.dom.append(text, $l.random(1, 15) + '&lt;br /&gt;');
+$l.dom.append(text, $l.helpers.random(1, 15) + '&lt;br /&gt;');
+$l.dom.append(text, $l.helpers.random(1, 15) + '&lt;br /&gt;');
 
 $l.dom.append(text, '&lt;div&gt;&lt;strong&gt;Getting values from a single column:&lt;/strong&gt;&lt;/div&gt;');
 var arr = [{id: 1, count: 5}, {id: 2, count: 12}];
-$l.dom.append(text, JSON.stringify($l.column(arr, 'count')) + '&lt;br /&gt;');
+$l.dom.append(text, JSON.stringify($l.helpers.column(arr, 'count')) + '&lt;br /&gt;');
 
 $l.dom.append(text, '&lt;div&gt;&lt;strong&gt;Shuffling values:&lt;/strong&gt;&lt;/div&gt;');
-$l.dom.append(text, $l.shuffle([1, 2, 3, 4, 5]) + '&lt;br /&gt;');
+$l.dom.append(text, $l.helpers.shuffle([1, 2, 3, 4, 5]) + '&lt;br /&gt;');
 
-$l.dom.append(text, '&lt;div&gt;&lt;strong&gt;Extending an object:&lt;/strong&gt;&lt;/div&gt;');
-$l.dom.append(text, JSON.stringify($l.extend({id: 1}, {name: 'eser', count: 5})) + '&lt;br /&gt;');
+$l.dom.append(text, '&lt;div&gt;&lt;strong&gt;Merging objects:&lt;/strong&gt;&lt;/div&gt;');
+$l.dom.append(text, JSON.stringify($l.merge({id: 1}, {name: 'eser', count: 5})) + '&lt;br /&gt;');
 
 $l.dom.append(text, '&lt;div&gt;&lt;strong&gt;Getting count of elements:&lt;/strong&gt;&lt;/div&gt;');
-$l.dom.append(text, $l.getLength({id: 1, name: 'eser', count: 5}) + '&lt;br /&gt;');
+$l.dom.append(text, $l.helpers.getLength({id: 1, name: 'eser', count: 5}) + '&lt;br /&gt;');
 
 $l.dom.append(text, '&lt;div&gt;&lt;strong&gt;Getting elements with dot notation:&lt;/strong&gt;&lt;/div&gt;');
-$l.dom.append(text, $l.getElement({id: 1, child: { a: 1, b: 2 }}, 'child.a') + '&lt;br /&gt;');
+$l.dom.append(text, $l.helpers.getElement({id: 1, child: { a: 1, b: 2 }}, 'child.a') + '&lt;br /&gt;');
 
 $l.dom.append(text, '&lt;div&gt;&lt;strong&gt;Getting keys for dot notation:&lt;/strong&gt;&lt;/div&gt;');
-$l.dom.append(text, JSON.stringify($l.getKeysRecursive({id: 1, child: { a: 1, b: 2 }})) + '&lt;br /&gt;');
+$l.dom.append(text, JSON.stringify($l.helpers.getKeysRecursive({id: 1, child: { a: 1, b: 2 }})) + '&lt;br /&gt;');
 
+                        </pre>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row header-row">
+                <div class="col-sm-6">
+                    <h2 class="nomargin">Storyboard Examples</h2>
+                </div>
+                <div class="col-sm-6 text-right">
+                    <a class="btn btn-sm btn-default" href="https://github.com/larukedi/laroux.js/wiki/storyboard" role="button">Wiki Page</a>
+                </div>
+            </div>
+
+            <div class="example-area">
+                <h3>Animation</h3>
+                <div class="row">
+                    <div class="col-sm-4">
+                        <button id="button-storyboard-animation" class="btn btn-default">Go on</button>
+                        <div class="box" id="div-storyboard-animation"></div>
+                    </div>
+                    <div class="col-sm-8">
+                        <h4>HTML</h4>
+                        <pre class="prettyprint">
+&lt;div class="box" id="div-storyboard-animation"&gt;&lt;/div&gt;
+                        </pre>
+
+                        <h4>Javascript</h4>
+                        <pre class="prettyprint">
+var box = $l.id('div-storyboard-animation');
+
+var step1action1 = function () {
+    $l.css.setProperty(box, 'background-color', 'blue');
+};
+
+var step1action2 = $l.anim.setCss({
+    object:   box,
+    property: 'left',
+    from:     0, // current value
+    to:       50,
+    time:     1200,
+    unit:     'px',
+    reset:    false
+});
+
+var step2 = function () {
+    var deferred = $l.anim.setCss({
+        object:   box,
+        property: 'left',
+        from:     50, // current value
+        to:       0,
+        time:     600,
+        unit:     'px',
+        reset:    false
+    });
+
+    myStory.add('second-step', deferred);
+};
+
+var step3 = function () {
+    $l.css.setProperty(box, 'background-color', 'red');
+};
+
+var myStory = new $l.storyboard();
+myStory.addPhase('first-step');
+myStory.addPhase('second-step');
+myStory.addPhase('third-step');
+
+myStory.add('first-step', step1action1);
+myStory.add('first-step', step1action2);
+
+myStory.add('second-step', step2);
+
+myStory.add('third-step', step3);
+
+myStory.start();
                         </pre>
                     </div>
                 </div>
@@ -584,7 +662,7 @@ var pressCount = 0;
 $l.keys.assign({
     target: document,
     key: 'f7',
-    fnc: function() {
+    callback: function() {
         $l.dom.replace(text, 'pressed: ' + ++pressCount);
     }
 });
@@ -624,7 +702,7 @@ $l.keys.assign({
 
                         <h4>Javascript</h4>
                         <pre class="prettyprint">
-var myModel = new $l.stack({
+var myModel = new $l.types.observable({
     name: ''
 });
 
@@ -666,7 +744,7 @@ $l.dom.setEvent(
 
                         <h4>Javascript</h4>
                         <pre class="prettyprint">
-var myModel = new $l.stack({
+var myModel = new $l.types.observable({
     a: 3,
     b: 5,
     total: function() {
@@ -702,7 +780,7 @@ $l.mvc.init('mvccalculation', myModel);
 
                         <h4>Javascript</h4>
                         <pre class="prettyprint">
-var myModel = new $l.stack({
+var myModel = new $l.types.observable({
     text: 'initial'
 });
 
@@ -714,52 +792,101 @@ $l.mvc.init('mvctwoway', myModel);
 
             <div class="row header-row">
                 <div class="col-sm-6">
-                    <h2 class="nomargin">Stack Examples</h2>
+                    <h2 class="nomargin">Routes Examples</h2>
                 </div>
                 <div class="col-sm-6 text-right">
-                    <a class="btn btn-sm btn-default" href="https://github.com/larukedi/laroux.js/wiki/stack" role="button">Wiki Page</a>
+                    <a class="btn btn-sm btn-default" href="https://github.com/larukedi/laroux.js/wiki/routes" role="button">Wiki Page</a>
                 </div>
             </div>
 
             <div class="example-area">
-                <h3>Stack Example</h3>
+                <h3>Routing</h3>
                 <div class="row">
                     <div class="col-sm-4">
-                        <button id="button-stack-example" class="btn btn-default">Execute</button>
-                        <div id="text-stack-example"></div>
+                        <button id="button-routes-routing-1" class="btn btn-default">Route 1</button>
+                        <button id="button-routes-routing-2" class="btn btn-default">Route 2</button>
+                        <button id="button-routes-routing-3" class="btn btn-default">Route 3</button>
+                        <div id="text-routes-routing"></div>
                     </div>
                     <div class="col-sm-8">
                         <h4>HTML</h4>
                         <pre class="prettyprint">
-&lt;div id="text-stack-example"&gt;&lt;/div&gt;
+&lt;div id="text-routes-routing"&gt;&lt;/div&gt;
+&lt;button id="button-routes-routing-1" class="btn btn-default"&gt;Route 1&lt;/button&gt;
+&lt;button id="button-routes-routing-2" class="btn btn-default"&gt;Route 1&lt;/button&gt;
+&lt;button id="button-routes-routing-3" class="btn btn-default"&gt;Route 1&lt;/button&gt;
                         </pre>
 
                         <h4>Javascript</h4>
                         <pre class="prettyprint">
-var stack = new $l.stack();
-stack.set('id', 1);
-stack.setRange({count: 15, name: 'eser'});
+var text = $l.id('text-routes-routing');
+var button1 = $l.id('button-routes-routing-1');
+var button2 = $l.id('button-routes-routing-2');
+var button3 = $l.id('button-routes-routing-3');
 
-$l.dom.clear(text);
+$l.routes.add(
+    'test/:name',
+    function (name, trans) {
+        $l.dom.clear(text);
 
-$l.dom.append(text, '&lt;div&gt;&lt;strong&gt;Element with key \'id\':&lt;/strong&gt;&lt;/div&gt;');
-$l.dom.append(text, stack.get('id') + '&lt;br /&gt;');
+        $l.dom.append(text, '&lt;div&gt;&lt;strong&gt;Name:&lt;/strong&gt;&lt;/div&gt;');
+        $l.dom.append(text, name + '&lt;br /&gt;');
 
-$l.dom.append(text, '&lt;div&gt;&lt;strong&gt;Elements with keys \'id\' and \'name\':&lt;/strong&gt;&lt;/div&gt;');
-$l.dom.append(text, JSON.stringify(stack.getRange(['id', 'name'])) + '&lt;br /&gt;');
+        $l.dom.append(text, '&lt;div&gt;&lt;strong&gt;Transition Data:&lt;/strong&gt;&lt;/div&gt;');
+        $l.dom.append(text, JSON.stringify(trans) + '&lt;br /&gt;');
+    }
+);
+$l.routes.reload();
 
-$l.dom.append(text, '&lt;div&gt;&lt;strong&gt;Keys:&lt;/strong&gt;&lt;/div&gt;');
-$l.dom.append(text, JSON.stringify(stack.keys()) + '&lt;br /&gt;');
+$l.dom.setEvent(button1, 'click', function () { $l.routes.go('test/route1'); });
+$l.dom.setEvent(button2, 'click', function () { $l.routes.go('test/route2'); });
+$l.dom.setEvent(button3, 'click', function () { $l.routes.go('test/route3'); });
+                        </pre>
+                    </div>
+                </div>
 
-$l.dom.append(text, '&lt;div&gt;&lt;strong&gt;Length:&lt;/strong&gt;&lt;/div&gt;');
-$l.dom.append(text, JSON.stringify(stack.length()) + '&lt;br /&gt;');
+                <h3>Named Routing</h3>
+                <div class="row">
+                    <div class="col-sm-4">
+                        <button id="button-routes-namedrouting-1" class="btn btn-default">Route 1</button>
+                        <button id="button-routes-namedrouting-2" class="btn btn-default">Route 2</button>
+                        <button id="button-routes-namedrouting-3" class="btn btn-default">Route 3</button>
+                        <div id="text-routes-namedrouting"></div>
+                    </div>
+                    <div class="col-sm-8">
+                        <h4>HTML</h4>
+                        <pre class="prettyprint">
+&lt;div id="text-routes-namedrouting"&gt;&lt;/div&gt;
+&lt;button id="button-routes-namedrouting-1" class="btn btn-default"&gt;Route 1&lt;/button&gt;
+&lt;button id="button-routes-namedrouting-2" class="btn btn-default"&gt;Route 1&lt;/button&gt;
+&lt;button id="button-routes-namedrouting-3" class="btn btn-default"&gt;Route 1&lt;/button&gt;
+                        </pre>
 
-$l.dom.append(text, '&lt;div&gt;&lt;strong&gt;Check if it has element with key \'name\':&lt;/strong&gt;&lt;/div&gt;');
-$l.dom.append(text, JSON.stringify(stack.exists('name')) + '&lt;br /&gt;');
+                        <h4>Javascript</h4>
+                        <pre class="prettyprint">
+var text = $l.id('text-routes-namedrouting');
+var button1 = $l.id('button-routes-namedrouting-1');
+var button2 = $l.id('button-routes-namedrouting-2');
+var button3 = $l.id('button-routes-namedrouting-3');
 
-$l.dom.append(text, '&lt;div&gt;&lt;strong&gt;All data:&lt;/strong&gt;&lt;/div&gt;');
-$l.dom.append(text, JSON.stringify(stack._data) + '&lt;br /&gt;');
+$l.routes.addNamed(
+    'test2',
+    'testNamed/:name',
+    function (name, trans) {
+        $l.dom.clear(text);
 
+        $l.dom.append(text, '&lt;div&gt;&lt;strong&gt;Name:&lt;/strong&gt;&lt;/div&gt;');
+        $l.dom.append(text, name + '&lt;br /&gt;');
+
+        $l.dom.append(text, '&lt;div&gt;&lt;strong&gt;Transition Data:&lt;/strong&gt;&lt;/div&gt;');
+        $l.dom.append(text, JSON.stringify(trans) + '&lt;br /&gt;');
+    }
+);
+$l.routes.reload();
+
+$l.dom.setEvent(button1, 'click', function () { $l.routes.goNamed('test2', { name: 'route1' }); });
+$l.dom.setEvent(button2, 'click', function () { $l.routes.goNamed('test2', { name: 'route2' }); });
+$l.dom.setEvent(button3, 'click', function () { $l.routes.goNamed('test2', { name: 'route3' }); });
                         </pre>
                     </div>
                 </div>
@@ -907,6 +1034,55 @@ $l.dom.setEvent(
 
             <div class="row header-row">
                 <div class="col-sm-6">
+                    <h2 class="nomargin">Types Examples</h2>
+                </div>
+                <div class="col-sm-6 text-right">
+                    <a class="btn btn-sm btn-default" href="https://github.com/larukedi/laroux.js/wiki/types" role="button">Wiki Page</a>
+                </div>
+            </div>
+
+            <div class="example-area">
+                <h3>Types Example</h3>
+                <div class="row">
+                    <div class="col-sm-4">
+                        <button id="button-types-example" class="btn btn-default">Execute</button>
+                        <div id="text-types-example"></div>
+                    </div>
+                    <div class="col-sm-8">
+                        <h4>HTML</h4>
+                        <pre class="prettyprint">
+&lt;div id="text-types-example"&gt;&lt;/div&gt;
+                        </pre>
+
+                        <h4>Javascript</h4>
+                        <pre class="prettyprint">
+var myModel = new $l.types.observable();
+myModel.set('id', 1);
+myModel.setRange({count: 15, name: 'eser'});
+
+$l.dom.clear(text);
+
+$l.dom.append(text, '&lt;div&gt;&lt;strong&gt;Element with key \'id\':&lt;/strong&gt;&lt;/div&gt;');
+$l.dom.append(text, myModel.get('id') + '&lt;br /&gt;');
+
+$l.dom.append(text, '&lt;div&gt;&lt;strong&gt;Elements with keys \'id\' and \'name\':&lt;/strong&gt;&lt;/div&gt;');
+$l.dom.append(text, JSON.stringify(myModel.getRange(['id', 'name'])) + '&lt;br /&gt;');
+
+$l.dom.append(text, '&lt;div&gt;&lt;strong&gt;Keys:&lt;/strong&gt;&lt;/div&gt;');
+$l.dom.append(text, JSON.stringify(myModel.keys()) + '&lt;br /&gt;');
+
+$l.dom.append(text, '&lt;div&gt;&lt;strong&gt;Length:&lt;/strong&gt;&lt;/div&gt;');
+$l.dom.append(text, JSON.stringify(myModel.length()) + '&lt;br /&gt;');
+
+$l.dom.append(text, '&lt;div&gt;&lt;strong&gt;Check if it has element with key \'name\':&lt;/strong&gt;&lt;/div&gt;');
+$l.dom.append(text, JSON.stringify(myModel.exists('name')) + '&lt;br /&gt;');
+                        </pre>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row header-row">
+                <div class="col-sm-6">
                     <h2 class="nomargin">Vars Examples</h2>
                 </div>
                 <div class="col-sm-6 text-right">
@@ -1003,10 +1179,9 @@ $l.dom.setEvent(
             </div>
 
             <div class="example-area">
-                <h3>Setting a when</h3>
+                <h3>Triggers</h3>
                 <div class="row">
                     <div class="col-sm-4">
-                        Click both buttons in any order<br />
                         <button id="button-when-set-1" class="btn btn-default">Button 1</button>
                         <button id="button-when-set-2" class="btn btn-default">Button 2</button>
                         <button id="button-when-set-reset" class="btn btn-default" disabled="disabled">Reset</button>
@@ -1023,6 +1198,7 @@ $l.dom.setEvent(
                         <h4>Javascript</h4>
                         <pre class="prettyprint">
 var text = $l.id('text-when-set');
+$l.dom.replace(text, 'click both buttons in any order&lt;br /&gt;');
 
 var promise1 = new $l.deferred();
 var promise2 = new $l.deferred();
