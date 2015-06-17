@@ -31,7 +31,7 @@
                                     </ul>
 
                                     <div class="box-large vertical-spaces">
-                                        <h2>2.0.0</h2>
+                                        <h2>2.1.0</h2>
                                     </div>
 
                                     <button data-href="https://github.com/larukedi/laroux.js/releases/latest" class="btn btn-primary btn-href">Download</button>
@@ -45,13 +45,14 @@
                                         <li><a href="https://github.com/larukedi/laroux.js/wiki/deferred">Deferred</a></li>
                                         <li><a href="https://github.com/larukedi/laroux.js/wiki/events">Events</a></li>
                                         <li><a href="https://github.com/larukedi/laroux.js/wiki/helpers">Helpers</a></li>
-                                        <li><a href="https://github.com/larukedi/laroux.js/wiki/stack">Stack</a></li>
+                                        <li><a href="https://github.com/larukedi/laroux.js/wiki/storyboard">Storyboard</a></li>
                                         <li><a href="https://github.com/larukedi/laroux.js/wiki/templates">Templates</a></li>
+                                        <li><a href="https://github.com/larukedi/laroux.js/wiki/timers">Timers</a></li>
                                     </ul>
                                 </li>
                                 <li class="col-sm-3">
                                     <ul>
-                                        <li><a href="https://github.com/larukedi/laroux.js/wiki/timers">Timers</a></li>
+                                        <li><a href="https://github.com/larukedi/laroux.js/wiki/stack">Types</a></li>
                                         <li><a href="https://github.com/larukedi/laroux.js/wiki/vars">Vars</a></li>
                                         <li><a href="https://github.com/larukedi/laroux.js/wiki/when">When</a></li>
                                         <li class="divider"></li>
@@ -59,13 +60,14 @@
                                         <li><a href="https://github.com/larukedi/laroux.js/wiki/anim">Anim</a></li>
                                         <li><a href="https://github.com/larukedi/laroux.js/wiki/css">CSS</a></li>
                                         <li><a href="https://github.com/larukedi/laroux.js/wiki/dom">DOM</a></li>
+                                        <li><a href="https://github.com/larukedi/laroux.js/wiki/forms">Forms</a></li>
                                     </ul>
                                 </li>
                                 <li class="col-sm-3">
                                     <ul>
-                                        <li><a href="https://github.com/larukedi/laroux.js/wiki/forms">Forms</a></li>
                                         <li><a href="https://github.com/larukedi/laroux.js/wiki/keys">Keys</a></li>
                                         <li><a href="https://github.com/larukedi/laroux.js/wiki/mvc">MVC</a></li>
+                                        <li><a href="https://github.com/larukedi/laroux.js/wiki/routes">Routes</a></li>
                                         <li><a href="https://github.com/larukedi/laroux.js/wiki/touch">Touch</a></li>
                                         <li class="divider"></li>
                                         <li class="dropdown-header">Need Help?</li>
@@ -95,7 +97,7 @@
 
                             <!-- Slides -->
                             <div id="one" class="slide active">
-                                <h1>laroux.js 2.0.0</h1>
+                                <h1>laroux.js 2.1.0</h1>
                                 <div class="lead">
                                     This project is a jQuery substitute for modern browsers and mobile devices. But instead of offering some wrappers and own dynamics, it simply provides helper functions to achieve the same objectives as jQuery or Zepto.
                                 </div>
@@ -105,7 +107,7 @@
                                 <h3><em>laroux.js</em> is right for you if you:</h3>
                                 <ul>
                                     <li>Complain about people who do not know the difference between jQuery and Javascript.</li>
-                                    <li>Love working with more compact, organized libraries in smaller sizes (~39K).</li>
+                                    <li>Love working with more compact, organized libraries in smaller sizes (~45K).</li>
                                     <li>Want to be working with native DOM objects instead of wrappers.</li>
                                     <li>Want to leverage the debug console's autocomplete/fluent typing.</li>
                                     <li>Are not satisfied with the performance of other libraries on mobile devices.</li>
@@ -132,29 +134,29 @@
 
 **1) Isn't this reinventing the wheel?**
 
-laroux.js is not a new *technology*, it's a new *product* that does the same job with a different mindset, and is better suited to certain requirements. Think of it like smartphones, in the end they all sit in your pocket and fetch your e-mail, but you probably have some strong opinions on why you chose what you chose.
+`laroux.js` is not a new *technology*, it's a new *product* that does the same job with a different mindset, and is better suited to certain requirements. Think of it like smartphones, in the end they all sit in your pocket and fetch your e-mail, but you probably have some strong opinions on why you chose what you chose.
 
 **2) Why should I use this instead of jQuery?**
 
-laroux.js has some significantly different design concerns and additional features, and it might better suit your coding style and project requirements:
+`laroux.js` has some significantly different design concerns and additional features, and it might better suit your coding style and project requirements:
 
- * It's modern: laroux.js was designed from the ground-up with HTML5 and CSS3 in mind, and targeted for modern (including mobile) browsers. Well-embraced standards of today feel right at home.
+ * It's modern: `laroux.js` was designed from the ground-up with HTML5 and CSS3 in mind, and targeted for modern (including mobile) browsers. Well-embraced standards of today feel right at home.
 
- * It's goal-oriented: laroux.js is designed to take the shortest path and get the job done. Abstraction is minimized by design and nothing is overengineered.
+ * It's goal-oriented: `laroux.js` is designed to take the shortest path and get the job done. Abstraction is minimized by design and nothing is overengineered.
 
- * Reads like Javascript: laroux.js doesn't work under layers of abstraction and its workflow is very similar to regular javascript. You can use laroux.js as much or as little as you want in your code without a complete overhaul. It's a set of shinier tools, not a new toolbox around which you have to change your habits.
+ * Reads like Javascript: `laroux.js` doesn't work under layers of abstraction and its workflow is very similar to regular javascript. You can use `laroux.js` as much or as little as you want in your code without a complete overhaul. It's a set of shinier tools, not a new toolbox around which you have to change your habits.
 
- * Wrappers not mandatory: laroux.js uses native DOM objects directly and doesn't use wrappers by default.
+ * No wrappers: `laroux.js` uses native DOM objects directly and doesn't use wrappers.
 
- * Runs faster: laroux.js is optimized to yield [significantly better runtime performance](https://larukedi.github.io/laroux.js/benchmarks.html) on modern browsers.
+ * Runs faster: `laroux.js` is optimized to yield [significantly better runtime performance](https://larukedi.github.io/laroux.js/benchmarks.html) on modern browsers.
 
- * You're in charge: laroux.js provides alternative methods with different trade-offs where possible, so you can tailor-code to your requirements. There's more than one way to skin a cat, and laroux.js assumes you know what you're doing.
+ * You're in charge: `laroux.js` provides alternative methods with different trade-offs where possible, so you can tailor-code to your requirements. There's more than one way to skin a cat, and `laroux.js` assumes you know what you're doing.
 
- * Small footprint: laroux.js trims the fat, weighing in at only ~22KB and only ~30KB with extensions.
+ * Small footprint: `laroux.js` trims the fat, weighing in at only ~45KB with web extensions.
 
-**3) Is laroux.js a finished product? Is it truly 1.x?**
+**3) Is laroux.js a finished product? Is it truly 2.x?**
 
-Starting off, my requirement list was narrow, so I deployed the first version that fulfilled that list and believed to be production-ready as 1.0. Of course the project is still missing stuff, like unit testing, more comprehensive continuous integration and wider community support.
+Starting off, my requirement list was narrow, so I deployed the first version that fulfilled that list and believed to be production-ready as 2.0. Of course the project is still missing stuff, like unit testing and wider community support.
 
 **4) I've encountered some bugs/misnomers/mobile compatibility problems/etc. Are these intentional?**
 
@@ -167,29 +169,25 @@ As the initiator of the project, decisions so far have been made by me (Eser Öz
 
 ## Technical
 
-**1) Does it support method chaining? / I don't like suggested convention, can I use a jQuery-like API instead?**
-
-As of v1.4, laroux.js supports method chaining. See the [wiki page for details](https://github.com/larukedi/laroux.js/wiki/wrapper).
-
-**2) Other products are cached on CDN and load just as fast. How does being small make it faster?**
+**1) Other products are cached on CDN and load just as fast. How does being small make it faster?**
 
 The *runtime* performance increase is due to code optimization, not physical size. See the [benchmark results](https://larukedi.github.io/laroux.js/benchmarks.html).
 
-**3) Why is there an `extend` method on `$l`?**
+**2) Why is there an `extend` method on `$l`?**
 
-It's basically for plug-in support.
+It's basically for extending existing functionality and basic module support for `laroux.js`'s itself.
 
-**4) So why isn't extend used internally?**
+**3) So it is modular?**
 
-The source code might seem modular by the physical structure but laroux.js isn't actually modular internally. It's tightly-coupled with its organs as a design choice. Due to this, each organ that stays in the controllable area assigns itself directly instead of using extend. With this method, the exact same job is done without any extra engineering, thanks to Javascript's interpretative properties.
+The source code might seem modular by the physical structure but `laroux.js` isn't actually that so. It's tightly-coupled with its organs as a design choice. Due to this, each organ that stays in the controllable area assigns itself using extend.
 
-**5) Does it support Internet Explorer?**
+**4) Does it support Internet Explorer?**
 
-I tried to patch IE8+ to get it work with `laroux.js` and everything is OK for now. This patch is a single file (see [laroux.backward.js](https://github.com/larukedi/laroux.js/blob/master/src/laroux.backward.js)) which modifies base prototypes of browsers that doesn't support modern DOM and Javascript capabilities. Since it's a very hard task and not just for `laroux.js`'s itself, pull requests are always welcome.
+In previous versions I coded some polyfills to patch IE8+ to get it work with `laroux.js` and everything was OK. However modern browsers' usage statistics improved day by day, I considered dropping backward compatibility in early versions of 2.0.0.
 
-**6) How versioning works?**
+**5) How versioning works?**
 
-As suggested by GitHub, laroux.js follows [semantic versioning](http://semver.org).
+As suggested by GitHub, `laroux.js` follows [semantic versioning](http://semver.org).
         </script>
 
         <div class="container">

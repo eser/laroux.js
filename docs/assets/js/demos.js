@@ -269,6 +269,66 @@
         );
     });
 
+    // storyboard - Animation
+    $l.ready(function() {
+        var button = $l.id('button-storyboard-animation');
+        var box = $l.id('div-storyboard-animation');
+
+        $l.dom.setEvent(
+            button,
+            'click',
+            function() {
+                var step1action1 = function () {
+                    $l.css.setProperty(box, 'background-color', 'blue');
+                };
+
+                var step1action2 = $l.anim.setCss({
+                    object:   box,
+                    property: 'left',
+                    from:     0, // current value
+                    to:       50,
+                    time:     1200,
+                    unit:     'px',
+                    reset:    false
+                });
+
+                var step2 = function () {
+                    var deferred = $l.anim.setCss({
+                        object:   box,
+                        property: 'left',
+                        from:     50, // current value
+                        to:       0,
+                        time:     600,
+                        unit:     'px',
+                        reset:    false
+                    });
+
+                    myStory.add('second-step', deferred);
+                };
+
+                var step3 = function () {
+                    $l.css.setProperty(box, 'background-color', 'red');
+                };
+
+                var myStory = new $l.storyboard();
+                myStory.addPhase('first-step');
+                myStory.addPhase('second-step');
+                myStory.addPhase('third-step');
+
+                myStory.add('first-step', step1action1);
+                myStory.add('first-step', step1action2);
+
+                myStory.add('second-step', step2);
+
+                myStory.add('third-step', step3);
+
+                myStory.start();
+
+                return false;
+            }
+        );
+    });
+
     // keys - Assign a key
     $l.ready(function() {
         var button = $l.id('button-keys-assign');
@@ -336,39 +396,57 @@
         $l.mvc.init('mvctwoway', myModel);
     });
 
-    // stack - Examples
+    // routes - Routing
     $l.ready(function() {
-        var button = $l.id('button-stack-example');
-        var text = $l.id('text-stack-example');
+        var text = $l.id('text-routes-routing');
+        var button1 = $l.id('button-routes-routing-1');
+        var button2 = $l.id('button-routes-routing-2');
+        var button3 = $l.id('button-routes-routing-3');
 
-        $l.dom.setEvent(
-            button,
-            'click',
-            function() {
-                var myModel = new $l.types.observable();
-                myModel.set('id', 1);
-                myModel.setRange({count: 15, name: 'eser'});
-
+        $l.routes.add(
+            'test/:name',
+            function (name, trans) {
                 $l.dom.clear(text);
 
-                $l.dom.append(text, '<div><strong>Element with key \'id\':</strong></div>');
-                $l.dom.append(text, myModel.get('id') + crlf);
+                $l.dom.append(text, '<div><strong>Name:</strong></div>');
+                $l.dom.append(text, name + crlf);
 
-                $l.dom.append(text, '<div><strong>Elements with keys \'id\' and \'name\':</strong></div>');
-                $l.dom.append(text, JSON.stringify(myModel.getRange(['id', 'name'])) + crlf);
-
-                $l.dom.append(text, '<div><strong>Keys:</strong></div>');
-                $l.dom.append(text, JSON.stringify(myModel.keys()) + crlf);
-
-                $l.dom.append(text, '<div><strong>Length:</strong></div>');
-                $l.dom.append(text, JSON.stringify(myModel.length()) + crlf);
-
-                $l.dom.append(text, '<div><strong>Check if it has element with key \'name\':</strong></div>');
-                $l.dom.append(text, JSON.stringify(myModel.exists('name')) + crlf);
-
-                return false;
+                $l.dom.append(text, '<div><strong>Transition Data:</strong></div>');
+                $l.dom.append(text, JSON.stringify(trans) + crlf);
             }
         );
+        $l.routes.reload();
+
+        $l.dom.setEvent(button1, 'click', function () { $l.routes.go('test/route1'); });
+        $l.dom.setEvent(button2, 'click', function () { $l.routes.go('test/route2'); });
+        $l.dom.setEvent(button3, 'click', function () { $l.routes.go('test/route3'); });
+    });
+
+    // routes - Named Routing
+    $l.ready(function() {
+        var text = $l.id('text-routes-namedrouting');
+        var button1 = $l.id('button-routes-namedrouting-1');
+        var button2 = $l.id('button-routes-namedrouting-2');
+        var button3 = $l.id('button-routes-namedrouting-3');
+
+        $l.routes.addNamed(
+            'test2',
+            'testNamed/:name',
+            function (name, trans) {
+                $l.dom.clear(text);
+
+                $l.dom.append(text, '<div><strong>Name:</strong></div>');
+                $l.dom.append(text, name + crlf);
+
+                $l.dom.append(text, '<div><strong>Transition Data:</strong></div>');
+                $l.dom.append(text, JSON.stringify(trans) + crlf);
+            }
+        );
+        $l.routes.reload();
+
+        $l.dom.setEvent(button1, 'click', function () { $l.routes.goNamed('test2', { name: 'route1' }); });
+        $l.dom.setEvent(button2, 'click', function () { $l.routes.goNamed('test2', { name: 'route2' }); });
+        $l.dom.setEvent(button3, 'click', function () { $l.routes.goNamed('test2', { name: 'route3' }); });
     });
 
     // templates - Examples
@@ -441,6 +519,41 @@
             function(event) {
                 var createdElement = $l.dom.createElement('LI', { }, 'longtap');
                 target.appendChild(createdElement);
+            }
+        );
+    });
+
+    // types - Examples
+    $l.ready(function() {
+        var button = $l.id('button-types-example');
+        var text = $l.id('text-types-example');
+
+        $l.dom.setEvent(
+            button,
+            'click',
+            function() {
+                var myModel = new $l.types.observable();
+                myModel.set('id', 1);
+                myModel.setRange({count: 15, name: 'eser'});
+
+                $l.dom.clear(text);
+
+                $l.dom.append(text, '<div><strong>Element with key \'id\':</strong></div>');
+                $l.dom.append(text, myModel.get('id') + crlf);
+
+                $l.dom.append(text, '<div><strong>Elements with keys \'id\' and \'name\':</strong></div>');
+                $l.dom.append(text, JSON.stringify(myModel.getRange(['id', 'name'])) + crlf);
+
+                $l.dom.append(text, '<div><strong>Keys:</strong></div>');
+                $l.dom.append(text, JSON.stringify(myModel.keys()) + crlf);
+
+                $l.dom.append(text, '<div><strong>Length:</strong></div>');
+                $l.dom.append(text, JSON.stringify(myModel.length()) + crlf);
+
+                $l.dom.append(text, '<div><strong>Check if it has element with key \'name\':</strong></div>');
+                $l.dom.append(text, JSON.stringify(myModel.exists('name')) + crlf);
+
+                return false;
             }
         );
     });

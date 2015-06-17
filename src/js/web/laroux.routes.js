@@ -171,8 +171,14 @@ export default (function () {
         },
 
         reload: function () {
-            let hash = location.hash.substring(1);
-            routes.exec(routes.get(hash));
+            let hash = location.hash.substring(1),
+                route = routes.get(hash);
+
+            if (route === null) {
+                return;
+            }
+
+            routes.exec(route);
         },
 
         attach: function () {

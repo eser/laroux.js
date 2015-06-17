@@ -3626,8 +3626,14 @@ exports['default'] = (function () {
         },
 
         reload: function reload() {
-            var hash = location.hash.substring(1);
-            routes.exec(routes.get(hash));
+            var hash = location.hash.substring(1),
+                route = routes.get(hash);
+
+            if (route === null) {
+                return;
+            }
+
+            routes.exec(route);
         },
 
         attach: function attach() {

@@ -32,7 +32,7 @@
                                     </ul>
 
                                     <div class="box-large vertical-spaces">
-                                        <h2>2.0.0</h2>
+                                        <h2>2.1.0</h2>
                                     </div>
 
                                     <button data-href="https://github.com/larukedi/laroux.js/releases/latest" class="btn btn-primary btn-href">Download</button>
@@ -46,13 +46,14 @@
                                         <li><a href="https://github.com/larukedi/laroux.js/wiki/deferred">Deferred</a></li>
                                         <li><a href="https://github.com/larukedi/laroux.js/wiki/events">Events</a></li>
                                         <li><a href="https://github.com/larukedi/laroux.js/wiki/helpers">Helpers</a></li>
-                                        <li><a href="https://github.com/larukedi/laroux.js/wiki/stack">Stack</a></li>
+                                        <li><a href="https://github.com/larukedi/laroux.js/wiki/storyboard">Storyboard</a></li>
                                         <li><a href="https://github.com/larukedi/laroux.js/wiki/templates">Templates</a></li>
+                                        <li><a href="https://github.com/larukedi/laroux.js/wiki/timers">Timers</a></li>
                                     </ul>
                                 </li>
                                 <li class="col-sm-3">
                                     <ul>
-                                        <li><a href="https://github.com/larukedi/laroux.js/wiki/timers">Timers</a></li>
+                                        <li><a href="https://github.com/larukedi/laroux.js/wiki/types">Types</a></li>
                                         <li><a href="https://github.com/larukedi/laroux.js/wiki/vars">Vars</a></li>
                                         <li><a href="https://github.com/larukedi/laroux.js/wiki/when">When</a></li>
                                         <li class="divider"></li>
@@ -60,13 +61,14 @@
                                         <li><a href="https://github.com/larukedi/laroux.js/wiki/anim">Anim</a></li>
                                         <li><a href="https://github.com/larukedi/laroux.js/wiki/css">CSS</a></li>
                                         <li><a href="https://github.com/larukedi/laroux.js/wiki/dom">DOM</a></li>
+                                        <li><a href="https://github.com/larukedi/laroux.js/wiki/forms">Forms</a></li>
                                     </ul>
                                 </li>
                                 <li class="col-sm-3">
                                     <ul>
-                                        <li><a href="https://github.com/larukedi/laroux.js/wiki/forms">Forms</a></li>
                                         <li><a href="https://github.com/larukedi/laroux.js/wiki/keys">Keys</a></li>
                                         <li><a href="https://github.com/larukedi/laroux.js/wiki/mvc">MVC</a></li>
+                                        <li><a href="https://github.com/larukedi/laroux.js/wiki/routes">Routes</a></li>
                                         <li><a href="https://github.com/larukedi/laroux.js/wiki/touch">Touch</a></li>
                                         <li class="divider"></li>
                                         <li class="dropdown-header">Need Help?</li>
@@ -96,7 +98,7 @@
 
                             <!-- Slides -->
                             <div id="one" class="slide active">
-                                <h1>laroux.js 2.0.0</h1>
+                                <h1>laroux.js 2.1.0</h1>
                                 <div class="lead">
                                     This project is a jQuery substitute for modern browsers and mobile devices. But instead of offering some wrappers and own dynamics, it simply provides helper functions to achieve the same objectives as jQuery or Zepto.
                                 </div>
@@ -106,7 +108,7 @@
                                 <h3><em>laroux.js</em> is right for you if you:</h3>
                                 <ul>
                                     <li>Complain about people who do not know the difference between jQuery and Javascript.</li>
-                                    <li>Love working with more compact, organized libraries in smaller sizes (~39K).</li>
+                                    <li>Love working with more compact, organized libraries in smaller sizes (~45K).</li>
                                     <li>Want to be working with native DOM objects instead of wrappers.</li>
                                     <li>Want to leverage the debug console's autocomplete/fluent typing.</li>
                                     <li>Are not satisfied with the performance of other libraries on mobile devices.</li>
@@ -556,6 +558,82 @@ $l.dom.append(text, JSON.stringify($l.helpers.getKeysRecursive({id: 1, child: { 
 
             <div class="row header-row">
                 <div class="col-sm-6">
+                    <h2 class="nomargin">Storyboard Examples</h2>
+                </div>
+                <div class="col-sm-6 text-right">
+                    <a class="btn btn-sm btn-default" href="https://github.com/larukedi/laroux.js/wiki/storyboard" role="button">Wiki Page</a>
+                </div>
+            </div>
+
+            <div class="example-area">
+                <h3>Animation</h3>
+                <div class="row">
+                    <div class="col-sm-4">
+                        <button id="button-storyboard-animation" class="btn btn-default">Go on</button>
+                        <div class="box" id="div-storyboard-animation"></div>
+                    </div>
+                    <div class="col-sm-8">
+                        <h4>HTML</h4>
+                        <pre class="prettyprint">
+&lt;div class="box" id="div-storyboard-animation"&gt;&lt;/div&gt;
+                        </pre>
+
+                        <h4>Javascript</h4>
+                        <pre class="prettyprint">
+var box = $l.id('div-storyboard-animation');
+
+var step1action1 = function () {
+    $l.css.setProperty(box, 'background-color', 'blue');
+};
+
+var step1action2 = $l.anim.setCss({
+    object:   box,
+    property: 'left',
+    from:     0, // current value
+    to:       50,
+    time:     1200,
+    unit:     'px',
+    reset:    false
+});
+
+var step2 = function () {
+    var deferred = $l.anim.setCss({
+        object:   box,
+        property: 'left',
+        from:     50, // current value
+        to:       0,
+        time:     600,
+        unit:     'px',
+        reset:    false
+    });
+
+    myStory.add('second-step', deferred);
+};
+
+var step3 = function () {
+    $l.css.setProperty(box, 'background-color', 'red');
+};
+
+var myStory = new $l.storyboard();
+myStory.addPhase('first-step');
+myStory.addPhase('second-step');
+myStory.addPhase('third-step');
+
+myStory.add('first-step', step1action1);
+myStory.add('first-step', step1action2);
+
+myStory.add('second-step', step2);
+
+myStory.add('third-step', step3);
+
+myStory.start();
+                        </pre>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row header-row">
+                <div class="col-sm-6">
                     <h2 class="nomargin">Keys Examples</h2>
                 </div>
                 <div class="col-sm-6 text-right">
@@ -714,48 +792,101 @@ $l.mvc.init('mvctwoway', myModel);
 
             <div class="row header-row">
                 <div class="col-sm-6">
-                    <h2 class="nomargin">Stack Examples</h2>
+                    <h2 class="nomargin">Routes Examples</h2>
                 </div>
                 <div class="col-sm-6 text-right">
-                    <a class="btn btn-sm btn-default" href="https://github.com/larukedi/laroux.js/wiki/stack" role="button">Wiki Page</a>
+                    <a class="btn btn-sm btn-default" href="https://github.com/larukedi/laroux.js/wiki/routes" role="button">Wiki Page</a>
                 </div>
             </div>
 
             <div class="example-area">
-                <h3>Stack Example</h3>
+                <h3>Routing</h3>
                 <div class="row">
                     <div class="col-sm-4">
-                        <button id="button-stack-example" class="btn btn-default">Execute</button>
-                        <div id="text-stack-example"></div>
+                        <button id="button-routes-routing-1" class="btn btn-default">Route 1</button>
+                        <button id="button-routes-routing-2" class="btn btn-default">Route 2</button>
+                        <button id="button-routes-routing-3" class="btn btn-default">Route 3</button>
+                        <div id="text-routes-routing"></div>
                     </div>
                     <div class="col-sm-8">
                         <h4>HTML</h4>
                         <pre class="prettyprint">
-&lt;div id="text-stack-example"&gt;&lt;/div&gt;
+&lt;div id="text-routes-routing"&gt;&lt;/div&gt;
+&lt;button id="button-routes-routing-1" class="btn btn-default"&gt;Route 1&lt;/button&gt;
+&lt;button id="button-routes-routing-2" class="btn btn-default"&gt;Route 1&lt;/button&gt;
+&lt;button id="button-routes-routing-3" class="btn btn-default"&gt;Route 1&lt;/button&gt;
                         </pre>
 
                         <h4>Javascript</h4>
                         <pre class="prettyprint">
-var myModel = new $l.types.observable();
-myModel.set('id', 1);
-myModel.setRange({count: 15, name: 'eser'});
+var text = $l.id('text-routes-routing');
+var button1 = $l.id('button-routes-routing-1');
+var button2 = $l.id('button-routes-routing-2');
+var button3 = $l.id('button-routes-routing-3');
 
-$l.dom.clear(text);
+$l.routes.add(
+    'test/:name',
+    function (name, trans) {
+        $l.dom.clear(text);
 
-$l.dom.append(text, '&lt;div&gt;&lt;strong&gt;Element with key \'id\':&lt;/strong&gt;&lt;/div&gt;');
-$l.dom.append(text, myModel.get('id') + '&lt;br /&gt;');
+        $l.dom.append(text, '&lt;div&gt;&lt;strong&gt;Name:&lt;/strong&gt;&lt;/div&gt;');
+        $l.dom.append(text, name + '&lt;br /&gt;');
 
-$l.dom.append(text, '&lt;div&gt;&lt;strong&gt;Elements with keys \'id\' and \'name\':&lt;/strong&gt;&lt;/div&gt;');
-$l.dom.append(text, JSON.stringify(myModel.getRange(['id', 'name'])) + '&lt;br /&gt;');
+        $l.dom.append(text, '&lt;div&gt;&lt;strong&gt;Transition Data:&lt;/strong&gt;&lt;/div&gt;');
+        $l.dom.append(text, JSON.stringify(trans) + '&lt;br /&gt;');
+    }
+);
+$l.routes.reload();
 
-$l.dom.append(text, '&lt;div&gt;&lt;strong&gt;Keys:&lt;/strong&gt;&lt;/div&gt;');
-$l.dom.append(text, JSON.stringify(myModel.keys()) + '&lt;br /&gt;');
+$l.dom.setEvent(button1, 'click', function () { $l.routes.go('test/route1'); });
+$l.dom.setEvent(button2, 'click', function () { $l.routes.go('test/route2'); });
+$l.dom.setEvent(button3, 'click', function () { $l.routes.go('test/route3'); });
+                        </pre>
+                    </div>
+                </div>
 
-$l.dom.append(text, '&lt;div&gt;&lt;strong&gt;Length:&lt;/strong&gt;&lt;/div&gt;');
-$l.dom.append(text, JSON.stringify(myModel.length()) + '&lt;br /&gt;');
+                <h3>Named Routing</h3>
+                <div class="row">
+                    <div class="col-sm-4">
+                        <button id="button-routes-namedrouting-1" class="btn btn-default">Route 1</button>
+                        <button id="button-routes-namedrouting-2" class="btn btn-default">Route 2</button>
+                        <button id="button-routes-namedrouting-3" class="btn btn-default">Route 3</button>
+                        <div id="text-routes-namedrouting"></div>
+                    </div>
+                    <div class="col-sm-8">
+                        <h4>HTML</h4>
+                        <pre class="prettyprint">
+&lt;div id="text-routes-namedrouting"&gt;&lt;/div&gt;
+&lt;button id="button-routes-namedrouting-1" class="btn btn-default"&gt;Route 1&lt;/button&gt;
+&lt;button id="button-routes-namedrouting-2" class="btn btn-default"&gt;Route 1&lt;/button&gt;
+&lt;button id="button-routes-namedrouting-3" class="btn btn-default"&gt;Route 1&lt;/button&gt;
+                        </pre>
 
-$l.dom.append(text, '&lt;div&gt;&lt;strong&gt;Check if it has element with key \'name\':&lt;/strong&gt;&lt;/div&gt;');
-$l.dom.append(text, JSON.stringify(myModel.exists('name')) + '&lt;br /&gt;');
+                        <h4>Javascript</h4>
+                        <pre class="prettyprint">
+var text = $l.id('text-routes-namedrouting');
+var button1 = $l.id('button-routes-namedrouting-1');
+var button2 = $l.id('button-routes-namedrouting-2');
+var button3 = $l.id('button-routes-namedrouting-3');
+
+$l.routes.addNamed(
+    'test2',
+    'testNamed/:name',
+    function (name, trans) {
+        $l.dom.clear(text);
+
+        $l.dom.append(text, '&lt;div&gt;&lt;strong&gt;Name:&lt;/strong&gt;&lt;/div&gt;');
+        $l.dom.append(text, name + '&lt;br /&gt;');
+
+        $l.dom.append(text, '&lt;div&gt;&lt;strong&gt;Transition Data:&lt;/strong&gt;&lt;/div&gt;');
+        $l.dom.append(text, JSON.stringify(trans) + '&lt;br /&gt;');
+    }
+);
+$l.routes.reload();
+
+$l.dom.setEvent(button1, 'click', function () { $l.routes.goNamed('test2', { name: 'route1' }); });
+$l.dom.setEvent(button2, 'click', function () { $l.routes.goNamed('test2', { name: 'route2' }); });
+$l.dom.setEvent(button3, 'click', function () { $l.routes.goNamed('test2', { name: 'route3' }); });
                         </pre>
                     </div>
                 </div>
@@ -896,6 +1027,55 @@ $l.dom.setEvent(
         target.appendChild(createdElement);
     }
 );
+                        </pre>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row header-row">
+                <div class="col-sm-6">
+                    <h2 class="nomargin">Types Examples</h2>
+                </div>
+                <div class="col-sm-6 text-right">
+                    <a class="btn btn-sm btn-default" href="https://github.com/larukedi/laroux.js/wiki/types" role="button">Wiki Page</a>
+                </div>
+            </div>
+
+            <div class="example-area">
+                <h3>Types Example</h3>
+                <div class="row">
+                    <div class="col-sm-4">
+                        <button id="button-types-example" class="btn btn-default">Execute</button>
+                        <div id="text-types-example"></div>
+                    </div>
+                    <div class="col-sm-8">
+                        <h4>HTML</h4>
+                        <pre class="prettyprint">
+&lt;div id="text-types-example"&gt;&lt;/div&gt;
+                        </pre>
+
+                        <h4>Javascript</h4>
+                        <pre class="prettyprint">
+var myModel = new $l.types.observable();
+myModel.set('id', 1);
+myModel.setRange({count: 15, name: 'eser'});
+
+$l.dom.clear(text);
+
+$l.dom.append(text, '&lt;div&gt;&lt;strong&gt;Element with key \'id\':&lt;/strong&gt;&lt;/div&gt;');
+$l.dom.append(text, myModel.get('id') + '&lt;br /&gt;');
+
+$l.dom.append(text, '&lt;div&gt;&lt;strong&gt;Elements with keys \'id\' and \'name\':&lt;/strong&gt;&lt;/div&gt;');
+$l.dom.append(text, JSON.stringify(myModel.getRange(['id', 'name'])) + '&lt;br /&gt;');
+
+$l.dom.append(text, '&lt;div&gt;&lt;strong&gt;Keys:&lt;/strong&gt;&lt;/div&gt;');
+$l.dom.append(text, JSON.stringify(myModel.keys()) + '&lt;br /&gt;');
+
+$l.dom.append(text, '&lt;div&gt;&lt;strong&gt;Length:&lt;/strong&gt;&lt;/div&gt;');
+$l.dom.append(text, JSON.stringify(myModel.length()) + '&lt;br /&gt;');
+
+$l.dom.append(text, '&lt;div&gt;&lt;strong&gt;Check if it has element with key \'name\':&lt;/strong&gt;&lt;/div&gt;');
+$l.dom.append(text, JSON.stringify(myModel.exists('name')) + '&lt;br /&gt;');
                         </pre>
                     </div>
                 </div>

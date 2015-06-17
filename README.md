@@ -20,7 +20,7 @@ Additionally [Anim](https://github.com/larukedi/laroux.js/wiki/anim), [CSS](http
 `laroux.js` is right for you if you:
 
 - Complain about people who do not know the difference between jQuery and Javascript.
-- Love working with more compact, organized libraries in smaller sizes (~39K).
+- Love working with more compact, organized libraries in smaller sizes (~45K).
 - Want to be working with native DOM objects instead of wrappers.
 - Want to leverage the debug console's autocomplete/fluent typing.
 - Are not satisfied with the performance of other libraries on mobile devices.
