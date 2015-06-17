@@ -1,5 +1,6 @@
-import dom from './laroux.dom.js';
-import forms from './laroux.forms.js';
+import laroux from '../laroux.js';
+
+import helpers from '../laroux.helpers.js';
 
 export default (function () {
     'use strict';
@@ -8,6 +9,7 @@ export default (function () {
     //          can be found at: https://github.com/jgallen23/routie
     let routes = {
         map: {},
+        attached: false,
 
         regexConverter: function (path, sensitive, strict) {
             let keys = [],
@@ -42,13 +44,13 @@ export default (function () {
 
                 routes.map[path] = {
                     name: name,
-                    callbacks: [callback],
+                    callback: callback,
                     params: {},
                     keys: converted.keys,
                     regex: converted.regex
                 };
             } else {
-                routes.map[path].callbacks.push(callback);
+                routes.map[path].callback = callback;
             }
         },
 
@@ -77,20 +79,64 @@ export default (function () {
                 return {
                     route: item,
                     params: params,
-                    callbacks: route.callbacks
+                    callback: route.callback
                 };
             }
 
             return null;
         },
 
-        reload: function () {
+        exec: function (path) {
+            let route = routes.get(path);
+
+            if (route === null) {
+                return null;
+            }
+
+            return route.callback.apply(
+                global,
+                helpers.map(
+                    route.params,
+                    value => value
+                )
+            );
         },
 
-        go: function (path) {
+        go: function (path, silent) {
+            let attached = routes.attached;
 
+            if (silent && attached) {
+                routes.detach();
+            }
+
+            setTimeout(function () {
+                global.location.hash = path;
+
+                if (silent && attached) {
+                    setTimeout(function () {
+                        routes.attach();
+                    }, 1);
+                }
+            }, 1);
+        },
+
+        reload: function () {
+            let hash = location.hash.substring(1);
+            routes.exec(hash);
+        },
+
+        attach: function () {
+            global.addEventListener('hashchange', routes.reload, false);
+            routes.attached = true;
+        },
+
+        detach: function () {
+            global.removeEventListener('hashchange', routes.reload);
+            routes.attached = false;
         }
     };
+
+    laroux.ready(routes.attach);
 
     return routes;
 

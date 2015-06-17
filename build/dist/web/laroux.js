@@ -3449,6 +3449,7 @@ exports['default'] = (function () {
 
 module.exports = exports['default'];
 },{"../laroux.helpers.js":6,"./laroux.dom.js":16}],20:[function(require,module,exports){
+(function (global){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -3457,19 +3458,22 @@ Object.defineProperty(exports, '__esModule', {
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-var _larouxDomJs = require('./laroux.dom.js');
+var _larouxJs = require('../laroux.js');
 
-var _larouxDomJs2 = _interopRequireDefault(_larouxDomJs);
+var _larouxJs2 = _interopRequireDefault(_larouxJs);
 
-var _larouxFormsJs = require('./laroux.forms.js');
+var _larouxHelpersJs = require('../laroux.helpers.js');
 
-var _larouxFormsJs2 = _interopRequireDefault(_larouxFormsJs);
+var _larouxHelpersJs2 = _interopRequireDefault(_larouxHelpersJs);
 
 exports['default'] = (function () {
     'use strict';
 
+    // routes - partially taken from 'routie' project
+    //          can be found at: https://github.com/jgallen23/routie
     var routes = {
         map: {},
+        attached: false,
 
         regexConverter: function regexConverter(path, sensitive, strict) {
             var keys = [],
@@ -3496,13 +3500,13 @@ exports['default'] = (function () {
 
                 routes.map[path] = {
                     name: name,
-                    callbacks: [callback],
+                    callback: callback,
                     params: {},
                     keys: converted.keys,
                     regex: converted.regex
                 };
             } else {
-                routes.map[path].callbacks.push(callback);
+                routes.map[path].callback = callback;
             }
         },
 
@@ -3531,23 +3535,67 @@ exports['default'] = (function () {
                 return {
                     route: item,
                     params: params,
-                    callbacks: route.callbacks
+                    callback: route.callback
                 };
             }
 
             return null;
         },
 
-        reload: function reload() {},
+        exec: function exec(path) {
+            var route = routes.get(path);
 
-        go: function go(path) {}
+            if (route === null) {
+                return null;
+            }
+
+            return route.callback.apply(global, _larouxHelpersJs2['default'].map(route.params, function (value) {
+                return value;
+            }));
+        },
+
+        go: function go(path, silent) {
+            var attached = routes.attached;
+
+            if (silent && attached) {
+                routes.detach();
+            }
+
+            setTimeout(function () {
+                global.location.hash = path;
+
+                if (silent && attached) {
+                    setTimeout(function () {
+                        routes.attach();
+                    }, 1);
+                }
+            }, 1);
+        },
+
+        reload: function reload() {
+            var hash = location.hash.substring(1);
+            routes.exec(hash);
+        },
+
+        attach: function attach() {
+            global.addEventListener('hashchange', routes.reload, false);
+            routes.attached = true;
+        },
+
+        detach: function detach() {
+            global.removeEventListener('hashchange', routes.reload);
+            routes.attached = false;
+        }
     };
+
+    _larouxJs2['default'].ready(routes.attach);
 
     return routes;
 })();
 
 module.exports = exports['default'];
-},{"./laroux.dom.js":16,"./laroux.forms.js":17}],21:[function(require,module,exports){
+}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+},{"../laroux.helpers.js":6,"../laroux.js":7}],21:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
