@@ -3534,6 +3534,7 @@ exports['default'] = (function () {
 
                 return {
                     route: item,
+                    resolved: path,
                     params: params,
                     callback: route.callback
                 };
@@ -3542,13 +3543,45 @@ exports['default'] = (function () {
             return null;
         },
 
-        exec: function exec(path) {
-            var route = routes.get(path);
+        getNamed: function getNamed(name, params) {
+            for (var item in routes.map) {
+                if (!routes.map.hasOwnProperty(item)) {
+                    continue;
+                }
+
+                var route = routes.map[item],
+                    path = item;
+
+                for (var i = 0, _length2 = route.keys.length; i < _length2; i++) {
+                    var key = route.keys[i];
+
+                    path = path.replace(':' + key.name, params[key.name] || '');
+                }
+
+                if (route.name == name) {
+                    return {
+                        route: item,
+                        resolved: path,
+                        params: params,
+                        callback: route.callback
+                    };
+                }
+            }
+
+            return null;
+        },
+
+        link: function link(name, params) {
+            var route = routes.getNamed(name, params);
 
             if (route === null) {
                 return null;
             }
 
+            return route.resolved;
+        },
+
+        exec: function exec(route) {
             return route.callback.apply(global, _larouxHelpersJs2['default'].map(route.params, function (value) {
                 return value;
             }));
@@ -3572,9 +3605,32 @@ exports['default'] = (function () {
             }, 1);
         },
 
+        goNamed: function goNamed(name, params, silent) {
+            var attached = routes.attached,
+                link = routes.link(name, params);
+
+            if (link === null) {
+                return null;
+            }
+
+            if (silent && attached) {
+                routes.detach();
+            }
+
+            setTimeout(function () {
+                global.location.hash = link;
+
+                if (silent && attached) {
+                    setTimeout(function () {
+                        routes.attach();
+                    }, 1);
+                }
+            }, 1);
+        },
+
         reload: function reload() {
             var hash = location.hash.substring(1);
-            routes.exec(hash);
+            routes.exec(routes.get(hash));
         },
 
         attach: function attach() {

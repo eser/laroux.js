@@ -78,6 +78,7 @@ export default (function () {
 
                 return {
                     route: item,
+                    resolved: path,
                     params: params,
                     callback: route.callback
                 };
@@ -86,13 +87,45 @@ export default (function () {
             return null;
         },
 
-        exec: function (path) {
-            let route = routes.get(path);
+        getNamed: function (name, params) {
+            for (let item in routes.map) {
+                if (!routes.map.hasOwnProperty(item)) {
+                    continue;
+                }
+
+                let route = routes.map[item],
+                    path = item;
+
+                for (let i = 0, length = route.keys.length; i < length; i++) {
+                    let key = route.keys[i];
+
+                    path = path.replace(':' + key.name, params[key.name] || '');
+                }
+
+                if (route.name == name) {
+                    return {
+                        route: item,
+                        resolved: path,
+                        params: params,
+                        callback: route.callback
+                    };
+                }
+            }
+
+            return null;
+        },
+
+        link: function (name, params) {
+            let route = routes.getNamed(name, params);
 
             if (route === null) {
                 return null;
             }
 
+            return route.resolved;
+        },
+
+        exec: function (route) {
             return route.callback.apply(
                 global,
                 helpers.map(
@@ -120,9 +153,32 @@ export default (function () {
             }, 1);
         },
 
+        goNamed: function (name, params, silent) {
+            let attached = routes.attached,
+                link = routes.link(name, params);
+
+            if (link === null) {
+                return null;
+            }
+
+            if (silent && attached) {
+                routes.detach();
+            }
+
+            setTimeout(function () {
+                global.location.hash = link;
+
+                if (silent && attached) {
+                    setTimeout(function () {
+                        routes.attach();
+                    }, 1);
+                }
+            }, 1);
+        },
+
         reload: function () {
             let hash = location.hash.substring(1);
-            routes.exec(hash);
+            routes.exec(routes.get(hash));
         },
 
         attach: function () {
