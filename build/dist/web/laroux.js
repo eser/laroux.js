@@ -3474,6 +3474,7 @@ exports['default'] = (function () {
     var routes = {
         map: {},
         attached: false,
+        current: null,
 
         regexConverter: function regexConverter(path, sensitive, strict) {
             var keys = [],
@@ -3582,9 +3583,18 @@ exports['default'] = (function () {
         },
 
         exec: function exec(route) {
-            return route.callback.apply(global, _larouxHelpersJs2['default'].map(route.params, function (value) {
+            var previous = routes.current,
+                args = _larouxHelpersJs2['default'].map(route.params, function (value) {
                 return value;
-            }));
+            });
+
+            routes.current = route;
+            args.push({
+                previous: previous,
+                current: routes.current
+            });
+
+            return route.callback.apply(global, args);
         },
 
         go: function go(path, silent) {
@@ -3606,26 +3616,13 @@ exports['default'] = (function () {
         },
 
         goNamed: function goNamed(name, params, silent) {
-            var attached = routes.attached,
-                link = routes.link(name, params);
+            var path = routes.link(name, params);
 
-            if (link === null) {
+            if (path === null) {
                 return null;
             }
 
-            if (silent && attached) {
-                routes.detach();
-            }
-
-            setTimeout(function () {
-                global.location.hash = link;
-
-                if (silent && attached) {
-                    setTimeout(function () {
-                        routes.attach();
-                    }, 1);
-                }
-            }, 1);
+            routes.go(path, silent);
         },
 
         reload: function reload() {

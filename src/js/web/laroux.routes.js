@@ -10,6 +10,7 @@ export default (function () {
     let routes = {
         map: {},
         attached: false,
+        current: null,
 
         regexConverter: function (path, sensitive, strict) {
             let keys = [],
@@ -126,13 +127,19 @@ export default (function () {
         },
 
         exec: function (route) {
-            return route.callback.apply(
-                global,
-                helpers.map(
+            let previous = routes.current,
+                args = helpers.map(
                     route.params,
                     value => value
-                )
-            );
+                );
+
+            routes.current = route;
+            args.push({
+                previous: previous,
+                current: routes.current
+            });
+
+            return route.callback.apply(global, args);
         },
 
         go: function (path, silent) {
@@ -154,26 +161,13 @@ export default (function () {
         },
 
         goNamed: function (name, params, silent) {
-            let attached = routes.attached,
-                link = routes.link(name, params);
+            let path = routes.link(name, params);
 
-            if (link === null) {
+            if (path === null) {
                 return null;
             }
 
-            if (silent && attached) {
-                routes.detach();
-            }
-
-            setTimeout(function () {
-                global.location.hash = link;
-
-                if (silent && attached) {
-                    setTimeout(function () {
-                        routes.attach();
-                    }, 1);
-                }
-            }, 1);
+            routes.go(path, silent);
         },
 
         reload: function () {
