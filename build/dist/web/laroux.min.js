@@ -1,7 +1,7 @@
 /**
  * laroux.js - A jquery substitute for modern browsers (web bundle)
  *
- * @version v2.0.0
+ * @version v2.1.0
  * @link https://larukedi.github.io/laroux.js
  * @license Apache-2.0
  */
