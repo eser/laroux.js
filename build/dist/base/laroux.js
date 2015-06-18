@@ -17,10 +17,6 @@ var _larouxAjaxJs = require('./laroux.ajax.js');
 
 var _larouxAjaxJs2 = _interopRequireDefault(_larouxAjaxJs);
 
-var _larouxDateJs = require('./laroux.date.js');
-
-var _larouxDateJs2 = _interopRequireDefault(_larouxDateJs);
-
 var _larouxDeferredJs = require('./laroux.deferred.js');
 
 var _larouxDeferredJs2 = _interopRequireDefault(_larouxDeferredJs);
@@ -32,6 +28,10 @@ var _larouxEventsJs2 = _interopRequireDefault(_larouxEventsJs);
 var _larouxHelpersJs = require('./laroux.helpers.js');
 
 var _larouxHelpersJs2 = _interopRequireDefault(_larouxHelpersJs);
+
+var _larouxIntlJs = require('./laroux.intl.js');
+
+var _larouxIntlJs2 = _interopRequireDefault(_larouxIntlJs);
 
 var _larouxRequireJs = require('./laroux.require.js');
 
@@ -83,9 +83,9 @@ exports['default'] = (function () {
     _larouxHelpersJs2['default'].merge(laroux, _larouxHelpersJs2['default']);
     _larouxHelpersJs2['default'].merge(laroux, {
         ajax: _larouxAjaxJs2['default'],
-        date: _larouxDateJs2['default'],
         deferred: _larouxDeferredJs2['default'],
         events: _larouxEventsJs2['default'],
+        intl: _larouxIntlJs2['default'],
         require: _larouxRequireJs2['default'],
         storyboard: _larouxStoryboardJs2['default'],
         types: _larouxTypesJs2['default'],

@@ -32,6 +32,7 @@ var When = (function () {
 
         var self = this;
 
+        this.params = [];
         this.queues = [];
         this.remaining = -1;
 
@@ -48,10 +49,15 @@ var When = (function () {
     _createClass(When, [{
         key: 'then',
         value: function then() {
+            var _this = this;
+
             for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
                 args[_key] = arguments[_key];
             }
 
+            args.forEach(function (arg) {
+                return _this.params.push(arg);
+            });
             this.queues.push(args);
             this.check();
 
@@ -60,6 +66,8 @@ var When = (function () {
     }, {
         key: 'check',
         value: function check() {
+            var _this2 = this;
+
             while (this.remaining <= 0) {
                 if (this.remaining !== -1) {
                     this.queues.shift();
@@ -76,7 +84,17 @@ var When = (function () {
                 this.remaining = 0;
                 for (var i = 0, _length = queue.length; i < _length; i++) {
                     if (queue[i].constructor === Function) {
-                        queue[i] = _larouxDeferredJs2['default'].async(queue[i]);
+                        (function () {
+                            var results = [];
+                            _this2.params.forEach(function (x) {
+                                if (x instanceof _larouxDeferredJs2['default']) {
+                                    results.push(x.events.done.result[0]);
+                                } else {
+                                    results.push(x);
+                                }
+                            });
+                            queue[i] = _larouxDeferredJs2['default'].async.apply(_larouxDeferredJs2['default'], [queue[i]].concat(results));
+                        })();
                     }
 
                     if (queue[i] instanceof _larouxDeferredJs2['default'] && !queue[i].is('completed')) {

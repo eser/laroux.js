@@ -355,219 +355,7 @@ exports['default'] = (function () {
 })();
 
 module.exports = exports['default'];
-},{"./laroux.deferred.js":4,"./laroux.events.js":5,"./laroux.helpers.js":6}],3:[function(require,module,exports){
-'use strict';
-
-Object.defineProperty(exports, '__esModule', {
-    value: true
-});
-
-exports['default'] = (function () {
-    'use strict';
-
-    var date = {
-        shortDateFormat: 'dd.MM.yyyy',
-        longDateFormat: 'dd MMMM yyyy',
-        timeFormat: 'HH:mm',
-
-        monthsShort: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-        monthsLong: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
-
-        strings: {
-            now: 'now',
-            later: 'later',
-            ago: 'ago',
-            seconds: 'seconds',
-            aminute: 'a minute',
-            minutes: 'minutes',
-            ahour: 'a hour',
-            hours: 'hours',
-            aday: 'a day',
-            days: 'days',
-            aweek: 'a week',
-            weeks: 'weeks',
-            amonth: 'a month',
-            months: 'months',
-            ayear: 'a year',
-            years: 'years'
-        },
-
-        parseEpoch: function parseEpoch(timespan, limitWithWeeks) {
-            if (timespan < 60 * 1000) {
-                timespan = Math.ceil(timespan / 1000);
-
-                return timespan + ' ' + date.strings.seconds;
-            }
-
-            if (timespan < 60 * 60 * 1000) {
-                timespan = Math.ceil(timespan / (60 * 1000));
-
-                if (timespan === 1) {
-                    return date.strings.aminute;
-                }
-
-                return timespan + ' ' + date.strings.minutes;
-            }
-
-            if (timespan < 24 * 60 * 60 * 1000) {
-                timespan = Math.ceil(timespan / (60 * 60 * 1000));
-
-                if (timespan === 1) {
-                    return date.strings.ahour;
-                }
-
-                return timespan + ' ' + date.strings.hours;
-            }
-
-            if (timespan < 7 * 24 * 60 * 60 * 1000) {
-                timespan = Math.ceil(timespan / (24 * 60 * 60 * 1000));
-
-                if (timespan === 1) {
-                    return date.strings.aday;
-                }
-
-                return timespan + ' ' + date.strings.days;
-            }
-
-            if (timespan < 4 * 7 * 24 * 60 * 60 * 1000) {
-                timespan = Math.ceil(timespan / (7 * 24 * 60 * 60 * 1000));
-
-                if (timespan === 1) {
-                    return date.strings.aweek;
-                }
-
-                return timespan + ' ' + date.strings.weeks;
-            }
-
-            if (limitWithWeeks === true) {
-                return null;
-            }
-
-            if (timespan < 30 * 7 * 24 * 60 * 60 * 1000) {
-                timespan = Math.ceil(timespan / (30 * 24 * 60 * 60 * 1000));
-
-                if (timespan === 1) {
-                    return date.strings.amonth;
-                }
-
-                return timespan + ' ' + date.strings.months;
-            }
-
-            timespan = Math.ceil(timespan / (365 * 24 * 60 * 60 * 1000));
-
-            if (timespan === 1) {
-                return date.strings.ayear;
-            }
-
-            return timespan + ' ' + date.strings.years;
-        },
-
-        getCustomDateString: function getCustomDateString(format, timestamp) {
-            var now = timestamp || new Date();
-
-            return format.replace(/yyyy|yy|MMMM|MMM|MM|M|dd|d|hh|h|HH|H|mm|m|ss|s|tt|t/g, function (match) {
-                switch (match) {
-                    case 'yyyy':
-                        return now.getFullYear();
-
-                    case 'yy':
-                        return now.getYear();
-
-                    case 'MMMM':
-                        return date.monthsLong[now.getMonth()];
-
-                    case 'MMM':
-                        return date.monthsShort[now.getMonth()];
-
-                    case 'MM':
-                        return ('0' + (now.getMonth() + 1)).substr(-2, 2);
-
-                    case 'M':
-                        return now.getMonth() + 1;
-
-                    case 'dd':
-                        return ('0' + now.getDate()).substr(-2, 2);
-
-                    case 'd':
-                        return now.getDate();
-
-                    case 'hh':
-                        var hour1 = now.getHours();
-                        return ('0' + (hour1 % 12 > 0 ? hour1 % 12 : 12)).substr(-2, 2);
-
-                    case 'h':
-                        var hour2 = now.getHours();
-                        return hour2 % 12 > 0 ? hour2 % 12 : 12;
-
-                    case 'HH':
-                        return ('0' + now.getHours()).substr(-2, 2);
-
-                    case 'H':
-                        return now.getHours();
-
-                    case 'mm':
-                        return ('0' + now.getMinutes()).substr(-2, 2);
-
-                    case 'm':
-                        return now.getMinutes();
-
-                    case 'ss':
-                        return ('0' + now.getSeconds()).substr(-2, 2);
-
-                    case 's':
-                        return now.getSeconds();
-
-                    case 'tt':
-                        if (now.getHours() >= 12) {
-                            return 'pm';
-                        }
-
-                        return 'am';
-
-                    case 't':
-                        if (now.getHours() >= 12) {
-                            return 'p';
-                        }
-
-                        return 'a';
-                }
-
-                return match;
-            });
-        },
-
-        getDateDiffString: function getDateDiffString(timestamp) {
-            var now = Date.now(),
-                timespan = now - timestamp.getTime(),
-                absTimespan = Math.abs(timespan),
-                past = timespan > 0;
-
-            if (absTimespan <= 3000) {
-                return date.strings.now;
-            }
-
-            var timespanstring = date.parseEpoch(absTimespan, true);
-            if (timespanstring !== null) {
-                return timespanstring + ' ' + (past ? date.strings.ago : date.strings.later);
-            }
-
-            return date.getShortDateString(timestamp, true);
-        },
-
-        getShortDateString: function getShortDateString(timestamp, includeTime) {
-            return date.getCustomDateString(includeTime ? date.shortDateFormat + ' ' + date.timeFormat : date.shortDateFormat, timestamp);
-        },
-
-        getLongDateString: function getLongDateString(timestamp, includeTime) {
-            return date.getCustomDateString(includeTime ? date.longDateFormat + ' ' + date.timeFormat : date.longDateFormat, timestamp);
-        }
-    };
-
-    return date;
-})();
-
-module.exports = exports['default'];
-},{}],4:[function(require,module,exports){
+},{"./laroux.deferred.js":3,"./laroux.events.js":4,"./laroux.helpers.js":5}],3:[function(require,module,exports){
 /*jslint node: true */
 'use strict';
 
@@ -728,7 +516,7 @@ var Deferred = (function () {
 
 exports['default'] = Deferred;
 module.exports = exports['default'];
-},{"./laroux.helpers.js":6}],5:[function(require,module,exports){
+},{"./laroux.helpers.js":5}],4:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -764,7 +552,7 @@ exports['default'] = (function () {
 })();
 
 module.exports = exports['default'];
-},{}],6:[function(require,module,exports){
+},{}],5:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -1199,7 +987,234 @@ exports['default'] = (function () {
 })();
 
 module.exports = exports['default'];
-},{}],7:[function(require,module,exports){
+},{}],6:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, '__esModule', {
+    value: true
+});
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+var _larouxHelpersJs = require('./laroux.helpers.js');
+
+var _larouxHelpersJs2 = _interopRequireDefault(_larouxHelpersJs);
+
+exports['default'] = (function () {
+    'use strict';
+
+    var intl = {
+        shortDateFormat: 'dd.MM.yyyy',
+        longDateFormat: 'dd MMMM yyyy',
+        timeFormat: 'HH:mm',
+
+        monthsShort: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+        monthsLong: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+
+        strings: {
+            now: 'now',
+            later: 'later',
+            ago: 'ago',
+            seconds: 'seconds',
+            aminute: 'a minute',
+            minutes: 'minutes',
+            ahour: 'a hour',
+            hours: 'hours',
+            aday: 'a day',
+            days: 'days',
+            aweek: 'a week',
+            weeks: 'weeks',
+            amonth: 'a month',
+            months: 'months',
+            ayear: 'a year',
+            years: 'years'
+        },
+
+        parseEpoch: function parseEpoch(timespan, limitWithWeeks) {
+            if (timespan < 60 * 1000) {
+                timespan = Math.ceil(timespan / 1000);
+
+                return timespan + ' ' + intl.strings.seconds;
+            }
+
+            if (timespan < 60 * 60 * 1000) {
+                timespan = Math.ceil(timespan / (60 * 1000));
+
+                if (timespan === 1) {
+                    return intl.strings.aminute;
+                }
+
+                return timespan + ' ' + intl.strings.minutes;
+            }
+
+            if (timespan < 24 * 60 * 60 * 1000) {
+                timespan = Math.ceil(timespan / (60 * 60 * 1000));
+
+                if (timespan === 1) {
+                    return intl.strings.ahour;
+                }
+
+                return timespan + ' ' + intl.strings.hours;
+            }
+
+            if (timespan < 7 * 24 * 60 * 60 * 1000) {
+                timespan = Math.ceil(timespan / (24 * 60 * 60 * 1000));
+
+                if (timespan === 1) {
+                    return intl.strings.aday;
+                }
+
+                return timespan + ' ' + intl.strings.days;
+            }
+
+            if (timespan < 4 * 7 * 24 * 60 * 60 * 1000) {
+                timespan = Math.ceil(timespan / (7 * 24 * 60 * 60 * 1000));
+
+                if (timespan === 1) {
+                    return intl.strings.aweek;
+                }
+
+                return timespan + ' ' + intl.strings.weeks;
+            }
+
+            if (limitWithWeeks === true) {
+                return null;
+            }
+
+            if (timespan < 30 * 7 * 24 * 60 * 60 * 1000) {
+                timespan = Math.ceil(timespan / (30 * 24 * 60 * 60 * 1000));
+
+                if (timespan === 1) {
+                    return intl.strings.amonth;
+                }
+
+                return timespan + ' ' + intl.strings.months;
+            }
+
+            timespan = Math.ceil(timespan / (365 * 24 * 60 * 60 * 1000));
+
+            if (timespan === 1) {
+                return intl.strings.ayear;
+            }
+
+            return timespan + ' ' + intl.strings.years;
+        },
+
+        customDate: function customDate(format, timestamp) {
+            var now = timestamp || new Date();
+
+            return format.replace(/yyyy|yy|MMMM|MMM|MM|M|dd|d|hh|h|HH|H|mm|m|ss|s|tt|t/g, function (match) {
+                switch (match) {
+                    case 'yyyy':
+                        return now.getFullYear();
+
+                    case 'yy':
+                        return now.getYear();
+
+                    case 'MMMM':
+                        return intl.monthsLong[now.getMonth()];
+
+                    case 'MMM':
+                        return intl.monthsShort[now.getMonth()];
+
+                    case 'MM':
+                        return ('0' + (now.getMonth() + 1)).substr(-2, 2);
+
+                    case 'M':
+                        return now.getMonth() + 1;
+
+                    case 'dd':
+                        return ('0' + now.getDate()).substr(-2, 2);
+
+                    case 'd':
+                        return now.getDate();
+
+                    case 'hh':
+                        var hour1 = now.getHours();
+                        return ('0' + (hour1 % 12 > 0 ? hour1 % 12 : 12)).substr(-2, 2);
+
+                    case 'h':
+                        var hour2 = now.getHours();
+                        return hour2 % 12 > 0 ? hour2 % 12 : 12;
+
+                    case 'HH':
+                        return ('0' + now.getHours()).substr(-2, 2);
+
+                    case 'H':
+                        return now.getHours();
+
+                    case 'mm':
+                        return ('0' + now.getMinutes()).substr(-2, 2);
+
+                    case 'm':
+                        return now.getMinutes();
+
+                    case 'ss':
+                        return ('0' + now.getSeconds()).substr(-2, 2);
+
+                    case 's':
+                        return now.getSeconds();
+
+                    case 'tt':
+                        if (now.getHours() >= 12) {
+                            return 'pm';
+                        }
+
+                        return 'am';
+
+                    case 't':
+                        if (now.getHours() >= 12) {
+                            return 'p';
+                        }
+
+                        return 'a';
+                }
+
+                return match;
+            });
+        },
+
+        dateDiff: function dateDiff(timestamp) {
+            var now = Date.now(),
+                timespan = now - timestamp.getTime(),
+                absTimespan = Math.abs(timespan),
+                past = timespan > 0;
+
+            if (absTimespan <= 3000) {
+                return intl.strings.now;
+            }
+
+            var timespanstring = intl.parseEpoch(absTimespan, true);
+            if (timespanstring !== null) {
+                return timespanstring + ' ' + (past ? intl.strings.ago : intl.strings.later);
+            }
+
+            return intl.shortDate(timestamp, true);
+        },
+
+        shortDate: function shortDate(timestamp, includeTime) {
+            return intl.customDate(includeTime ? intl.shortDateFormat + ' ' + intl.timeFormat : intl.shortDateFormat, timestamp);
+        },
+
+        longDate: function longDate(timestamp, includeTime) {
+            return intl.customDate(includeTime ? intl.longDateFormat + ' ' + intl.timeFormat : intl.longDateFormat, timestamp);
+        },
+
+        format: function format(message, dictionary) {
+            var temp = {};
+            Object.keys(dictionary).forEach(function (x) {
+                return temp['{' + x + '}'] = dictionary[x];
+            });
+
+            return _larouxHelpersJs2['default'].replaceAll(message, temp);
+        }
+    };
+
+    return intl;
+})();
+
+module.exports = exports['default'];
+},{"./laroux.helpers.js":5}],7:[function(require,module,exports){
 (function (global){
 'use strict';
 
@@ -1213,10 +1228,6 @@ var _larouxAjaxJs = require('./laroux.ajax.js');
 
 var _larouxAjaxJs2 = _interopRequireDefault(_larouxAjaxJs);
 
-var _larouxDateJs = require('./laroux.date.js');
-
-var _larouxDateJs2 = _interopRequireDefault(_larouxDateJs);
-
 var _larouxDeferredJs = require('./laroux.deferred.js');
 
 var _larouxDeferredJs2 = _interopRequireDefault(_larouxDeferredJs);
@@ -1228,6 +1239,10 @@ var _larouxEventsJs2 = _interopRequireDefault(_larouxEventsJs);
 var _larouxHelpersJs = require('./laroux.helpers.js');
 
 var _larouxHelpersJs2 = _interopRequireDefault(_larouxHelpersJs);
+
+var _larouxIntlJs = require('./laroux.intl.js');
+
+var _larouxIntlJs2 = _interopRequireDefault(_larouxIntlJs);
 
 var _larouxRequireJs = require('./laroux.require.js');
 
@@ -1279,9 +1294,9 @@ exports['default'] = (function () {
     _larouxHelpersJs2['default'].merge(laroux, _larouxHelpersJs2['default']);
     _larouxHelpersJs2['default'].merge(laroux, {
         ajax: _larouxAjaxJs2['default'],
-        date: _larouxDateJs2['default'],
         deferred: _larouxDeferredJs2['default'],
         events: _larouxEventsJs2['default'],
+        intl: _larouxIntlJs2['default'],
         require: _larouxRequireJs2['default'],
         storyboard: _larouxStoryboardJs2['default'],
         types: _larouxTypesJs2['default'],
@@ -1327,19 +1342,28 @@ exports['default'] = (function () {
 
 module.exports = exports['default'];
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./laroux.ajax.js":2,"./laroux.date.js":3,"./laroux.deferred.js":4,"./laroux.events.js":5,"./laroux.helpers.js":6,"./laroux.require.js":8,"./laroux.storyboard.js":9,"./laroux.templates.js":10,"./laroux.timers.js":11,"./laroux.types.js":12,"./laroux.vars.js":13,"./laroux.when.js":14}],8:[function(require,module,exports){
+},{"./laroux.ajax.js":2,"./laroux.deferred.js":3,"./laroux.events.js":4,"./laroux.helpers.js":5,"./laroux.intl.js":6,"./laroux.require.js":8,"./laroux.storyboard.js":9,"./laroux.templates.js":10,"./laroux.timers.js":11,"./laroux.types.js":12,"./laroux.vars.js":13,"./laroux.when.js":14}],8:[function(require,module,exports){
 (function (global){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
     value: true
 });
+var _bind = Function.prototype.bind;
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-var _larouxHelpersJs = require('./laroux.helpers.js');
+var _larouxAjaxJs = require('./laroux.ajax.js');
 
-var _larouxHelpersJs2 = _interopRequireDefault(_larouxHelpersJs);
+var _larouxAjaxJs2 = _interopRequireDefault(_larouxAjaxJs);
+
+var _larouxDeferredJs = require('./laroux.deferred.js');
+
+var _larouxDeferredJs2 = _interopRequireDefault(_larouxDeferredJs);
+
+var _larouxWhenJs = require('./laroux.when.js');
+
+var _larouxWhenJs2 = _interopRequireDefault(_larouxWhenJs);
 
 exports['default'] = (function () {
     'use strict';
@@ -1349,9 +1373,29 @@ exports['default'] = (function () {
             args[_key] = arguments[_key];
         }
 
-        var name = args.length >= 3 ? args.shift() : null,
-            requirements = args.shift(),
-            source = args.shift();
+        var name = undefined,
+            requirements = undefined,
+            source = undefined;
+
+        if (args.length >= 3) {
+            name = args[0];
+            requirements = args[1];
+            source = args[2];
+        } else if (args.length === 2) {
+            if (args[0] instanceof Array) {
+                name = null;
+                requirements = args[0];
+                source = args[1];
+            } else {
+                name = args[0];
+                requirements = [];
+                source = args[1];
+            }
+        } else {
+            name = null;
+            requirements = [];
+            source = args[0];
+        }
 
         var resolved = [];
         for (var i = 0, _length = requirements.length; i < _length; i++) {
@@ -1362,31 +1406,50 @@ exports['default'] = (function () {
             resolved.push(require_.modules[requirements[i]]);
         }
 
-        var result = null;
+        var when = new (_bind.apply(_larouxWhenJs2['default'], [null].concat(resolved)))(),
+            promise = new _larouxDeferredJs2['default']();
+
         if (source instanceof Function) {
-            result = source.apply(global, resolved);
+            when.then(function () {
+                for (var _len2 = arguments.length, args = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
+                    args[_key2] = arguments[_key2];
+                }
+
+                promise.resolve(source.apply(global, args));
+            });
         } else {
-            result = require_.loadSource(source, resolved);
+            (function () {
+                var request = _larouxAjaxJs2['default'].makeRequest({
+                    type: 'GET',
+                    url: source
+                    // datatype: 'plain'
+                });
+
+                when.then(function () {
+                    request.done(function (script) {
+                        /*jshint evil:true */
+                        /*jslint evil:true */
+                        promise.resolve(eval(script));
+                    });
+                });
+            })();
         }
 
         if (name !== null) {
-            require_.modules[name] = result;
+            require_.modules[name] = promise;
         }
 
-        return result;
+        return when;
     };
 
     require_.modules = {};
-    require_.loadSource = function (url, requirements) {};
 
     return require_;
 })();
 
 module.exports = exports['default'];
-
-// load source from external url
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./laroux.helpers.js":6}],9:[function(require,module,exports){
+},{"./laroux.ajax.js":2,"./laroux.deferred.js":3,"./laroux.when.js":14}],9:[function(require,module,exports){
 (function (global){
 /*jslint node: true */
 'use strict';
@@ -1501,7 +1564,7 @@ var Storyboard = (function () {
 exports['default'] = Storyboard;
 module.exports = exports['default'];
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./laroux.deferred.js":4}],10:[function(require,module,exports){
+},{"./laroux.deferred.js":3}],10:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -1630,7 +1693,7 @@ exports['default'] = (function () {
 })();
 
 module.exports = exports['default'];
-},{"./laroux.helpers.js":6}],11:[function(require,module,exports){
+},{"./laroux.helpers.js":5}],11:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -1714,7 +1777,7 @@ exports['default'] = (function () {
 })();
 
 module.exports = exports['default'];
-},{"./laroux.helpers.js":6}],12:[function(require,module,exports){
+},{"./laroux.helpers.js":5}],12:[function(require,module,exports){
 /*jslint node: true */
 'use strict';
 
@@ -1861,7 +1924,7 @@ exports['default'] = (function () {
 })();
 
 module.exports = exports['default'];
-},{"./laroux.helpers.js":6}],13:[function(require,module,exports){
+},{"./laroux.helpers.js":5}],13:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -1973,7 +2036,7 @@ exports['default'] = (function () {
 })();
 
 module.exports = exports['default'];
-},{"./laroux.helpers.js":6}],14:[function(require,module,exports){
+},{"./laroux.helpers.js":5}],14:[function(require,module,exports){
 /*jslint node: true */
 'use strict';
 
@@ -2001,6 +2064,7 @@ var When = (function () {
 
         var self = this;
 
+        this.params = [];
         this.queues = [];
         this.remaining = -1;
 
@@ -2017,10 +2081,15 @@ var When = (function () {
     _createClass(When, [{
         key: 'then',
         value: function then() {
+            var _this = this;
+
             for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
                 args[_key] = arguments[_key];
             }
 
+            args.forEach(function (arg) {
+                return _this.params.push(arg);
+            });
             this.queues.push(args);
             this.check();
 
@@ -2029,6 +2098,8 @@ var When = (function () {
     }, {
         key: 'check',
         value: function check() {
+            var _this2 = this;
+
             while (this.remaining <= 0) {
                 if (this.remaining !== -1) {
                     this.queues.shift();
@@ -2045,7 +2116,17 @@ var When = (function () {
                 this.remaining = 0;
                 for (var i = 0, _length = queue.length; i < _length; i++) {
                     if (queue[i].constructor === Function) {
-                        queue[i] = _larouxDeferredJs2['default'].async(queue[i]);
+                        (function () {
+                            var results = [];
+                            _this2.params.forEach(function (x) {
+                                if (x instanceof _larouxDeferredJs2['default']) {
+                                    results.push(x.events.done.result[0]);
+                                } else {
+                                    results.push(x);
+                                }
+                            });
+                            queue[i] = _larouxDeferredJs2['default'].async.apply(_larouxDeferredJs2['default'], [queue[i]].concat(results));
+                        })();
                     }
 
                     if (queue[i] instanceof _larouxDeferredJs2['default'] && !queue[i].is('completed')) {
@@ -2062,7 +2143,7 @@ var When = (function () {
 
 exports['default'] = When;
 module.exports = exports['default'];
-},{"./laroux.deferred.js":4,"./laroux.helpers.js":6}],15:[function(require,module,exports){
+},{"./laroux.deferred.js":3,"./laroux.helpers.js":5}],15:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -2235,7 +2316,7 @@ exports['default'] = (function () {
 })();
 
 module.exports = exports['default'];
-},{"../laroux.deferred.js":4,"../laroux.helpers.js":6,"./laroux.css.js":16}],16:[function(require,module,exports){
+},{"../laroux.deferred.js":3,"../laroux.helpers.js":5,"./laroux.css.js":16}],16:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -2497,7 +2578,7 @@ exports['default'] = (function () {
 })();
 
 module.exports = exports['default'];
-},{"../laroux.helpers.js":6}],17:[function(require,module,exports){
+},{"../laroux.helpers.js":5}],17:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -2928,7 +3009,7 @@ exports['default'] = (function () {
 })();
 
 module.exports = exports['default'];
-},{"../laroux.helpers.js":6}],18:[function(require,module,exports){
+},{"../laroux.helpers.js":5}],18:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -3512,7 +3593,7 @@ exports['default'] = (function () {
 })();
 
 module.exports = exports['default'];
-},{"../laroux.helpers.js":6,"./laroux.dom.js":17}],21:[function(require,module,exports){
+},{"../laroux.helpers.js":5,"./laroux.dom.js":17}],21:[function(require,module,exports){
 (function (global){
 'use strict';
 
@@ -3718,7 +3799,7 @@ exports['default'] = (function () {
 
 module.exports = exports['default'];
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"../laroux.helpers.js":6,"../laroux.js":7}],22:[function(require,module,exports){
+},{"../laroux.helpers.js":5,"../laroux.js":7}],22:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {

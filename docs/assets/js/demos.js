@@ -122,22 +122,22 @@
                 $l.dom.clear(text);
 
                 $l.dom.append(text, '<div><strong>From yesterday to today:</strong></div>');
-                $l.dom.append(text, $l.date.parseEpoch(now.getTime() - yesterday.getTime()));
+                $l.dom.append(text, $l.intl.parseEpoch(now.getTime() - yesterday.getTime()));
 
                 $l.dom.append(text, '<div><strong>Short Date:</strong></div>');
-                $l.dom.append(text, $l.date.getShortDateString(now) + crlf);
+                $l.dom.append(text, $l.intl.shortDate(now) + crlf);
 
                 $l.dom.append(text, '<div><strong>Short Date + month names:</strong></div>');
-                $l.dom.append(text, $l.date.getShortDateString(now, true) + crlf);
+                $l.dom.append(text, $l.intl.shortDate(now, true) + crlf);
 
                 $l.dom.append(text, '<div><strong>Long Date:</strong></div>');
-                $l.dom.append(text, $l.date.getLongDateString(now) + crlf);
+                $l.dom.append(text, $l.intl.longDate(now) + crlf);
 
                 $l.dom.append(text, '<div><strong>Long Date + month names:</strong></div>');
-                $l.dom.append(text, $l.date.getLongDateString(now, true) + crlf);
+                $l.dom.append(text, $l.intl.longDate(now, true) + crlf);
 
                 $l.dom.append(text, '<div><strong>Custom Date:</strong></div>');
-                $l.dom.append(text, $l.date.getCustomDateString('dd/MM/yyyy HH:ss', now) + crlf);
+                $l.dom.append(text, $l.intl.customDate('dd/MM/yyyy HH:ss', now) + crlf);
 
                 return false;
             }

@@ -1,8 +1,8 @@
 import ajax from './laroux.ajax.js';
-import date from './laroux.date.js';
 import Deferred from './laroux.deferred.js';
 import events from './laroux.events.js';
 import helpers from './laroux.helpers.js';
+import intl from './laroux.intl.js';
 import require_ from './laroux.require.js';
 import Storyboard from './laroux.storyboard.js';
 import types from './laroux.types.js';
@@ -35,9 +35,9 @@ export default (function () {
     helpers.merge(laroux, helpers);
     helpers.merge(laroux, {
         ajax,
-        date,
         deferred: Deferred,
         events,
+        intl,
         require: require_,
         storyboard: Storyboard,
         types,

@@ -302,22 +302,22 @@ yesterday.setDate(yesterday.getDate() - 1);
 $l.dom.clear(text);
 
 $l.dom.append(text, '&lt;div&gt;&lt;strong&gt;From yesterday to today:&lt;/strong&gt;&lt;/div&gt;');
-$l.dom.append(text, $l.date.parseEpoch(now.getTime() - yesterday.getTime()));
+$l.dom.append(text, $l.intl.parseEpoch(now.getTime() - yesterday.getTime()));
 
 $l.dom.append(text, '&lt;div&gt;&lt;strong&gt;Short Date:&lt;/strong&gt;&lt;/div&gt;');
-$l.dom.append(text, $l.date.getShortDateString(now) + '&lt;br /&gt;');
+$l.dom.append(text, $l.intl.shortDate(now) + '&lt;br /&gt;');
 
 $l.dom.append(text, '&lt;div&gt;&lt;strong&gt;Short Date + month names:&lt;/strong&gt;&lt;/div&gt;');
-$l.dom.append(text, $l.date.getShortDateString(now, true) + '&lt;br /&gt;');
+$l.dom.append(text, $l.intl.shortDate(now, true) + '&lt;br /&gt;');
 
 $l.dom.append(text, '&lt;div&gt;&lt;strong&gt;Long Date:&lt;/strong&gt;&lt;/div&gt;');
-$l.dom.append(text, $l.date.getLongDateString(now) + '&lt;br /&gt;');
+$l.dom.append(text, $l.intl.longDate(now) + '&lt;br /&gt;');
 
 $l.dom.append(text, '&lt;div&gt;&lt;strong&gt;Long Date + month names:&lt;/strong&gt;&lt;/div&gt;');
-$l.dom.append(text, $l.date.getLongDateString(now, true) + '&lt;br /&gt;');
+$l.dom.append(text, $l.intl.longDate(now, true) + '&lt;br /&gt;');
 
 $l.dom.append(text, '&lt;div&gt;&lt;strong&gt;Custom Date:&lt;/strong&gt;&lt;/div&gt;');
-$l.dom.append(text, $l.date.getCustomDateString('dd/MM/yyyy HH:ss', now) + '&lt;br /&gt;');
+$l.dom.append(text, $l.intl.customDate('dd/MM/yyyy HH:ss', now) + '&lt;br /&gt;');
                         </pre>
                     </div>
                 </div>

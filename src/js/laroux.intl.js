@@ -1,7 +1,9 @@
+import helpers from './laroux.helpers.js';
+
 export default (function () {
     'use strict';
 
-    let date = {
+    let intl = {
         shortDateFormat: 'dd.MM.yyyy',
         longDateFormat: 'dd MMMM yyyy',
         timeFormat: 'HH:mm',
@@ -32,47 +34,47 @@ export default (function () {
             if (timespan < 60 * 1000) {
                 timespan = Math.ceil(timespan / 1000);
 
-                return timespan + ' ' + date.strings.seconds;
+                return timespan + ' ' + intl.strings.seconds;
             }
 
             if (timespan < 60 * 60 * 1000) {
                 timespan = Math.ceil(timespan / (60 * 1000));
 
                 if (timespan === 1) {
-                    return date.strings.aminute;
+                    return intl.strings.aminute;
                 }
 
-                return timespan + ' ' + date.strings.minutes;
+                return timespan + ' ' + intl.strings.minutes;
             }
 
             if (timespan < 24 * 60 * 60 * 1000) {
                 timespan = Math.ceil(timespan / (60 * 60 * 1000));
 
                 if (timespan === 1) {
-                    return date.strings.ahour;
+                    return intl.strings.ahour;
                 }
 
-                return timespan + ' ' + date.strings.hours;
+                return timespan + ' ' + intl.strings.hours;
             }
 
             if (timespan < 7 * 24 * 60 * 60 * 1000) {
                 timespan = Math.ceil(timespan / (24 * 60 * 60 * 1000));
 
                 if (timespan === 1) {
-                    return date.strings.aday;
+                    return intl.strings.aday;
                 }
 
-                return timespan + ' ' + date.strings.days;
+                return timespan + ' ' + intl.strings.days;
             }
 
             if (timespan < 4 * 7 * 24 * 60 * 60 * 1000) {
                 timespan = Math.ceil(timespan / (7 * 24 * 60 * 60 * 1000));
 
                 if (timespan === 1) {
-                    return date.strings.aweek;
+                    return intl.strings.aweek;
                 }
 
-                return timespan + ' ' + date.strings.weeks;
+                return timespan + ' ' + intl.strings.weeks;
             }
 
             if (limitWithWeeks === true) {
@@ -83,22 +85,22 @@ export default (function () {
                 timespan = Math.ceil(timespan / (30 * 24 * 60 * 60 * 1000));
 
                 if (timespan === 1) {
-                    return date.strings.amonth;
+                    return intl.strings.amonth;
                 }
 
-                return timespan + ' ' + date.strings.months;
+                return timespan + ' ' + intl.strings.months;
             }
 
             timespan = Math.ceil(timespan / (365 * 24 * 60 * 60 * 1000));
 
             if (timespan === 1) {
-                return date.strings.ayear;
+                return intl.strings.ayear;
             }
 
-            return timespan + ' ' + date.strings.years;
+            return timespan + ' ' + intl.strings.years;
         },
 
-        getCustomDateString: function (format, timestamp) {
+        customDate: function (format, timestamp) {
             let now = timestamp || new Date();
 
             return format.replace(
@@ -112,10 +114,10 @@ export default (function () {
                         return now.getYear();
 
                     case 'MMMM':
-                        return date.monthsLong[now.getMonth()];
+                        return intl.monthsLong[now.getMonth()];
 
                     case 'MMM':
-                        return date.monthsShort[now.getMonth()];
+                        return intl.monthsShort[now.getMonth()];
 
                     case 'MM':
                         return ('0' + (now.getMonth() + 1)).substr(-2, 2);
@@ -175,41 +177,48 @@ export default (function () {
             );
         },
 
-        getDateDiffString: function (timestamp) {
+        dateDiff: function (timestamp) {
             let now = Date.now(),
                 timespan = now - timestamp.getTime(),
                 absTimespan = Math.abs(timespan),
                 past = (timespan > 0);
 
             if (absTimespan <= 3000) {
-                return date.strings.now;
+                return intl.strings.now;
             }
 
-            let timespanstring = date.parseEpoch(absTimespan, true);
+            let timespanstring = intl.parseEpoch(absTimespan, true);
             if (timespanstring !== null) {
                 return timespanstring +
                     ' ' +
-                    (past ? date.strings.ago : date.strings.later);
+                    (past ? intl.strings.ago : intl.strings.later);
             }
 
-            return date.getShortDateString(timestamp, true);
+            return intl.shortDate(timestamp, true);
         },
 
-        getShortDateString: function (timestamp, includeTime) {
-            return date.getCustomDateString(
-                includeTime ? date.shortDateFormat + ' ' + date.timeFormat : date.shortDateFormat,
+        shortDate: function (timestamp, includeTime) {
+            return intl.customDate(
+                includeTime ? intl.shortDateFormat + ' ' + intl.timeFormat : intl.shortDateFormat,
                 timestamp
             );
         },
 
-        getLongDateString: function (timestamp, includeTime) {
-            return date.getCustomDateString(
-                includeTime ? date.longDateFormat + ' ' + date.timeFormat : date.longDateFormat,
+        longDate: function (timestamp, includeTime) {
+            return intl.customDate(
+                includeTime ? intl.longDateFormat + ' ' + intl.timeFormat : intl.longDateFormat,
                 timestamp
             );
+        },
+
+        format: function (message, dictionary) {
+            let temp = {};
+            Object.keys(dictionary).forEach(x => temp['{' + x + '}'] = dictionary[x]);
+
+            return helpers.replaceAll(message, temp);
         }
     };
 
-    return date;
+    return intl;
 
 })();
