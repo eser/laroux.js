@@ -9,7 +9,7 @@
         buffer = require('vinyl-buffer'),
         sourcemaps = require('gulp-sourcemaps'),
         uglify = require('gulp-uglify'),
-        minifyCSS = require('gulp-minify-css'),
+        cleanCSS = require('gulp-clean-css'),
         header = require('gulp-header'),
         rename = require('gulp-rename'),
         taskList = [];
@@ -64,7 +64,7 @@
                 }
 
                 if (pack.minifyCSS) {
-                    stream = stream.pipe(minifyCSS({
+                    stream = stream.pipe(cleanCSS({
                         advanced: false,
                         compatibility: 'ie8',
                         keepSpecialComments: 0,

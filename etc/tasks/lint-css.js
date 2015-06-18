@@ -38,7 +38,7 @@
                     'unqualified-attributes': false,
                     'zero-units': false
                 }))
-                .pipe(csslint.reporter());
+                .pipe(csslint.formatter());
         });
 
         taskList.push(taskName);

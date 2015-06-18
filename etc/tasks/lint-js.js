@@ -5,8 +5,7 @@
         config = require('../config/tasks.common'),
         handleErrors = require('../utils/handleErrors'),
         resolvePath = require('../utils/resolvePath'),
-        jshint = require('gulp-jshint'),
-        jscs = require('gulp-jscs'),
+        eslint = require('gulp-eslint'),
         taskList = [];
 
     Object.keys(config.bundles).forEach(function (item) {
@@ -17,9 +16,9 @@
         gulp.task(taskName, ['eolfix-js'], function () {
             return gulp.src(tempSources)
                 .on('error', handleErrors)
-                .pipe(jshint('./etc/config/.jshintrc'))
-                .pipe(jshint.reporter('default', { verbose: true }))
-                .pipe(jscs('./etc/config/.jscsrc'));
+                .pipe(eslint({ configFile: './etc/config/.eslintrc.json' }))
+                .pipe(eslint.format());
+                // .pipe(eslint.failAfterError());
         });
 
         taskList.push(taskName);
