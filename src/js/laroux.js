@@ -3,6 +3,7 @@ import date from './laroux.date.js';
 import Deferred from './laroux.deferred.js';
 import events from './laroux.events.js';
 import helpers from './laroux.helpers.js';
+import require_ from './laroux.require.js';
 import Storyboard from './laroux.storyboard.js';
 import types from './laroux.types.js';
 import templates from './laroux.templates.js';
@@ -37,6 +38,7 @@ export default (function () {
         date,
         deferred: Deferred,
         events,
+        require: require_,
         storyboard: Storyboard,
         types,
         templates,

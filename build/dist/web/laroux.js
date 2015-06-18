@@ -94,7 +94,7 @@ exports['default'] = (function () {
 })();
 
 module.exports = exports['default'];
-},{"../laroux.js":7,"./laroux.anim.js":14,"./laroux.css.js":15,"./laroux.dom.js":16,"./laroux.forms.js":17,"./laroux.keys.js":18,"./laroux.mvc.js":19,"./laroux.routes.js":20,"./laroux.touch.js":21}],2:[function(require,module,exports){
+},{"../laroux.js":7,"./laroux.anim.js":15,"./laroux.css.js":16,"./laroux.dom.js":17,"./laroux.forms.js":18,"./laroux.keys.js":19,"./laroux.mvc.js":20,"./laroux.routes.js":21,"./laroux.touch.js":22}],2:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -1229,6 +1229,10 @@ var _larouxHelpersJs = require('./laroux.helpers.js');
 
 var _larouxHelpersJs2 = _interopRequireDefault(_larouxHelpersJs);
 
+var _larouxRequireJs = require('./laroux.require.js');
+
+var _larouxRequireJs2 = _interopRequireDefault(_larouxRequireJs);
+
 var _larouxStoryboardJs = require('./laroux.storyboard.js');
 
 var _larouxStoryboardJs2 = _interopRequireDefault(_larouxStoryboardJs);
@@ -1278,6 +1282,7 @@ exports['default'] = (function () {
         date: _larouxDateJs2['default'],
         deferred: _larouxDeferredJs2['default'],
         events: _larouxEventsJs2['default'],
+        require: _larouxRequireJs2['default'],
         storyboard: _larouxStoryboardJs2['default'],
         types: _larouxTypesJs2['default'],
         templates: _larouxTemplatesJs2['default'],
@@ -1322,7 +1327,66 @@ exports['default'] = (function () {
 
 module.exports = exports['default'];
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./laroux.ajax.js":2,"./laroux.date.js":3,"./laroux.deferred.js":4,"./laroux.events.js":5,"./laroux.helpers.js":6,"./laroux.storyboard.js":8,"./laroux.templates.js":9,"./laroux.timers.js":10,"./laroux.types.js":11,"./laroux.vars.js":12,"./laroux.when.js":13}],8:[function(require,module,exports){
+},{"./laroux.ajax.js":2,"./laroux.date.js":3,"./laroux.deferred.js":4,"./laroux.events.js":5,"./laroux.helpers.js":6,"./laroux.require.js":8,"./laroux.storyboard.js":9,"./laroux.templates.js":10,"./laroux.timers.js":11,"./laroux.types.js":12,"./laroux.vars.js":13,"./laroux.when.js":14}],8:[function(require,module,exports){
+(function (global){
+'use strict';
+
+Object.defineProperty(exports, '__esModule', {
+    value: true
+});
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+var _larouxHelpersJs = require('./laroux.helpers.js');
+
+var _larouxHelpersJs2 = _interopRequireDefault(_larouxHelpersJs);
+
+exports['default'] = (function () {
+    'use strict';
+
+    var require_ = function require_() {
+        for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+            args[_key] = arguments[_key];
+        }
+
+        var name = args.length >= 3 ? args.shift() : null,
+            requirements = args.shift(),
+            source = args.shift();
+
+        var resolved = [];
+        for (var i = 0, _length = requirements.length; i < _length; i++) {
+            if (!(requirements[i] in require_.modules)) {
+                throw 'dependency not loaded: ' + requirements[i] + '.';
+            }
+
+            resolved.push(require_.modules[requirements[i]]);
+        }
+
+        var result = null;
+        if (source instanceof Function) {
+            result = source.apply(global, resolved);
+        } else {
+            result = require_.loadSource(source, resolved);
+        }
+
+        if (name !== null) {
+            require_.modules[name] = result;
+        }
+
+        return result;
+    };
+
+    require_.modules = {};
+    require_.loadSource = function (url, requirements) {};
+
+    return require_;
+})();
+
+module.exports = exports['default'];
+
+// load source from external url
+}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+},{"./laroux.helpers.js":6}],9:[function(require,module,exports){
 (function (global){
 /*jslint node: true */
 'use strict';
@@ -1437,7 +1501,7 @@ var Storyboard = (function () {
 exports['default'] = Storyboard;
 module.exports = exports['default'];
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./laroux.deferred.js":4}],9:[function(require,module,exports){
+},{"./laroux.deferred.js":4}],10:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -1566,7 +1630,7 @@ exports['default'] = (function () {
 })();
 
 module.exports = exports['default'];
-},{"./laroux.helpers.js":6}],10:[function(require,module,exports){
+},{"./laroux.helpers.js":6}],11:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -1650,7 +1714,7 @@ exports['default'] = (function () {
 })();
 
 module.exports = exports['default'];
-},{"./laroux.helpers.js":6}],11:[function(require,module,exports){
+},{"./laroux.helpers.js":6}],12:[function(require,module,exports){
 /*jslint node: true */
 'use strict';
 
@@ -1797,7 +1861,7 @@ exports['default'] = (function () {
 })();
 
 module.exports = exports['default'];
-},{"./laroux.helpers.js":6}],12:[function(require,module,exports){
+},{"./laroux.helpers.js":6}],13:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -1909,7 +1973,7 @@ exports['default'] = (function () {
 })();
 
 module.exports = exports['default'];
-},{"./laroux.helpers.js":6}],13:[function(require,module,exports){
+},{"./laroux.helpers.js":6}],14:[function(require,module,exports){
 /*jslint node: true */
 'use strict';
 
@@ -1998,7 +2062,7 @@ var When = (function () {
 
 exports['default'] = When;
 module.exports = exports['default'];
-},{"./laroux.deferred.js":4,"./laroux.helpers.js":6}],14:[function(require,module,exports){
+},{"./laroux.deferred.js":4,"./laroux.helpers.js":6}],15:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -2171,7 +2235,7 @@ exports['default'] = (function () {
 })();
 
 module.exports = exports['default'];
-},{"../laroux.deferred.js":4,"../laroux.helpers.js":6,"./laroux.css.js":15}],15:[function(require,module,exports){
+},{"../laroux.deferred.js":4,"../laroux.helpers.js":6,"./laroux.css.js":16}],16:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -2433,7 +2497,7 @@ exports['default'] = (function () {
 })();
 
 module.exports = exports['default'];
-},{"../laroux.helpers.js":6}],16:[function(require,module,exports){
+},{"../laroux.helpers.js":6}],17:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -2864,7 +2928,7 @@ exports['default'] = (function () {
 })();
 
 module.exports = exports['default'];
-},{"../laroux.helpers.js":6}],17:[function(require,module,exports){
+},{"../laroux.helpers.js":6}],18:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -3088,7 +3152,7 @@ exports['default'] = (function () {
 })();
 
 module.exports = exports['default'];
-},{"../laroux.ajax.js":2,"./laroux.dom.js":16}],18:[function(require,module,exports){
+},{"../laroux.ajax.js":2,"./laroux.dom.js":17}],19:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -3253,7 +3317,7 @@ exports['default'] = (function () {
 })();
 
 module.exports = exports['default'];
-},{"./laroux.dom.js":16,"./laroux.forms.js":17}],19:[function(require,module,exports){
+},{"./laroux.dom.js":17,"./laroux.forms.js":18}],20:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -3448,7 +3512,7 @@ exports['default'] = (function () {
 })();
 
 module.exports = exports['default'];
-},{"../laroux.helpers.js":6,"./laroux.dom.js":16}],20:[function(require,module,exports){
+},{"../laroux.helpers.js":6,"./laroux.dom.js":17}],21:[function(require,module,exports){
 (function (global){
 'use strict';
 
@@ -3654,7 +3718,7 @@ exports['default'] = (function () {
 
 module.exports = exports['default'];
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"../laroux.helpers.js":6,"../laroux.js":7}],21:[function(require,module,exports){
+},{"../laroux.helpers.js":6,"../laroux.js":7}],22:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -3792,4 +3856,4 @@ exports['default'] = (function () {
 })();
 
 module.exports = exports['default'];
-},{"../laroux.js":7,"./laroux.dom.js":16}]},{},[1]);
+},{"../laroux.js":7,"./laroux.dom.js":17}]},{},[1]);

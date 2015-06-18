@@ -33,6 +33,10 @@ var _larouxHelpersJs = require('./laroux.helpers.js');
 
 var _larouxHelpersJs2 = _interopRequireDefault(_larouxHelpersJs);
 
+var _larouxRequireJs = require('./laroux.require.js');
+
+var _larouxRequireJs2 = _interopRequireDefault(_larouxRequireJs);
+
 var _larouxStoryboardJs = require('./laroux.storyboard.js');
 
 var _larouxStoryboardJs2 = _interopRequireDefault(_larouxStoryboardJs);
@@ -82,6 +86,7 @@ exports['default'] = (function () {
         date: _larouxDateJs2['default'],
         deferred: _larouxDeferredJs2['default'],
         events: _larouxEventsJs2['default'],
+        require: _larouxRequireJs2['default'],
         storyboard: _larouxStoryboardJs2['default'],
         types: _larouxTypesJs2['default'],
         templates: _larouxTemplatesJs2['default'],
