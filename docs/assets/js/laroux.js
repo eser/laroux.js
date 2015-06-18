@@ -1329,6 +1329,8 @@ exports['default'] = (function () {
             return intl.customDate(includeTime ? intl.longDateFormat + ' ' + intl.timeFormat : intl.longDateFormat, timestamp);
         },
 
+        translations: {},
+
         format: function format(message, dictionary) {
             var temp = {};
             Object.keys(dictionary).forEach(function (x) {
@@ -1336,6 +1338,14 @@ exports['default'] = (function () {
             });
 
             return _larouxHelpersJs2['default'].replaceAll(message, temp);
+        },
+
+        addTranslations: function addTranslations(culture, dictionary) {
+            _larouxHelpersJs2['default'].mergeNs(intl.translations, culture, dictionary);
+        },
+
+        translate: function translate(culture, message) {
+            return intl.format(message, intl.translations[culture]);
         }
     };
 
