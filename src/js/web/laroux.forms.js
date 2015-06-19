@@ -1,5 +1,6 @@
 import ajax from '../laroux.ajax.js';
 import dom from './laroux.dom.js';
+import validation from '../laroux.validation.js';
 
 export default (function () {
     'use strict';
@@ -205,6 +206,12 @@ export default (function () {
             for (let selected = 0, length = selection.length; selected < length; selected++) {
                 forms.setFormFieldValue(selection[selected], data[selection[selected].getAttribute('name')]);
             }
+        },
+
+        validate: function (formobj, rules) {
+            let fields = forms.serialize(formobj);
+
+            return validation.validate(fields, rules);
         }
     };
 

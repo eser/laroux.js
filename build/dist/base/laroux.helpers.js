@@ -169,6 +169,16 @@ exports['default'] = (function () {
             return value.slice(0, index) + (add || '') + value.slice(index + count);
         },
 
+        assign: function assign(values, keys) {
+            var result = {};
+
+            for (var i = 0, _length3 = keys.length; i < _length3; i++) {
+                result[keys[i]] = values[i];
+            }
+
+            return result;
+        },
+
         random: function random(min, max) {
             return min + Math.floor(Math.random() * (max - min + 1));
         },
@@ -236,7 +246,7 @@ exports['default'] = (function () {
         },
 
         aeach: function aeach(arr, callback) {
-            for (var i = 0, _length3 = arr.length; i < _length3; i++) {
+            for (var i = 0, _length4 = arr.length; i < _length4; i++) {
                 if (callback(i, arr[i]) === false) {
                     break;
                 }
@@ -248,7 +258,7 @@ exports['default'] = (function () {
         amap: function amap(arr, callback, dontSkipReturns) {
             var results = [];
 
-            for (var i = 0, _length4 = arr.length; i < _length4; i++) {
+            for (var i = 0, _length5 = arr.length; i < _length5; i++) {
                 var result = callback(arr[i], i);
                 if (result === false) {
                     break;
@@ -263,7 +273,7 @@ exports['default'] = (function () {
         },
 
         aindex: function aindex(arr, value, start) {
-            for (var i = start || 0, _length5 = arr.length; i < _length5; i++) {
+            for (var i = start || 0, _length6 = arr.length; i < _length6; i++) {
                 if (arr[i] === value) {
                     return i;
                 }
@@ -346,10 +356,10 @@ exports['default'] = (function () {
             }
 
             if (obj instanceof NodeList) {
-                var _length6 = obj.length;
+                var _length7 = obj.length;
 
-                var items = new Array(_length6);
-                for (var i = 0; i < _length6; i++) {
+                var items = new Array(_length7);
+                for (var i = 0; i < _length7; i++) {
                     items[i] = obj[i];
                 }
 
@@ -429,7 +439,7 @@ exports['default'] = (function () {
         },
 
         callAll: function callAll(callbacks, scope, parameters) {
-            for (var i = 0, _length7 = callbacks.length; i < _length7; i++) {
+            for (var i = 0, _length8 = callbacks.length; i < _length8; i++) {
                 callbacks[i].apply(scope, parameters);
             }
         }

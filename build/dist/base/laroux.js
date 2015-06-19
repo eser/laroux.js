@@ -53,6 +53,10 @@ var _larouxTimersJs = require('./laroux.timers.js');
 
 var _larouxTimersJs2 = _interopRequireDefault(_larouxTimersJs);
 
+var _larouxValidationJs = require('./laroux.validation.js');
+
+var _larouxValidationJs2 = _interopRequireDefault(_larouxValidationJs);
+
 var _larouxVarsJs = require('./laroux.vars.js');
 
 var _larouxVarsJs2 = _interopRequireDefault(_larouxVarsJs);
@@ -91,6 +95,7 @@ exports['default'] = (function () {
         types: _larouxTypesJs2['default'],
         templates: _larouxTemplatesJs2['default'],
         timers: _larouxTimersJs2['default'],
+        validation: _larouxValidationJs2['default'],
         vars: _larouxVarsJs2['default'],
         when: _larouxWhenJs2['default'],
 
