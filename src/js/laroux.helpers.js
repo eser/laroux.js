@@ -165,6 +165,16 @@ export default (function () {
             return value.slice(0, index) + (add || '') + value.slice(index + count);
         },
 
+        assign: function (values, keys) {
+            let result = {};
+
+            for (let i = 0, length = keys.length; i < length; i++) {
+                result[keys[i]] = values[i];
+            }
+
+            return result;
+        },
+
         random: function (min, max) {
             return min + Math.floor(Math.random() * (max - min + 1));
         },

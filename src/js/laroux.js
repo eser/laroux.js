@@ -8,6 +8,7 @@ import Storyboard from './laroux.storyboard.js';
 import types from './laroux.types.js';
 import templates from './laroux.templates.js';
 import timers from './laroux.timers.js';
+import validation from './laroux.validation.js';
 import vars from './laroux.vars.js';
 import When from './laroux.when.js';
 
@@ -43,6 +44,7 @@ export default (function () {
         types,
         templates,
         timers,
+        validation,
         vars,
         when: When,
 

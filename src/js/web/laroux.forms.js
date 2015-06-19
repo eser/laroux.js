@@ -1,5 +1,6 @@
 import ajax from '../laroux.ajax.js';
 import dom from './laroux.dom.js';
+import validation from '../laroux.validation.js';
 
 export default (function () {
     'use strict';
@@ -207,6 +208,7 @@ export default (function () {
             }
         },
 
+<<<<<<< HEAD
         validate: function (formobj, rules, messages) {
 
             messages = Object.assign({
@@ -274,6 +276,12 @@ export default (function () {
 
             });
 
+=======
+        validate: function (formobj, rules) {
+            let fields = forms.serialize(formobj);
+
+            return validation.validate(fields, rules);
+>>>>>>> * added $l.validation.
         }
 
     };
