@@ -73,7 +73,7 @@ export default (function () {
                     let key = route.keys[i - 1];
 
                     if (key !== undefined) {
-                        params[key.name] = (typeof match[i] == 'string') ? decodeURIComponent(match[i]) : match[i];
+                        params[key.name] = (typeof match[i] === 'string') ? decodeURIComponent(match[i]) : match[i];
                     }
                 }
 

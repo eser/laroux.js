@@ -33,7 +33,7 @@ export default class Storyboard {
     }
 
     add(phase, fnc) {
-        if (fnc instanceof Deferred) {
+        if (fnc.constructor === Deferred) {
             return this.addPromise(phase, fnc);
         }
 

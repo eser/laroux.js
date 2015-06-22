@@ -10,7 +10,6 @@ export default (function () {
     let ajax = {
         corsDefault: false,
 
-        xDomainObject: false,
         xmlHttpRequestObject: null,
         xDomainRequestObject: null,
         xhr: function (crossDomain) {
@@ -18,18 +17,12 @@ export default (function () {
                 ajax.xmlHttpRequestObject = new XMLHttpRequest();
             }
 
-            if (crossDomain) {
-                if (!('withCredentials' in ajax.xmlHttpRequestObject) && typeof XDomainRequest !== 'undefined') {
-                    ajax.xDomainObject = true;
-
-                    if (ajax.xDomainRequestObject === null) {
-                        ajax.xDomainRequestObject = new XDomainRequest();
-                    }
-
-                    return ajax.xDomainRequestObject;
+            if (crossDomain && !('withCredentials' in ajax.xmlHttpRequestObject) && global.XDomainRequest !== undefined) {
+                if (ajax.xDomainRequestObject === null) {
+                    ajax.xDomainRequestObject = new XDomainRequest();
                 }
-            } else {
-                ajax.xDomainObject = false;
+
+                return ajax.xDomainRequestObject;
             }
 
             return ajax.xmlHttpRequestObject;
@@ -124,7 +117,7 @@ export default (function () {
                 url += ((url.indexOf('?') < 0) ? '?' : '&') + 'jsonp=' + options.jsonp;
             }
 
-            if (!ajax.xDomainObject) {
+            if (xhr.constructor === XMLHttpRequest) {
                 xhr.open(options.type, url, true);
             } else {
                 xhr.open(options.type, url);

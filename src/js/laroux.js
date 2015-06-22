@@ -16,7 +16,7 @@ export default (function () {
     'use strict';
 
     let laroux = function (selector, parent) {
-        if (selector instanceof Array) {
+        if (selector.constructor === Array) {
             return helpers.toArray(
                 (parent || document).querySelectorAll(selector)
             );

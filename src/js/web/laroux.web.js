@@ -29,7 +29,7 @@ export default (function () {
         },
 
         c: function (selector) {
-            if (selector instanceof Array) {
+            if (selector.constructor === Array) {
                 return laroux.cached.array[selector] || (
                     laroux.cached.array[selector] = helpers.toArray(
                         document.querySelectorAll(selector)
