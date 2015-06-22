@@ -55,10 +55,12 @@ export default class When {
                             results.push(x);
                         }
                     });
+
                     queue[i] = Deferred.async(queue[i], ...results);
+                    continue;
                 }
 
-                if (queue[i] instanceof Deferred && !queue[i].is('completed')) {
+                if (queue[i].constructor === Deferred && !queue[i].is('completed')) {
                     this.remaining++;
                     queue[i].completed(this.deferredCompleted);
                 }

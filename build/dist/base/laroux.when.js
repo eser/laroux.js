@@ -84,7 +84,7 @@ var When = (function () {
                 this.remaining = 0;
                 for (var i = 0, _length = queue.length; i < _length; i++) {
                     if (queue[i].constructor === Function) {
-                        (function () {
+                        var _ret = (function () {
                             var results = [];
                             _this2.params.forEach(function (x) {
                                 if (x instanceof _larouxDeferredJs2['default']) {
@@ -93,11 +93,15 @@ var When = (function () {
                                     results.push(x);
                                 }
                             });
+
                             queue[i] = _larouxDeferredJs2['default'].async.apply(_larouxDeferredJs2['default'], [queue[i]].concat(results));
+                            return 'continue';
                         })();
+
+                        if (_ret === 'continue') continue;
                     }
 
-                    if (queue[i] instanceof _larouxDeferredJs2['default'] && !queue[i].is('completed')) {
+                    if (queue[i].constructor === _larouxDeferredJs2['default'] && !queue[i].is('completed')) {
                         this.remaining++;
                         queue[i].completed(this.deferredCompleted);
                     }

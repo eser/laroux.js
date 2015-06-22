@@ -13,7 +13,7 @@ export default (function () {
             requirements = args[1];
             source = args[2];
         } else if (args.length === 2) {
-            if (args[0] instanceof Array) {
+            if (args[0].constructor === Array) {
                 name = null;
                 requirements = args[0];
                 source = args[1];
@@ -40,7 +40,7 @@ export default (function () {
         let when = new When(...resolved),
             promise = new Deferred();
 
-        if (source instanceof Function) {
+        if (source.constructor === Function) {
             when.then(function (...args) {
                 promise.resolve(source.apply(global, args));
             });

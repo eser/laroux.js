@@ -211,14 +211,14 @@ export default (function () {
             );
         },
 
-        translations: {
-        },
-
         format: function (message, dictionary) {
             let temp = {};
             Object.keys(dictionary).forEach(x => temp['{' + x + '}'] = dictionary[x]);
 
             return helpers.replaceAll(message, temp);
+        },
+
+        translations: {
         },
 
         addTranslations: function (culture, dictionary) {

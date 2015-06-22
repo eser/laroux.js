@@ -4,11 +4,42 @@ export default (function () {
     'use strict';
 
     let validation = {
+        // TODO: email, date, equalTo
         rules: {
             required: {
                 keys: ['message'],
                 callback: function (dictionary, name, rule) {
                     return (name in dictionary);
+                }
+            },
+
+            minlength: {
+                keys: ['length', 'message'],
+                callback: function (dictionary, name, rule) {
+                    return (dictionary[name].length >= rule.length);
+                }
+            },
+
+            maxlength: {
+                keys: ['length', 'message'],
+                callback: function (dictionary, name, rule) {
+                    return (dictionary[name].length <= rule.length);
+                }
+            },
+
+            min: {
+                keys: ['value', 'message'],
+                callback: function (dictionary, name, rule) {
+                    let floatValue = parseFloat(dictionary[name]);
+                    return (floatValue >= rule.value);
+                }
+            },
+
+            max: {
+                keys: ['value', 'message'],
+                callback: function (dictionary, name, rule) {
+                    let floatValue = parseFloat(dictionary[name]);
+                    return (floatValue <= rule.value);
                 }
             }
         },
@@ -39,7 +70,7 @@ export default (function () {
                 for (let j = 0, length2 = fieldRules.length; j < length2; j++) {
                     let fieldRule = fieldRules[j];
 
-                    if (!(fieldRule instanceof Object)) {
+                    if (fieldRule.constructor !== Object) {
                         let fieldRuleSplitted = fieldRule.split('|'),
                             fieldRuleName = fieldRuleSplitted[0];
 

@@ -70,7 +70,7 @@ exports['default'] = (function () {
         },
 
         c: function c(selector) {
-            if (selector instanceof Array) {
+            if (selector.constructor === Array) {
                 return _larouxJs2['default'].cached.array[selector] || (_larouxJs2['default'].cached.array[selector] = helpers.toArray(document.querySelectorAll(selector)));
             }
 
@@ -95,6 +95,7 @@ exports['default'] = (function () {
 
 module.exports = exports['default'];
 },{"../laroux.js":7,"./laroux.anim.js":16,"./laroux.css.js":17,"./laroux.dom.js":18,"./laroux.forms.js":19,"./laroux.keys.js":20,"./laroux.mvc.js":21,"./laroux.routes.js":22,"./laroux.touch.js":23}],2:[function(require,module,exports){
+(function (global){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -123,7 +124,6 @@ exports['default'] = (function () {
     var ajax = {
         corsDefault: false,
 
-        xDomainObject: false,
         xmlHttpRequestObject: null,
         xDomainRequestObject: null,
         xhr: function xhr(crossDomain) {
@@ -131,18 +131,12 @@ exports['default'] = (function () {
                 ajax.xmlHttpRequestObject = new XMLHttpRequest();
             }
 
-            if (crossDomain) {
-                if (!('withCredentials' in ajax.xmlHttpRequestObject) && typeof XDomainRequest !== 'undefined') {
-                    ajax.xDomainObject = true;
-
-                    if (ajax.xDomainRequestObject === null) {
-                        ajax.xDomainRequestObject = new XDomainRequest();
-                    }
-
-                    return ajax.xDomainRequestObject;
+            if (crossDomain && !('withCredentials' in ajax.xmlHttpRequestObject) && global.XDomainRequest !== undefined) {
+                if (ajax.xDomainRequestObject === null) {
+                    ajax.xDomainRequestObject = new XDomainRequest();
                 }
-            } else {
-                ajax.xDomainObject = false;
+
+                return ajax.xDomainRequestObject;
             }
 
             return ajax.xmlHttpRequestObject;
@@ -234,7 +228,7 @@ exports['default'] = (function () {
                 url += (url.indexOf('?') < 0 ? '?' : '&') + 'jsonp=' + options.jsonp;
             }
 
-            if (!ajax.xDomainObject) {
+            if (xhr.constructor === XMLHttpRequest) {
                 xhr.open(options.type, url, true);
             } else {
                 xhr.open(options.type, url);
@@ -355,6 +349,7 @@ exports['default'] = (function () {
 })();
 
 module.exports = exports['default'];
+}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 },{"./laroux.deferred.js":3,"./laroux.events.js":4,"./laroux.helpers.js":5}],3:[function(require,module,exports){
 /*jslint node: true */
 'use strict';
@@ -1210,8 +1205,6 @@ exports['default'] = (function () {
             return intl.customDate(includeTime ? intl.longDateFormat + ' ' + intl.timeFormat : intl.longDateFormat, timestamp);
         },
 
-        translations: {},
-
         format: function format(message, dictionary) {
             var temp = {};
             Object.keys(dictionary).forEach(function (x) {
@@ -1220,6 +1213,8 @@ exports['default'] = (function () {
 
             return _larouxHelpersJs2['default'].replaceAll(message, temp);
         },
+
+        translations: {},
 
         addTranslations: function addTranslations(culture, dictionary) {
             _larouxHelpersJs2['default'].mergeNs(intl.translations, culture, dictionary);
@@ -1300,7 +1295,7 @@ exports['default'] = (function () {
     'use strict';
 
     var laroux = function laroux(selector, parent) {
-        if (selector instanceof Array) {
+        if (selector.constructor === Array) {
             return _larouxHelpersJs2['default'].toArray((parent || document).querySelectorAll(selector));
         }
 
@@ -1407,7 +1402,7 @@ exports['default'] = (function () {
             requirements = args[1];
             source = args[2];
         } else if (args.length === 2) {
-            if (args[0] instanceof Array) {
+            if (args[0].constructor === Array) {
                 name = null;
                 requirements = args[0];
                 source = args[1];
@@ -1434,7 +1429,7 @@ exports['default'] = (function () {
         var when = new (_bind.apply(_larouxWhenJs2['default'], [null].concat(resolved)))(),
             promise = new _larouxDeferredJs2['default']();
 
-        if (source instanceof Function) {
+        if (source.constructor === Function) {
             when.then(function () {
                 for (var _len2 = arguments.length, args = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
                     args[_key2] = arguments[_key2];
@@ -1532,7 +1527,7 @@ var Storyboard = (function () {
     }, {
         key: 'add',
         value: function add(phase, fnc) {
-            if (fnc instanceof _larouxDeferredJs2['default']) {
+            if (fnc.constructor === _larouxDeferredJs2['default']) {
                 return this.addPromise(phase, fnc);
             }
 
@@ -1966,11 +1961,42 @@ exports['default'] = (function () {
     'use strict';
 
     var validation = {
+        // TODO: email, date, equalTo
         rules: {
             required: {
                 keys: ['message'],
                 callback: function callback(dictionary, name, rule) {
                     return name in dictionary;
+                }
+            },
+
+            minlength: {
+                keys: ['length', 'message'],
+                callback: function callback(dictionary, name, rule) {
+                    return dictionary[name].length >= rule.length;
+                }
+            },
+
+            maxlength: {
+                keys: ['length', 'message'],
+                callback: function callback(dictionary, name, rule) {
+                    return dictionary[name].length <= rule.length;
+                }
+            },
+
+            min: {
+                keys: ['value', 'message'],
+                callback: function callback(dictionary, name, rule) {
+                    var floatValue = parseFloat(dictionary[name]);
+                    return floatValue >= rule.value;
+                }
+            },
+
+            max: {
+                keys: ['value', 'message'],
+                callback: function callback(dictionary, name, rule) {
+                    var floatValue = parseFloat(dictionary[name]);
+                    return floatValue <= rule.value;
                 }
             }
         },
@@ -2001,7 +2027,7 @@ exports['default'] = (function () {
                 for (var j = 0, length2 = fieldRules.length; j < length2; j++) {
                     var fieldRule = fieldRules[j];
 
-                    if (!(fieldRule instanceof Object)) {
+                    if (fieldRule.constructor !== Object) {
                         var fieldRuleSplitted = fieldRule.split('|'),
                             fieldRuleName = fieldRuleSplitted[0];
 
@@ -2220,7 +2246,7 @@ var When = (function () {
                 this.remaining = 0;
                 for (var i = 0, _length = queue.length; i < _length; i++) {
                     if (queue[i].constructor === Function) {
-                        (function () {
+                        var _ret = (function () {
                             var results = [];
                             _this2.params.forEach(function (x) {
                                 if (x instanceof _larouxDeferredJs2['default']) {
@@ -2229,11 +2255,15 @@ var When = (function () {
                                     results.push(x);
                                 }
                             });
+
                             queue[i] = _larouxDeferredJs2['default'].async.apply(_larouxDeferredJs2['default'], [queue[i]].concat(results));
+                            return 'continue';
                         })();
+
+                        if (_ret === 'continue') continue;
                     }
 
-                    if (queue[i] instanceof _larouxDeferredJs2['default'] && !queue[i].is('completed')) {
+                    if (queue[i].constructor === _larouxDeferredJs2['default'] && !queue[i].is('completed')) {
                         this.remaining++;
                         queue[i].completed(this.deferredCompleted);
                     }
@@ -3788,7 +3818,7 @@ exports['default'] = (function () {
                     var key = route.keys[i - 1];
 
                     if (key !== undefined) {
-                        params[key.name] = typeof match[i] == 'string' ? decodeURIComponent(match[i]) : match[i];
+                        params[key.name] = typeof match[i] === 'string' ? decodeURIComponent(match[i]) : match[i];
                     }
                 }
 

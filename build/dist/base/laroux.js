@@ -69,7 +69,7 @@ exports['default'] = (function () {
     'use strict';
 
     var laroux = function laroux(selector, parent) {
-        if (selector instanceof Array) {
+        if (selector.constructor === Array) {
             return _larouxHelpersJs2['default'].toArray((parent || document).querySelectorAll(selector));
         }
 
