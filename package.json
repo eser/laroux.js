@@ -1,6 +1,6 @@
 {
     "name": "laroux.js",
-    "version": "2.1.0",
+    "version": "2.2.0",
     "description": "A jquery substitute for modern browsers",
     "keywords": [ "laroux", "larouxjs", "laroux.js", "jquery", "substitute", "dom", "css", "helpers", "ajax" ],
     "author": "Eser Ozvataf",
