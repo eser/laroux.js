@@ -208,7 +208,6 @@ export default (function () {
             }
         },
 
-<<<<<<< HEAD
         validate: function (formobj, rules, messages) {
 
             messages = Object.assign({
@@ -275,14 +274,13 @@ export default (function () {
                 parent.appendChild(error);
 
             });
-
-=======
-        validate: function (formobj, rules) {
-            let fields = forms.serialize(formobj);
-
-            return validation.validate(fields, rules);
->>>>>>> * added $l.validation.
         }
+
+        // validate: function (formobj, rules) {
+        //     let fields = forms.serialize(formobj);
+        //
+        //     return validation.validate(fields, rules);
+        // }
 
     };
 
