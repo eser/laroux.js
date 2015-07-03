@@ -106,10 +106,10 @@
         );
     });
 
-    // date - Dates
+    // intl - Dates
     $l.ready(function() {
-        var button = $l.id('button-date-dates');
-        var text = $l.id('text-date-dates');
+        var button = $l.id('button-intl-dates');
+        var text = $l.id('text-intl-dates');
 
         $l.dom.setEvent(
             button,

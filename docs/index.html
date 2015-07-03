@@ -133,7 +133,7 @@
         </div>
 
         <div id="examples" class="container">
-            <div class="row header-row">
+            <div id="ajax-examples" class="row header-row">
                 <div class="col-sm-6">
                     <h2 class="nomargin">Ajax Examples</h2>
                 </div>
@@ -172,7 +172,7 @@ $l.ajax.getJson(
                 </div>
             </div>
 
-            <div class="row header-row">
+            <div id="anim-examples" class="row header-row">
                 <div class="col-sm-6">
                     <h2 class="nomargin">Anim Examples</h2>
                 </div>
@@ -231,7 +231,7 @@ $l.anim.setCss({
                 </div>
             </div>
 
-            <div class="row header-row">
+            <div id="css-examples" class="row header-row">
                 <div class="col-sm-6">
                     <h2 class="nomargin">CSS Examples</h2>
                 </div>
@@ -271,12 +271,12 @@ $l.css.toggleClass(box, 'box-silver');
                 </div>
             </div>
 
-            <div class="row header-row">
+            <div id="intl-examples" class="row header-row">
                 <div class="col-sm-6">
-                    <h2 class="nomargin">Date Examples</h2>
+                    <h2 class="nomargin">Intl Examples</h2>
                 </div>
                 <div class="col-sm-6 text-right">
-                    <a class="btn btn-sm btn-default" href="https://github.com/larukedi/laroux.js/wiki/date" role="button">Wiki Page</a>
+                    <a class="btn btn-sm btn-default" href="https://github.com/larukedi/laroux.js/wiki/intl" role="button">Wiki Page</a>
                 </div>
             </div>
 
@@ -284,18 +284,18 @@ $l.css.toggleClass(box, 'box-silver');
                 <h3>Dates</h3>
                 <div class="row">
                     <div class="col-sm-4">
-                        <button id="button-date-dates" class="btn btn-default">Show Dates</button>
-                        <div id="text-date-dates"></div>
+                        <button id="button-intl-dates" class="btn btn-default">Show Dates</button>
+                        <div id="text-intl-dates"></div>
                     </div>
                     <div class="col-sm-8">
                         <h4>HTML</h4>
                         <pre class="prettyprint">
-&lt;div id="text-date-dates"&gt;&lt;/div&gt;
+&lt;div id="text-intl-dates"&gt;&lt;/div&gt;
                         </pre>
 
                         <h4>Javascript</h4>
                         <pre class="prettyprint">
-var text = $l.id('text-date-dates');
+var text = $l.id('text-intl-dates');
 
 var now = new Date();
 var yesterday = new Date();
@@ -325,7 +325,7 @@ $l.dom.append(text, $l.intl.customDate('dd/MM/yyyy HH:ss', now) + '&lt;br /&gt;'
                 </div>
             </div>
 
-            <div class="row header-row">
+            <div id="dom-examples" class="row header-row">
                 <div class="col-sm-6">
                     <h2 class="nomargin">DOM Examples</h2>
                 </div>
@@ -361,7 +361,7 @@ $l.dom.clone(target.firstElementChild, $l.dom.cloneAppend);
                 </div>
             </div>
 
-            <div class="row header-row">
+            <div id="events-examples" class="row header-row">
                 <div class="col-sm-6">
                     <h2 class="nomargin">Events Examples</h2>
                 </div>
@@ -406,7 +406,7 @@ $l.dom.setEvent(
                 </div>
             </div>
 
-            <div class="row header-row">
+            <div id="forms-examples" class="row header-row">
                 <div class="col-sm-6">
                     <h2 class="nomargin">Forms Examples</h2>
                 </div>
@@ -486,7 +486,7 @@ $l.forms.toggleFormEditing($l.id('target-forms-toggle'));
                 </div>
             </div>
 
-            <div class="row header-row">
+            <div id="helpers-examples" class="row header-row">
                 <div class="col-sm-6">
                     <h2 class="nomargin">Helpers Examples</h2>
                 </div>
@@ -558,7 +558,7 @@ $l.dom.append(text, JSON.stringify($l.helpers.getKeysRecursive({id: 1, child: { 
                 </div>
             </div>
 
-            <div class="row header-row">
+            <div id="storyboard-examples" class="row header-row">
                 <div class="col-sm-6">
                     <h2 class="nomargin">Storyboard Examples</h2>
                 </div>
@@ -634,7 +634,7 @@ myStory.start();
                 </div>
             </div>
 
-            <div class="row header-row">
+            <div id="keys-examples" class="row header-row">
                 <div class="col-sm-6">
                     <h2 class="nomargin">Keys Examples</h2>
                 </div>
@@ -673,7 +673,7 @@ $l.keys.assign({
                 </div>
             </div>
 
-            <div class="row header-row">
+            <div id="mvc-examples" class="row header-row">
                 <div class="col-sm-6">
                     <h2 class="nomargin">MVC Examples</h2>
                 </div>
@@ -792,7 +792,7 @@ $l.mvc.init('mvctwoway', myModel);
                 </div>
             </div>
 
-            <div class="row header-row">
+            <div id="routes-examples" class="row header-row">
                 <div class="col-sm-6">
                     <h2 class="nomargin">Routes Examples</h2>
                 </div>
@@ -894,7 +894,7 @@ $l.dom.setEvent(button3, 'click', function () { $l.routes.goNamed('test2', { nam
                 </div>
             </div>
 
-            <div class="row header-row">
+            <div id="templates-examples" class="row header-row">
                 <div class="col-sm-6">
                     <h2 class="nomargin">Templates Examples</h2>
                 </div>
@@ -935,7 +935,7 @@ $l.dom.replace(text, result);
                 </div>
             </div>
 
-            <div class="row header-row">
+            <div id="timers-examples" class="row header-row">
                 <div class="col-sm-6">
                     <h2 class="nomargin">Timers Examples</h2>
                 </div>
@@ -974,7 +974,7 @@ $l.timers.set({
                 </div>
             </div>
 
-            <div class="row header-row">
+            <div id="touch-examples" class="row header-row">
                 <div class="col-sm-6">
                     <h2 class="nomargin">Touch Examples</h2>
                 </div>
@@ -1034,7 +1034,7 @@ $l.dom.setEvent(
                 </div>
             </div>
 
-            <div class="row header-row">
+            <div id="types-examples" class="row header-row">
                 <div class="col-sm-6">
                     <h2 class="nomargin">Types Examples</h2>
                 </div>
@@ -1083,7 +1083,7 @@ $l.dom.append(text, JSON.stringify(myModel.exists('name')) + '&lt;br /&gt;');
                 </div>
             </div>
 
-            <div class="row header-row">
+            <div id="vars-examples" class="row header-row">
                 <div class="col-sm-6">
                     <h2 class="nomargin">Vars Examples</h2>
                 </div>
@@ -1171,7 +1171,7 @@ $l.dom.setEvent(
                 </div>
             </div>
 
-            <div class="row header-row">
+            <div id="when-examples" class="row header-row">
                 <div class="col-sm-6">
                     <h2 class="nomargin">When Examples</h2>
                 </div>
