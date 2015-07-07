@@ -21,6 +21,10 @@ var _larouxEventsJs = require('./laroux.events.js');
 
 var _larouxEventsJs2 = _interopRequireDefault(_larouxEventsJs);
 
+var _larouxFetchObjectJs = require('./laroux.fetchObject.js');
+
+var _larouxFetchObjectJs2 = _interopRequireDefault(_larouxFetchObjectJs);
+
 var _larouxHelpersJs = require('./laroux.helpers.js');
 
 var _larouxHelpersJs2 = _interopRequireDefault(_larouxHelpersJs);
@@ -84,6 +88,7 @@ exports['default'] = (function () {
     _larouxHelpersJs2['default'].merge(laroux, {
         ajax: _larouxAjaxJs2['default'],
         events: _larouxEventsJs2['default'],
+        fetch: _larouxFetchObjectJs2['default'],
         intl: _larouxIntlJs2['default'],
         promise: _larouxPromiseObjectJs2['default'],
         require: _larouxRequireJs2['default'],

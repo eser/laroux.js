@@ -225,5 +225,5 @@ var PromisePolyfill = (function () {
     return PromisePolyfill;
 })();
 
-exports['default'] = typeof Promise !== 'undefined' ? Promise : PromisePolyfill;
+exports['default'] = Promise || PromisePolyfill;
 module.exports = exports['default'];

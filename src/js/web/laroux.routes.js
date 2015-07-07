@@ -150,7 +150,7 @@ export default (function () {
             }
 
             setTimeout(function () {
-                global.location.hash = path;
+                location.hash = path;
 
                 if (silent && attached) {
                     setTimeout(function () {
@@ -182,12 +182,12 @@ export default (function () {
         },
 
         attach: function () {
-            global.addEventListener('hashchange', routes.reload, false);
+            addEventListener('hashchange', routes.reload, false);
             routes.attached = true;
         },
 
         detach: function () {
-            global.removeEventListener('hashchange', routes.reload);
+            removeEventListener('hashchange', routes.reload);
             routes.attached = false;
         }
     };
