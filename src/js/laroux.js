@@ -1,5 +1,6 @@
 import ajax from './laroux.ajax.js';
 import events from './laroux.events.js';
+import fetchObject from './laroux.fetchObject.js';
 import helpers from './laroux.helpers.js';
 import intl from './laroux.intl.js';
 import PromiseObject from './laroux.promiseObject.js';
@@ -36,6 +37,7 @@ export default (function () {
     helpers.merge(laroux, {
         ajax,
         events,
+        fetch: fetchObject,
         intl,
         promise: PromiseObject,
         require: require_,

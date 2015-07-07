@@ -17,7 +17,7 @@ export default (function () {
                 ajax.xmlHttpRequestObject = new XMLHttpRequest();
             }
 
-            if (crossDomain && !('withCredentials' in ajax.xmlHttpRequestObject) && global.XDomainRequest !== undefined) {
+            if (crossDomain && !('withCredentials' in ajax.xmlHttpRequestObject) && typeof XDomainRequest !== 'undefined') {
                 if (ajax.xDomainRequestObject === null) {
                     ajax.xDomainRequestObject = new XDomainRequest();
                 }

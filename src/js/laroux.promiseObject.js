@@ -193,4 +193,4 @@ class PromisePolyfill {
     }
 }
 
-export default (typeof Promise !== 'undefined') ? Promise : PromisePolyfill;
+export default (Promise || PromisePolyfill);
