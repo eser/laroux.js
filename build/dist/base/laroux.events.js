@@ -21,17 +21,19 @@ exports['default'] = (function () {
             events.delegates.push({ event: event, callback: callback });
         },
 
-        invoke: function invoke(event, args) {
-            for (var item in events.delegates) {
-                if (!events.delegates.hasOwnProperty(item)) {
+        invoke: function invoke(event) {
+            for (var i = 0, _length = events.delegates.length; i < _length; i++) {
+                var _events$delegates$i;
+
+                if (events.delegates[i].event != event) {
                     continue;
                 }
 
-                if (events.delegates[item].event != event) {
-                    continue;
+                for (var _len = arguments.length, args = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+                    args[_key - 1] = arguments[_key];
                 }
 
-                events.delegates[item].callback(args);
+                (_events$delegates$i = events.delegates[i]).callback.apply(_events$delegates$i, args);
             }
         }
     };

@@ -17,10 +17,6 @@ var _larouxAjaxJs = require('./laroux.ajax.js');
 
 var _larouxAjaxJs2 = _interopRequireDefault(_larouxAjaxJs);
 
-var _larouxDeferredJs = require('./laroux.deferred.js');
-
-var _larouxDeferredJs2 = _interopRequireDefault(_larouxDeferredJs);
-
 var _larouxEventsJs = require('./laroux.events.js');
 
 var _larouxEventsJs2 = _interopRequireDefault(_larouxEventsJs);
@@ -32,6 +28,10 @@ var _larouxHelpersJs2 = _interopRequireDefault(_larouxHelpersJs);
 var _larouxIntlJs = require('./laroux.intl.js');
 
 var _larouxIntlJs2 = _interopRequireDefault(_larouxIntlJs);
+
+var _larouxPromiseObjectJs = require('./laroux.promiseObject.js');
+
+var _larouxPromiseObjectJs2 = _interopRequireDefault(_larouxPromiseObjectJs);
 
 var _larouxRequireJs = require('./laroux.require.js');
 
@@ -61,10 +61,6 @@ var _larouxVarsJs = require('./laroux.vars.js');
 
 var _larouxVarsJs2 = _interopRequireDefault(_larouxVarsJs);
 
-var _larouxWhenJs = require('./laroux.when.js');
-
-var _larouxWhenJs2 = _interopRequireDefault(_larouxWhenJs);
-
 exports['default'] = (function () {
     'use strict';
 
@@ -87,9 +83,9 @@ exports['default'] = (function () {
     _larouxHelpersJs2['default'].merge(laroux, _larouxHelpersJs2['default']);
     _larouxHelpersJs2['default'].merge(laroux, {
         ajax: _larouxAjaxJs2['default'],
-        deferred: _larouxDeferredJs2['default'],
         events: _larouxEventsJs2['default'],
         intl: _larouxIntlJs2['default'],
+        promise: _larouxPromiseObjectJs2['default'],
         require: _larouxRequireJs2['default'],
         storyboard: _larouxStoryboardJs2['default'],
         types: _larouxTypesJs2['default'],
@@ -97,7 +93,6 @@ exports['default'] = (function () {
         timers: _larouxTimersJs2['default'],
         validation: _larouxValidationJs2['default'],
         vars: _larouxVarsJs2['default'],
-        when: _larouxWhenJs2['default'],
 
         extend: function extend(source) {
             return _larouxHelpersJs2['default'].merge(laroux, source);

@@ -1,8 +1,8 @@
 import ajax from './laroux.ajax.js';
-import Deferred from './laroux.deferred.js';
 import events from './laroux.events.js';
 import helpers from './laroux.helpers.js';
 import intl from './laroux.intl.js';
+import PromiseObject from './laroux.promiseObject.js';
 import require_ from './laroux.require.js';
 import Storyboard from './laroux.storyboard.js';
 import types from './laroux.types.js';
@@ -10,7 +10,6 @@ import templates from './laroux.templates.js';
 import timers from './laroux.timers.js';
 import validation from './laroux.validation.js';
 import vars from './laroux.vars.js';
-import When from './laroux.when.js';
 
 export default (function () {
     'use strict';
@@ -36,9 +35,9 @@ export default (function () {
     helpers.merge(laroux, helpers);
     helpers.merge(laroux, {
         ajax,
-        deferred: Deferred,
         events,
         intl,
+        promise: PromiseObject,
         require: require_,
         storyboard: Storyboard,
         types,
@@ -46,7 +45,6 @@ export default (function () {
         timers,
         validation,
         vars,
-        when: When,
 
         extend: function (source) {
             return helpers.merge(laroux, source);

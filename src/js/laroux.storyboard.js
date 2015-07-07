@@ -1,7 +1,7 @@
 /*jslint node: true */
 'use strict';
 
-import Deferred from './laroux.deferred.js';
+import PromiseObject from './laroux.promiseObject.js';
 
 export default class Storyboard {
     constructor(...args) {
@@ -32,20 +32,20 @@ export default class Storyboard {
         });
     }
 
-    add(phase, fnc) {
-        if (fnc.constructor === Deferred) {
-            return this.addPromise(phase, fnc);
+    add(phase, callback) {
+        if (callback.constructor === PromiseObject) {
+            return this.addPromise(phase, callback);
         }
 
         let phaseId = this.phaseKeys[phase];
 
         if (phaseId < this.currentIteration) {
             // execute immediately if phase is already passed
-            fnc.apply(global);
+            callback.apply(global);
             return;
         }
 
-        this.phases[phaseId].callbacks.push(fnc);
+        this.phases[phaseId].callbacks.push(callback);
     }
 
     addPromise(phase, promise) {
@@ -57,7 +57,8 @@ export default class Storyboard {
         }
 
         this.phases[phaseId].promises++;
-        promise.done(this.checkPromise);
+        // FIXME: must be handled even if it has failed
+        promise.then(this.checkPromise);
     }
 
     start() {

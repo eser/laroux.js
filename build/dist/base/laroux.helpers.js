@@ -22,6 +22,26 @@ exports['default'] = (function () {
             return 'uid-' + ++helpers.uniqueId;
         },
 
+        bind: function bind(method, context) {
+            // if (method.bind !== undefined) {
+            //    method.bind(context);
+            //    return;
+            // }
+
+            return function () {
+                method.apply(context, arguments);
+            };
+        },
+
+        async: function async(callback) {
+            if (typeof setImmediate !== 'undefined') {
+                setImmediate(callback);
+                return;
+            }
+
+            setTimeout(callback, 0);
+        },
+
         clone: function clone(obj) {
             return JSON.parse(JSON.stringify(obj));
         },

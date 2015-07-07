@@ -1,3 +1,4 @@
+import PromiseObject from '../laroux.promiseObject.js';
 import helpers from '../laroux.helpers.js';
 
 export default (function () {
@@ -243,34 +244,6 @@ export default (function () {
             return images;
         },
 
-        loadAsyncScript: function (path, triggerName, async) {
-            let elem = document.createElement('script');
-
-            elem.type = 'text/javascript';
-            elem.async = (async !== undefined) ? async : true;
-            elem.src = path;
-
-            let loaded = false;
-            elem.onload = elem.onreadystatechange = function () {
-                if ((elem.readyState && elem.readyState !== 'complete' && elem.readyState !== 'loaded') || loaded) {
-                    return false;
-                }
-
-                elem.onload = elem.onreadystatechange = null;
-                loaded = true;
-                if (triggerName) {
-                    if (typeof triggerName === 'function') {
-                        triggerName();
-                    } else {
-                        triggers.ontrigger(triggerName);
-                    }
-                }
-            };
-
-            let head = document.getElementsByTagName('head')[0];
-            head.appendChild(elem);
-        },
-
         loadAsyncStyle: function (path, triggerName, async) {
             let elem = document.createElement('LINK');
 
@@ -358,7 +331,36 @@ export default (function () {
             }
 
             return newElement;
-        }/*,
+        },
+
+        loadScript: function (url, async) {
+            return new PromiseObject(function (resolve, reject) {
+                let elem = document.createElement('script');
+
+                elem.type = 'text/javascript';
+                if (async !== undefined) {
+                    elem.async = async;
+                }
+
+                if (elem.readyState !== undefined) {
+                    elem.onreadystatechange = function () {
+                        if (elem.readyState in ['loaded', 'complete']) {
+                            elem.onreadystatechange = null;
+                            resolve(elem);
+                        }
+                    };
+                } else {
+                    elem.onload = function () {
+                        resolve(elem);
+                    };
+                }
+
+                elem.src = url;
+
+                let head = document.getElementsByTagName('head')[0];
+                head.appendChild(elem);
+            });
+        } /*,
 
         // TODO: it's redundant for now
         applyOperations: function (element, operations) {
