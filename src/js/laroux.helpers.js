@@ -9,11 +9,10 @@ export default (function () {
             return 'uid-' + (++helpers.uniqueId);
         },
 
-        bind: function (method, context) {
-            // if (method.bind !== undefined) {
-            //    method.bind(context);
-            //    return;
-            // }
+        bindContext: function (method, context) {
+            if (method.bind !== undefined) {
+                return method.bind(context);
+            }
 
             return function () {
                 method.apply(context, arguments);
