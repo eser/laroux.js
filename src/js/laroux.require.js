@@ -1,70 +1,47 @@
-import ajax from './laroux.ajax.js';
-import Deferred from './laroux.deferred.js';
-import When from './laroux.when.js';
-
 export default (function () {
     'use strict';
 
     let require_ = function (...args) {
-        let name, requirements, source;
+        let name, requirements, callback;
 
         if (args.length >= 3) {
             name = args[0];
             requirements = args[1];
-            source = args[2];
+            callback = args[2];
         } else if (args.length === 2) {
             if (args[0].constructor === Array) {
                 name = null;
                 requirements = args[0];
-                source = args[1];
+                callback = args[1];
             } else {
                 name = args[0];
                 requirements = [];
-                source = args[1];
+                callback = args[1];
             }
         } else {
             name = null;
             requirements = [];
-            source = args[0];
+            callback = args[0];
         }
 
-        let resolved = [];
+        let dependencies = [];
         for (let i = 0, length = requirements.length; i < length; i++) {
-            if (!(requirements[i] in require_.modules)) {
-                throw 'dependency not loaded: ' + requirements[i] + '.';
+            let requirement = requirements[i];
+
+            if (!(requirement in require_.modules)) {
+                throw 'dependency not loaded: ' + requirement + '.';
             }
 
-            resolved.push(require_.modules[requirements[i]]);
+            dependencies.push(require_.modules[requirement]);
         }
 
-        let when = new When(...resolved),
-            promise = new Deferred();
-
-        if (source.constructor === Function) {
-            when.then(function (...args) {
-                promise.resolve(source.apply(global, args));
-            });
-        } else {
-            let request = ajax.makeRequest({
-                type: 'GET',
-                url: source
-                // datatype: 'plain'
-            });
-
-            when.then(function () {
-                request.done(function (script) {
-                    /*jshint evil:true */
-                    /*jslint evil:true */
-                    promise.resolve(eval(script));
-                });
-            });
-        }
+        let result = callback.apply(global, dependencies);
 
         if (name !== null) {
-            require_.modules[name] = promise;
+            require_.modules[name] = result;
         }
 
-        return when;
+        return result;
     };
 
     require_.modules = {};

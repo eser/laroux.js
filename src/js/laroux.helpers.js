@@ -9,6 +9,26 @@ export default (function () {
             return 'uid-' + (++helpers.uniqueId);
         },
 
+        bind: function (method, context) {
+            // if (method.bind !== undefined) {
+            //    method.bind(context);
+            //    return;
+            // }
+
+            return function () {
+                method.apply(context, arguments);
+            };
+        },
+
+        async: function (callback) {
+            if (typeof setImmediate !== 'undefined') {
+                setImmediate(callback);
+                return;
+            }
+
+            setTimeout(callback, 0);
+        },
+
         clone: function (obj) {
             return JSON.parse(JSON.stringify(obj));
         },

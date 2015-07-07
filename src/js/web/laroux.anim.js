@@ -1,6 +1,6 @@
 import css from './laroux.css.js';
-import Deferred from '../laroux.deferred.js';
 import helpers from '../laroux.helpers.js';
+import PromiseObject from '../laroux.promiseObject.js';
 
 export default (function () {
     'use strict';
@@ -20,7 +20,10 @@ export default (function () {
 
         // {object, property, from, to, time, unit, reset}
         set: function (newanim) {
-            newanim.deferred = new Deferred();
+            newanim.deferred = new PromiseObject(function (resolve, reject) {
+                newanim.deferredResolve = resolve;
+                newanim.deferredReject = reject;
+            });
 
             newanim.startTime = undefined;
 
@@ -80,9 +83,9 @@ export default (function () {
             }
 
             if (targetKey !== null) {
-                let deferred = anim.data[targetKey].deferred;
+                let deferred = anim.data[targetKey];
 
-                deferred.reject('stop');
+                deferred.deferredReject('stop');
 
                 anim.data.splice(targetKey, 1);
                 return true;
@@ -117,7 +120,7 @@ export default (function () {
                         }
                     } else {
                         removeKeys = helpers.prependArray(removeKeys, item);
-                        currentItem.deferred.resolve();
+                        currentItem.deferredResolve();
                     }
                 }
             }

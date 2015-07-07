@@ -8,17 +8,13 @@ export default (function () {
             events.delegates.push({ event: event, callback: callback });
         },
 
-        invoke: function (event, args) {
-            for (let item in events.delegates) {
-                if (!events.delegates.hasOwnProperty(item)) {
+        invoke: function (event, ...args) {
+            for (let i = 0, length = events.delegates.length; i < length; i++) {
+                if (events.delegates[i].event != event) {
                     continue;
                 }
 
-                if (events.delegates[item].event != event) {
-                    continue;
-                }
-
-                events.delegates[item].callback(args);
+                events.delegates[i].callback(...args);
             }
         }
     };
