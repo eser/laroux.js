@@ -16,13 +16,14 @@
             button,
             'click',
             function() {
-                $l.ajax.getJson(
-                    'test.json'
+            $l.ajax.fetch('test.json')
+                .then(function (response) {
+                    return response.json();
 
-                ).done(function (response) {
-                    $l.dom.replace(text, response.testResponse);
+                }).then(function (json) {
+                    $l.dom.replace($l.id('text-ajax-get-request'), json.testResponse);
 
-                }).fail(function (error) {
+                }).catch(function (error) {
                     $l.dom.replace(text, 'Error: ' + error.message);
 
                 });
@@ -293,7 +294,7 @@
                 });
 
                 var step2 = function () {
-                    var deferred = $l.anim.setCss({
+                    var promise = $l.anim.setCss({
                         object:   box,
                         property: 'left',
                         from:     50, // current value
@@ -303,7 +304,7 @@
                         reset:    false
                     });
 
-                    myStory.add('second-step', deferred);
+                    myStory.add('second-step', promise);
                 };
 
                 var step3 = function () {
@@ -601,65 +602,6 @@
                 var storage = select.options[select.selectedIndex].value;
                 $l.vars.remove(storage, 'demopage');
                 $l.dom.append(text, storage + ' is removed' + crlf);
-
-                return false;
-            }
-        );
-    });
-
-    // when - Set
-    $l.ready(function() {
-        var button1 = $l.id('button-when-set-1');
-        var button2 = $l.id('button-when-set-2');
-        var buttonReset = $l.id('button-when-set-reset');
-        var text = $l.id('text-when-set');
-
-        $l.dom.append(text, 'click both buttons in any order' + crlf);
-
-        var promise1;
-        var promise2;
-
-        var resetFunc = function() {
-            promise1 = new $l.deferred();
-            promise2 = new $l.deferred();
-
-            new $l.when(promise1, promise2)
-                .then(function() {
-                    $l.dom.append(text, 'all set' + crlf);
-                    $l.dom.attr(buttonReset, 'disabled', null);
-                });
-
-            $l.dom.attr(buttonReset, 'disabled', 'disabled');
-        };
-        resetFunc();
-
-        $l.dom.setEvent(
-            button1,
-            'click',
-            function() {
-                $l.dom.append(text, 'button1 clicked...' + crlf);
-                promise1.resolve();
-
-                return false;
-            }
-        );
-
-        $l.dom.setEvent(
-            button2,
-            'click',
-            function() {
-                $l.dom.append(text, 'button2 clicked...' + crlf);
-                promise2.resolve();
-
-                return false;
-            }
-        );
-
-        $l.dom.setEvent(
-            buttonReset,
-            'click',
-            function() {
-                resetFunc();
 
                 return false;
             }

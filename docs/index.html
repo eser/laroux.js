@@ -42,10 +42,10 @@
                                     <ul>
                                         <li class="dropdown-header">Base Components</li>
                                         <li><a href="https://github.com/larukedi/laroux.js/wiki/ajax">Ajax</a></li>
-                                        <li><a href="https://github.com/larukedi/laroux.js/wiki/deferred">Deferred</a></li>
                                         <li><a href="https://github.com/larukedi/laroux.js/wiki/events">Events</a></li>
                                         <li><a href="https://github.com/larukedi/laroux.js/wiki/helpers">Helpers</a></li>
                                         <li><a href="https://github.com/larukedi/laroux.js/wiki/intl">Intl</a></li>
+                                        <li><a href="https://github.com/larukedi/laroux.js/wiki/promise">Promise</a></li>
                                         <li><a href="https://github.com/larukedi/laroux.js/wiki/require">Require</a></li>
                                         <li><a href="https://github.com/larukedi/laroux.js/wiki/storyboard">Storyboard</a></li>
                                         <li><a href="https://github.com/larukedi/laroux.js/wiki/templates">Templates</a></li>
@@ -57,16 +57,15 @@
                                         <li><a href="https://github.com/larukedi/laroux.js/wiki/types">Types</a></li>
                                         <li><a href="https://github.com/larukedi/laroux.js/wiki/validation">Validation</a></li>
                                         <li><a href="https://github.com/larukedi/laroux.js/wiki/vars">Vars</a></li>
-                                        <li><a href="https://github.com/larukedi/laroux.js/wiki/when">When</a></li>
                                         <li class="divider"></li>
                                         <li class="dropdown-header">Web Components</li>
                                         <li><a href="https://github.com/larukedi/laroux.js/wiki/anim">Anim</a></li>
                                         <li><a href="https://github.com/larukedi/laroux.js/wiki/css">CSS</a></li>
+                                        <li><a href="https://github.com/larukedi/laroux.js/wiki/dom">DOM</a></li>
                                     </ul>
                                 </li>
                                 <li class="col-sm-3">
                                     <ul>
-                                        <li><a href="https://github.com/larukedi/laroux.js/wiki/dom">DOM</a></li>
                                         <li><a href="https://github.com/larukedi/laroux.js/wiki/forms">Forms</a></li>
                                         <li><a href="https://github.com/larukedi/laroux.js/wiki/keys">Keys</a></li>
                                         <li><a href="https://github.com/larukedi/laroux.js/wiki/mvc">MVC</a></li>
@@ -157,16 +156,17 @@
 
                         <h4>Javascript</h4>
                         <pre class="prettyprint">
-$l.ajax.getJson(
-    'test.json'
+$l.ajax.fetch('test.json')
+    .then(function (response) {
+        return response.json();
 
-).done(function (response) {
-    $l.dom.replace($l.id('text-ajax-get-request'), response.testResponse);
+    }).then(function (json) {
+        $l.dom.replace($l.id('text-ajax-get-request'), json.testResponse);
 
-}).fail(function (error) {
-    $l.dom.replace(text, 'Error: ' + error.message);
+    }).catch(function (error) {
+        $l.dom.replace(text, 'Error: ' + error.message);
 
-});
+    });
                         </pre>
                     </div>
                 </div>
@@ -599,7 +599,7 @@ var step1action2 = $l.anim.setCss({
 });
 
 var step2 = function () {
-    var deferred = $l.anim.setCss({
+    var promise = $l.anim.setCss({
         object:   box,
         property: 'left',
         from:     50, // current value
@@ -609,7 +609,7 @@ var step2 = function () {
         reset:    false
     });
 
-    myStory.add('second-step', deferred);
+    myStory.add('second-step', promise);
 };
 
 var step3 = function () {
@@ -1162,71 +1162,6 @@ $l.dom.setEvent(
         var storage = select.options[select.selectedIndex].value;
         $l.vars.remove(storage, 'demopage');
         $l.dom.append(text, storage + ' is removed&lt;br /&gt;');
-
-        return false;
-    }
-);
-                        </pre>
-                    </div>
-                </div>
-            </div>
-
-            <div id="when-examples" class="row header-row">
-                <div class="col-sm-6">
-                    <h2 class="nomargin">When Examples</h2>
-                </div>
-                <div class="col-sm-6 text-right">
-                    <a class="btn btn-sm btn-default" href="https://github.com/larukedi/laroux.js/wiki/when" role="button">Wiki Page</a>
-                </div>
-            </div>
-
-            <div class="example-area">
-                <h3>Triggers</h3>
-                <div class="row">
-                    <div class="col-sm-4">
-                        <button id="button-when-set-1" class="btn btn-default">Button 1</button>
-                        <button id="button-when-set-2" class="btn btn-default">Button 2</button>
-                        <button id="button-when-set-reset" class="btn btn-default" disabled="disabled">Reset</button>
-                        <div id="text-when-set"></div>
-                    </div>
-                    <div class="col-sm-8">
-                        <h4>HTML</h4>
-                        <pre class="prettyprint">
-&lt;button id="button-when-set-1" class="btn btn-default"&gt;Button 1&lt;/button&gt;
-&lt;button id="button-when-set-2" class="btn btn-default"&gt;Button 2&lt;/button&gt;
-&lt;div id="text-when-set"&gt;&lt;/div&gt;
-                        </pre>
-
-                        <h4>Javascript</h4>
-                        <pre class="prettyprint">
-var text = $l.id('text-when-set');
-$l.dom.replace(text, 'click both buttons in any order&lt;br /&gt;');
-
-var promise1 = new $l.deferred();
-var promise2 = new $l.deferred();
-
-new $l.when(promise1, promise2)
-    .then(function() {
-        $l.dom.append(text, 'all set&lt;br /&gt;');
-    });
-
-$l.dom.setEvent(
-    $l.id('button-when-set-1'),
-    'click',
-    function() {
-        $l.dom.append(text, 'button1 clicked...&lt;br /&gt;');
-        promise1.resolve();
-
-        return false;
-    }
-);
-
-$l.dom.setEvent(
-    $l.id('button-when-set-2'),
-    'click',
-    function() {
-        $l.dom.append(text, 'button2 clicked...&lt;br /&gt;');
-        promise2.resolve();
 
         return false;
     }
