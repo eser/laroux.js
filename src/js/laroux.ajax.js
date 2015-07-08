@@ -283,9 +283,11 @@ class ResponsePolyfill extends Body {
 
 let fetchExist = ('fetch' in global);
 
-export default {
+let ajax = {
     fetch: fetchExist ? helpers.bindContext(fetch, global) : fetchPolyfill,
     Headers: fetchExist ? Headers : HeadersPolyfill,
     Request: fetchExist ? Request : RequestPolyfill,
     Response: fetchExist ? Response : ResponsePolyfill
 };
+
+export default ajax;
