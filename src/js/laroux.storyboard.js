@@ -3,7 +3,7 @@
 
 import PromiseObject from './laroux.promiseObject.js';
 
-export default class Storyboard {
+class Storyboard {
     constructor(...args) {
         let self = this;
 
@@ -82,3 +82,5 @@ export default class Storyboard {
         this.running = false;
     }
 }
+
+export default Storyboard;

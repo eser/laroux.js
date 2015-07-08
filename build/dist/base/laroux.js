@@ -5,6 +5,8 @@
  * @link https://larukedi.github.io/laroux.js
  * @license Apache-2.0
  */
+/*jslint node: true */
+/*global document */
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -61,72 +63,67 @@ var _larouxVarsJs = require('./laroux.vars.js');
 
 var _larouxVarsJs2 = _interopRequireDefault(_larouxVarsJs);
 
-exports['default'] = (function () {
-    'use strict';
-
-    var laroux = function laroux(selector, parent) {
-        if (selector.constructor === Array) {
-            return _larouxHelpersJs2['default'].toArray((parent || document).querySelectorAll(selector));
-        }
-
-        // FIXME: Laroux: non-chromium optimization, but it runs
-        //                slowly in chromium
-        //
-        // let re = /^#([^\+\>\[\]\.# ]*)$/.exec(selector);
-        // if (re) {
-        //     return (parent || document).getElementById(re[1]);
-        // }
-
-        return (parent || document).querySelector(selector);
-    };
-
-    _larouxHelpersJs2['default'].merge(laroux, _larouxHelpersJs2['default']);
-    _larouxHelpersJs2['default'].merge(laroux, {
-        ajax: _larouxAjaxJs2['default'],
-        events: _larouxEventsJs2['default'],
-        intl: _larouxIntlJs2['default'],
-        promise: _larouxPromiseObjectJs2['default'],
-        require: _larouxRequireJs2['default'],
-        storyboard: _larouxStoryboardJs2['default'],
-        types: _larouxTypesJs2['default'],
-        templates: _larouxTemplatesJs2['default'],
-        timers: _larouxTimersJs2['default'],
-        validation: _larouxValidationJs2['default'],
-        vars: _larouxVarsJs2['default'],
-
-        extend: function extend(source) {
-            return _larouxHelpersJs2['default'].merge(laroux, source);
-        },
-
-        extendNs: function extendNs(path, source) {
-            return _larouxHelpersJs2['default'].mergeNs(laroux, path, source);
-        },
-
-        readyPassed: false,
-
-        ready: function ready(callback) {
-            if (!laroux.readyPassed) {
-                _larouxEventsJs2['default'].add('ContentLoaded', callback);
-                return;
-            }
-
-            callback();
-        },
-
-        setReady: function setReady() {
-            if (!laroux.readyPassed) {
-                _larouxEventsJs2['default'].invoke('ContentLoaded');
-                setInterval(_larouxTimersJs2['default'].ontick, 100);
-                laroux.readyPassed = true;
-            }
-        }
-    });
-
-    if (global.$l === undefined) {
-        global.$l = laroux;
+var laroux = function laroux(selector, parent) {
+    if (selector.constructor === Array) {
+        return _larouxHelpersJs2['default'].toArray((parent || document).querySelectorAll(selector));
     }
 
-    return laroux;
-})();
+    // FIXME: Laroux: non-chromium optimization, but it runs
+    //                slowly in chromium
+    //
+    // let re = /^#([^\+\>\[\]\.# ]*)$/.exec(selector);
+    // if (re) {
+    //     return (parent || document).getElementById(re[1]);
+    // }
 
+    return (parent || document).querySelector(selector);
+};
+
+_larouxHelpersJs2['default'].merge(laroux, _larouxHelpersJs2['default']);
+_larouxHelpersJs2['default'].merge(laroux, {
+    ajax: _larouxAjaxJs2['default'],
+    events: _larouxEventsJs2['default'],
+    intl: _larouxIntlJs2['default'],
+    promise: _larouxPromiseObjectJs2['default'],
+    require: _larouxRequireJs2['default'],
+    storyboard: _larouxStoryboardJs2['default'],
+    types: _larouxTypesJs2['default'],
+    templates: _larouxTemplatesJs2['default'],
+    timers: _larouxTimersJs2['default'],
+    validation: _larouxValidationJs2['default'],
+    vars: _larouxVarsJs2['default'],
+
+    extend: function extend(source) {
+        return _larouxHelpersJs2['default'].merge(laroux, source);
+    },
+
+    extendNs: function extendNs(path, source) {
+        return _larouxHelpersJs2['default'].mergeNs(laroux, path, source);
+    },
+
+    readyPassed: false,
+
+    ready: function ready(callback) {
+        if (!laroux.readyPassed) {
+            _larouxEventsJs2['default'].add('ContentLoaded', callback);
+            return;
+        }
+
+        callback();
+    },
+
+    setReady: function setReady() {
+        if (!laroux.readyPassed) {
+            _larouxEventsJs2['default'].invoke('ContentLoaded');
+            setInterval(_larouxTimersJs2['default'].ontick, 100);
+            laroux.readyPassed = true;
+        }
+    }
+});
+
+if (global.$l === undefined) {
+    global.$l = laroux;
+}
+
+exports['default'] = laroux;
 module.exports = exports['default'];

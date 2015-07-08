@@ -146,12 +146,9 @@ var Observable = (function () {
     return Observable;
 })();
 
-exports['default'] = (function () {
-    var types = {
-        observable: Observable
-    };
+var types = {
+    observable: Observable
+};
 
-    return types;
-})();
-
+exports['default'] = types;
 module.exports = exports['default'];

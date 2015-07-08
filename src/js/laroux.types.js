@@ -112,11 +112,8 @@ class Observable {
     }
 }
 
-export default (function () {
-    let types = {
-        observable: Observable
-    };
+let types = {
+    observable: Observable
+};
 
-    return types;
-
-})();
+export default types;
