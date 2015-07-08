@@ -13,14 +13,25 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 <<<<<<< HEAD:docs/assets/js/laroux.js
 <<<<<<< HEAD:docs/assets/js/laroux.js
+<<<<<<< HEAD:docs/assets/js/laroux.js
+=======
+(function (global){
+/*jslint node: true */
+/*global fetch, Headers, Request, Response, Blob, FormData, FileReader, XMLHttpRequest */
+>>>>>>> * ajax is replaced by fetchObject.:build/dist/web/laroux.js
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
     value: true
 });
 
+var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
+<<<<<<< HEAD:docs/assets/js/laroux.js
 <<<<<<< HEAD:docs/assets/js/laroux.js
 =======
 var _larouxJs = require('../laroux.js');
@@ -126,8 +137,11 @@ var _larouxDeferredJs2 = _interopRequireDefault(_larouxDeferredJs);
 =======
 >>>>>>> * implemented Promises/A+ instead of $l.deferred and $l.when.:build/dist/web/laroux.js
 var _larouxEventsJs = require('./laroux.events.js');
+=======
+function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; }
+>>>>>>> * ajax is replaced by fetchObject.:build/dist/web/laroux.js
 
-var _larouxEventsJs2 = _interopRequireDefault(_larouxEventsJs);
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
 var _larouxHelpersJs = require('./laroux.helpers.js');
 
@@ -137,228 +151,334 @@ var _larouxPromiseObjectJs = require('./laroux.promiseObject.js');
 
 var _larouxPromiseObjectJs2 = _interopRequireDefault(_larouxPromiseObjectJs);
 
-exports['default'] = (function () {
-    'use strict';
+// ajax - partially taken from 'window.fetch polyfill' project
+//        can be found at: https://github.com/github/fetch
+//        see laroux.ajax.LICENSE file for details
+var fetchPolyfill = function fetchPolyfill(request, init) {
+    // TODO: Request constructor should accept input, init
+    if (init || request.constructor !== RequestPolyfill) {
+        request = new RequestPolyfill(request, init);
+    }
 
-    // ajax - partially taken from 'jquery in parts' project
-    //        can be found at: https://github.com/mythz/jquip/
-    var ajax = {
-        corsDefault: false,
+    return new _larouxPromiseObjectJs2['default'](function (resolve, reject) {
+        var xhr = new XMLHttpRequest();
 
-        xmlHttpRequestObject: null,
-        xDomainRequestObject: null,
-        xhr: function xhr(crossDomain) {
-            if (ajax.xmlHttpRequestObject === null) {
-                ajax.xmlHttpRequestObject = new XMLHttpRequest();
+        xhr.onload = function () {
+            var status = xhr.status === 1223 ? 204 : xhr.status;
+            if (status < 100 || status >= 600) {
+                reject(new TypeError('Network request failed'));
+                return;
             }
 
-            if (crossDomain && !('withCredentials' in ajax.xmlHttpRequestObject) && typeof XDomainRequest !== 'undefined') {
-                if (ajax.xDomainRequestObject === null) {
-                    ajax.xDomainRequestObject = new XDomainRequest();
-                }
+            var options = {
+                status: status,
+                statusText: xhr.statusText,
+                headers: new HeadersPolyfill()
+            },
+                allHeaders = xhr.getAllResponseHeaders(),
+                pairs = allHeaders.trim().split('\n');
 
-                return ajax.xDomainRequestObject;
-            }
+            pairs.forEach(function (header) {
+                var split = header.trim().split(':'),
+                    key = split.shift().trim(),
+                    value = split.join(':').trim();
 
-            return ajax.xmlHttpRequestObject;
-        },
+                options.headers.append(key, value);
+            });
 
-        xhrResp: function xhrResp(xhr, options) {
-            var response = undefined;
-
-            if (options.datatype === 'json') {
-                response = JSON.parse(xhr.responseText);
-            } else if (options.datatype === 'xml') {
-                response = xhr.responseXML;
+            if ('responseURL' in xhr) {
+                options.url = xhr.responseURL;
+            } else if (options.headers.has('X-Request-URL')) {
+                // Avoid security warnings on getResponseHeader when not allowed by CORS
+                options.url = options.headers.get('X-Request-URL');
             } else {
-                response = xhr.responseText;
+                options.url = null;
             }
 
-            return {
-                response: response
-            };
-        },
+            resolve(new ResponsePolyfill(xhr.response || xhr.responseText, options));
+        };
 
-        makeRequest: function makeRequest(options) {
-            return new _larouxPromiseObjectJs2['default'](function (resolve, reject) {
-                var cors = options.cors || ajax.corsDefault,
-                    xhr = ajax.xhr(cors),
-                    url = options.url,
-                    timer = null,
-                    n = 0;
+        xhr.onerror = function () {
+            reject(new TypeError('Network request failed'));
+        };
 
-                if (options.timeout !== undefined) {
-                    timer = setTimeout(function () {
-                        xhr.abort();
-                        reject('timeout', options.url);
-                    }, options.timeout);
-                }
+        xhr.open(request.method, request.url, true);
 
-                xhr.onreadystatechange = function () {
-                    if (xhr.readyState === 4) {
-                        if (timer !== null) {
-                            clearTimeout(timer);
-                        }
-
-                        if (xhr.status < 300) {
-                            var res = null,
-                                isSuccess = true;
-
-                            try {
-                                res = ajax.xhrResp(xhr, options);
-                            } catch (err) {
-                                reject(err, xhr);
-                                _larouxEventsJs2['default'].invoke('ajaxError', { exception: err, xhr: xhr });
-                                isSuccess = false;
-                            }
-
-                            if (isSuccess && res !== null) {
-                                resolve(res.response, xhr);
-                                _larouxEventsJs2['default'].invoke('ajaxSuccess', { res: res, xhr: xhr });
-                            }
-                        } else {
-                            reject(xhr);
-                            _larouxEventsJs2['default'].invoke('ajaxError', xhr);
-                        }
-
-                        _larouxEventsJs2['default'].invoke('ajaxComplete', { xhr: xhr });
-                    } else if (options.progress !== undefined) {
-                        /*jslint plusplus: true */
-                        options.progress(++n);
-                    }
-                };
-
-                if (options.getdata !== undefined && options.getdata !== null) {
-                    if (options.getdata.constructor === Object) {
-                        var queryString = _larouxHelpersJs2['default'].buildQueryString(options.getdata);
-                        if (queryString.length > 0) {
-                            url += (url.indexOf('?') < 0 ? '?' : '&') + queryString;
-                        }
-                    } else {
-                        url += (url.indexOf('?') < 0 ? '?' : '&') + options.getdata;
-                    }
-                }
-
-                if (options.jsonp !== undefined) {
-                    url += (url.indexOf('?') < 0 ? '?' : '&') + 'jsonp=' + options.jsonp;
-                }
-
-                if (xhr.constructor === XMLHttpRequest) {
-                    xhr.open(options.type, url, true);
-                } else {
-                    xhr.open(options.type, url);
-                }
-
-                if (options.xhrFields !== undefined) {
-                    for (var i in options.xhrFields) {
-                        if (!options.xhrFields.hasOwnProperty(i)) {
-                            continue;
-                        }
-
-                        xhr[i] = options.xhrFields[i];
-                    }
-                }
-
-                var headers = options.headers || {};
-
-                if (!cors) {
-                    headers['X-Requested-With'] = 'XMLHttpRequest';
-                }
-
-                for (var j in headers) {
-                    if (!headers.hasOwnProperty(j)) {
-                        continue;
-                    }
-
-                    xhr.setRequestHeader(j, headers[j]);
-                }
-
-                if (options.postdata === undefined || options.postdata === null) {
-                    xhr.send(null);
-                    return;
-                }
-
-                switch (options.postdatatype) {
-                    case 'json':
-                        xhr.send(JSON.stringify(options.postdata));
-                        break;
-                    case 'form':
-                        xhr.send(_larouxHelpersJs2['default'].buildFormData(options.postdata));
-                        break;
-                    default:
-                        xhr.send(options.postdata);
-                        break;
-                }
-            });
-        },
-
-        get: function get(path, values, cors) {
-            return ajax.makeRequest({
-                type: 'GET',
-                url: path,
-                datatype: 'html',
-                getdata: values,
-                cors: cors || ajax.corsDefault
-            });
-        },
-
-        getJson: function getJson(path, values, cors) {
-            return ajax.makeRequest({
-                type: 'GET',
-                url: path,
-                datatype: 'json',
-                getdata: values,
-                cors: cors || ajax.corsDefault
-            });
-        },
-
-        getJsonP: function getJsonP(path, values, method, cors) {
-            var promise = ajax.makeRequest({
-                type: 'GET',
-                url: path,
-                datatype: 'json',
-                getdata: values,
-                jsonp: method,
-                cors: cors || ajax.corsDefault
-            });
-
-            promise.done(function (data) {
-                method(data);
-            });
-
-            return promise;
-        },
-
-        post: function post(path, values, cors) {
-            return ajax.makeRequest({
-                type: 'POST',
-                url: path,
-                datatype: 'json',
-                postdata: values,
-                postdatatype: 'form',
-                cors: cors || ajax.corsDefault
-            });
-        },
-
-        postJson: function postJson(path, values, cors) {
-            return ajax.makeRequest({
-                type: 'POST',
-                url: path,
-                datatype: 'json',
-                postdata: values,
-                postdatatype: 'json',
-                headers: {
-                    'Content-Type': 'application/json; charset=UTF-8'
-                },
-                cors: cors || ajax.corsDefault
-            });
+        if (request.credentials === 'include') {
+            xhr.withCredentials = true;
         }
-    };
 
-    return ajax;
+        if (typeof Blob !== 'undefined' && 'responseType' in xhr) {
+            xhr.responseType = 'blob';
+        }
+
+        request.headers.forEach(function (value, name) {
+            xhr.setRequestHeader(name, value);
+        });
+
+        xhr.send(request.content);
+    });
+};
+
+var HeadersPolyfill = (function () {
+    function HeadersPolyfill(headers) {
+        _classCallCheck(this, HeadersPolyfill);
+
+        this.map = {};
+
+        this['delete'] = this._delete;
+
+        if (headers !== undefined) {
+            if (headers.constructor === HeadersPolyfill) {
+                headers.forEach(function (value, name) {
+                    this.append(name, value);
+                }, this);
+
+                return;
+            }
+
+            Object.getOwnPropertyNames(headers).forEach(function (name) {
+                this.append(name, headers[name]);
+            }, this);
+        }
+    }
+
+    _createClass(HeadersPolyfill, [{
+        key: 'normalizeName',
+        value: function normalizeName(name) {
+            if (name.constructor !== String) {
+                name = name.toString();
+            }
+
+            if (/[^a-z0-9\-#$%&'*+.\^_`|~]/i.test(name)) {
+                throw new TypeError('Invalid character in header field name');
+            }
+
+            return name.toLowerCase();
+        }
+    }, {
+        key: 'normalizeValue',
+        value: function normalizeValue(value) {
+            if (value.constructor !== String) {
+                value = value.toString();
+            }
+
+            return value.toLowerCase();
+        }
+    }, {
+        key: 'append',
+        value: function append(name, value) {
+            name = this.normalizeName(name);
+
+            if (!(name in this.map)) {
+                this.map[name] = [];
+            }
+
+            this.map[name].push(this.normalizeValue(value));
+        }
+    }, {
+        key: '_delete',
+        value: function _delete(name) {
+            delete this.map[this.normalizeName(name)];
+        }
+    }, {
+        key: 'get',
+        value: function get(name) {
+            var values = this.map[this.normalizeName(name)];
+            return values ? values[0] : null;
+        }
+    }, {
+        key: 'getAll',
+        value: function getAll(name) {
+            return this.map[this.normalizeName(name)] || [];
+        }
+    }, {
+        key: 'has',
+        value: function has(name) {
+            return this.normalizeName(name) in this.map;
+        }
+    }, {
+        key: 'set',
+        value: function set(name, value) {
+            this.map[this.normalizeName(name)] = [this.normalizeValue(value)];
+        }
+    }, {
+        key: 'forEach',
+        value: function forEach(callback, context) {
+            Object.getOwnPropertyNames(this.map).forEach(function (name) {
+                this.map[name].forEach(function (value) {
+                    callback.call(context, value, name, this);
+                }, this);
+            }, this);
+        }
+    }]);
+
+    return HeadersPolyfill;
 })();
 
+var Body = (function () {
+    function Body() {
+        _classCallCheck(this, Body);
+
+        this.bodyUsed = false;
+    }
+
+    _createClass(Body, [{
+        key: 'blob',
+        value: function blob() {
+            var rejected = this.consumed();
+            if (rejected) {
+                return rejected;
+            }
+
+            if (this.content instanceof Blob) {
+                return _larouxPromiseObjectJs2['default'].resolve(this.content);
+            }
+
+            if (this.content instanceof FormData) {
+                throw new Error('could not read FormData body as blob');
+            }
+
+            return _larouxPromiseObjectJs2['default'].resolve(new Blob([this.content]));
+        }
+    }, {
+        key: 'arrayBuffer',
+        value: function arrayBuffer() {
+            return this.blob().then();
+        }
+    }, {
+        key: 'text',
+        value: function text() {
+            var rejected = this.consumed();
+            if (rejected) {
+                return rejected;
+            }
+
+            if (this.content instanceof Blob) {
+                return this.readBlobAsText(this.content);
+            }
+
+            if (this.content instanceof FormData) {
+                throw new Error('could not read FormData body as text');
+            }
+
+            return _larouxPromiseObjectJs2['default'].resolve(this.content);
+        }
+    }, {
+        key: 'formData',
+        value: function formData() {
+            return this.text().then(this.decode);
+        }
+    }, {
+        key: 'json',
+        value: function json() {
+            return this.text().then(JSON.parse);
+        }
+    }, {
+        key: 'consumed',
+        value: function consumed() {
+            if (this.bodyUsed) {
+                return _larouxPromiseObjectJs2['default'].reject(new TypeError('Already read'));
+            }
+
+            this.bodyUsed = true;
+        }
+    }, {
+        key: 'readBlobAsArrayBuffer',
+        value: function readBlobAsArrayBuffer(blob) {
+            var reader = new FileReader();
+            reader.readAsArrayBuffer(blob);
+
+            return this.fileReaderReady(reader);
+        }
+    }, {
+        key: 'readBlobAsText',
+        value: function readBlobAsText(blob) {
+            var reader = new FileReader();
+            reader.readAsText(blob);
+
+            return this.fileReaderReady(reader);
+        }
+    }, {
+        key: 'fileReaderReady',
+        value: function fileReaderReady(reader) {
+            return new _larouxPromiseObjectJs2['default'](function (resolve, reject) {
+                reader.onload = function () {
+                    resolve(reader.result);
+                };
+
+                reader.onerror = function () {
+                    reject(reader.error);
+                };
+            });
+        }
+    }]);
+
+    return Body;
+})();
+
+var RequestPolyfill = (function (_Body) {
+    function RequestPolyfill(url, options) {
+        _classCallCheck(this, RequestPolyfill);
+
+        _get(Object.getPrototypeOf(RequestPolyfill.prototype), 'constructor', this).call(this);
+
+        if (options === undefined) {
+            options = {};
+        }
+
+        this.url = url;
+        this.credentials = options.credentials || 'omit';
+        this.headers = new HeadersPolyfill(options.headers);
+        this.method = options.method || 'GET';
+        this.mode = options.mode || null;
+        this.referrer = null;
+
+        if (options.body) {
+            this.content = options.body;
+        }
+    }
+
+    _inherits(RequestPolyfill, _Body);
+
+    return RequestPolyfill;
+})(Body);
+
+var ResponsePolyfill = (function (_Body2) {
+    function ResponsePolyfill(body, options) {
+        _classCallCheck(this, ResponsePolyfill);
+
+        _get(Object.getPrototypeOf(ResponsePolyfill.prototype), 'constructor', this).call(this);
+
+        if (options === undefined) {
+            options = {};
+        }
+
+        this.type = 'default';
+        this.url = options.url || '';
+        this.status = options.status;
+        this.ok = this.status >= 200 && this.status < 300;
+        this.statusText = options.statusText;
+        this.headers = options.headers.constructor === HeadersPolyfill ? options.headers : new HeadersPolyfill(options.headers);
+
+        this.content = body;
+    }
+
+    _inherits(ResponsePolyfill, _Body2);
+
+    return ResponsePolyfill;
+})(Body);
+
+var fetchExist = typeof fetch !== 'undefined';
+
+exports['default'] = {
+    fetch: fetchExist ? _larouxHelpersJs2['default'].bindContext(fetch, global) : fetchPolyfill,
+    Headers: fetchExist ? Headers : HeadersPolyfill,
+    Request: fetchExist ? Request : RequestPolyfill,
+    Response: fetchExist ? Response : ResponsePolyfill
+};
 module.exports = exports['default'];
+<<<<<<< HEAD:docs/assets/js/laroux.js
 <<<<<<< HEAD:docs/assets/js/laroux.js
 <<<<<<< HEAD:docs/assets/js/laroux.js
 <<<<<<< HEAD:docs/assets/js/laroux.js
@@ -749,6 +869,10 @@ module.exports = exports['default'];
 =======
 },{"./laroux.events.js":2,"./laroux.helpers.js":4,"./laroux.promiseObject.js":7}],2:[function(require,module,exports){
 >>>>>>> * initial commit for $l.fetch.:build/dist/web/laroux.js
+=======
+}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+},{"./laroux.helpers.js":3,"./laroux.promiseObject.js":6}],2:[function(require,module,exports){
+>>>>>>> * ajax is replaced by fetchObject.:build/dist/web/laroux.js
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -787,26 +911,6 @@ exports['default'] = (function () {
 
 module.exports = exports['default'];
 },{}],3:[function(require,module,exports){
-/*jslint node: true */
-'use strict';
-
-Object.defineProperty(exports, '__esModule', {
-  value: true
-});
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-var _larouxHelpersJs = require('./laroux.helpers.js');
-
-var _larouxHelpersJs2 = _interopRequireDefault(_larouxHelpersJs);
-
-// fetch - partially taken from 'window.fetch polyfill' project
-//         can be found at: https://github.com/github/fetch
-var fetchPolyfill = function fetchPolyfill() {};
-
-exports['default'] = fetch || fetchPolyfill;
-module.exports = exports['default'];
-},{"./laroux.helpers.js":4}],4:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -1272,6 +1376,7 @@ exports['default'] = (function () {
 module.exports = exports['default'];
 <<<<<<< HEAD:docs/assets/js/laroux.js
 <<<<<<< HEAD:docs/assets/js/laroux.js
+<<<<<<< HEAD:docs/assets/js/laroux.js
 },{}],6:[function(require,module,exports){
 <<<<<<< HEAD:docs/assets/js/laroux.js
 =======
@@ -1281,6 +1386,9 @@ module.exports = exports['default'];
 =======
 },{}],5:[function(require,module,exports){
 >>>>>>> * initial commit for $l.fetch.:build/dist/web/laroux.js
+=======
+},{}],4:[function(require,module,exports){
+>>>>>>> * ajax is replaced by fetchObject.:build/dist/web/laroux.js
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -1519,6 +1627,7 @@ exports['default'] = (function () {
 module.exports = exports['default'];
 <<<<<<< HEAD:docs/assets/js/laroux.js
 <<<<<<< HEAD:docs/assets/js/laroux.js
+<<<<<<< HEAD:docs/assets/js/laroux.js
 },{"./laroux.helpers.js":5}],7:[function(require,module,exports){
 >>>>>>> * added $l.require.:build/dist/web/laroux.js
 =======
@@ -1527,6 +1636,9 @@ module.exports = exports['default'];
 =======
 },{"./laroux.helpers.js":4}],6:[function(require,module,exports){
 >>>>>>> * initial commit for $l.fetch.:build/dist/web/laroux.js
+=======
+},{"./laroux.helpers.js":3}],5:[function(require,module,exports){
+>>>>>>> * ajax is replaced by fetchObject.:build/dist/web/laroux.js
 (function (global){
 'use strict';
 
@@ -1543,10 +1655,6 @@ var _larouxAjaxJs2 = _interopRequireDefault(_larouxAjaxJs);
 var _larouxEventsJs = require('./laroux.events.js');
 
 var _larouxEventsJs2 = _interopRequireDefault(_larouxEventsJs);
-
-var _larouxFetchObjectJs = require('./laroux.fetchObject.js');
-
-var _larouxFetchObjectJs2 = _interopRequireDefault(_larouxFetchObjectJs);
 
 var _larouxHelpersJs = require('./laroux.helpers.js');
 
@@ -1616,10 +1724,13 @@ exports['default'] = (function () {
         events: _larouxEventsJs2['default'],
 <<<<<<< HEAD:docs/assets/js/laroux.js
 <<<<<<< HEAD:docs/assets/js/laroux.js
+<<<<<<< HEAD:docs/assets/js/laroux.js
 =======
 =======
         fetch: _larouxFetchObjectJs2['default'],
 >>>>>>> * initial commit for $l.fetch.:build/dist/web/laroux.js
+=======
+>>>>>>> * ajax is replaced by fetchObject.:build/dist/web/laroux.js
         intl: _larouxIntlJs2['default'],
         promise: _larouxPromiseObjectJs2['default'],
         require: _larouxRequireJs2['default'],
@@ -1668,7 +1779,7 @@ exports['default'] = (function () {
 
 module.exports = exports['default'];
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./laroux.ajax.js":1,"./laroux.events.js":2,"./laroux.fetchObject.js":3,"./laroux.helpers.js":4,"./laroux.intl.js":5,"./laroux.promiseObject.js":7,"./laroux.require.js":8,"./laroux.storyboard.js":9,"./laroux.templates.js":10,"./laroux.timers.js":11,"./laroux.types.js":12,"./laroux.validation.js":13,"./laroux.vars.js":14}],7:[function(require,module,exports){
+},{"./laroux.ajax.js":1,"./laroux.events.js":2,"./laroux.helpers.js":3,"./laroux.intl.js":4,"./laroux.promiseObject.js":6,"./laroux.require.js":7,"./laroux.storyboard.js":8,"./laroux.templates.js":9,"./laroux.timers.js":10,"./laroux.types.js":11,"./laroux.validation.js":12,"./laroux.vars.js":13}],6:[function(require,module,exports){
 /*jslint node: true */
 'use strict';
 
@@ -1686,8 +1797,9 @@ var _larouxHelpersJs = require('./laroux.helpers.js');
 
 var _larouxHelpersJs2 = _interopRequireDefault(_larouxHelpersJs);
 
-// promise - partially taken from 'promise-polyfill' project
-//           can be found at: https://github.com/taylorhakes/promise-polyfill
+// promiseObject - partially taken from 'promise-polyfill' project
+//                 can be found at: https://github.com/taylorhakes/promise-polyfill
+//                 see laroux.promiseObject.LICENSE file for details
 
 var PromisePolyfill = (function () {
     function PromisePolyfill(callback) {
@@ -1700,7 +1812,7 @@ var PromisePolyfill = (function () {
         this['catch'] = this._catch;
 
         if (callback !== undefined) {
-            this.doResolve(callback, _larouxHelpersJs2['default'].bind(this.resolve, this), _larouxHelpersJs2['default'].bind(this.reject, this));
+            this.doResolve(callback, _larouxHelpersJs2['default'].bindContext(this.resolve, this), _larouxHelpersJs2['default'].bindContext(this.reject, this));
         }
     }
 
@@ -1739,7 +1851,7 @@ var PromisePolyfill = (function () {
         value: function resolve(newValue) {
             try {
                 if (newValue && newValue.then !== undefined && newValue.then.constructor === Function) {
-                    this.doResolve(_larouxHelpersJs2['default'].bind(newValue.then, newValue), _larouxHelpersJs2['default'].bind(this.resolve, this), _larouxHelpersJs2['default'].bind(this.reject, this));
+                    this.doResolve(_larouxHelpersJs2['default'].bindContext(newValue.then, newValue), _larouxHelpersJs2['default'].bindContext(this.resolve, this), _larouxHelpersJs2['default'].bindContext(this.reject, this));
                     return;
                 }
 
@@ -1893,6 +2005,7 @@ exports['default'] = Promise || PromisePolyfill;
 module.exports = exports['default'];
 <<<<<<< HEAD:docs/assets/js/laroux.js
 <<<<<<< HEAD:docs/assets/js/laroux.js
+<<<<<<< HEAD:docs/assets/js/laroux.js
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 <<<<<<< HEAD:docs/assets/js/laroux.js
 <<<<<<< HEAD:docs/assets/js/laroux.js
@@ -1908,6 +2021,9 @@ module.exports = exports['default'];
 =======
 },{"./laroux.helpers.js":4}],8:[function(require,module,exports){
 >>>>>>> * initial commit for $l.fetch.:build/dist/web/laroux.js
+=======
+},{"./laroux.helpers.js":3}],7:[function(require,module,exports){
+>>>>>>> * ajax is replaced by fetchObject.:build/dist/web/laroux.js
 (function (global){
 'use strict';
 
@@ -1977,6 +2093,7 @@ module.exports = exports['default'];
 <<<<<<< HEAD:docs/assets/js/laroux.js
 <<<<<<< HEAD:docs/assets/js/laroux.js
 <<<<<<< HEAD:docs/assets/js/laroux.js
+<<<<<<< HEAD:docs/assets/js/laroux.js
 },{"./laroux.ajax.js":2,"./laroux.deferred.js":3,"./laroux.when.js":14}],9:[function(require,module,exports){
 >>>>>>> * added $l.require.:build/dist/web/laroux.js
 =======
@@ -1988,6 +2105,9 @@ module.exports = exports['default'];
 =======
 },{}],9:[function(require,module,exports){
 >>>>>>> * initial commit for $l.fetch.:build/dist/web/laroux.js
+=======
+},{}],8:[function(require,module,exports){
+>>>>>>> * ajax is replaced by fetchObject.:build/dist/web/laroux.js
 (function (global){
 /*jslint node: true */
 'use strict';
@@ -2106,6 +2226,7 @@ module.exports = exports['default'];
 <<<<<<< HEAD:docs/assets/js/laroux.js
 <<<<<<< HEAD:docs/assets/js/laroux.js
 <<<<<<< HEAD:docs/assets/js/laroux.js
+<<<<<<< HEAD:docs/assets/js/laroux.js
 },{"./laroux.deferred.js":3}],8:[function(require,module,exports){
 =======
 },{"./laroux.deferred.js":3}],10:[function(require,module,exports){
@@ -2116,6 +2237,9 @@ module.exports = exports['default'];
 =======
 },{"./laroux.promiseObject.js":7}],10:[function(require,module,exports){
 >>>>>>> * initial commit for $l.fetch.:build/dist/web/laroux.js
+=======
+},{"./laroux.promiseObject.js":6}],9:[function(require,module,exports){
+>>>>>>> * ajax is replaced by fetchObject.:build/dist/web/laroux.js
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -2247,6 +2371,7 @@ module.exports = exports['default'];
 <<<<<<< HEAD:docs/assets/js/laroux.js
 <<<<<<< HEAD:docs/assets/js/laroux.js
 <<<<<<< HEAD:docs/assets/js/laroux.js
+<<<<<<< HEAD:docs/assets/js/laroux.js
 },{"./laroux.helpers.js":5}],9:[function(require,module,exports){
 =======
 },{"./laroux.helpers.js":5}],11:[function(require,module,exports){
@@ -2257,6 +2382,9 @@ module.exports = exports['default'];
 =======
 },{"./laroux.helpers.js":4}],11:[function(require,module,exports){
 >>>>>>> * initial commit for $l.fetch.:build/dist/web/laroux.js
+=======
+},{"./laroux.helpers.js":3}],10:[function(require,module,exports){
+>>>>>>> * ajax is replaced by fetchObject.:build/dist/web/laroux.js
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -2343,6 +2471,7 @@ module.exports = exports['default'];
 <<<<<<< HEAD:docs/assets/js/laroux.js
 <<<<<<< HEAD:docs/assets/js/laroux.js
 <<<<<<< HEAD:docs/assets/js/laroux.js
+<<<<<<< HEAD:docs/assets/js/laroux.js
 },{"./laroux.helpers.js":5}],10:[function(require,module,exports){
 =======
 },{"./laroux.helpers.js":5}],12:[function(require,module,exports){
@@ -2353,6 +2482,9 @@ module.exports = exports['default'];
 =======
 },{"./laroux.helpers.js":4}],12:[function(require,module,exports){
 >>>>>>> * initial commit for $l.fetch.:build/dist/web/laroux.js
+=======
+},{"./laroux.helpers.js":3}],11:[function(require,module,exports){
+>>>>>>> * ajax is replaced by fetchObject.:build/dist/web/laroux.js
 /*jslint node: true */
 'use strict';
 
@@ -2502,6 +2634,7 @@ module.exports = exports['default'];
 <<<<<<< HEAD:docs/assets/js/laroux.js
 <<<<<<< HEAD:docs/assets/js/laroux.js
 <<<<<<< HEAD:docs/assets/js/laroux.js
+<<<<<<< HEAD:docs/assets/js/laroux.js
 },{"./laroux.helpers.js":5}],11:[function(require,module,exports){
 =======
 },{"./laroux.helpers.js":5}],13:[function(require,module,exports){
@@ -2512,6 +2645,9 @@ module.exports = exports['default'];
 =======
 },{"./laroux.helpers.js":4}],13:[function(require,module,exports){
 >>>>>>> * initial commit for $l.fetch.:build/dist/web/laroux.js
+=======
+},{"./laroux.helpers.js":3}],12:[function(require,module,exports){
+>>>>>>> * ajax is replaced by fetchObject.:build/dist/web/laroux.js
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -2621,7 +2757,7 @@ exports['default'] = (function () {
 })();
 
 module.exports = exports['default'];
-},{"./laroux.helpers.js":4}],14:[function(require,module,exports){
+},{"./laroux.helpers.js":3}],13:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -2733,6 +2869,7 @@ exports['default'] = (function () {
 })();
 
 module.exports = exports['default'];
+<<<<<<< HEAD:docs/assets/js/laroux.js
 <<<<<<< HEAD:docs/assets/js/laroux.js
 <<<<<<< HEAD:docs/assets/js/laroux.js
 <<<<<<< HEAD:docs/assets/js/laroux.js
@@ -2869,6 +3006,9 @@ module.exports = exports['default'];
 =======
 },{"./laroux.helpers.js":4}],15:[function(require,module,exports){
 >>>>>>> * initial commit for $l.fetch.:build/dist/web/laroux.js
+=======
+},{"./laroux.helpers.js":3}],14:[function(require,module,exports){
+>>>>>>> * ajax is replaced by fetchObject.:build/dist/web/laroux.js
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -3048,6 +3188,7 @@ module.exports = exports['default'];
 <<<<<<< HEAD:docs/assets/js/laroux.js
 <<<<<<< HEAD:docs/assets/js/laroux.js
 <<<<<<< HEAD:docs/assets/js/laroux.js
+<<<<<<< HEAD:docs/assets/js/laroux.js
 },{"../laroux.deferred.js":3,"../laroux.helpers.js":5,"./laroux.css.js":14}],14:[function(require,module,exports){
 =======
 },{"../laroux.deferred.js":3,"../laroux.helpers.js":5,"./laroux.css.js":16}],16:[function(require,module,exports){
@@ -3061,6 +3202,9 @@ module.exports = exports['default'];
 =======
 },{"../laroux.helpers.js":4,"../laroux.promiseObject.js":7,"./laroux.css.js":16}],16:[function(require,module,exports){
 >>>>>>> * initial commit for $l.fetch.:build/dist/web/laroux.js
+=======
+},{"../laroux.helpers.js":3,"../laroux.promiseObject.js":6,"./laroux.css.js":15}],15:[function(require,module,exports){
+>>>>>>> * ajax is replaced by fetchObject.:build/dist/web/laroux.js
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -3326,6 +3470,7 @@ module.exports = exports['default'];
 <<<<<<< HEAD:docs/assets/js/laroux.js
 <<<<<<< HEAD:docs/assets/js/laroux.js
 <<<<<<< HEAD:docs/assets/js/laroux.js
+<<<<<<< HEAD:docs/assets/js/laroux.js
 },{"../laroux.helpers.js":5}],15:[function(require,module,exports){
 =======
 },{"../laroux.helpers.js":5}],17:[function(require,module,exports){
@@ -3339,6 +3484,9 @@ module.exports = exports['default'];
 =======
 },{"../laroux.helpers.js":4}],17:[function(require,module,exports){
 >>>>>>> * initial commit for $l.fetch.:build/dist/web/laroux.js
+=======
+},{"../laroux.helpers.js":3}],16:[function(require,module,exports){
+>>>>>>> * ajax is replaced by fetchObject.:build/dist/web/laroux.js
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -3783,6 +3931,7 @@ module.exports = exports['default'];
 <<<<<<< HEAD:docs/assets/js/laroux.js
 <<<<<<< HEAD:docs/assets/js/laroux.js
 <<<<<<< HEAD:docs/assets/js/laroux.js
+<<<<<<< HEAD:docs/assets/js/laroux.js
 },{"../laroux.helpers.js":5}],16:[function(require,module,exports){
 =======
 },{"../laroux.helpers.js":5}],18:[function(require,module,exports){
@@ -3796,6 +3945,9 @@ module.exports = exports['default'];
 =======
 },{"../laroux.helpers.js":4,"../laroux.promiseObject.js":7}],18:[function(require,module,exports){
 >>>>>>> * initial commit for $l.fetch.:build/dist/web/laroux.js
+=======
+},{"../laroux.helpers.js":3,"../laroux.promiseObject.js":6}],17:[function(require,module,exports){
+>>>>>>> * ajax is replaced by fetchObject.:build/dist/web/laroux.js
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -3826,7 +3978,14 @@ exports['default'] = (function () {
                     callbackBegin();
                 }
 
-                _larouxAjaxJs2['default'].post(formobj.getAttribute('action'), forms.serializeFormData(formobj), callback);
+                var promise = _larouxAjaxJs2['default'].fetch(formobj.getAttribute('action'), {
+                    method: 'POST',
+                    body: forms.serializeFormData(formobj)
+                });
+
+                if (callback !== undefined) {
+                    promise.then(callback);
+                }
 
                 return false;
             });
@@ -4032,6 +4191,7 @@ module.exports = exports['default'];
 <<<<<<< HEAD:docs/assets/js/laroux.js
 <<<<<<< HEAD:docs/assets/js/laroux.js
 <<<<<<< HEAD:docs/assets/js/laroux.js
+<<<<<<< HEAD:docs/assets/js/laroux.js
 },{"../laroux.ajax.js":1,"./laroux.dom.js":15}],17:[function(require,module,exports){
 =======
 },{"../laroux.ajax.js":2,"../laroux.validation.js":13,"./laroux.dom.js":18}],20:[function(require,module,exports){
@@ -4042,6 +4202,9 @@ module.exports = exports['default'];
 =======
 },{"../laroux.ajax.js":1,"../laroux.validation.js":13,"./laroux.dom.js":17}],19:[function(require,module,exports){
 >>>>>>> * initial commit for $l.fetch.:build/dist/web/laroux.js
+=======
+},{"../laroux.ajax.js":1,"../laroux.validation.js":12,"./laroux.dom.js":16}],18:[function(require,module,exports){
+>>>>>>> * ajax is replaced by fetchObject.:build/dist/web/laroux.js
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -4209,6 +4372,7 @@ module.exports = exports['default'];
 <<<<<<< HEAD:docs/assets/js/laroux.js
 <<<<<<< HEAD:docs/assets/js/laroux.js
 <<<<<<< HEAD:docs/assets/js/laroux.js
+<<<<<<< HEAD:docs/assets/js/laroux.js
 },{"./laroux.dom.js":15,"./laroux.forms.js":16}],18:[function(require,module,exports){
 =======
 },{"./laroux.dom.js":18,"./laroux.forms.js":19}],21:[function(require,module,exports){
@@ -4219,6 +4383,9 @@ module.exports = exports['default'];
 =======
 },{"./laroux.dom.js":17,"./laroux.forms.js":18}],20:[function(require,module,exports){
 >>>>>>> * initial commit for $l.fetch.:build/dist/web/laroux.js
+=======
+},{"./laroux.dom.js":16,"./laroux.forms.js":17}],19:[function(require,module,exports){
+>>>>>>> * ajax is replaced by fetchObject.:build/dist/web/laroux.js
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -4417,6 +4584,7 @@ module.exports = exports['default'];
 <<<<<<< HEAD:docs/assets/js/laroux.js
 <<<<<<< HEAD:docs/assets/js/laroux.js
 <<<<<<< HEAD:docs/assets/js/laroux.js
+<<<<<<< HEAD:docs/assets/js/laroux.js
 },{"../laroux.helpers.js":5,"./laroux.dom.js":15}],19:[function(require,module,exports){
 =======
 },{"../laroux.helpers.js":5,"./laroux.dom.js":17}],21:[function(require,module,exports){
@@ -4430,6 +4598,9 @@ module.exports = exports['default'];
 =======
 },{"../laroux.helpers.js":4,"./laroux.dom.js":17}],21:[function(require,module,exports){
 >>>>>>> * initial commit for $l.fetch.:build/dist/web/laroux.js
+=======
+},{"../laroux.helpers.js":3,"./laroux.dom.js":16}],20:[function(require,module,exports){
+>>>>>>> * ajax is replaced by fetchObject.:build/dist/web/laroux.js
 (function (global){
 'use strict';
 
@@ -4452,6 +4623,7 @@ exports['default'] = (function () {
 
     // routes - partially taken from 'routie' project
     //          can be found at: https://github.com/jgallen23/routie
+    //          see laroux.routes.LICENSE file for details
     var routes = {
         map: {},
         attached: false,
@@ -4639,6 +4811,7 @@ module.exports = exports['default'];
 <<<<<<< HEAD:docs/assets/js/laroux.js
 <<<<<<< HEAD:docs/assets/js/laroux.js
 <<<<<<< HEAD:docs/assets/js/laroux.js
+<<<<<<< HEAD:docs/assets/js/laroux.js
 },{"../laroux.helpers.js":5,"../laroux.js":6}],20:[function(require,module,exports){
 =======
 },{"../laroux.helpers.js":5,"../laroux.js":7}],22:[function(require,module,exports){
@@ -4652,6 +4825,9 @@ module.exports = exports['default'];
 =======
 },{"../laroux.helpers.js":4,"../laroux.js":6}],22:[function(require,module,exports){
 >>>>>>> * initial commit for $l.fetch.:build/dist/web/laroux.js
+=======
+},{"../laroux.helpers.js":3,"../laroux.js":5}],21:[function(require,module,exports){
+>>>>>>> * ajax is replaced by fetchObject.:build/dist/web/laroux.js
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -4673,6 +4849,7 @@ exports['default'] = (function () {
 
     // touch - partially taken from 'tocca.js' project
     //         can be found at: https://github.com/GianlucaGuarini/Tocca.js
+    //         see laroux.touch.LICENSE file for details
     var touch = {
         touchStarted: null,
         swipeTreshold: 80,
@@ -4792,6 +4969,7 @@ module.exports = exports['default'];
 <<<<<<< HEAD:docs/assets/js/laroux.js
 <<<<<<< HEAD:docs/assets/js/laroux.js
 <<<<<<< HEAD:docs/assets/js/laroux.js
+<<<<<<< HEAD:docs/assets/js/laroux.js
 },{"../laroux.js":6,"./laroux.dom.js":15}],21:[function(require,module,exports){
 =======
 },{"../laroux.js":5,"./laroux.dom.js":16}],22:[function(require,module,exports){
@@ -4799,6 +4977,9 @@ module.exports = exports['default'];
 =======
 },{"../laroux.js":6,"./laroux.dom.js":17}],23:[function(require,module,exports){
 >>>>>>> * initial commit for $l.fetch.:build/dist/web/laroux.js
+=======
+},{"../laroux.js":5,"./laroux.dom.js":16}],22:[function(require,module,exports){
+>>>>>>> * ajax is replaced by fetchObject.:build/dist/web/laroux.js
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -4893,6 +5074,7 @@ exports['default'] = (function () {
 module.exports = exports['default'];
 <<<<<<< HEAD:docs/assets/js/laroux.js
 <<<<<<< HEAD:docs/assets/js/laroux.js
+<<<<<<< HEAD:docs/assets/js/laroux.js
 },{"../laroux.js":6,"./laroux.anim.js":13,"./laroux.css.js":14,"./laroux.dom.js":15,"./laroux.forms.js":16,"./laroux.keys.js":17,"./laroux.mvc.js":18,"./laroux.routes.js":19,"./laroux.touch.js":20}]},{},[21]);
 =======
 },{"../laroux.js":7,"./laroux.dom.js":18}]},{},[1]);
@@ -4903,3 +5085,6 @@ module.exports = exports['default'];
 =======
 },{"../laroux.js":6,"./laroux.anim.js":15,"./laroux.css.js":16,"./laroux.dom.js":17,"./laroux.forms.js":18,"./laroux.keys.js":19,"./laroux.mvc.js":20,"./laroux.routes.js":21,"./laroux.touch.js":22}]},{},[23]);
 >>>>>>> * initial commit for $l.fetch.:build/dist/web/laroux.js
+=======
+},{"../laroux.js":5,"./laroux.anim.js":14,"./laroux.css.js":15,"./laroux.dom.js":16,"./laroux.forms.js":17,"./laroux.keys.js":18,"./laroux.mvc.js":19,"./laroux.routes.js":20,"./laroux.touch.js":21}]},{},[22]);
+>>>>>>> * ajax is replaced by fetchObject.:build/dist/web/laroux.js

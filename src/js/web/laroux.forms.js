@@ -12,11 +12,17 @@ export default (function () {
                     callbackBegin();
                 }
 
-                ajax.post(
+                let promise = ajax.fetch(
                     formobj.getAttribute('action'),
-                    forms.serializeFormData(formobj),
-                    callback
+                    {
+                        method: 'POST',
+                        body: forms.serializeFormData(formobj)
+                    }
                 );
+
+                if (callback !== undefined) {
+                    promise.then(callback);
+                }
 
                 return false;
             });

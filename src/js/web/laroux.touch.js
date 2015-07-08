@@ -7,6 +7,7 @@ export default (function () {
 
     // touch - partially taken from 'tocca.js' project
     //         can be found at: https://github.com/GianlucaGuarini/Tocca.js
+    //         see laroux.touch.LICENSE file for details
     let touch = {
         touchStarted: null,
         swipeTreshold: 80,

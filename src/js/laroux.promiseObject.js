@@ -3,8 +3,9 @@
 
 import helpers from './laroux.helpers.js';
 
-// promise - partially taken from 'promise-polyfill' project
-//           can be found at: https://github.com/taylorhakes/promise-polyfill
+// promiseObject - partially taken from 'promise-polyfill' project
+//                 can be found at: https://github.com/taylorhakes/promise-polyfill
+//                 see laroux.promiseObject.LICENSE file for details
 class PromisePolyfill {
     constructor(callback) {
         this.state = null;
@@ -16,8 +17,8 @@ class PromisePolyfill {
         if (callback !== undefined) {
             this.doResolve(
                 callback,
-                helpers.bind(this.resolve, this),
-                helpers.bind(this.reject, this)
+                helpers.bindContext(this.resolve, this),
+                helpers.bindContext(this.reject, this)
             );
         }
     }
@@ -58,9 +59,9 @@ class PromisePolyfill {
         try {
             if (newValue && newValue.then !== undefined && newValue.then.constructor === Function) {
                 this.doResolve(
-                    helpers.bind(newValue.then, newValue),
-                    helpers.bind(this.resolve, this),
-                    helpers.bind(this.reject, this)
+                    helpers.bindContext(newValue.then, newValue),
+                    helpers.bindContext(this.resolve, this),
+                    helpers.bindContext(this.reject, this)
                 );
                 return;
             }
