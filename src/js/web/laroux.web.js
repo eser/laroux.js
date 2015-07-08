@@ -52,7 +52,7 @@ export default (function () {
         }
     });
 
-    if (typeof document !== 'undefined') {
+    if ('document' in global) {
         document.addEventListener(
             'DOMContentLoaded',
             laroux.setReady
