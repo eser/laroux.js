@@ -337,7 +337,6 @@ export default (function () {
             return new PromiseObject(function (resolve, reject) {
                 let elem = document.createElement('script');
 
-                elem.type = 'text/javascript';
                 if (async !== undefined) {
                     elem.async = async;
                 }

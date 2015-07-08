@@ -2043,6 +2043,12 @@ Object.defineProperty(exports, '__esModule', {
     value: true
 });
 
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+var _larouxPromiseObjectJs = require('./laroux.promiseObject.js');
+
+var _larouxPromiseObjectJs2 = _interopRequireDefault(_larouxPromiseObjectJs);
+
 exports['default'] = (function () {
     'use strict';
 
@@ -2080,13 +2086,16 @@ exports['default'] = (function () {
             var requirement = requirements[i];
 
             if (!(requirement in require_.modules)) {
-                throw 'dependency not loaded: ' + requirement + '.';
+                throw new Error('dependency not loaded: ' + requirement + '.');
             }
 
             dependencies.push(require_.modules[requirement]);
         }
 
-        var result = callback.apply(global, dependencies);
+        var result = _larouxPromiseObjectJs2['default'].all(dependencies).then(function (dependencies) {
+            return _larouxPromiseObjectJs2['default'].resolve(callback.apply(global, dependencies));
+        });
+        // let result = callback.apply(global, dependencies);
 
         if (name !== null) {
             require_.modules[name] = result;
@@ -2106,6 +2115,7 @@ module.exports = exports['default'];
 <<<<<<< HEAD:docs/assets/js/laroux.js
 <<<<<<< HEAD:docs/assets/js/laroux.js
 <<<<<<< HEAD:docs/assets/js/laroux.js
+<<<<<<< HEAD:docs/assets/js/laroux.js
 },{"./laroux.ajax.js":2,"./laroux.deferred.js":3,"./laroux.when.js":14}],9:[function(require,module,exports){
 >>>>>>> * added $l.require.:build/dist/web/laroux.js
 =======
@@ -2120,6 +2130,9 @@ module.exports = exports['default'];
 =======
 },{}],8:[function(require,module,exports){
 >>>>>>> * ajax is replaced by fetchObject.:build/dist/web/laroux.js
+=======
+},{"./laroux.promiseObject.js":6}],8:[function(require,module,exports){
+>>>>>>> * async $l.require.:build/dist/web/laroux.js
 (function (global){
 /*jslint node: true */
 'use strict';
@@ -3844,7 +3857,6 @@ exports['default'] = (function () {
             return new _larouxPromiseObjectJs2['default'](function (resolve, reject) {
                 var elem = document.createElement('script');
 
-                elem.type = 'text/javascript';
                 if (async !== undefined) {
                     elem.async = async;
                 }
