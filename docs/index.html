@@ -41,36 +41,36 @@
                                 <li class="col-sm-3">
                                     <ul>
                                         <li class="dropdown-header">Base Components</li>
-                                        <li><a href="https://github.com/eserozvataf/laroux.js/wiki/ajax">Ajax</a></li>
-                                        <li><a href="https://github.com/eserozvataf/laroux.js/wiki/deferred">Deferred</a></li>
-                                        <li><a href="https://github.com/eserozvataf/laroux.js/wiki/events">Events</a></li>
-                                        <li><a href="https://github.com/eserozvataf/laroux.js/wiki/helpers">Helpers</a></li>
-                                        <li><a href="https://github.com/eserozvataf/laroux.js/wiki/intl">Intl</a></li>
-                                        <li><a href="https://github.com/eserozvataf/laroux.js/wiki/require">Require</a></li>
-                                        <li><a href="https://github.com/eserozvataf/laroux.js/wiki/storyboard">Storyboard</a></li>
-                                        <li><a href="https://github.com/eserozvataf/laroux.js/wiki/templates">Templates</a></li>
+                                        <li><a href="https://github.com/larukedi/laroux.js/wiki/ajax">Ajax</a></li>
+                                        <li><a href="https://github.com/larukedi/laroux.js/wiki/events">Events</a></li>
+                                        <li><a href="https://github.com/larukedi/laroux.js/wiki/helpers">Helpers</a></li>
+                                        <li><a href="https://github.com/larukedi/laroux.js/wiki/intl">Intl</a></li>
+                                        <li><a href="https://github.com/larukedi/laroux.js/wiki/promise">Promise</a></li>
+                                        <li><a href="https://github.com/larukedi/laroux.js/wiki/require">Require</a></li>
+                                        <li><a href="https://github.com/larukedi/laroux.js/wiki/storyboard">Storyboard</a></li>
+                                        <li><a href="https://github.com/larukedi/laroux.js/wiki/templates">Templates</a></li>
                                     </ul>
                                 </li>
                                 <li class="col-sm-3">
                                     <ul>
-                                        <li><a href="https://github.com/eserozvataf/laroux.js/wiki/types">Types</a></li>
-                                        <li><a href="https://github.com/eserozvataf/laroux.js/wiki/validation">Validation</a></li>
-                                        <li><a href="https://github.com/eserozvataf/laroux.js/wiki/vars">Vars</a></li>
-                                        <li><a href="https://github.com/eserozvataf/laroux.js/wiki/when">When</a></li>
+                                        <li><a href="https://github.com/larukedi/laroux.js/wiki/timers">Timers</a></li>
+                                        <li><a href="https://github.com/larukedi/laroux.js/wiki/types">Types</a></li>
+                                        <li><a href="https://github.com/larukedi/laroux.js/wiki/validation">Validation</a></li>
+                                        <li><a href="https://github.com/larukedi/laroux.js/wiki/vars">Vars</a></li>
                                         <li class="divider"></li>
                                         <li class="dropdown-header">Web Components</li>
-                                        <li><a href="https://github.com/eserozvataf/laroux.js/wiki/anim">Anim</a></li>
-                                        <li><a href="https://github.com/eserozvataf/laroux.js/wiki/css">CSS</a></li>
+                                        <li><a href="https://github.com/larukedi/laroux.js/wiki/anim">Anim</a></li>
+                                        <li><a href="https://github.com/larukedi/laroux.js/wiki/css">CSS</a></li>
+                                        <li><a href="https://github.com/larukedi/laroux.js/wiki/dom">DOM</a></li>
                                     </ul>
                                 </li>
                                 <li class="col-sm-3">
                                     <ul>
-                                        <li><a href="https://github.com/eserozvataf/laroux.js/wiki/dom">DOM</a></li>
-                                        <li><a href="https://github.com/eserozvataf/laroux.js/wiki/forms">Forms</a></li>
-                                        <li><a href="https://github.com/eserozvataf/laroux.js/wiki/keys">Keys</a></li>
-                                        <li><a href="https://github.com/eserozvataf/laroux.js/wiki/mvc">MVC</a></li>
-                                        <li><a href="https://github.com/eserozvataf/laroux.js/wiki/routes">Routes</a></li>
-                                        <li><a href="https://github.com/eserozvataf/laroux.js/wiki/touch">Touch</a></li>
+                                        <li><a href="https://github.com/larukedi/laroux.js/wiki/forms">Forms</a></li>
+                                        <li><a href="https://github.com/larukedi/laroux.js/wiki/keys">Keys</a></li>
+                                        <li><a href="https://github.com/larukedi/laroux.js/wiki/mvc">MVC</a></li>
+                                        <li><a href="https://github.com/larukedi/laroux.js/wiki/routes">Routes</a></li>
+                                        <li><a href="https://github.com/larukedi/laroux.js/wiki/touch">Touch</a></li>
                                         <li class="divider"></li>
                                         <li class="dropdown-header">Need Help?</li>
                                         <li><a href="https://github.com/eserozvataf/laroux.js/issues">GitHub Issues <span class="glyphicon glyphicon-chevron-right pull-right"></span></a></li>
@@ -156,16 +156,17 @@
 
                         <h4>Javascript</h4>
                         <pre class="prettyprint">
-$l.ajax.getJson(
-    'test.json'
+$l.ajax.fetch('test.json')
+    .then(function (response) {
+        return response.json();
 
-).done(function (response) {
-    $l.dom.replace($l.id('text-ajax-get-request'), response.testResponse);
+    }).then(function (json) {
+        $l.dom.replace($l.id('text-ajax-get-request'), json.testResponse);
 
-}).fail(function (error) {
-    $l.dom.replace(text, 'Error: ' + error.message);
+    }).catch(function (error) {
+        $l.dom.replace(text, 'Error: ' + error.message);
 
-});
+    });
                         </pre>
                     </div>
                 </div>
@@ -598,7 +599,7 @@ var step1action2 = $l.anim.setCss({
 });
 
 var step2 = function () {
-    var deferred = $l.anim.setCss({
+    var promise = $l.anim.setCss({
         object:   box,
         property: 'left',
         from:     50, // current value
@@ -608,7 +609,7 @@ var step2 = function () {
         reset:    false
     });
 
-    myStory.add('second-step', deferred);
+    myStory.add('second-step', promise);
 };
 
 var step3 = function () {
