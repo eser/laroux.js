@@ -1,3 +1,5 @@
+import PromiseObject from './laroux.promiseObject.js';
+
 export default (function () {
     'use strict';
 
@@ -29,13 +31,16 @@ export default (function () {
             let requirement = requirements[i];
 
             if (!(requirement in require_.modules)) {
-                throw 'dependency not loaded: ' + requirement + '.';
+                throw new Error('dependency not loaded: ' + requirement + '.');
             }
 
             dependencies.push(require_.modules[requirement]);
         }
 
-        let result = callback.apply(global, dependencies);
+        let result = PromiseObject.all(dependencies).then(function (dependencies) {
+            return PromiseObject.resolve(callback.apply(global, dependencies));
+        });
+        // let result = callback.apply(global, dependencies);
 
         if (name !== null) {
             require_.modules[name] = result;
