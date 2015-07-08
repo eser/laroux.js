@@ -22,8 +22,9 @@ var _larouxHelpersJs = require('./laroux.helpers.js');
 
 var _larouxHelpersJs2 = _interopRequireDefault(_larouxHelpersJs);
 
-// promise - partially taken from 'promise-polyfill' project
-//           can be found at: https://github.com/taylorhakes/promise-polyfill
+// promiseObject - partially taken from 'promise-polyfill' project
+//                 can be found at: https://github.com/taylorhakes/promise-polyfill
+//                 see laroux.promiseObject.LICENSE file for details
 
 var PromisePolyfill = (function () {
     function PromisePolyfill(callback) {
@@ -36,7 +37,7 @@ var PromisePolyfill = (function () {
         this['catch'] = this._catch;
 
         if (callback !== undefined) {
-            this.doResolve(callback, _larouxHelpersJs2['default'].bind(this.resolve, this), _larouxHelpersJs2['default'].bind(this.reject, this));
+            this.doResolve(callback, _larouxHelpersJs2['default'].bindContext(this.resolve, this), _larouxHelpersJs2['default'].bindContext(this.reject, this));
         }
     }
 
@@ -75,7 +76,7 @@ var PromisePolyfill = (function () {
         value: function resolve(newValue) {
             try {
                 if (newValue && newValue.then !== undefined && newValue.then.constructor === Function) {
-                    this.doResolve(_larouxHelpersJs2['default'].bind(newValue.then, newValue), _larouxHelpersJs2['default'].bind(this.resolve, this), _larouxHelpersJs2['default'].bind(this.reject, this));
+                    this.doResolve(_larouxHelpersJs2['default'].bindContext(newValue.then, newValue), _larouxHelpersJs2['default'].bindContext(this.resolve, this), _larouxHelpersJs2['default'].bindContext(this.reject, this));
                     return;
                 }
 

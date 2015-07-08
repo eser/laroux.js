@@ -7,6 +7,7 @@ export default (function () {
 
     // routes - partially taken from 'routie' project
     //          can be found at: https://github.com/jgallen23/routie
+    //          see laroux.routes.LICENSE file for details
     let routes = {
         map: {},
         attached: false,
