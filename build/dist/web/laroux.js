@@ -353,12 +353,14 @@ var ResponsePolyfill = (function (_Body2) {
 
 var fetchExist = ('fetch' in global);
 
-exports['default'] = {
+var ajax = {
     fetch: fetchExist ? _larouxHelpersJs2['default'].bindContext(fetch, global) : fetchPolyfill,
     Headers: fetchExist ? Headers : HeadersPolyfill,
     Request: fetchExist ? Request : RequestPolyfill,
     Response: fetchExist ? Response : ResponsePolyfill
 };
+
+exports['default'] = ajax;
 module.exports = exports['default'];
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 },{"./laroux.helpers.js":3,"./laroux.promiseObject.js":6}],2:[function(require,module,exports){
