@@ -42,13 +42,13 @@ Additionally [Anim](https://github.com/larukedi/laroux.js/wiki/anim), [CSS](http
 The latest version is always downloadable from [releases page](https://github.com/larukedi/laroux.js/releases).
 
 
-The required file ([laroux.min.js](//rawgit.com/larukedi/laroux.js/master/build/dist/web/laroux.min.js) can also be found at `rawgit.com`.
+The required file ([laroux.min.js](//cdn.rawgit.com/larukedi/laroux.js/v2.2.0/build/dist/web/laroux.min.js) can also be found at `rawgit.com`.
 
 
 Including these files would be enough to start using `laroux.js` (or `laroux.min.js`) in your web project. For example:
 
 ```html
-<script src="//rawgit.com/larukedi/laroux.js/master/build/dist/web/laroux.min.js"></script>
+<script src="//cdn.rawgit.com/larukedi/laroux.js/v2.2.0/build/dist/web/laroux.min.js"></script>
 ```
 
 

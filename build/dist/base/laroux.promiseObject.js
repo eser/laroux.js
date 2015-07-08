@@ -226,5 +226,7 @@ var PromisePolyfill = (function () {
     return PromisePolyfill;
 })();
 
-exports['default'] = Promise || PromisePolyfill;
+var promiseExist = ('Promise' in global);
+
+exports['default'] = promiseExist ? Promise : PromisePolyfill;
 module.exports = exports['default'];

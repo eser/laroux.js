@@ -194,4 +194,6 @@ class PromisePolyfill {
     }
 }
 
-export default (Promise || PromisePolyfill);
+let promiseExist = ('Promise' in global);
+
+export default (promiseExist ? Promise : PromisePolyfill);

@@ -433,7 +433,7 @@ export default (function () {
     };
 
     // a fix for Internet Explorer
-    if (typeof Element !== 'undefined') {
+    if ('Element' in global) {
         if (Element.prototype.remove === undefined) {
             Element.prototype.remove = function () {
                 if (this.parentElement !== null) {

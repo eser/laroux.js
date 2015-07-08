@@ -35,7 +35,7 @@ var Observable = (function () {
             _larouxHelpersJs2['default'].callAll(self._callbacks, self, [changes]);
         };
 
-        Object.observe(this, this._onupdate);
+        this.observe(this);
 
         if (data) {
             this.setRange(data);
@@ -120,12 +120,16 @@ var Observable = (function () {
     }, {
         key: 'observe',
         value: function observe(obj) {
-            Object.observe(obj, this._onupdate);
+            if ('observe' in Object) {
+                Object.observe(obj, this._onupdate);
+            }
         }
     }, {
         key: 'unobserve',
         value: function unobserve(obj) {
-            Object.unobserve(obj);
+            if ('unobserve' in Object) {
+                Object.unobserve(obj);
+            }
         }
     }, {
         key: 'on',

@@ -88,7 +88,7 @@ var fetchPolyfill = function fetchPolyfill(request, init) {
             xhr.withCredentials = true;
         }
 
-        if (typeof Blob !== 'undefined' && 'responseType' in xhr) {
+        if ('Blob' in global && 'responseType' in xhr) {
             xhr.responseType = 'blob';
         }
 
@@ -349,7 +349,7 @@ var ResponsePolyfill = (function (_Body2) {
     return ResponsePolyfill;
 })(Body);
 
-var fetchExist = typeof fetch !== 'undefined';
+var fetchExist = ('fetch' in global);
 
 exports['default'] = {
     fetch: fetchExist ? _larouxHelpersJs2['default'].bindContext(fetch, global) : fetchPolyfill,

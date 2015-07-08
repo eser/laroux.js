@@ -18,7 +18,7 @@ class Observable {
             );
         };
 
-        Object.observe(this, this._onupdate);
+        this.observe(this);
 
         if (data) {
             this.setRange(data);
@@ -92,11 +92,15 @@ class Observable {
     }
 
     observe(obj) {
-        Object.observe(obj, this._onupdate);
+        if ('observe' in Object) {
+            Object.observe(obj, this._onupdate);
+        }
     }
 
     unobserve(obj) {
-        Object.unobserve(obj);
+        if ('unobserve' in Object) {
+            Object.unobserve(obj);
+        }
     }
 
     on(callback) {

@@ -62,7 +62,7 @@ let fetchPolyfill = function (request, init) {
             xhr.withCredentials = true;
         }
 
-        if (typeof Blob !== 'undefined' && 'responseType' in xhr) {
+        if ('Blob' in global && 'responseType' in xhr) {
             xhr.responseType = 'blob';
         }
 
@@ -281,7 +281,7 @@ class ResponsePolyfill extends Body {
     }
 }
 
-let fetchExist = (typeof fetch !== 'undefined');
+let fetchExist = ('fetch' in global);
 
 export default {
     fetch: fetchExist ? helpers.bindContext(fetch, global) : fetchPolyfill,

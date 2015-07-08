@@ -20,7 +20,7 @@ export default (function () {
         },
 
         async: function (callback) {
-            if (typeof setImmediate !== 'undefined') {
+            if ('setImmediate' in global) {
                 setImmediate(callback);
                 return;
             }

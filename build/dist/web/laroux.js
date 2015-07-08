@@ -90,7 +90,7 @@ var fetchPolyfill = function fetchPolyfill(request, init) {
             xhr.withCredentials = true;
         }
 
-        if (typeof Blob !== 'undefined' && 'responseType' in xhr) {
+        if ('Blob' in global && 'responseType' in xhr) {
             xhr.responseType = 'blob';
         }
 
@@ -351,7 +351,7 @@ var ResponsePolyfill = (function (_Body2) {
     return ResponsePolyfill;
 })(Body);
 
-var fetchExist = typeof fetch !== 'undefined';
+var fetchExist = ('fetch' in global);
 
 exports['default'] = {
     fetch: fetchExist ? _larouxHelpersJs2['default'].bindContext(fetch, global) : fetchPolyfill,
@@ -400,6 +400,7 @@ exports['default'] = (function () {
 
 module.exports = exports['default'];
 },{}],3:[function(require,module,exports){
+(function (global){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -428,7 +429,7 @@ exports['default'] = (function () {
         },
 
         async: function async(callback) {
-            if (typeof setImmediate !== 'undefined') {
+            if ('setImmediate' in global) {
                 setImmediate(callback);
                 return;
             }
@@ -863,6 +864,7 @@ exports['default'] = (function () {
 })();
 
 module.exports = exports['default'];
+}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 },{}],4:[function(require,module,exports){
 'use strict';
 
@@ -1229,6 +1231,7 @@ exports['default'] = (function () {
 module.exports = exports['default'];
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 },{"./laroux.ajax.js":1,"./laroux.events.js":2,"./laroux.helpers.js":3,"./laroux.intl.js":4,"./laroux.promiseObject.js":6,"./laroux.require.js":7,"./laroux.storyboard.js":8,"./laroux.templates.js":9,"./laroux.timers.js":10,"./laroux.types.js":11,"./laroux.validation.js":12,"./laroux.vars.js":13}],6:[function(require,module,exports){
+(function (global){
 /*jslint node: true */
 'use strict';
 
@@ -1450,8 +1453,11 @@ var PromisePolyfill = (function () {
     return PromisePolyfill;
 })();
 
-exports['default'] = Promise || PromisePolyfill;
+var promiseExist = ('Promise' in global);
+
+exports['default'] = promiseExist ? Promise : PromisePolyfill;
 module.exports = exports['default'];
+}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 },{"./laroux.helpers.js":3}],7:[function(require,module,exports){
 (function (global){
 'use strict';
@@ -1879,7 +1885,7 @@ var Observable = (function () {
             _larouxHelpersJs2['default'].callAll(self._callbacks, self, [changes]);
         };
 
-        Object.observe(this, this._onupdate);
+        this.observe(this);
 
         if (data) {
             this.setRange(data);
@@ -1964,12 +1970,16 @@ var Observable = (function () {
     }, {
         key: 'observe',
         value: function observe(obj) {
-            Object.observe(obj, this._onupdate);
+            if ('observe' in Object) {
+                Object.observe(obj, this._onupdate);
+            }
         }
     }, {
         key: 'unobserve',
         value: function unobserve(obj) {
-            Object.unobserve(obj);
+            if ('unobserve' in Object) {
+                Object.unobserve(obj);
+            }
         }
     }, {
         key: 'on',
@@ -2656,6 +2666,7 @@ exports['default'] = (function () {
 
 module.exports = exports['default'];
 },{"../laroux.helpers.js":3}],16:[function(require,module,exports){
+(function (global){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -3082,7 +3093,7 @@ exports['default'] = (function () {
     };
 
     // a fix for Internet Explorer
-    if (typeof Element !== 'undefined') {
+    if ('Element' in global) {
         if (Element.prototype.remove === undefined) {
             Element.prototype.remove = function () {
                 if (this.parentElement !== null) {
@@ -3096,6 +3107,7 @@ exports['default'] = (function () {
 })();
 
 module.exports = exports['default'];
+}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 },{"../laroux.helpers.js":3,"../laroux.promiseObject.js":6}],17:[function(require,module,exports){
 'use strict';
 
@@ -4044,6 +4056,7 @@ exports['default'] = (function () {
 
 module.exports = exports['default'];
 },{"../laroux.js":5,"./laroux.dom.js":16}],22:[function(require,module,exports){
+(function (global){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -4124,7 +4137,7 @@ exports['default'] = (function () {
         }
     });
 
-    if (typeof document !== 'undefined') {
+    if ('document' in global) {
         document.addEventListener('DOMContentLoaded', _larouxJs2['default'].setReady);
     }
 
@@ -4132,4 +4145,5 @@ exports['default'] = (function () {
 })();
 
 module.exports = exports['default'];
+}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 },{"../laroux.js":5,"./laroux.anim.js":14,"./laroux.css.js":15,"./laroux.dom.js":16,"./laroux.forms.js":17,"./laroux.keys.js":18,"./laroux.mvc.js":19,"./laroux.routes.js":20,"./laroux.touch.js":21}]},{},[22]);
