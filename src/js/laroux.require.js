@@ -1,7 +1,9 @@
 /*jslint node: true */
 'use strict';
 
+import ajax from './laroux.ajax.js';
 import PromiseObject from './laroux.promiseObject.js';
+import helpers from './laroux.helpers.js';
 
 let require_ = function (...args) {
     let name, requirements, callback;
@@ -35,16 +37,38 @@ let require_ = function (...args) {
         }
 
         dependencies.push(require_.modules[requirement]);
+
     }
 
+    let result;
     if (callback.constructor === PromiseObject) {
         dependencies.push(callback);
-    }
 
-    let result = PromiseObject.all(dependencies);
+        result = PromiseObject.all(dependencies);
+    } else if (callback.constructor === String) {
+        if ('require' in global) {
+            result = PromiseObject.all(dependencies).then(function (dependencies) {
+                return require(callback);
+            });
+        } else {
+            let script;
 
-    if (callback.constructor !== PromiseObject) {
-        result = result.then(function (dependencies) {
+            let promise = ajax.fetch(callback)
+                .then(function (response) {
+                    return response.text();
+                }).then(function (text) {
+                    script = text;
+                    return text;
+                });
+
+            dependencies.push(promise);
+
+            result = PromiseObject.all(dependencies).then(function (dependencies) {
+                return helpers.executeScript.call(global, script);
+            });
+        }
+    } else {
+        result = PromiseObject.all(dependencies).then(function (dependencies) {
             return callback.apply(global, dependencies);
         });
     }

@@ -459,6 +459,11 @@ var helpers = {
         for (var i = 0, _length8 = callbacks.length; i < _length8; i++) {
             callbacks[i].apply(scope, parameters);
         }
+    },
+
+    executeScript: function executeScript(script) {
+        /*jslint evil:true */
+        return eval('(function () { ' + script + '})();');
     }
 };
 
