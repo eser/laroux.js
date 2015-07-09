@@ -1366,6 +1366,11 @@ var helpers = {
         for (var i = 0, _length8 = callbacks.length; i < _length8; i++) {
             callbacks[i].apply(scope, parameters);
         }
+    },
+
+    executeScript: function executeScript(script) {
+        /*jslint evil:true */
+        return eval('(function () { ' + script + '})();');
     }
 };
 
@@ -2061,9 +2066,17 @@ Object.defineProperty(exports, '__esModule', {
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
+var _larouxAjaxJs = require('./laroux.ajax.js');
+
+var _larouxAjaxJs2 = _interopRequireDefault(_larouxAjaxJs);
+
 var _larouxPromiseObjectJs = require('./laroux.promiseObject.js');
 
 var _larouxPromiseObjectJs2 = _interopRequireDefault(_larouxPromiseObjectJs);
+
+var _larouxHelpersJs = require('./laroux.helpers.js');
+
+var _larouxHelpersJs2 = _interopRequireDefault(_larouxHelpersJs);
 
 var require_ = function require_() {
     var name = undefined,
@@ -2105,14 +2118,36 @@ var require_ = function require_() {
         dependencies.push(require_.modules[requirement]);
     }
 
+    var result = undefined;
     if (callback.constructor === _larouxPromiseObjectJs2['default']) {
         dependencies.push(callback);
-    }
 
-    var result = _larouxPromiseObjectJs2['default'].all(dependencies);
+        result = _larouxPromiseObjectJs2['default'].all(dependencies);
+    } else if (callback.constructor === String) {
+        if ('require' in global) {
+            result = _larouxPromiseObjectJs2['default'].all(dependencies).then(function (dependencies) {
+                return require(callback);
+            });
+        } else {
+            (function () {
+                var script = undefined;
 
-    if (callback.constructor !== _larouxPromiseObjectJs2['default']) {
-        result = result.then(function (dependencies) {
+                var promise = _larouxAjaxJs2['default'].fetch(callback).then(function (response) {
+                    return response.text();
+                }).then(function (text) {
+                    script = text;
+                    return text;
+                });
+
+                dependencies.push(promise);
+
+                result = _larouxPromiseObjectJs2['default'].all(dependencies).then(function (dependencies) {
+                    return _larouxHelpersJs2['default'].executeScript.call(global, script);
+                });
+            })();
+        }
+    } else {
+        result = _larouxPromiseObjectJs2['default'].all(dependencies).then(function (dependencies) {
             return callback.apply(global, dependencies);
         });
     }
@@ -2129,6 +2164,7 @@ require_.modules = {};
 exports['default'] = require_;
 module.exports = exports['default'];
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+<<<<<<< HEAD:docs/assets/js/laroux.js
 <<<<<<< HEAD:docs/assets/js/laroux.js
 <<<<<<< HEAD:docs/assets/js/laroux.js
 <<<<<<< HEAD:docs/assets/js/laroux.js
@@ -2151,6 +2187,9 @@ module.exports = exports['default'];
 =======
 },{"./laroux.promiseObject.js":6}],8:[function(require,module,exports){
 >>>>>>> * async $l.require.:build/dist/web/laroux.js
+=======
+},{"./laroux.ajax.js":1,"./laroux.helpers.js":3,"./laroux.promiseObject.js":6}],8:[function(require,module,exports){
+>>>>>>> * $l.require external resources.:build/dist/web/laroux.js
 (function (global){
 /*jslint node: true */
 'use strict';
