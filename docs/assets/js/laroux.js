@@ -1368,17 +1368,9 @@ var helpers = {
         }
     },
 
-    executeScript: function executeScript(script) {
-        var module = {
-            exports: {}
-        },
-            exports = module.exports,
-            require = function require() {};
-
+    executeScript: function executeScript(script, context) {
         /*jslint evil:true */
-        eval('(function () { ' + script + '})();');
-
-        return module.exports;
+        return eval('(function () { ' + script + '}).call(context || global);');
     }
 };
 
