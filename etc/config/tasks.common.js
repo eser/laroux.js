@@ -13,7 +13,7 @@ module.exports = {
             ].join('\n'),
 
             jsFiles: [
-                './src/js/**/*.js'
+                './src/js/base/**/*.js'
             ],
 
             jsPreprocessVars: {
@@ -29,7 +29,7 @@ module.exports = {
             ],
 
             testFiles: [
-                './tests/**/*.js'
+                './tests/base/**/*.js'
             ],
 
             packs: [
@@ -68,7 +68,8 @@ module.exports = {
             ].join('\n'),
 
             jsFiles: [
-                './src/js/**/*.js'
+                './src/js/base/**/*.js',
+                './src/js/web/**/*.js'
             ],
 
             jsPreprocessVars: {
@@ -78,7 +79,7 @@ module.exports = {
             },
 
             jsBrowserifyEntryPoints: [
-                'web/laroux.web.js'
+                'laroux.web.js'
             ],
 
             jsBrowserifyOutputFile: '_browserified.js',
@@ -90,7 +91,7 @@ module.exports = {
             ],
 
             testFiles: [
-                './tests/**/*.js'
+                './tests/web/**/*.js'
             ],
 
             packs: [
@@ -104,6 +105,59 @@ module.exports = {
                     files: [
                         // FIXME '~/web/js/laroux.backward.js',
                         '~/web/js/_browserified.js'
+                    ]
+                }
+            ]
+        },
+
+        'web.mvvm': {
+            banner: [
+                '/**',
+                ' * <%= pkg.name %> - <%= pkg.description %> (<%= pkg.bundle %> bundle)',
+                ' *',
+                ' * @version v<%= pkg.version %>',
+                ' * @link <%= pkg.link %>',
+                ' * @license <%= pkg.license %>',
+                ' */',
+                ''
+            ].join('\n'),
+
+            jsFiles: [
+                './src/js/web.mvvm/**/*.js'
+            ],
+
+            jsPreprocessVars: {
+                BUNDLE: 'web.mvvm',
+                ENV: 'web',
+                COMPAT: true
+            },
+
+            jsBrowserifyEntryPoints: [
+                'laroux.mvvm.js'
+            ],
+
+            jsBrowserifyOutputFile: '_browserified.js',
+
+            lessFiles: [
+            ],
+
+            cssFiles: [
+            ],
+
+            testFiles: [
+                './tests/web.mvvm/**/*.js'
+            ],
+
+            packs: [
+                {
+                    uglify: true,
+                    minifyCSS: false,
+                    csscomb: false,
+                    header: true,
+                    concat: 'laroux.mvvm.js',
+                    dest: './build/dist/web.mvvm/',
+                    files: [
+                        '~/web.mvvm/js/_browserified.js'
                     ]
                 }
             ]

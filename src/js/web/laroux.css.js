@@ -2,7 +2,7 @@
 /*global getComputedStyle, document, innerHeight, innerWidth */
 'use strict';
 
-import helpers from '../laroux.helpers.js';
+import helpers from './laroux.helpers.js';
 
 let css = {
     // class features

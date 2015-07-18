@@ -873,2225 +873,18 @@ module.exports = exports['default'];
 >>>>>>> * initial commit for $l.fetch.:build/dist/web/laroux.js
 =======
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+<<<<<<< HEAD:docs/assets/js/laroux.js
 },{"./laroux.helpers.js":3,"./laroux.promiseObject.js":6}],2:[function(require,module,exports){
 <<<<<<< HEAD:docs/assets/js/laroux.js
 >>>>>>> * ajax is replaced by fetchObject.:build/dist/web/laroux.js
 =======
 /*jslint node: true */
 >>>>>>> * removed redundant module closures.:build/dist/web/laroux.js
-'use strict';
-
-Object.defineProperty(exports, '__esModule', {
-    value: true
-});
-var events = {
-    delegates: [],
-
-    add: function add(event, callback) {
-        events.delegates.push({ event: event, callback: callback });
-    },
-
-    invoke: function invoke(event) {
-        for (var i = 0, _length = events.delegates.length; i < _length; i++) {
-            var _events$delegates$i;
-
-            if (events.delegates[i].event != event) {
-                continue;
-            }
-
-            for (var _len = arguments.length, args = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
-                args[_key - 1] = arguments[_key];
-            }
-
-            (_events$delegates$i = events.delegates[i]).callback.apply(_events$delegates$i, args);
-        }
-    }
-};
-
-exports['default'] = events;
-module.exports = exports['default'];
-},{}],3:[function(require,module,exports){
-(function (global){
-/*jslint node: true */
-/*global FormData, NodeList */
-'use strict';
-
-Object.defineProperty(exports, '__esModule', {
-    value: true
-});
-var helpers = {
-    uniqueId: 0,
-
-    getUniqueId: function getUniqueId() {
-        /*jslint plusplus: true */
-        return 'uid-' + ++helpers.uniqueId;
-    },
-
-    bindContext: function bindContext(method, context) {
-        if (method.bind !== undefined) {
-            return method.bind(context);
-        }
-
-        return function () {
-            method.apply(context, arguments);
-        };
-    },
-
-    async: function async(callback) {
-        if ('setImmediate' in global) {
-            setImmediate(callback);
-            return;
-        }
-
-        setTimeout(callback, 0);
-    },
-
-    clone: function clone(obj) {
-        return JSON.parse(JSON.stringify(obj));
-    },
-
-    merge: function merge(target, source, clone) {
-        var result = clone ? helpers.clone(target) : target,
-            keys = Object.keys(source);
-
-        for (var i = 0, _length = keys.length; i < _length; i++) {
-            var key = keys[i];
-
-            if (result[key] instanceof Array) {
-                result[key] = result[key].concat(source[key]);
-                continue;
-            }
-
-            if (result[key] instanceof Object) {
-                helpers.merge(result[key], source[key]);
-                continue;
-            }
-
-            result[key] = source[key];
-        }
-
-        return result;
-    },
-
-    mergeNs: function mergeNs(target, path, source) {
-        var ptr = target,
-            pathSlices = path.split('.'),
-            keys = Object.keys(source);
-
-        for (var i = 0, _length2 = pathSlices.length; i < _length2; i++) {
-            var current = pathSlices[i];
-
-            if (ptr[current] === undefined) {
-                ptr[current] = {};
-            }
-
-            ptr = ptr[current];
-        }
-
-        if (source !== undefined) {
-            // might be replaced w/ $l.merge method
-            helpers.merge(ptr, source);
-        }
-
-        return target;
-    },
-
-    buildQueryString: function buildQueryString(values, rfc3986) {
-        var uri = '',
-            regEx = /%20/g;
-
-        for (var _name in values) {
-            if (!values.hasOwnProperty(_name)) {
-                continue;
-            }
-
-            if (typeof values[_name] !== 'function') {
-                if (rfc3986 || false) {
-                    uri += '&' + encodeURIComponent(_name).replace(regEx, '+') + '=' + encodeURIComponent(values[_name].toString()).replace(regEx, '+');
-                } else {
-                    uri += '&' + encodeURIComponent(_name) + '=' + encodeURIComponent(values[_name].toString());
-                }
-            }
-        }
-
-        return uri.substr(1);
-    },
-
-    buildFormData: function buildFormData(values) {
-        var data = new FormData();
-
-        for (var _name2 in values) {
-            if (!values.hasOwnProperty(_name2)) {
-                continue;
-            }
-
-            if (typeof values[_name2] !== 'function') {
-                data.append(_name2, values[_name2]);
-            }
-        }
-
-        return data;
-    },
-
-    format: function format() {
-        for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-            args[_key] = arguments[_key];
-        }
-
-        return Array.prototype.shift.call(args).replace(/%s/g, function () {
-            return Array.prototype.shift.call(args);
-        });
-    },
-
-    replaceAll: function replaceAll(text, dictionary) {
-        var re = new RegExp(Object.keys(dictionary).join('|'), 'g');
-
-        return text.replace(re, function (match) {
-            return dictionary[match];
-        });
-    },
-
-    camelCase: function camelCase(value) {
-        var flag = false;
-        var output = '';
-
-        for (var j = 0; j < value.length; j++) {
-            var currChar = value.charAt(j);
-            if (currChar === '-') {
-                flag = true;
-                continue;
-            }
-
-            output += !flag ? currChar : currChar.toUpperCase();
-            flag = false;
-        }
-
-        return output;
-    },
-
-    antiCamelCase: function antiCamelCase(value) {
-        var output = '';
-
-        for (var j = 0; j < value.length; j++) {
-            var currChar = value.charAt(j);
-            if (currChar !== '-' && currChar == currChar.toUpperCase()) {
-                output += '-' + currChar.toLowerCase();
-                continue;
-            }
-
-            output += currChar;
-        }
-
-        return output;
-    },
-
-    quoteAttr: function quoteAttr(value) {
-        return value.replace(/&/g, '&amp;').replace(/'/g, '&apos;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/\r\n/g, '&#13;').replace(/[\r\n]/g, '&#13;');
-    },
-
-    spliceString: function spliceString(value, index, count, add) {
-        return value.slice(0, index) + (add || '') + value.slice(index + count);
-    },
-
-    assign: function assign(values, keys) {
-        var result = {};
-
-        for (var i = 0, _length3 = keys.length; i < _length3; i++) {
-            result[keys[i]] = values[i];
-        }
-
-        return result;
-    },
-
-    random: function random(min, max) {
-        return min + Math.floor(Math.random() * (max - min + 1));
-    },
-
-    find: function find(obj, iterator, context) {
-        var result = undefined;
-
-        obj.some(function (value, index, list) {
-            if (iterator.call(context, value, index, list)) {
-                result = value;
-                return true;
-            }
-        });
-
-        return result;
-    },
-
-    each: function each(arr, callback, testOwnProperties) {
-        for (var item in arr) {
-            if (testOwnProperties && !arr.hasOwnProperty(item)) {
-                continue;
-            }
-
-            if (callback(item, arr[item]) === false) {
-                break;
-            }
-        }
-
-        return arr;
-    },
-
-    map: function map(arr, callback, dontSkipReturns, testOwnProperties) {
-        var results = [];
-
-        for (var item in arr) {
-            if (testOwnProperties && !arr.hasOwnProperty(item)) {
-                continue;
-            }
-
-            var result = callback(arr[item], item);
-            if (result === false) {
-                break;
-            }
-
-            if (dontSkipReturns || result !== undefined) {
-                results.push(result);
-            }
-        }
-
-        return results;
-    },
-
-    index: function index(arr, value, testOwnProperties) {
-        for (var item in arr) {
-            if (testOwnProperties && !arr.hasOwnProperty(item)) {
-                continue;
-            }
-
-            if (arr[item] === value) {
-                return item;
-            }
-        }
-
-        return null;
-    },
-
-    aeach: function aeach(arr, callback) {
-        for (var i = 0, _length4 = arr.length; i < _length4; i++) {
-            if (callback(i, arr[i]) === false) {
-                break;
-            }
-        }
-
-        return arr;
-    },
-
-    amap: function amap(arr, callback, dontSkipReturns) {
-        var results = [];
-
-        for (var i = 0, _length5 = arr.length; i < _length5; i++) {
-            var result = callback(arr[i], i);
-            if (result === false) {
-                break;
-            }
-
-            if (dontSkipReturns || result !== undefined) {
-                results.push(result);
-            }
-        }
-
-        return results;
-    },
-
-    aindex: function aindex(arr, value, start) {
-        for (var i = start || 0, _length6 = arr.length; i < _length6; i++) {
-            if (arr[i] === value) {
-                return i;
-            }
-        }
-
-        return -1;
-    },
-
-    column: function column(obj, key) {
-        return helpers.map(obj, function (value) {
-            return value[key];
-        }, true);
-    },
-
-    shuffle: function shuffle(obj) {
-        var index = 0,
-            shuffled = [];
-
-        for (var item in obj) {
-            if (!obj.hasOwnProperty(item)) {
-                continue;
-            }
-
-            var rand = helpers.random(0, index);
-            shuffled[index++] = shuffled[rand];
-            shuffled[rand] = obj[item];
-        }
-
-        return shuffled;
-    },
-
-    prependArray: function prependArray(obj, value) {
-        var length = obj.length,
-            items = new Array(length + 1);
-
-        items[0] = value;
-        for (var i = 0, j = 1; i < length; i++, j++) {
-            items[j] = obj[i];
-        }
-
-        return items;
-    },
-
-    removeFromArray: function removeFromArray(obj, value) {
-        var targetKey = null;
-
-        for (var item in obj) {
-            if (!obj.hasOwnProperty(item)) {
-                continue;
-            }
-
-            if (obj[item] === value) {
-                targetKey = item;
-                break;
-            }
-        }
-
-        if (targetKey !== null) {
-            obj.splice(targetKey, 1);
-            return true;
-        }
-
-        return false;
-    },
-
-    toArray: function toArray(obj) {
-        var length = obj.length,
-            items = new Array(length);
-
-        for (var i = 0; i < length; i++) {
-            items[i] = obj[i];
-        }
-
-        return items;
-    },
-
-    getAsArray: function getAsArray(obj) {
-        if (obj instanceof Array) {
-            return obj;
-        }
-
-        if (obj instanceof NodeList) {
-            var _length7 = obj.length;
-
-            var items = new Array(_length7);
-            for (var i = 0; i < _length7; i++) {
-                items[i] = obj[i];
-            }
-
-            return items;
-        }
-
-        return [obj];
-    },
-
-    getLength: function getLength(obj) {
-        if (obj.constructor === Object) {
-            if (obj.length !== undefined) {
-                return obj.length;
-            }
-
-            return Object.keys(obj).length;
-        }
-
-        return -1;
-    },
-
-    getKeysRecursive: function getKeysRecursive(obj, delimiter, prefix, keys) {
-        if (delimiter === undefined) {
-            delimiter = '.';
-        }
-
-        if (prefix === undefined) {
-            prefix = '';
-            keys = [];
-        }
-
-        for (var item in obj) {
-            if (!obj.hasOwnProperty(item)) {
-                continue;
-            }
-
-            keys.push(prefix + item);
-
-            if (obj[item] !== undefined && obj[item] !== null && obj[item].constructor === Object) {
-                helpers.getKeysRecursive(obj[item], delimiter, prefix + item + delimiter, keys);
-                continue;
-            }
-        }
-
-        return keys;
-    },
-
-    getElement: function getElement(obj, path, defaultValue, delimiter) {
-        if (defaultValue === undefined) {
-            defaultValue = null;
-        }
-
-        if (delimiter === undefined) {
-            delimiter = '.';
-        }
-
-        var pos = path.indexOf(delimiter);
-        var key = undefined;
-        var rest = undefined;
-        if (pos === -1) {
-            key = path;
-            rest = null;
-        } else {
-            key = path.substring(0, pos);
-            rest = path.substring(pos + 1);
-        }
-
-        if (!(key in obj)) {
-            return defaultValue;
-        }
-
-        if (rest === null || rest.length === 0) {
-            return obj[key];
-        }
-
-        return helpers.getElement(obj[key], rest, defaultValue, delimiter);
-    },
-
-    callAll: function callAll(callbacks, scope, parameters) {
-        for (var i = 0, _length8 = callbacks.length; i < _length8; i++) {
-            callbacks[i].apply(scope, parameters);
-        }
-    },
-
-    executeScript: function executeScript(script, context) {
-        /*jslint evil:true */
-        return eval('(function () { ' + script + '}).call(context || global);');
-    }
-};
-
-exports['default'] = helpers;
-module.exports = exports['default'];
-<<<<<<< HEAD:docs/assets/js/laroux.js
-<<<<<<< HEAD:docs/assets/js/laroux.js
-<<<<<<< HEAD:docs/assets/js/laroux.js
-<<<<<<< HEAD:docs/assets/js/laroux.js
-},{}],6:[function(require,module,exports){
-<<<<<<< HEAD:docs/assets/js/laroux.js
 =======
-=======
-},{}],4:[function(require,module,exports){
->>>>>>> * implemented Promises/A+ instead of $l.deferred and $l.when.:build/dist/web/laroux.js
-=======
-},{}],5:[function(require,module,exports){
->>>>>>> * initial commit for $l.fetch.:build/dist/web/laroux.js
-=======
-=======
-}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
->>>>>>> * fixed undefined checks.:build/dist/web/laroux.js
-},{}],4:[function(require,module,exports){
-<<<<<<< HEAD:docs/assets/js/laroux.js
->>>>>>> * ajax is replaced by fetchObject.:build/dist/web/laroux.js
-=======
-/*jslint node: true */
->>>>>>> * removed redundant module closures.:build/dist/web/laroux.js
-'use strict';
-
-Object.defineProperty(exports, '__esModule', {
-    value: true
-});
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-var _larouxHelpersJs = require('./laroux.helpers.js');
-
-var _larouxHelpersJs2 = _interopRequireDefault(_larouxHelpersJs);
-
-var intl = {
-    shortDateFormat: 'dd.MM.yyyy',
-    longDateFormat: 'dd MMMM yyyy',
-    timeFormat: 'HH:mm',
-
-    monthsShort: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-    monthsLong: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
-
-    strings: {
-        now: 'now',
-        later: 'later',
-        ago: 'ago',
-        seconds: 'seconds',
-        aminute: 'a minute',
-        minutes: 'minutes',
-        ahour: 'a hour',
-        hours: 'hours',
-        aday: 'a day',
-        days: 'days',
-        aweek: 'a week',
-        weeks: 'weeks',
-        amonth: 'a month',
-        months: 'months',
-        ayear: 'a year',
-        years: 'years'
-    },
-
-    parseEpoch: function parseEpoch(timespan, limitWithWeeks) {
-        if (timespan < 60 * 1000) {
-            timespan = Math.ceil(timespan / 1000);
-
-            return timespan + ' ' + intl.strings.seconds;
-        }
-
-        if (timespan < 60 * 60 * 1000) {
-            timespan = Math.ceil(timespan / (60 * 1000));
-
-            if (timespan === 1) {
-                return intl.strings.aminute;
-            }
-
-            return timespan + ' ' + intl.strings.minutes;
-        }
-
-        if (timespan < 24 * 60 * 60 * 1000) {
-            timespan = Math.ceil(timespan / (60 * 60 * 1000));
-
-            if (timespan === 1) {
-                return intl.strings.ahour;
-            }
-
-            return timespan + ' ' + intl.strings.hours;
-        }
-
-        if (timespan < 7 * 24 * 60 * 60 * 1000) {
-            timespan = Math.ceil(timespan / (24 * 60 * 60 * 1000));
-
-            if (timespan === 1) {
-                return intl.strings.aday;
-            }
-
-            return timespan + ' ' + intl.strings.days;
-        }
-
-        if (timespan < 4 * 7 * 24 * 60 * 60 * 1000) {
-            timespan = Math.ceil(timespan / (7 * 24 * 60 * 60 * 1000));
-
-            if (timespan === 1) {
-                return intl.strings.aweek;
-            }
-
-            return timespan + ' ' + intl.strings.weeks;
-        }
-
-        if (limitWithWeeks === true) {
-            return null;
-        }
-
-        if (timespan < 30 * 7 * 24 * 60 * 60 * 1000) {
-            timespan = Math.ceil(timespan / (30 * 24 * 60 * 60 * 1000));
-
-            if (timespan === 1) {
-                return intl.strings.amonth;
-            }
-
-            return timespan + ' ' + intl.strings.months;
-        }
-
-        timespan = Math.ceil(timespan / (365 * 24 * 60 * 60 * 1000));
-
-        if (timespan === 1) {
-            return intl.strings.ayear;
-        }
-
-        return timespan + ' ' + intl.strings.years;
-    },
-
-    customDate: function customDate(format, timestamp) {
-        var now = timestamp || new Date();
-
-        return format.replace(/yyyy|yy|MMMM|MMM|MM|M|dd|d|hh|h|HH|H|mm|m|ss|s|tt|t/g, function (match) {
-            switch (match) {
-                case 'yyyy':
-                    return now.getFullYear();
-
-                case 'yy':
-                    return now.getYear();
-
-                case 'MMMM':
-                    return intl.monthsLong[now.getMonth()];
-
-                case 'MMM':
-                    return intl.monthsShort[now.getMonth()];
-
-                case 'MM':
-                    return ('0' + (now.getMonth() + 1)).substr(-2, 2);
-
-                case 'M':
-                    return now.getMonth() + 1;
-
-                case 'dd':
-                    return ('0' + now.getDate()).substr(-2, 2);
-
-                case 'd':
-                    return now.getDate();
-
-                case 'hh':
-                    var hour1 = now.getHours();
-                    return ('0' + (hour1 % 12 > 0 ? hour1 % 12 : 12)).substr(-2, 2);
-
-                case 'h':
-                    var hour2 = now.getHours();
-                    return hour2 % 12 > 0 ? hour2 % 12 : 12;
-
-                case 'HH':
-                    return ('0' + now.getHours()).substr(-2, 2);
-
-                case 'H':
-                    return now.getHours();
-
-                case 'mm':
-                    return ('0' + now.getMinutes()).substr(-2, 2);
-
-                case 'm':
-                    return now.getMinutes();
-
-                case 'ss':
-                    return ('0' + now.getSeconds()).substr(-2, 2);
-
-                case 's':
-                    return now.getSeconds();
-
-                case 'tt':
-                    if (now.getHours() >= 12) {
-                        return 'pm';
-                    }
-
-                    return 'am';
-
-                case 't':
-                    if (now.getHours() >= 12) {
-                        return 'p';
-                    }
-
-                    return 'a';
-            }
-
-            return match;
-        });
-    },
-
-    dateDiff: function dateDiff(timestamp) {
-        var now = Date.now(),
-            timespan = now - timestamp.getTime(),
-            absTimespan = Math.abs(timespan),
-            past = timespan > 0;
-
-        if (absTimespan <= 3000) {
-            return intl.strings.now;
-        }
-
-        var timespanstring = intl.parseEpoch(absTimespan, true);
-        if (timespanstring !== null) {
-            return timespanstring + ' ' + (past ? intl.strings.ago : intl.strings.later);
-        }
-
-        return intl.shortDate(timestamp, true);
-    },
-
-    shortDate: function shortDate(timestamp, includeTime) {
-        return intl.customDate(includeTime ? intl.shortDateFormat + ' ' + intl.timeFormat : intl.shortDateFormat, timestamp);
-    },
-
-    longDate: function longDate(timestamp, includeTime) {
-        return intl.customDate(includeTime ? intl.longDateFormat + ' ' + intl.timeFormat : intl.longDateFormat, timestamp);
-    },
-
-    format: function format(message, dictionary) {
-        var temp = {};
-        Object.keys(dictionary).forEach(function (x) {
-            return temp['{' + x + '}'] = dictionary[x];
-        });
-
-        return _larouxHelpersJs2['default'].replaceAll(message, temp);
-    },
-
-    translations: {},
-
-    addTranslations: function addTranslations(culture, dictionary) {
-        _larouxHelpersJs2['default'].mergeNs(intl.translations, culture, dictionary);
-    },
-
-    translate: function translate(culture, message) {
-        return intl.format(message, intl.translations[culture]);
-    }
-};
-
-exports['default'] = intl;
-module.exports = exports['default'];
-<<<<<<< HEAD:docs/assets/js/laroux.js
-<<<<<<< HEAD:docs/assets/js/laroux.js
-<<<<<<< HEAD:docs/assets/js/laroux.js
-},{"./laroux.helpers.js":5}],7:[function(require,module,exports){
->>>>>>> * added $l.require.:build/dist/web/laroux.js
-=======
-},{"./laroux.helpers.js":3}],5:[function(require,module,exports){
->>>>>>> * implemented Promises/A+ instead of $l.deferred and $l.when.:build/dist/web/laroux.js
-=======
-},{"./laroux.helpers.js":4}],6:[function(require,module,exports){
->>>>>>> * initial commit for $l.fetch.:build/dist/web/laroux.js
-=======
-},{"./laroux.helpers.js":3}],5:[function(require,module,exports){
->>>>>>> * ajax is replaced by fetchObject.:build/dist/web/laroux.js
-(function (global){
-/*jslint node: true */
-/*global document */
-'use strict';
-
-Object.defineProperty(exports, '__esModule', {
-    value: true
-});
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-var _larouxAjaxJs = require('./laroux.ajax.js');
-
-var _larouxAjaxJs2 = _interopRequireDefault(_larouxAjaxJs);
-
-var _larouxEventsJs = require('./laroux.events.js');
-
-var _larouxEventsJs2 = _interopRequireDefault(_larouxEventsJs);
-
-var _larouxHelpersJs = require('./laroux.helpers.js');
-
-var _larouxHelpersJs2 = _interopRequireDefault(_larouxHelpersJs);
-
-<<<<<<< HEAD:docs/assets/js/laroux.js
-=======
-var _larouxIntlJs = require('./laroux.intl.js');
-
-var _larouxIntlJs2 = _interopRequireDefault(_larouxIntlJs);
-
-var _larouxPromiseObjectJs = require('./laroux.promiseObject.js');
-
-var _larouxPromiseObjectJs2 = _interopRequireDefault(_larouxPromiseObjectJs);
-
-var _larouxRequireJs = require('./laroux.require.js');
-
-var _larouxRequireJs2 = _interopRequireDefault(_larouxRequireJs);
-
->>>>>>> * added $l.require.:build/dist/web/laroux.js
-var _larouxStoryboardJs = require('./laroux.storyboard.js');
-
-var _larouxStoryboardJs2 = _interopRequireDefault(_larouxStoryboardJs);
-
-var _larouxTypesJs = require('./laroux.types.js');
-
-var _larouxTypesJs2 = _interopRequireDefault(_larouxTypesJs);
-
-var _larouxTemplatesJs = require('./laroux.templates.js');
-
-var _larouxTemplatesJs2 = _interopRequireDefault(_larouxTemplatesJs);
-
-var _larouxTimersJs = require('./laroux.timers.js');
-
-var _larouxTimersJs2 = _interopRequireDefault(_larouxTimersJs);
-
-var _larouxValidationJs = require('./laroux.validation.js');
-
-var _larouxValidationJs2 = _interopRequireDefault(_larouxValidationJs);
-
-var _larouxVarsJs = require('./laroux.vars.js');
-
-var _larouxVarsJs2 = _interopRequireDefault(_larouxVarsJs);
-
-var laroux = function laroux(selector, parent) {
-    if (selector.constructor === Array) {
-        return _larouxHelpersJs2['default'].toArray((parent || document).querySelectorAll(selector));
-    }
-
-    // FIXME: Laroux: non-chromium optimization, but it runs
-    //                slowly in chromium
-    //
-    // let re = /^#([^\+\>\[\]\.# ]*)$/.exec(selector);
-    // if (re) {
-    //     return (parent || document).getElementById(re[1]);
-    // }
-
-    return (parent || document).querySelector(selector);
-};
-
-<<<<<<< HEAD:docs/assets/js/laroux.js
-        return (parent || document).querySelector(selector);
-    };
-
-    _larouxHelpersJs2['default'].merge(laroux, _larouxHelpersJs2['default']);
-    _larouxHelpersJs2['default'].merge(laroux, {
-        ajax: _larouxAjaxJs2['default'],
-        events: _larouxEventsJs2['default'],
-<<<<<<< HEAD:docs/assets/js/laroux.js
-<<<<<<< HEAD:docs/assets/js/laroux.js
-<<<<<<< HEAD:docs/assets/js/laroux.js
-=======
-=======
-        fetch: _larouxFetchObjectJs2['default'],
->>>>>>> * initial commit for $l.fetch.:build/dist/web/laroux.js
-=======
->>>>>>> * ajax is replaced by fetchObject.:build/dist/web/laroux.js
-        intl: _larouxIntlJs2['default'],
-        promise: _larouxPromiseObjectJs2['default'],
-        require: _larouxRequireJs2['default'],
->>>>>>> * added $l.require.:build/dist/web/laroux.js
-        storyboard: _larouxStoryboardJs2['default'],
-        types: _larouxTypesJs2['default'],
-        templates: _larouxTemplatesJs2['default'],
-        timers: _larouxTimersJs2['default'],
-        validation: _larouxValidationJs2['default'],
-        vars: _larouxVarsJs2['default'],
-
-        extend: function extend(source) {
-            return _larouxHelpersJs2['default'].merge(laroux, source);
-        },
-=======
-_larouxHelpersJs2['default'].merge(laroux, _larouxHelpersJs2['default']);
-_larouxHelpersJs2['default'].merge(laroux, {
-    ajax: _larouxAjaxJs2['default'],
-    events: _larouxEventsJs2['default'],
-    intl: _larouxIntlJs2['default'],
-    promise: _larouxPromiseObjectJs2['default'],
-    require: _larouxRequireJs2['default'],
-    storyboard: _larouxStoryboardJs2['default'],
-    types: _larouxTypesJs2['default'],
-    templates: _larouxTemplatesJs2['default'],
-    timers: _larouxTimersJs2['default'],
-    validation: _larouxValidationJs2['default'],
-    vars: _larouxVarsJs2['default'],
-
-    extend: function extend(source) {
-        return _larouxHelpersJs2['default'].merge(laroux, source);
-    },
-
-    extendNs: function extendNs(path, source) {
-        return _larouxHelpersJs2['default'].mergeNs(laroux, path, source);
-    },
-
-    readyPassed: false,
-
-    ready: function ready(callback) {
-        if (!laroux.readyPassed) {
-            _larouxEventsJs2['default'].add('ContentLoaded', callback);
-            return;
-        }
->>>>>>> * removed redundant module closures.:build/dist/web/laroux.js
-
-        callback();
-    },
-
-    setReady: function setReady() {
-        if (!laroux.readyPassed) {
-            _larouxEventsJs2['default'].invoke('ContentLoaded');
-            setInterval(_larouxTimersJs2['default'].ontick, 100);
-            laroux.readyPassed = true;
-        }
-    }
-});
-
-if (global.$l === undefined) {
-    global.$l = laroux;
-}
-
-exports['default'] = laroux;
-module.exports = exports['default'];
-}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./laroux.ajax.js":1,"./laroux.events.js":2,"./laroux.helpers.js":3,"./laroux.intl.js":4,"./laroux.promiseObject.js":6,"./laroux.require.js":7,"./laroux.storyboard.js":8,"./laroux.templates.js":9,"./laroux.timers.js":10,"./laroux.types.js":11,"./laroux.validation.js":12,"./laroux.vars.js":13}],6:[function(require,module,exports){
-(function (global){
-/*jslint node: true */
-'use strict';
-
-Object.defineProperty(exports, '__esModule', {
-    value: true
-});
-
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
-
-var _larouxHelpersJs = require('./laroux.helpers.js');
-
-var _larouxHelpersJs2 = _interopRequireDefault(_larouxHelpersJs);
-
-// promiseObject - partially taken from 'promise-polyfill' project
-//                 can be found at: https://github.com/taylorhakes/promise-polyfill
-//                 see laroux.promiseObject.LICENSE file for details
-
-var PromisePolyfill = (function () {
-    function PromisePolyfill(callback) {
-        _classCallCheck(this, PromisePolyfill);
-
-        this.state = null;
-        this.value = null;
-        this.deferreds = [];
-
-        this['catch'] = this._catch;
-
-        if (callback !== undefined) {
-            this.doResolve(callback, _larouxHelpersJs2['default'].bindContext(this.resolve, this), _larouxHelpersJs2['default'].bindContext(this.reject, this));
-        }
-    }
-
-    _createClass(PromisePolyfill, [{
-        key: 'doResolve',
-        value: function doResolve(callback, onFulfilled, onRejected) {
-            var done = false;
-
-            try {
-                callback(function (value) {
-                    if (done) {
-                        return;
-                    }
-
-                    done = true;
-                    onFulfilled(value);
-                }, function (reason) {
-                    if (done) {
-                        return;
-                    }
-
-                    done = true;
-                    onRejected(reason);
-                });
-            } catch (err) {
-                if (done) {
-                    return;
-                }
-
-                done = true;
-                onRejected(err);
-            }
-        }
-    }, {
-        key: 'resolve',
-        value: function resolve(newValue) {
-            try {
-                if (newValue && newValue.then !== undefined && newValue.then.constructor === Function) {
-                    this.doResolve(_larouxHelpersJs2['default'].bindContext(newValue.then, newValue), _larouxHelpersJs2['default'].bindContext(this.resolve, this), _larouxHelpersJs2['default'].bindContext(this.reject, this));
-                    return;
-                }
-
-                this.state = true;
-                this.value = newValue;
-
-                this.finale();
-            } catch (err) {
-                this.reject(err);
-            }
-        }
-    }, {
-        key: 'reject',
-        value: function reject(newValue) {
-            this.state = false;
-            this.value = newValue;
-
-            this.finale();
-        }
-    }, {
-        key: 'finale',
-        value: function finale() {
-            for (var i = 0, _length = this.deferreds.length; i < _length; i++) {
-                this.handle(this.deferreds[i]);
-            }
-
-            this.deferreds = null;
-        }
-    }, {
-        key: 'handle',
-        value: function handle(deferred) {
-            var self = this;
-
-            if (this.state === null) {
-                this.deferreds.push(deferred);
-                return;
-            }
-
-            _larouxHelpersJs2['default'].async(function () {
-                var callback = self.state ? deferred.onFulfilled : deferred.onRejected;
-
-                if (callback === null) {
-                    (self.state ? deferred.resolve : deferred.reject)(self.value);
-                    return;
-                }
-
-                var result = undefined;
-                try {
-                    result = callback(self.value);
-                } catch (err) {
-                    deferred.reject(err);
-                    return;
-                }
-
-                deferred.resolve(result);
-            });
-        }
-    }, {
-        key: 'then',
-        value: function then(onFulfilled, onRejected) {
-            var self = this;
-
-            return new PromisePolyfill(function (resolve, reject) {
-                self.handle({
-                    onFulfilled: onFulfilled || null,
-                    onRejected: onRejected || null,
-                    resolve: resolve,
-                    reject: reject
-                });
-            });
-        }
-    }, {
-        key: '_catch',
-        value: function _catch(onRejected) {
-            this.then(null, onRejected);
-        }
-    }], [{
-        key: 'all',
-        value: function all() {
-            for (var _len = arguments.length, deferreds = Array(_len), _key = 0; _key < _len; _key++) {
-                deferreds[_key] = arguments[_key];
-            }
-
-            if (deferreds.length === 1 && deferreds.constructor === Array) {
-                deferreds = deferreds[0];
-            }
-
-            return new PromisePolyfill(function (resolve, reject) {
-                var remaining = deferreds.length;
-
-                if (remaining === 0) {
-                    return [];
-                }
-
-                var res = function res(i, deferred) {
-                    try {
-                        if (deferred && deferred.then !== undefined && deferred.then.constructor === Function) {
-                            deferred.then.call(deferred, function (value) {
-                                res(i, value);
-                            }, reject);
-                            return;
-                        }
-
-                        deferreds[i] = deferred;
-                        if (--remaining === 0) {
-                            resolve(deferreds);
-                        }
-                    } catch (err) {
-                        reject(err);
-                    }
-                };
-
-                for (var i = 0, _length2 = deferreds.length; i < _length2; i++) {
-                    res(i, deferreds[i]);
-                }
-            });
-        }
-    }, {
-        key: 'resolve',
-        value: function resolve(value) {
-            if (value && value.constructor === PromisePolyfill) {
-                return value;
-            }
-
-            return new PromisePolyfill(function (resolve) {
-                resolve(value);
-            });
-        }
-    }, {
-        key: 'reject',
-        value: function reject(reason) {
-            return new PromisePolyfill(function (resolve, reject) {
-                reject(reason);
-            });
-        }
-    }, {
-        key: 'race',
-        value: function race(values) {
-            return new PromisePolyfill(function (resolve, reject) {
-                for (var i = 0, _length3 = values.length; i < _length3; i++) {
-                    values[i].then(resolve, reject);
-                }
-            });
-        }
-    }]);
-
-    return PromisePolyfill;
-})();
-
-var promiseExist = ('Promise' in global);
-
-exports['default'] = promiseExist ? Promise : PromisePolyfill;
-module.exports = exports['default'];
-<<<<<<< HEAD:docs/assets/js/laroux.js
-<<<<<<< HEAD:docs/assets/js/laroux.js
-<<<<<<< HEAD:docs/assets/js/laroux.js
-<<<<<<< HEAD:docs/assets/js/laroux.js
-}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-<<<<<<< HEAD:docs/assets/js/laroux.js
-<<<<<<< HEAD:docs/assets/js/laroux.js
-},{"./laroux.ajax.js":1,"./laroux.date.js":2,"./laroux.deferred.js":3,"./laroux.events.js":4,"./laroux.helpers.js":5,"./laroux.storyboard.js":7,"./laroux.templates.js":8,"./laroux.timers.js":9,"./laroux.types.js":10,"./laroux.vars.js":11,"./laroux.when.js":12}],7:[function(require,module,exports){
-=======
-},{"./laroux.ajax.js":2,"./laroux.deferred.js":3,"./laroux.events.js":4,"./laroux.helpers.js":5,"./laroux.intl.js":6,"./laroux.require.js":8,"./laroux.storyboard.js":9,"./laroux.templates.js":10,"./laroux.timers.js":11,"./laroux.types.js":12,"./laroux.vars.js":13,"./laroux.when.js":14}],8:[function(require,module,exports){
-=======
-},{"./laroux.ajax.js":2,"./laroux.deferred.js":3,"./laroux.events.js":4,"./laroux.helpers.js":5,"./laroux.intl.js":6,"./laroux.require.js":8,"./laroux.storyboard.js":9,"./laroux.templates.js":10,"./laroux.timers.js":11,"./laroux.types.js":12,"./laroux.validation.js":13,"./laroux.vars.js":14,"./laroux.when.js":15}],8:[function(require,module,exports){
->>>>>>> * added $l.validation.:build/dist/web/laroux.js
-=======
-},{"./laroux.helpers.js":3}],7:[function(require,module,exports){
->>>>>>> * implemented Promises/A+ instead of $l.deferred and $l.when.:build/dist/web/laroux.js
-=======
-},{"./laroux.helpers.js":4}],8:[function(require,module,exports){
->>>>>>> * initial commit for $l.fetch.:build/dist/web/laroux.js
-=======
-=======
-}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
->>>>>>> * fixed undefined checks.:build/dist/web/laroux.js
-},{"./laroux.helpers.js":3}],7:[function(require,module,exports){
->>>>>>> * ajax is replaced by fetchObject.:build/dist/web/laroux.js
-(function (global){
-/*jslint node: true */
-'use strict';
-
-Object.defineProperty(exports, '__esModule', {
-    value: true
-});
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-var _larouxAjaxJs = require('./laroux.ajax.js');
-
-var _larouxAjaxJs2 = _interopRequireDefault(_larouxAjaxJs);
-
-var _larouxPromiseObjectJs = require('./laroux.promiseObject.js');
-
-var _larouxPromiseObjectJs2 = _interopRequireDefault(_larouxPromiseObjectJs);
-
-var _larouxHelpersJs = require('./laroux.helpers.js');
-
-var _larouxHelpersJs2 = _interopRequireDefault(_larouxHelpersJs);
-
-var require_ = function require_() {
-    var name = undefined,
-        requirements = undefined,
-        callback = undefined;
-
-    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-        args[_key] = arguments[_key];
-    }
-
-    if (args.length >= 3) {
-        name = args[0];
-        requirements = args[1];
-        callback = args[2];
-    } else if (args.length === 2) {
-        if (args[0].constructor === Array) {
-            name = null;
-            requirements = args[0];
-            callback = args[1];
-        } else {
-            name = args[0];
-            requirements = [];
-            callback = args[1];
-        }
-    } else {
-        name = null;
-        requirements = [];
-        callback = args[0];
-    }
-
-    var dependencies = [];
-    for (var i = 0, _length = requirements.length; i < _length; i++) {
-        var requirement = requirements[i];
-
-        if (!(requirement in require_.modules)) {
-            throw new Error('dependency not loaded: ' + requirement + '.');
-        }
-
-        dependencies.push(require_.modules[requirement]);
-    }
-
-    var result = undefined;
-    if (callback.constructor === _larouxPromiseObjectJs2['default']) {
-        dependencies.push(callback);
-
-        result = _larouxPromiseObjectJs2['default'].all(dependencies);
-    } else if (callback.constructor === String) {
-        if ('require' in global) {
-            result = _larouxPromiseObjectJs2['default'].all(dependencies).then(function (dependencies) {
-                return require(callback);
-            });
-        } else {
-            (function () {
-                var script = undefined;
-
-                var promise = _larouxAjaxJs2['default'].fetch(callback).then(function (response) {
-                    return response.text();
-                }).then(function (text) {
-                    script = text;
-                    return text;
-                });
-
-                dependencies.push(promise);
-
-                result = _larouxPromiseObjectJs2['default'].all(dependencies).then(function (dependencies) {
-                    return _larouxHelpersJs2['default'].executeScript.call(global, script);
-                });
-            })();
-        }
-    } else {
-        result = _larouxPromiseObjectJs2['default'].all(dependencies).then(function (dependencies) {
-            return callback.apply(global, dependencies);
-        });
-    }
-
-    if (name !== null) {
-        require_.modules[name] = result;
-    }
-
-    return result;
-};
-
-require_.modules = {};
-
-exports['default'] = require_;
-module.exports = exports['default'];
-}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-<<<<<<< HEAD:docs/assets/js/laroux.js
-<<<<<<< HEAD:docs/assets/js/laroux.js
-<<<<<<< HEAD:docs/assets/js/laroux.js
-<<<<<<< HEAD:docs/assets/js/laroux.js
-<<<<<<< HEAD:docs/assets/js/laroux.js
-<<<<<<< HEAD:docs/assets/js/laroux.js
-},{"./laroux.ajax.js":2,"./laroux.deferred.js":3,"./laroux.when.js":14}],9:[function(require,module,exports){
->>>>>>> * added $l.require.:build/dist/web/laroux.js
-=======
-},{"./laroux.ajax.js":2,"./laroux.deferred.js":3,"./laroux.when.js":15}],9:[function(require,module,exports){
->>>>>>> * added $l.validation.:build/dist/web/laroux.js
-=======
-},{}],8:[function(require,module,exports){
->>>>>>> * implemented Promises/A+ instead of $l.deferred and $l.when.:build/dist/web/laroux.js
-=======
-},{}],9:[function(require,module,exports){
->>>>>>> * initial commit for $l.fetch.:build/dist/web/laroux.js
-=======
-},{}],8:[function(require,module,exports){
->>>>>>> * ajax is replaced by fetchObject.:build/dist/web/laroux.js
-=======
-},{"./laroux.promiseObject.js":6}],8:[function(require,module,exports){
->>>>>>> * async $l.require.:build/dist/web/laroux.js
-=======
-},{"./laroux.ajax.js":1,"./laroux.helpers.js":3,"./laroux.promiseObject.js":6}],8:[function(require,module,exports){
->>>>>>> * $l.require external resources.:build/dist/web/laroux.js
-(function (global){
-/*jslint node: true */
-'use strict';
-
-Object.defineProperty(exports, '__esModule', {
-    value: true
-});
-
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
-
-var _larouxPromiseObjectJs = require('./laroux.promiseObject.js');
-
-var _larouxPromiseObjectJs2 = _interopRequireDefault(_larouxPromiseObjectJs);
-
-var Storyboard = (function () {
-    function Storyboard() {
-        _classCallCheck(this, Storyboard);
-
-        var self = this;
-
-        this.phases = [];
-        this.phaseKeys = {};
-        this.currentIteration = 0;
-        this.running = false;
-
-        for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-            args[_key] = arguments[_key];
-        }
-
-        for (var i = 0, _length = args.length; i < _length; i++) {
-            this.addPhase(args[i]);
-        }
-
-        this.checkPromise = function () {
-            if (--self.phases[self.currentIteration].promises === 0 && !self.running) {
-                self.start();
-            }
-        };
-    }
-
-    _createClass(Storyboard, [{
-        key: 'addPhase',
-        value: function addPhase(key) {
-            this.phaseKeys[key] = this.phases.length;
-            this.phases.push({
-                key: key,
-                callbacks: [],
-                promises: 0
-            });
-        }
-    }, {
-        key: 'add',
-        value: function add(phase, callback) {
-            if (callback.constructor === _larouxPromiseObjectJs2['default']) {
-                return this.addPromise(phase, callback);
-            }
-
-            var phaseId = this.phaseKeys[phase];
-
-            if (phaseId < this.currentIteration) {
-                // execute immediately if phase is already passed
-                callback.apply(global);
-                return;
-            }
-
-            this.phases[phaseId].callbacks.push(callback);
-        }
-    }, {
-        key: 'addPromise',
-        value: function addPromise(phase, promise) {
-            var phaseId = this.phaseKeys[phase];
-
-            // skips if phase is already passed
-            if (phaseId < this.currentIteration) {
-                return;
-            }
-
-            this.phases[phaseId].promises++;
-            // FIXME: must be handled even if it has failed
-            promise.then(this.checkPromise);
-        }
-    }, {
-        key: 'start',
-        value: function start() {
-            this.running = true;
-
-            while (this.phases.length > this.currentIteration) {
-                var currentPhase = this.phases[this.currentIteration];
-
-                while (currentPhase.callbacks.length > 0) {
-                    var fnc = currentPhase.callbacks.shift();
-                    fnc.apply(global);
-                }
-
-                if (currentPhase.promises > 0) {
-                    break;
-                }
-
-                this.currentIteration++;
-            }
-
-            this.running = false;
-        }
-    }]);
-
-    return Storyboard;
-})();
-
-exports['default'] = Storyboard;
-module.exports = exports['default'];
-}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-<<<<<<< HEAD:docs/assets/js/laroux.js
-<<<<<<< HEAD:docs/assets/js/laroux.js
-<<<<<<< HEAD:docs/assets/js/laroux.js
-<<<<<<< HEAD:docs/assets/js/laroux.js
-},{"./laroux.deferred.js":3}],8:[function(require,module,exports){
-=======
-},{"./laroux.deferred.js":3}],10:[function(require,module,exports){
->>>>>>> * added $l.require.:build/dist/web/laroux.js
-=======
-},{"./laroux.promiseObject.js":6}],9:[function(require,module,exports){
-<<<<<<< HEAD:docs/assets/js/laroux.js
->>>>>>> * implemented Promises/A+ instead of $l.deferred and $l.when.:build/dist/web/laroux.js
-=======
-},{"./laroux.promiseObject.js":7}],10:[function(require,module,exports){
->>>>>>> * initial commit for $l.fetch.:build/dist/web/laroux.js
-=======
-},{"./laroux.promiseObject.js":6}],9:[function(require,module,exports){
->>>>>>> * ajax is replaced by fetchObject.:build/dist/web/laroux.js
-=======
-/*jslint node: true */
-/*global Hogan, Mustache, Handlebars, _ */
->>>>>>> * removed redundant module closures.:build/dist/web/laroux.js
-'use strict';
-
-Object.defineProperty(exports, '__esModule', {
-    value: true
-});
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-var _larouxHelpersJs = require('./laroux.helpers.js');
-
-var _larouxHelpersJs2 = _interopRequireDefault(_larouxHelpersJs);
-
-var templates = {
-    engines: {
-        plain: {
-            compile: function compile(template, options) {
-                return [template, options];
-            },
-
-            render: function render(compiled, model) {
-                var result = compiled[0],
-                    dict = [],
-                    lastIndex = 0,
-                    nextIndex = undefined;
-
-                while ((nextIndex = result.indexOf('{{', lastIndex)) !== -1) {
-                    nextIndex += 2;
-                    var closeIndex = result.indexOf('}}', nextIndex);
-                    if (closeIndex === -1) {
-                        break;
-                    }
-
-                    var key = result.substring(nextIndex, closeIndex);
-                    dict['{{' + key + '}}'] = _larouxHelpersJs2['default'].getElement(model, key, '');
-                    lastIndex = closeIndex + 2;
-                }
-
-                return _larouxHelpersJs2['default'].replaceAll(result, dict);
-            }
-        },
-
-        hogan: {
-            compile: function compile(template, options) {
-                return Hogan.compile(template, options);
-            },
-
-            render: function render(compiled, model) {
-                return compiled.render(model);
-            }
-        },
-
-        mustache: {
-            compile: function compile(template, options) {
-                return Mustache.compile(template, options);
-            },
-
-            render: function render(compiled, model) {
-                return compiled(model);
-            }
-        },
-
-        handlebars: {
-            compile: function compile(template, options) {
-                return Handlebars.compile(template, options);
-            },
-
-            render: function render(compiled, model) {
-                return compiled(model);
-            }
-        },
-
-        lodash: {
-            compile: function compile(template, options) {
-                /*jslint nomen: true */
-                return _.compile(template, null, options);
-            },
-
-            render: function render(compiled, model) {
-                return compiled(model);
-            }
-        },
-
-        underscore: {
-            compile: function compile(template, options) {
-                /*jslint nomen: true */
-                return _.compile(template, null, options);
-            },
-
-            render: function render(compiled, model) {
-                return compiled(model);
-            }
-        }
-    },
-    engine: 'plain',
-
-    apply: function apply(element, model, options) {
-        var content = undefined,
-            engine = templates.engines[templates.engine];
-
-        if (element.nodeType === 1 || element.nodeType === 3 || element.nodeType === 11) {
-            content = element.textContent;
-        } else {
-            content = element.nodeValue;
-        }
-
-        var compiled = engine.compile(content, options);
-        return engine.render(compiled, model);
-    }
-
-    /*
-    insert: function (element, model, target, position, options) {
-        let output = templates.apply(element, model, options);
-         dom.insert(target, position || 'beforeend', output);
-    },
-     replace: function (element, model, target, options) {
-        let output = templates.apply(element, model, options);
-         dom.replace(target, output);
-    }
-    */
-};
-
-exports['default'] = templates;
-module.exports = exports['default'];
-<<<<<<< HEAD:docs/assets/js/laroux.js
-<<<<<<< HEAD:docs/assets/js/laroux.js
-<<<<<<< HEAD:docs/assets/js/laroux.js
-<<<<<<< HEAD:docs/assets/js/laroux.js
-},{"./laroux.helpers.js":5}],9:[function(require,module,exports){
-=======
-},{"./laroux.helpers.js":5}],11:[function(require,module,exports){
->>>>>>> * added $l.require.:build/dist/web/laroux.js
-=======
-},{"./laroux.helpers.js":3}],10:[function(require,module,exports){
->>>>>>> * implemented Promises/A+ instead of $l.deferred and $l.when.:build/dist/web/laroux.js
-=======
-},{"./laroux.helpers.js":4}],11:[function(require,module,exports){
->>>>>>> * initial commit for $l.fetch.:build/dist/web/laroux.js
-=======
-},{"./laroux.helpers.js":3}],10:[function(require,module,exports){
-<<<<<<< HEAD:docs/assets/js/laroux.js
->>>>>>> * ajax is replaced by fetchObject.:build/dist/web/laroux.js
-=======
-/*jslint node: true */
->>>>>>> * removed redundant module closures.:build/dist/web/laroux.js
-'use strict';
-
-Object.defineProperty(exports, '__esModule', {
-    value: true
-});
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-var _larouxHelpersJs = require('./laroux.helpers.js');
-
-var _larouxHelpersJs2 = _interopRequireDefault(_larouxHelpersJs);
-
-var timers = {
-    data: [],
-
-    set: function set(timer) {
-        timer.next = Date.now() + timer.timeout;
-        timers.data.push(timer);
-    },
-
-    remove: function remove(id) {
-        var targetKey = null;
-
-        for (var item in timers.data) {
-            if (!timers.data.hasOwnProperty(item)) {
-                continue;
-            }
-
-            var currentItem = timers.data[item];
-
-            if (currentItem.id !== undefined && currentItem.id == id) {
-                targetKey = item;
-                break;
-            }
-        }
-
-        if (targetKey !== null) {
-            timers.data.splice(targetKey, 1);
-            return true;
-        }
-
-        return false;
-    },
-
-    ontick: function ontick() {
-        var now = Date.now(),
-            removeKeys = [];
-
-        for (var item in timers.data) {
-            if (!timers.data.hasOwnProperty(item)) {
-                continue;
-            }
-
-            var currentItem = timers.data[item];
-
-            if (currentItem.next <= now) {
-                var result = currentItem.ontick(currentItem.state);
-
-                if (result !== false && currentItem.reset) {
-                    currentItem.next = now + currentItem.timeout;
-                } else {
-                    removeKeys = _larouxHelpersJs2['default'].prependArray(removeKeys, item);
-                }
-            }
-        }
-
-        for (var item2 in removeKeys) {
-            if (!removeKeys.hasOwnProperty(item2)) {
-                continue;
-            }
-
-            timers.data.splice(removeKeys[item2], 1);
-        }
-    }
-};
-
-exports['default'] = timers;
-module.exports = exports['default'];
-<<<<<<< HEAD:docs/assets/js/laroux.js
-<<<<<<< HEAD:docs/assets/js/laroux.js
-<<<<<<< HEAD:docs/assets/js/laroux.js
-<<<<<<< HEAD:docs/assets/js/laroux.js
-},{"./laroux.helpers.js":5}],10:[function(require,module,exports){
-=======
-},{"./laroux.helpers.js":5}],12:[function(require,module,exports){
->>>>>>> * added $l.require.:build/dist/web/laroux.js
-=======
-},{"./laroux.helpers.js":3}],11:[function(require,module,exports){
->>>>>>> * implemented Promises/A+ instead of $l.deferred and $l.when.:build/dist/web/laroux.js
-=======
-},{"./laroux.helpers.js":4}],12:[function(require,module,exports){
->>>>>>> * initial commit for $l.fetch.:build/dist/web/laroux.js
-=======
-},{"./laroux.helpers.js":3}],11:[function(require,module,exports){
->>>>>>> * ajax is replaced by fetchObject.:build/dist/web/laroux.js
-/*jslint node: true */
-'use strict';
-
-Object.defineProperty(exports, '__esModule', {
-    value: true
-});
-
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
-
-var _larouxHelpersJs = require('./laroux.helpers.js');
-
-var _larouxHelpersJs2 = _interopRequireDefault(_larouxHelpersJs);
-
-var staticKeys = ['_callbacks', '_onupdate'];
-
-var Observable = (function () {
-    function Observable(data) {
-        _classCallCheck(this, Observable);
-
-        var self = this;
-
-        this._callbacks = [];
-        this._onupdate = function (changes) {
-            _larouxHelpersJs2['default'].callAll(self._callbacks, self, [changes]);
-        };
-
-        this.observe(this);
-
-        if (data) {
-            this.setRange(data);
-        }
-    }
-
-    _createClass(Observable, [{
-        key: 'set',
-        value: function set(key, value) {
-            if (staticKeys.indexOf(key) === -1) {
-                this[key] = value;
-            }
-        }
-    }, {
-        key: 'setRange',
-        value: function setRange(values) {
-            for (var valueKey in values) {
-                this.set(valueKey, values[valueKey]);
-            }
-        }
-    }, {
-        key: 'get',
-        value: function get(key, defaultValue) {
-            if (key in this && staticKeys.indexOf(key) === -1) {
-                return this[key];
-            }
-
-            return defaultValue || null;
-        }
-    }, {
-        key: 'getRange',
-        value: function getRange(keys) {
-            var values = {};
-
-            for (var item in keys) {
-                values[keys[item]] = this[keys[item]];
-            }
-
-            return values;
-        }
-    }, {
-        key: 'keys',
-        value: function keys() {
-            var keys = [];
-
-            for (var item in this) {
-                if (staticKeys.indexOf(item) === -1) {
-                    keys.push(item);
-                }
-            }
-
-            return keys;
-        }
-    }, {
-        key: 'length',
-        value: function length() {
-            return this.keys().length;
-        }
-    }, {
-        key: 'exists',
-        value: function exists(key) {
-            return key in this;
-        }
-    }, {
-        key: 'remove',
-        value: function remove(key) {
-            if (staticKeys.indexOf(key) === -1) {
-                delete this[key];
-            }
-        }
-    }, {
-        key: 'clear',
-        value: function clear() {
-            for (var item in this) {
-                if (!this.hasOwnProperty(item) || staticKeys.indexOf(item) !== -1) {
-                    continue;
-                }
-
-                delete this[item];
-            }
-        }
-    }, {
-        key: 'observe',
-        value: function observe(obj) {
-            if ('observe' in Object) {
-                Object.observe(obj, this._onupdate);
-            }
-        }
-    }, {
-        key: 'unobserve',
-        value: function unobserve(obj) {
-            if ('unobserve' in Object) {
-                Object.unobserve(obj);
-            }
-        }
-    }, {
-        key: 'on',
-        value: function on(callback) {
-            this._callbacks.push(callback);
-        }
-    }, {
-        key: 'off',
-        value: function off(callback) {
-            _larouxHelpersJs2['default'].removeFromArray(this._callbacks, callback);
-        }
-    }]);
-
-    return Observable;
-})();
-
-var types = {
-    observable: Observable
-};
-
-exports['default'] = types;
-module.exports = exports['default'];
-<<<<<<< HEAD:docs/assets/js/laroux.js
-<<<<<<< HEAD:docs/assets/js/laroux.js
-<<<<<<< HEAD:docs/assets/js/laroux.js
-<<<<<<< HEAD:docs/assets/js/laroux.js
-},{"./laroux.helpers.js":5}],11:[function(require,module,exports){
-=======
-},{"./laroux.helpers.js":5}],13:[function(require,module,exports){
->>>>>>> * added $l.require.:build/dist/web/laroux.js
-=======
-},{"./laroux.helpers.js":3}],12:[function(require,module,exports){
->>>>>>> * implemented Promises/A+ instead of $l.deferred and $l.when.:build/dist/web/laroux.js
-=======
-},{"./laroux.helpers.js":4}],13:[function(require,module,exports){
->>>>>>> * initial commit for $l.fetch.:build/dist/web/laroux.js
-=======
-},{"./laroux.helpers.js":3}],12:[function(require,module,exports){
-<<<<<<< HEAD:docs/assets/js/laroux.js
->>>>>>> * ajax is replaced by fetchObject.:build/dist/web/laroux.js
-=======
-/*jslint node: true */
->>>>>>> * removed redundant module closures.:build/dist/web/laroux.js
-'use strict';
-
-Object.defineProperty(exports, '__esModule', {
-    value: true
-});
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-var _larouxHelpersJs = require('./laroux.helpers.js');
-
-var _larouxHelpersJs2 = _interopRequireDefault(_larouxHelpersJs);
-
-var validation = {
-    // TODO: email, date, equalTo
-    rules: {
-        required: {
-            keys: ['message'],
-            callback: function callback(dictionary, name, rule) {
-                return name in dictionary;
-            }
-        },
-
-        minlength: {
-            keys: ['length', 'message'],
-            callback: function callback(dictionary, name, rule) {
-                return dictionary[name].length >= rule.length;
-            }
-        },
-
-        maxlength: {
-            keys: ['length', 'message'],
-            callback: function callback(dictionary, name, rule) {
-                return dictionary[name].length <= rule.length;
-            }
-        },
-
-        min: {
-            keys: ['value', 'message'],
-            callback: function callback(dictionary, name, rule) {
-                var floatValue = parseFloat(dictionary[name]);
-                return floatValue >= rule.value;
-            }
-        },
-
-        max: {
-            keys: ['value', 'message'],
-            callback: function callback(dictionary, name, rule) {
-                var floatValue = parseFloat(dictionary[name]);
-                return floatValue <= rule.value;
-            }
-        }
-    },
-
-    // {rule: 'required', message: 'isrequired'}
-    // 'required'
-
-    // {
-    //    'name': 'required',
-    //    'age': [
-    //        'required|The field is required.',
-    //        { rule: 'range', min: 10, max: 18 },
-    //    ]
-    // }
-
-    validate: function validate(fields, rules) {
-        var rulesKeys = Object.keys(rules),
-            result = {
-            success: true,
-            details: {}
-        };
-
-        for (var i = 0, _length = rulesKeys.length; i < _length; i++) {
-            var key = rulesKeys[i],
-                rule = rules[key];
-
-            var fieldRules = _larouxHelpersJs2['default'].getAsArray(rule);
-            for (var j = 0, length2 = fieldRules.length; j < length2; j++) {
-                var fieldRule = fieldRules[j];
-
-                if (fieldRule.constructor !== Object) {
-                    var fieldRuleSplitted = fieldRule.split('|'),
-                        fieldRuleName = fieldRuleSplitted[0];
-
-                    fieldRule = _larouxHelpersJs2['default'].assign(fieldRuleSplitted, ['name'].concat(validation.rules[fieldRuleName].keys));
-                }
-
-                if (!validation.rules[fieldRule.name].callback(fields, key, fieldRule)) {
-                    result.success = false;
-
-                    if (!(key in result.details)) {
-                        result.details[key] = [];
-                    }
-
-                    result.details[key].push(fieldRule);
-                }
-            }
-        }
-
-        return result;
-    }
-};
-
-exports['default'] = validation;
-module.exports = exports['default'];
-},{"./laroux.helpers.js":3}],13:[function(require,module,exports){
-/*jslint node: true */
-/*global document, localStorage, sessionStorage */
-'use strict';
-
-Object.defineProperty(exports, '__esModule', {
-    value: true
-});
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-var _larouxHelpersJs = require('./laroux.helpers.js');
-
-var _larouxHelpersJs2 = _interopRequireDefault(_larouxHelpersJs);
-
-var vars = {
-    storages: {
-        cookie: {
-            defaultPath: '/',
-
-            get: function get(name, defaultValue) {
-                var re = new RegExp(encodeURIComponent(name) + '=[^;]+', 'i'),
-                    match = document.cookie.match(re);
-
-                if (!match) {
-                    return defaultValue || null;
-                }
-
-                return decodeURIComponent(match[0].split('=')[1]);
-            },
-
-            set: function set(name, value, expires, path) {
-                var expireValue = '';
-                if (expires) {
-                    expireValue = '; expires=' + expires.toGMTString();
-                }
-
-                document.cookie = encodeURIComponent(name) + '=' + encodeURIComponent(value) + expireValue + '; path=' + (path || vars.storages.cookie.defaultPath);
-            },
-
-            remove: function remove(name, path) {
-                document.cookie = encodeURIComponent(name) + '=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=' + (path || vars.storages.cookie.defaultPath);
-            }
-        },
-
-        local: {
-            get: function get(name, defaultValue) {
-                if (!(name in localStorage)) {
-                    return defaultValue || null;
-                }
-
-                return JSON.parse(localStorage[name]);
-            },
-
-            set: function set(name, value) {
-                localStorage[name] = JSON.stringify(value);
-            },
-
-            remove: function remove(name) {
-                delete localStorage[name];
-            }
-        },
-
-        session: {
-            get: function get(name, defaultValue) {
-                if (!(name in sessionStorage)) {
-                    return defaultValue || null;
-                }
-
-                return JSON.parse(sessionStorage[name]);
-            },
-
-            set: function set(name, value) {
-                sessionStorage[name] = JSON.stringify(value);
-            },
-
-            remove: function remove(name) {
-                delete sessionStorage[name];
-            }
-        }
-    },
-
-    get: function get(storage) {
-        for (var _len = arguments.length, args = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
-            args[_key - 1] = arguments[_key];
-        }
-
-        return vars.storages[storage].get.apply(this, args);
-    },
-
-    set: function set(storage) {
-        for (var _len2 = arguments.length, args = Array(_len2 > 1 ? _len2 - 1 : 0), _key2 = 1; _key2 < _len2; _key2++) {
-            args[_key2 - 1] = arguments[_key2];
-        }
-
-        return vars.storages[storage].set.apply(this, args);
-    },
-
-    remove: function remove(storage) {
-        for (var _len3 = arguments.length, args = Array(_len3 > 1 ? _len3 - 1 : 0), _key3 = 1; _key3 < _len3; _key3++) {
-            args[_key3 - 1] = arguments[_key3];
-        }
-
-        return vars.storages[storage].remove.apply(this, args);
-    }
-};
-
-exports['default'] = vars;
-module.exports = exports['default'];
-<<<<<<< HEAD:docs/assets/js/laroux.js
-<<<<<<< HEAD:docs/assets/js/laroux.js
-<<<<<<< HEAD:docs/assets/js/laroux.js
-<<<<<<< HEAD:docs/assets/js/laroux.js
-<<<<<<< HEAD:docs/assets/js/laroux.js
-},{"./laroux.helpers.js":5}],12:[function(require,module,exports){
-=======
-},{"./laroux.helpers.js":5}],14:[function(require,module,exports){
->>>>>>> * added $l.require.:build/dist/web/laroux.js
-=======
-},{"./laroux.helpers.js":5}],15:[function(require,module,exports){
->>>>>>> * added $l.validation.:build/dist/web/laroux.js
-/*jslint node: true */
-'use strict';
-
-Object.defineProperty(exports, '__esModule', {
-    value: true
-});
-
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
-
-var _larouxDeferredJs = require('./laroux.deferred.js');
-
-var _larouxDeferredJs2 = _interopRequireDefault(_larouxDeferredJs);
-
-var _larouxHelpersJs = require('./laroux.helpers.js');
-
-var _larouxHelpersJs2 = _interopRequireDefault(_larouxHelpersJs);
-
-var When = (function () {
-    function When() {
-        _classCallCheck(this, When);
-
-        var self = this;
-
-        this.params = [];
-        this.queues = [];
-        this.remaining = -1;
-
-        this.deferredCompleted = function () {
-            self.remaining--;
-            self.check();
-        };
-
-        if (arguments.length > 0) {
-            this.then.apply(this, arguments);
-        }
-    }
-
-    _createClass(When, [{
-        key: 'then',
-        value: function then() {
-            var _this = this;
-
-            for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-                args[_key] = arguments[_key];
-            }
-
-            args.forEach(function (arg) {
-                return _this.params.push(arg);
-            });
-            this.queues.push(args);
-            this.check();
-
-            return this;
-        }
-    }, {
-        key: 'check',
-        value: function check() {
-            var _this2 = this;
-
-            while (this.remaining <= 0) {
-                if (this.remaining !== -1) {
-                    this.queues.shift();
-                }
-
-                if (this.queues.length === 0) {
-                    this.remaining = -1;
-                    break;
-                }
-
-                var queue = this.queues[0];
-                // console.log('queue: ', queue);
-
-                this.remaining = 0;
-                for (var i = 0, _length = queue.length; i < _length; i++) {
-                    if (queue[i].constructor === Function) {
-                        var _ret = (function () {
-                            var results = [];
-                            _this2.params.forEach(function (x) {
-                                if (x instanceof _larouxDeferredJs2['default']) {
-                                    results.push(x.events.done.result[0]);
-                                } else {
-                                    results.push(x);
-                                }
-                            });
-
-                            queue[i] = _larouxDeferredJs2['default'].async.apply(_larouxDeferredJs2['default'], [queue[i]].concat(results));
-                            return 'continue';
-                        })();
-
-                        if (_ret === 'continue') continue;
-                    }
-
-                    if (queue[i].constructor === _larouxDeferredJs2['default'] && !queue[i].is('completed')) {
-                        this.remaining++;
-                        queue[i].completed(this.deferredCompleted);
-                    }
-                }
-            }
-        }
-    }]);
-
-    return When;
-})();
-
-exports['default'] = When;
-module.exports = exports['default'];
-<<<<<<< HEAD:docs/assets/js/laroux.js
-<<<<<<< HEAD:docs/assets/js/laroux.js
-},{"./laroux.deferred.js":3,"./laroux.helpers.js":5}],13:[function(require,module,exports){
-=======
-},{"./laroux.deferred.js":3,"./laroux.helpers.js":5}],15:[function(require,module,exports){
->>>>>>> * added $l.require.:build/dist/web/laroux.js
-=======
-},{"./laroux.deferred.js":3,"./laroux.helpers.js":5}],16:[function(require,module,exports){
->>>>>>> * added $l.validation.:build/dist/web/laroux.js
-=======
-},{"./laroux.helpers.js":3}],14:[function(require,module,exports){
->>>>>>> * implemented Promises/A+ instead of $l.deferred and $l.when.:build/dist/web/laroux.js
-=======
-},{"./laroux.helpers.js":4}],15:[function(require,module,exports){
->>>>>>> * initial commit for $l.fetch.:build/dist/web/laroux.js
-=======
-},{"./laroux.helpers.js":3}],14:[function(require,module,exports){
-<<<<<<< HEAD:docs/assets/js/laroux.js
->>>>>>> * ajax is replaced by fetchObject.:build/dist/web/laroux.js
-=======
+},{"./laroux.helpers.js":7,"./laroux.promiseObject.js":11}],2:[function(require,module,exports){
 /*jslint node: true */
 /*global document, requestAnimationFrame, scrollTo */
->>>>>>> * removed redundant module closures.:build/dist/web/laroux.js
+>>>>>>> * mvvm as a separate module.:build/dist/web/laroux.js
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -3104,11 +897,11 @@ var _larouxCssJs = require('./laroux.css.js');
 
 var _larouxCssJs2 = _interopRequireDefault(_larouxCssJs);
 
-var _larouxHelpersJs = require('../laroux.helpers.js');
+var _larouxHelpersJs = require('./laroux.helpers.js');
 
 var _larouxHelpersJs2 = _interopRequireDefault(_larouxHelpersJs);
 
-var _larouxPromiseObjectJs = require('../laroux.promiseObject.js');
+var _larouxPromiseObjectJs = require('./laroux.promiseObject.js');
 
 var _larouxPromiseObjectJs2 = _interopRequireDefault(_larouxPromiseObjectJs);
 
@@ -3216,24 +1009,12 @@ var anim = {
 
             anim.step(currentItem, timestamp);
 
-<<<<<<< HEAD:docs/assets/js/laroux.js
-                if (timestamp > currentItem.startTime + currentItem.time) {
-                    if (currentItem.reset === true) {
-                        currentItem.startTime = timestamp;
-                        if (currentItem.object === document.body && currentItem.property === 'scrollTop') {
-                            scrollTo(0, currentItem.from);
-                            // setTimeout(function () { scrollTo(0, currentItem.from); }, 1);
-                        } else {
-                                currentItem.object[currentItem.property] = currentItem.from;
-                            }
-=======
             if (timestamp > currentItem.startTime + currentItem.time) {
                 if (currentItem.reset === true) {
                     currentItem.startTime = timestamp;
                     if (currentItem.object === document.body && currentItem.property === 'scrollTop') {
                         scrollTo(0, currentItem.from);
                         // setTimeout(function () { scrollTo(0, currentItem.from); }, 1);
->>>>>>> * removed redundant module closures.:build/dist/web/laroux.js
                     } else {
                         currentItem.object[currentItem.property] = currentItem.from;
                     }
@@ -3261,18 +1042,7 @@ var anim = {
         var finishT = newanim.startTime + newanim.time,
             shift = timestamp > finishT ? 1 : (timestamp - newanim.startTime) / newanim.time;
 
-<<<<<<< HEAD:docs/assets/js/laroux.js
-            if (newanim.object === document.body && newanim.property === 'scrollTop') {
-                scrollTo(0, value);
-                // setTimeout(function () { scrollTo(0, value); }, 1);
-            } else {
-                    newanim.object[newanim.property] = value;
-                }
-        }
-    };
-=======
         var value = anim.fx.interpolate(newanim.from, newanim.to, anim.fx.easing(shift)) + newanim.unit;
->>>>>>> * removed redundant module closures.:build/dist/web/laroux.js
 
         if (newanim.object === document.body && newanim.property === 'scrollTop') {
             scrollTo(0, value);
@@ -3285,32 +1055,9 @@ var anim = {
 
 exports['default'] = anim;
 module.exports = exports['default'];
-<<<<<<< HEAD:docs/assets/js/laroux.js
-<<<<<<< HEAD:docs/assets/js/laroux.js
-<<<<<<< HEAD:docs/assets/js/laroux.js
-<<<<<<< HEAD:docs/assets/js/laroux.js
-<<<<<<< HEAD:docs/assets/js/laroux.js
-},{"../laroux.deferred.js":3,"../laroux.helpers.js":5,"./laroux.css.js":14}],14:[function(require,module,exports){
-=======
-},{"../laroux.deferred.js":3,"../laroux.helpers.js":5,"./laroux.css.js":16}],16:[function(require,module,exports){
->>>>>>> * added $l.require.:build/dist/web/laroux.js
-=======
-},{"../laroux.deferred.js":3,"../laroux.helpers.js":5,"./laroux.css.js":17}],17:[function(require,module,exports){
->>>>>>> * added $l.validation.:build/dist/web/laroux.js
-=======
-},{"../laroux.helpers.js":3,"../laroux.promiseObject.js":6,"./laroux.css.js":15}],15:[function(require,module,exports){
-<<<<<<< HEAD:docs/assets/js/laroux.js
->>>>>>> * implemented Promises/A+ instead of $l.deferred and $l.when.:build/dist/web/laroux.js
-=======
-},{"../laroux.helpers.js":4,"../laroux.promiseObject.js":7,"./laroux.css.js":16}],16:[function(require,module,exports){
->>>>>>> * initial commit for $l.fetch.:build/dist/web/laroux.js
-=======
-},{"../laroux.helpers.js":3,"../laroux.promiseObject.js":6,"./laroux.css.js":15}],15:[function(require,module,exports){
->>>>>>> * ajax is replaced by fetchObject.:build/dist/web/laroux.js
-=======
+},{"./laroux.css.js":3,"./laroux.helpers.js":7,"./laroux.promiseObject.js":11}],3:[function(require,module,exports){
 /*jslint node: true */
 /*global getComputedStyle, document, innerHeight, innerWidth */
->>>>>>> * removed redundant module closures.:build/dist/web/laroux.js
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -3319,7 +1066,7 @@ Object.defineProperty(exports, '__esModule', {
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-var _larouxHelpersJs = require('../laroux.helpers.js');
+var _larouxHelpersJs = require('./laroux.helpers.js');
 
 var _larouxHelpersJs2 = _interopRequireDefault(_larouxHelpersJs);
 
@@ -3572,31 +1319,31 @@ module.exports = exports['default'];
 <<<<<<< HEAD:docs/assets/js/laroux.js
 <<<<<<< HEAD:docs/assets/js/laroux.js
 <<<<<<< HEAD:docs/assets/js/laroux.js
-},{"../laroux.helpers.js":5}],15:[function(require,module,exports){
+},{}],6:[function(require,module,exports){
+<<<<<<< HEAD:docs/assets/js/laroux.js
 =======
-},{"../laroux.helpers.js":5}],17:[function(require,module,exports){
->>>>>>> * added $l.require.:build/dist/web/laroux.js
 =======
-},{"../laroux.helpers.js":5}],18:[function(require,module,exports){
->>>>>>> * added $l.validation.:build/dist/web/laroux.js
-=======
-},{"../laroux.helpers.js":3}],16:[function(require,module,exports){
+},{}],4:[function(require,module,exports){
 >>>>>>> * implemented Promises/A+ instead of $l.deferred and $l.when.:build/dist/web/laroux.js
 =======
-},{"../laroux.helpers.js":4}],17:[function(require,module,exports){
+},{}],5:[function(require,module,exports){
 >>>>>>> * initial commit for $l.fetch.:build/dist/web/laroux.js
 =======
-},{"../laroux.helpers.js":3}],16:[function(require,module,exports){
+=======
+}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+>>>>>>> * fixed undefined checks.:build/dist/web/laroux.js
+},{}],4:[function(require,module,exports){
 <<<<<<< HEAD:docs/assets/js/laroux.js
 >>>>>>> * ajax is replaced by fetchObject.:build/dist/web/laroux.js
 =======
-(function (global){
-<<<<<<< HEAD:docs/assets/js/laroux.js
->>>>>>> * fixed undefined checks.:build/dist/web/laroux.js
+/*jslint node: true */
+>>>>>>> * removed redundant module closures.:build/dist/web/laroux.js
 =======
+},{"./laroux.helpers.js":7}],4:[function(require,module,exports){
+(function (global){
 /*jslint node: true */
 /*global document, event, Element */
->>>>>>> * removed redundant module closures.:build/dist/web/laroux.js
+>>>>>>> * mvvm as a separate module.:build/dist/web/laroux.js
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -3605,11 +1352,11 @@ Object.defineProperty(exports, '__esModule', {
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-var _larouxPromiseObjectJs = require('../laroux.promiseObject.js');
+var _larouxPromiseObjectJs = require('./laroux.promiseObject.js');
 
 var _larouxPromiseObjectJs2 = _interopRequireDefault(_larouxPromiseObjectJs);
 
-var _larouxHelpersJs = require('../laroux.helpers.js');
+var _larouxHelpersJs = require('./laroux.helpers.js');
 
 var _larouxHelpersJs2 = _interopRequireDefault(_larouxHelpersJs);
 
@@ -3894,9 +1641,32 @@ var dom = {
         element.textContent = content;
     },
 
+<<<<<<< HEAD:docs/assets/js/laroux.js
+exports['default'] = intl;
+module.exports = exports['default'];
+<<<<<<< HEAD:docs/assets/js/laroux.js
+<<<<<<< HEAD:docs/assets/js/laroux.js
+<<<<<<< HEAD:docs/assets/js/laroux.js
+},{"./laroux.helpers.js":5}],7:[function(require,module,exports){
+>>>>>>> * added $l.require.:build/dist/web/laroux.js
+=======
+},{"./laroux.helpers.js":3}],5:[function(require,module,exports){
+>>>>>>> * implemented Promises/A+ instead of $l.deferred and $l.when.:build/dist/web/laroux.js
+=======
+},{"./laroux.helpers.js":4}],6:[function(require,module,exports){
+>>>>>>> * initial commit for $l.fetch.:build/dist/web/laroux.js
+=======
+},{"./laroux.helpers.js":3}],5:[function(require,module,exports){
+>>>>>>> * ajax is replaced by fetchObject.:build/dist/web/laroux.js
+(function (global){
+/*jslint node: true */
+/*global document */
+'use strict';
+=======
     remove: function remove(element) {
         element.remove();
     },
+>>>>>>> * mvvm as a separate module.:build/dist/web/laroux.js
 
     cloneReturn: 0,
     cloneAppend: 1,
@@ -3948,7 +1718,13 @@ var dom = {
                 };
             }
 
+<<<<<<< HEAD:docs/assets/js/laroux.js
+<<<<<<< HEAD:docs/assets/js/laroux.js
+=======
+var _larouxIntlJs = require('./laroux.intl.js');
+=======
             elem.src = url;
+>>>>>>> * mvvm as a separate module.:build/dist/web/laroux.js
 
             var head = document.getElementsByTagName('head')[0];
             head.appendChild(elem);
@@ -4031,36 +1807,48 @@ if ('Element' in global) {
 
 exports['default'] = dom;
 module.exports = exports['default'];
-<<<<<<< HEAD:docs/assets/js/laroux.js
-<<<<<<< HEAD:docs/assets/js/laroux.js
-<<<<<<< HEAD:docs/assets/js/laroux.js
-<<<<<<< HEAD:docs/assets/js/laroux.js
-<<<<<<< HEAD:docs/assets/js/laroux.js
-<<<<<<< HEAD:docs/assets/js/laroux.js
-},{"../laroux.helpers.js":5}],16:[function(require,module,exports){
-=======
-},{"../laroux.helpers.js":5}],18:[function(require,module,exports){
->>>>>>> * added $l.require.:build/dist/web/laroux.js
-=======
-},{"../laroux.helpers.js":5}],19:[function(require,module,exports){
->>>>>>> * added $l.validation.:build/dist/web/laroux.js
-=======
-=======
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
->>>>>>> * fixed undefined checks.:build/dist/web/laroux.js
-},{"../laroux.helpers.js":3,"../laroux.promiseObject.js":6}],17:[function(require,module,exports){
->>>>>>> * implemented Promises/A+ instead of $l.deferred and $l.when.:build/dist/web/laroux.js
-=======
-},{"../laroux.helpers.js":4,"../laroux.promiseObject.js":7}],18:[function(require,module,exports){
->>>>>>> * initial commit for $l.fetch.:build/dist/web/laroux.js
-=======
-},{"../laroux.helpers.js":3,"../laroux.promiseObject.js":6}],17:[function(require,module,exports){
+},{"./laroux.helpers.js":7,"./laroux.promiseObject.js":11}],5:[function(require,module,exports){
+/*jslint node: true */
+'use strict';
+
+Object.defineProperty(exports, '__esModule', {
+    value: true
+});
+var events = {
+    delegates: [],
+
+    add: function add(event, callback) {
+        events.delegates.push({ event: event, callback: callback });
+    },
+
 <<<<<<< HEAD:docs/assets/js/laroux.js
->>>>>>> * ajax is replaced by fetchObject.:build/dist/web/laroux.js
+>>>>>>> * added $l.require.:build/dist/web/laroux.js
+var _larouxStoryboardJs = require('./laroux.storyboard.js');
 =======
+    invoke: function invoke(event) {
+        for (var i = 0, _length = events.delegates.length; i < _length; i++) {
+            var _events$delegates$i;
+>>>>>>> * mvvm as a separate module.:build/dist/web/laroux.js
+
+            if (events.delegates[i].event != event) {
+                continue;
+            }
+
+            for (var _len = arguments.length, args = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+                args[_key - 1] = arguments[_key];
+            }
+
+            (_events$delegates$i = events.delegates[i]).callback.apply(_events$delegates$i, args);
+        }
+    }
+};
+
+exports['default'] = events;
+module.exports = exports['default'];
+},{}],6:[function(require,module,exports){
 /*jslint node: true */
 /*global FormData */
->>>>>>> * removed redundant module closures.:build/dist/web/laroux.js
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -4069,7 +1857,7 @@ Object.defineProperty(exports, '__esModule', {
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-var _larouxAjaxJs = require('../laroux.ajax.js');
+var _larouxAjaxJs = require('./laroux.ajax.js');
 
 var _larouxAjaxJs2 = _interopRequireDefault(_larouxAjaxJs);
 
@@ -4077,7 +1865,7 @@ var _larouxDomJs = require('./laroux.dom.js');
 
 var _larouxDomJs2 = _interopRequireDefault(_larouxDomJs);
 
-var _larouxValidationJs = require('../laroux.validation.js');
+var _larouxValidationJs = require('./laroux.validation.js');
 
 var _larouxValidationJs2 = _interopRequireDefault(_larouxValidationJs);
 
@@ -4093,9 +1881,57 @@ var forms = {
                 body: forms.serializeFormData(formobj)
             });
 
+<<<<<<< HEAD:docs/assets/js/laroux.js
+<<<<<<< HEAD:docs/assets/js/laroux.js
+        return (parent || document).querySelector(selector);
+    };
+
+    _larouxHelpersJs2['default'].merge(laroux, _larouxHelpersJs2['default']);
+    _larouxHelpersJs2['default'].merge(laroux, {
+        ajax: _larouxAjaxJs2['default'],
+        events: _larouxEventsJs2['default'],
+<<<<<<< HEAD:docs/assets/js/laroux.js
+<<<<<<< HEAD:docs/assets/js/laroux.js
+<<<<<<< HEAD:docs/assets/js/laroux.js
+=======
+=======
+        fetch: _larouxFetchObjectJs2['default'],
+>>>>>>> * initial commit for $l.fetch.:build/dist/web/laroux.js
+=======
+>>>>>>> * ajax is replaced by fetchObject.:build/dist/web/laroux.js
+        intl: _larouxIntlJs2['default'],
+        promise: _larouxPromiseObjectJs2['default'],
+        require: _larouxRequireJs2['default'],
+>>>>>>> * added $l.require.:build/dist/web/laroux.js
+        storyboard: _larouxStoryboardJs2['default'],
+        types: _larouxTypesJs2['default'],
+        templates: _larouxTemplatesJs2['default'],
+        timers: _larouxTimersJs2['default'],
+        validation: _larouxValidationJs2['default'],
+        vars: _larouxVarsJs2['default'],
+
+        extend: function extend(source) {
+            return _larouxHelpersJs2['default'].merge(laroux, source);
+        },
+=======
+_larouxHelpersJs2['default'].merge(laroux, _larouxHelpersJs2['default']);
+_larouxHelpersJs2['default'].merge(laroux, {
+    ajax: _larouxAjaxJs2['default'],
+    events: _larouxEventsJs2['default'],
+    intl: _larouxIntlJs2['default'],
+    promise: _larouxPromiseObjectJs2['default'],
+    require: _larouxRequireJs2['default'],
+    storyboard: _larouxStoryboardJs2['default'],
+    types: _larouxTypesJs2['default'],
+    templates: _larouxTemplatesJs2['default'],
+    timers: _larouxTimersJs2['default'],
+    validation: _larouxValidationJs2['default'],
+    vars: _larouxVarsJs2['default'],
+=======
             if (callback !== undefined) {
                 promise.then(callback);
             }
+>>>>>>> * mvvm as a separate module.:build/dist/web/laroux.js
 
             return false;
         });
@@ -4115,6 +1951,7 @@ var forms = {
 
             return false;
         }
+>>>>>>> * removed redundant module closures.:build/dist/web/laroux.js
 
         if (element.tagName === 'TEXTAREA') {
             return true;
@@ -4300,24 +2137,1242 @@ module.exports = exports['default'];
 <<<<<<< HEAD:docs/assets/js/laroux.js
 <<<<<<< HEAD:docs/assets/js/laroux.js
 <<<<<<< HEAD:docs/assets/js/laroux.js
-},{"../laroux.ajax.js":1,"./laroux.dom.js":15}],17:[function(require,module,exports){
+<<<<<<< HEAD:docs/assets/js/laroux.js
+}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+<<<<<<< HEAD:docs/assets/js/laroux.js
+<<<<<<< HEAD:docs/assets/js/laroux.js
+},{"./laroux.ajax.js":1,"./laroux.date.js":2,"./laroux.deferred.js":3,"./laroux.events.js":4,"./laroux.helpers.js":5,"./laroux.storyboard.js":7,"./laroux.templates.js":8,"./laroux.timers.js":9,"./laroux.types.js":10,"./laroux.vars.js":11,"./laroux.when.js":12}],7:[function(require,module,exports){
 =======
-},{"../laroux.ajax.js":2,"../laroux.validation.js":13,"./laroux.dom.js":18}],20:[function(require,module,exports){
+},{"./laroux.ajax.js":2,"./laroux.deferred.js":3,"./laroux.events.js":4,"./laroux.helpers.js":5,"./laroux.intl.js":6,"./laroux.require.js":8,"./laroux.storyboard.js":9,"./laroux.templates.js":10,"./laroux.timers.js":11,"./laroux.types.js":12,"./laroux.vars.js":13,"./laroux.when.js":14}],8:[function(require,module,exports){
+=======
+},{"./laroux.ajax.js":2,"./laroux.deferred.js":3,"./laroux.events.js":4,"./laroux.helpers.js":5,"./laroux.intl.js":6,"./laroux.require.js":8,"./laroux.storyboard.js":9,"./laroux.templates.js":10,"./laroux.timers.js":11,"./laroux.types.js":12,"./laroux.validation.js":13,"./laroux.vars.js":14,"./laroux.when.js":15}],8:[function(require,module,exports){
 >>>>>>> * added $l.validation.:build/dist/web/laroux.js
 =======
-},{"../laroux.ajax.js":1,"../laroux.validation.js":12,"./laroux.dom.js":16}],18:[function(require,module,exports){
+},{"./laroux.helpers.js":3}],7:[function(require,module,exports){
+>>>>>>> * implemented Promises/A+ instead of $l.deferred and $l.when.:build/dist/web/laroux.js
+=======
+},{"./laroux.helpers.js":4}],8:[function(require,module,exports){
+>>>>>>> * initial commit for $l.fetch.:build/dist/web/laroux.js
+=======
+=======
+}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+>>>>>>> * fixed undefined checks.:build/dist/web/laroux.js
+},{"./laroux.helpers.js":3}],7:[function(require,module,exports){
+>>>>>>> * ajax is replaced by fetchObject.:build/dist/web/laroux.js
+=======
+},{"./laroux.ajax.js":1,"./laroux.dom.js":4,"./laroux.validation.js":19}],7:[function(require,module,exports){
+>>>>>>> * mvvm as a separate module.:build/dist/web/laroux.js
+(function (global){
+/*jslint node: true */
+/*global FormData, NodeList */
+'use strict';
+
+Object.defineProperty(exports, '__esModule', {
+    value: true
+});
+var helpers = {
+    uniqueId: 0,
+
+    getUniqueId: function getUniqueId() {
+        /*jslint plusplus: true */
+        return 'uid-' + ++helpers.uniqueId;
+    },
+
+    bindContext: function bindContext(method, context) {
+        if (method.bind !== undefined) {
+            return method.bind(context);
+        }
+
+        return function () {
+            method.apply(context, arguments);
+        };
+    },
+
+    async: function async(callback) {
+        if ('setImmediate' in global) {
+            setImmediate(callback);
+            return;
+        }
+
+        setTimeout(callback, 0);
+    },
+
+    clone: function clone(obj) {
+        return JSON.parse(JSON.stringify(obj));
+    },
+
+    merge: function merge(target, source, clone) {
+        var result = clone ? helpers.clone(target) : target,
+            keys = Object.keys(source);
+
+        for (var i = 0, _length = keys.length; i < _length; i++) {
+            var key = keys[i];
+
+            if (result[key] instanceof Array) {
+                result[key] = result[key].concat(source[key]);
+                continue;
+            }
+
+            if (result[key] instanceof Object) {
+                helpers.merge(result[key], source[key]);
+                continue;
+            }
+
+            result[key] = source[key];
+        }
+
+        return result;
+    },
+
+    mergeNs: function mergeNs(target, path, source) {
+        var ptr = target,
+            pathSlices = path.split('.'),
+            keys = Object.keys(source);
+
+        for (var i = 0, _length2 = pathSlices.length; i < _length2; i++) {
+            var current = pathSlices[i];
+
+            if (ptr[current] === undefined) {
+                ptr[current] = {};
+            }
+
+            ptr = ptr[current];
+        }
+
+<<<<<<< HEAD:docs/assets/js/laroux.js
+exports['default'] = require_;
+module.exports = exports['default'];
+}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+<<<<<<< HEAD:docs/assets/js/laroux.js
+<<<<<<< HEAD:docs/assets/js/laroux.js
+<<<<<<< HEAD:docs/assets/js/laroux.js
+<<<<<<< HEAD:docs/assets/js/laroux.js
+<<<<<<< HEAD:docs/assets/js/laroux.js
+<<<<<<< HEAD:docs/assets/js/laroux.js
+},{"./laroux.ajax.js":2,"./laroux.deferred.js":3,"./laroux.when.js":14}],9:[function(require,module,exports){
+>>>>>>> * added $l.require.:build/dist/web/laroux.js
+=======
+},{"./laroux.ajax.js":2,"./laroux.deferred.js":3,"./laroux.when.js":15}],9:[function(require,module,exports){
+>>>>>>> * added $l.validation.:build/dist/web/laroux.js
+=======
+},{}],8:[function(require,module,exports){
+>>>>>>> * implemented Promises/A+ instead of $l.deferred and $l.when.:build/dist/web/laroux.js
+=======
+},{}],9:[function(require,module,exports){
+>>>>>>> * initial commit for $l.fetch.:build/dist/web/laroux.js
+=======
+},{}],8:[function(require,module,exports){
+>>>>>>> * ajax is replaced by fetchObject.:build/dist/web/laroux.js
+=======
+},{"./laroux.promiseObject.js":6}],8:[function(require,module,exports){
+>>>>>>> * async $l.require.:build/dist/web/laroux.js
+=======
+},{"./laroux.ajax.js":1,"./laroux.helpers.js":3,"./laroux.promiseObject.js":6}],8:[function(require,module,exports){
+>>>>>>> * $l.require external resources.:build/dist/web/laroux.js
+(function (global){
+/*jslint node: true */
+'use strict';
+=======
+        if (source !== undefined) {
+            // might be replaced w/ $l.merge method
+            helpers.merge(ptr, source);
+        }
+>>>>>>> * mvvm as a separate module.:build/dist/web/laroux.js
+
+        return target;
+    },
+
+    buildQueryString: function buildQueryString(values, rfc3986) {
+        var uri = '',
+            regEx = /%20/g;
+
+        for (var _name in values) {
+            if (!values.hasOwnProperty(_name)) {
+                continue;
+            }
+
+            if (typeof values[_name] !== 'function') {
+                if (rfc3986 || false) {
+                    uri += '&' + encodeURIComponent(_name).replace(regEx, '+') + '=' + encodeURIComponent(values[_name].toString()).replace(regEx, '+');
+                } else {
+                    uri += '&' + encodeURIComponent(_name) + '=' + encodeURIComponent(values[_name].toString());
+                }
+            }
+        }
+
+        return uri.substr(1);
+    },
+
+    buildFormData: function buildFormData(values) {
+        var data = new FormData();
+
+        for (var _name2 in values) {
+            if (!values.hasOwnProperty(_name2)) {
+                continue;
+            }
+
+            if (typeof values[_name2] !== 'function') {
+                data.append(_name2, values[_name2]);
+            }
+        }
+
+        return data;
+    },
+
+    format: function format() {
+        for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+            args[_key] = arguments[_key];
+        }
+
+        return Array.prototype.shift.call(args).replace(/%s/g, function () {
+            return Array.prototype.shift.call(args);
+        });
+    },
+
+    replaceAll: function replaceAll(text, dictionary) {
+        var re = new RegExp(Object.keys(dictionary).join('|'), 'g');
+
+        return text.replace(re, function (match) {
+            return dictionary[match];
+        });
+    },
+
+    camelCase: function camelCase(value) {
+        var flag = false;
+        var output = '';
+
+        for (var j = 0; j < value.length; j++) {
+            var currChar = value.charAt(j);
+            if (currChar === '-') {
+                flag = true;
+                continue;
+            }
+
+            output += !flag ? currChar : currChar.toUpperCase();
+            flag = false;
+        }
+
+        return output;
+    },
+
+    antiCamelCase: function antiCamelCase(value) {
+        var output = '';
+
+        for (var j = 0; j < value.length; j++) {
+            var currChar = value.charAt(j);
+            if (currChar !== '-' && currChar == currChar.toUpperCase()) {
+                output += '-' + currChar.toLowerCase();
+                continue;
+            }
+
+            output += currChar;
+        }
+
+        return output;
+    },
+
+<<<<<<< HEAD:docs/assets/js/laroux.js
+exports['default'] = Storyboard;
+module.exports = exports['default'];
+}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+<<<<<<< HEAD:docs/assets/js/laroux.js
+<<<<<<< HEAD:docs/assets/js/laroux.js
+<<<<<<< HEAD:docs/assets/js/laroux.js
+<<<<<<< HEAD:docs/assets/js/laroux.js
+},{"./laroux.deferred.js":3}],8:[function(require,module,exports){
+=======
+},{"./laroux.deferred.js":3}],10:[function(require,module,exports){
+>>>>>>> * added $l.require.:build/dist/web/laroux.js
+=======
+},{"./laroux.promiseObject.js":6}],9:[function(require,module,exports){
 <<<<<<< HEAD:docs/assets/js/laroux.js
 >>>>>>> * implemented Promises/A+ instead of $l.deferred and $l.when.:build/dist/web/laroux.js
 =======
-},{"../laroux.ajax.js":1,"../laroux.validation.js":13,"./laroux.dom.js":17}],19:[function(require,module,exports){
+},{"./laroux.promiseObject.js":7}],10:[function(require,module,exports){
 >>>>>>> * initial commit for $l.fetch.:build/dist/web/laroux.js
 =======
-},{"../laroux.ajax.js":1,"../laroux.validation.js":12,"./laroux.dom.js":16}],18:[function(require,module,exports){
+},{"./laroux.promiseObject.js":6}],9:[function(require,module,exports){
 >>>>>>> * ajax is replaced by fetchObject.:build/dist/web/laroux.js
 =======
 /*jslint node: true */
-/*global event, document */
+/*global Hogan, Mustache, Handlebars, _ */
 >>>>>>> * removed redundant module closures.:build/dist/web/laroux.js
+'use strict';
+=======
+    quoteAttr: function quoteAttr(value) {
+        return value.replace(/&/g, '&amp;').replace(/'/g, '&apos;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/\r\n/g, '&#13;').replace(/[\r\n]/g, '&#13;');
+    },
+>>>>>>> * mvvm as a separate module.:build/dist/web/laroux.js
+
+    spliceString: function spliceString(value, index, count, add) {
+        return value.slice(0, index) + (add || '') + value.slice(index + count);
+    },
+
+    assign: function assign(values, keys) {
+        var result = {};
+
+        for (var i = 0, _length3 = keys.length; i < _length3; i++) {
+            result[keys[i]] = values[i];
+        }
+
+        return result;
+    },
+
+    random: function random(min, max) {
+        return min + Math.floor(Math.random() * (max - min + 1));
+    },
+
+    find: function find(obj, iterator, context) {
+        var result = undefined;
+
+        obj.some(function (value, index, list) {
+            if (iterator.call(context, value, index, list)) {
+                result = value;
+                return true;
+            }
+        });
+
+        return result;
+    },
+
+    each: function each(arr, callback, testOwnProperties) {
+        for (var item in arr) {
+            if (testOwnProperties && !arr.hasOwnProperty(item)) {
+                continue;
+            }
+
+            if (callback(item, arr[item]) === false) {
+                break;
+            }
+        }
+
+        return arr;
+    },
+
+    map: function map(arr, callback, dontSkipReturns, testOwnProperties) {
+        var results = [];
+
+        for (var item in arr) {
+            if (testOwnProperties && !arr.hasOwnProperty(item)) {
+                continue;
+            }
+
+            var result = callback(arr[item], item);
+            if (result === false) {
+                break;
+            }
+
+            if (dontSkipReturns || result !== undefined) {
+                results.push(result);
+            }
+        }
+
+        return results;
+    },
+
+    index: function index(arr, value, testOwnProperties) {
+        for (var item in arr) {
+            if (testOwnProperties && !arr.hasOwnProperty(item)) {
+                continue;
+            }
+
+            if (arr[item] === value) {
+                return item;
+            }
+        }
+
+        return null;
+    },
+
+    aeach: function aeach(arr, callback) {
+        for (var i = 0, _length4 = arr.length; i < _length4; i++) {
+            if (callback(i, arr[i]) === false) {
+                break;
+            }
+        }
+
+        return arr;
+    },
+
+<<<<<<< HEAD:docs/assets/js/laroux.js
+exports['default'] = templates;
+module.exports = exports['default'];
+<<<<<<< HEAD:docs/assets/js/laroux.js
+<<<<<<< HEAD:docs/assets/js/laroux.js
+<<<<<<< HEAD:docs/assets/js/laroux.js
+<<<<<<< HEAD:docs/assets/js/laroux.js
+},{"./laroux.helpers.js":5}],9:[function(require,module,exports){
+=======
+},{"./laroux.helpers.js":5}],11:[function(require,module,exports){
+>>>>>>> * added $l.require.:build/dist/web/laroux.js
+=======
+},{"./laroux.helpers.js":3}],10:[function(require,module,exports){
+>>>>>>> * implemented Promises/A+ instead of $l.deferred and $l.when.:build/dist/web/laroux.js
+=======
+},{"./laroux.helpers.js":4}],11:[function(require,module,exports){
+>>>>>>> * initial commit for $l.fetch.:build/dist/web/laroux.js
+=======
+},{"./laroux.helpers.js":3}],10:[function(require,module,exports){
+<<<<<<< HEAD:docs/assets/js/laroux.js
+>>>>>>> * ajax is replaced by fetchObject.:build/dist/web/laroux.js
+=======
+/*jslint node: true */
+>>>>>>> * removed redundant module closures.:build/dist/web/laroux.js
+'use strict';
+=======
+    amap: function amap(arr, callback, dontSkipReturns) {
+        var results = [];
+>>>>>>> * mvvm as a separate module.:build/dist/web/laroux.js
+
+        for (var i = 0, _length5 = arr.length; i < _length5; i++) {
+            var result = callback(arr[i], i);
+            if (result === false) {
+                break;
+            }
+
+            if (dontSkipReturns || result !== undefined) {
+                results.push(result);
+            }
+        }
+
+        return results;
+    },
+
+    aindex: function aindex(arr, value, start) {
+        for (var i = start || 0, _length6 = arr.length; i < _length6; i++) {
+            if (arr[i] === value) {
+                return i;
+            }
+        }
+
+        return -1;
+    },
+
+    column: function column(obj, key) {
+        return helpers.map(obj, function (value) {
+            return value[key];
+        }, true);
+    },
+
+    shuffle: function shuffle(obj) {
+        var index = 0,
+            shuffled = [];
+
+        for (var item in obj) {
+            if (!obj.hasOwnProperty(item)) {
+                continue;
+            }
+
+            var rand = helpers.random(0, index);
+            shuffled[index++] = shuffled[rand];
+            shuffled[rand] = obj[item];
+        }
+
+        return shuffled;
+    },
+
+    prependArray: function prependArray(obj, value) {
+        var length = obj.length,
+            items = new Array(length + 1);
+
+        items[0] = value;
+        for (var i = 0, j = 1; i < length; i++, j++) {
+            items[j] = obj[i];
+        }
+
+        return items;
+    },
+
+    removeFromArray: function removeFromArray(obj, value) {
+        var targetKey = null;
+
+        for (var item in obj) {
+            if (!obj.hasOwnProperty(item)) {
+                continue;
+            }
+
+            if (obj[item] === value) {
+                targetKey = item;
+                break;
+            }
+        }
+
+        if (targetKey !== null) {
+            obj.splice(targetKey, 1);
+            return true;
+        }
+
+        return false;
+    },
+
+    toArray: function toArray(obj) {
+        var length = obj.length,
+            items = new Array(length);
+
+        for (var i = 0; i < length; i++) {
+            items[i] = obj[i];
+        }
+
+        return items;
+    },
+
+    getAsArray: function getAsArray(obj) {
+        if (obj instanceof Array) {
+            return obj;
+        }
+
+        if (obj instanceof NodeList) {
+            var _length7 = obj.length;
+
+            var items = new Array(_length7);
+            for (var i = 0; i < _length7; i++) {
+                items[i] = obj[i];
+            }
+
+            return items;
+        }
+
+        return [obj];
+    },
+
+    getLength: function getLength(obj) {
+        if (obj.constructor === Object) {
+            if (obj.length !== undefined) {
+                return obj.length;
+            }
+
+            return Object.keys(obj).length;
+        }
+
+        return -1;
+    },
+
+    getKeysRecursive: function getKeysRecursive(obj, delimiter, prefix, keys) {
+        if (delimiter === undefined) {
+            delimiter = '.';
+        }
+
+        if (prefix === undefined) {
+            prefix = '';
+            keys = [];
+        }
+
+        for (var item in obj) {
+            if (!obj.hasOwnProperty(item)) {
+                continue;
+            }
+
+            keys.push(prefix + item);
+
+            if (obj[item] !== undefined && obj[item] !== null && obj[item].constructor === Object) {
+                helpers.getKeysRecursive(obj[item], delimiter, prefix + item + delimiter, keys);
+                continue;
+            }
+        }
+
+        return keys;
+    },
+
+    getElement: function getElement(obj, path, defaultValue, delimiter) {
+        if (defaultValue === undefined) {
+            defaultValue = null;
+        }
+
+        if (delimiter === undefined) {
+            delimiter = '.';
+        }
+
+        var pos = path.indexOf(delimiter);
+        var key = undefined;
+        var rest = undefined;
+        if (pos === -1) {
+            key = path;
+            rest = null;
+        } else {
+            key = path.substring(0, pos);
+            rest = path.substring(pos + 1);
+        }
+
+        if (!(key in obj)) {
+            return defaultValue;
+        }
+
+        if (rest === null || rest.length === 0) {
+            return obj[key];
+        }
+
+        return helpers.getElement(obj[key], rest, defaultValue, delimiter);
+    },
+
+    callAll: function callAll(callbacks, scope, parameters) {
+        for (var i = 0, _length8 = callbacks.length; i < _length8; i++) {
+            callbacks[i].apply(scope, parameters);
+        }
+    },
+
+    executeScript: function executeScript(script, context) {
+        /*jslint evil:true */
+        return eval('(function () { ' + script + '}).call(context || global);');
+    }
+};
+
+exports['default'] = helpers;
+module.exports = exports['default'];
+<<<<<<< HEAD:docs/assets/js/laroux.js
+<<<<<<< HEAD:docs/assets/js/laroux.js
+<<<<<<< HEAD:docs/assets/js/laroux.js
+<<<<<<< HEAD:docs/assets/js/laroux.js
+<<<<<<< HEAD:docs/assets/js/laroux.js
+},{"./laroux.helpers.js":5}],10:[function(require,module,exports){
+=======
+},{"./laroux.helpers.js":5}],12:[function(require,module,exports){
+>>>>>>> * added $l.require.:build/dist/web/laroux.js
+=======
+},{"./laroux.helpers.js":3}],11:[function(require,module,exports){
+>>>>>>> * implemented Promises/A+ instead of $l.deferred and $l.when.:build/dist/web/laroux.js
+=======
+},{"./laroux.helpers.js":4}],12:[function(require,module,exports){
+>>>>>>> * initial commit for $l.fetch.:build/dist/web/laroux.js
+=======
+},{"./laroux.helpers.js":3}],11:[function(require,module,exports){
+>>>>>>> * ajax is replaced by fetchObject.:build/dist/web/laroux.js
+=======
+}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+},{}],8:[function(require,module,exports){
+>>>>>>> * mvvm as a separate module.:build/dist/web/laroux.js
+/*jslint node: true */
+'use strict';
+
+Object.defineProperty(exports, '__esModule', {
+    value: true
+});
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+var _larouxHelpersJs = require('./laroux.helpers.js');
+
+var _larouxHelpersJs2 = _interopRequireDefault(_larouxHelpersJs);
+
+var intl = {
+    shortDateFormat: 'dd.MM.yyyy',
+    longDateFormat: 'dd MMMM yyyy',
+    timeFormat: 'HH:mm',
+
+    monthsShort: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+    monthsLong: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+
+    strings: {
+        now: 'now',
+        later: 'later',
+        ago: 'ago',
+        seconds: 'seconds',
+        aminute: 'a minute',
+        minutes: 'minutes',
+        ahour: 'a hour',
+        hours: 'hours',
+        aday: 'a day',
+        days: 'days',
+        aweek: 'a week',
+        weeks: 'weeks',
+        amonth: 'a month',
+        months: 'months',
+        ayear: 'a year',
+        years: 'years'
+    },
+
+    parseEpoch: function parseEpoch(timespan, limitWithWeeks) {
+        if (timespan < 60 * 1000) {
+            timespan = Math.ceil(timespan / 1000);
+
+            return timespan + ' ' + intl.strings.seconds;
+        }
+
+        if (timespan < 60 * 60 * 1000) {
+            timespan = Math.ceil(timespan / (60 * 1000));
+
+            if (timespan === 1) {
+                return intl.strings.aminute;
+            }
+
+            return timespan + ' ' + intl.strings.minutes;
+        }
+
+        if (timespan < 24 * 60 * 60 * 1000) {
+            timespan = Math.ceil(timespan / (60 * 60 * 1000));
+
+            if (timespan === 1) {
+                return intl.strings.ahour;
+            }
+
+            return timespan + ' ' + intl.strings.hours;
+        }
+
+        if (timespan < 7 * 24 * 60 * 60 * 1000) {
+            timespan = Math.ceil(timespan / (24 * 60 * 60 * 1000));
+
+            if (timespan === 1) {
+                return intl.strings.aday;
+            }
+
+            return timespan + ' ' + intl.strings.days;
+        }
+
+        if (timespan < 4 * 7 * 24 * 60 * 60 * 1000) {
+            timespan = Math.ceil(timespan / (7 * 24 * 60 * 60 * 1000));
+
+            if (timespan === 1) {
+                return intl.strings.aweek;
+            }
+
+            return timespan + ' ' + intl.strings.weeks;
+        }
+
+        if (limitWithWeeks === true) {
+            return null;
+        }
+
+        if (timespan < 30 * 7 * 24 * 60 * 60 * 1000) {
+            timespan = Math.ceil(timespan / (30 * 24 * 60 * 60 * 1000));
+
+            if (timespan === 1) {
+                return intl.strings.amonth;
+            }
+
+            return timespan + ' ' + intl.strings.months;
+        }
+
+        timespan = Math.ceil(timespan / (365 * 24 * 60 * 60 * 1000));
+
+        if (timespan === 1) {
+            return intl.strings.ayear;
+        }
+
+        return timespan + ' ' + intl.strings.years;
+    },
+
+    customDate: function customDate(format, timestamp) {
+        var now = timestamp || new Date();
+
+<<<<<<< HEAD:docs/assets/js/laroux.js
+exports['default'] = types;
+module.exports = exports['default'];
+<<<<<<< HEAD:docs/assets/js/laroux.js
+<<<<<<< HEAD:docs/assets/js/laroux.js
+<<<<<<< HEAD:docs/assets/js/laroux.js
+<<<<<<< HEAD:docs/assets/js/laroux.js
+},{"./laroux.helpers.js":5}],11:[function(require,module,exports){
+=======
+},{"./laroux.helpers.js":5}],13:[function(require,module,exports){
+>>>>>>> * added $l.require.:build/dist/web/laroux.js
+=======
+},{"./laroux.helpers.js":3}],12:[function(require,module,exports){
+>>>>>>> * implemented Promises/A+ instead of $l.deferred and $l.when.:build/dist/web/laroux.js
+=======
+},{"./laroux.helpers.js":4}],13:[function(require,module,exports){
+>>>>>>> * initial commit for $l.fetch.:build/dist/web/laroux.js
+=======
+},{"./laroux.helpers.js":3}],12:[function(require,module,exports){
+<<<<<<< HEAD:docs/assets/js/laroux.js
+>>>>>>> * ajax is replaced by fetchObject.:build/dist/web/laroux.js
+=======
+/*jslint node: true */
+>>>>>>> * removed redundant module closures.:build/dist/web/laroux.js
+'use strict';
+=======
+        return format.replace(/yyyy|yy|MMMM|MMM|MM|M|dd|d|hh|h|HH|H|mm|m|ss|s|tt|t/g, function (match) {
+            switch (match) {
+                case 'yyyy':
+                    return now.getFullYear();
+>>>>>>> * mvvm as a separate module.:build/dist/web/laroux.js
+
+                case 'yy':
+                    return now.getYear();
+
+                case 'MMMM':
+                    return intl.monthsLong[now.getMonth()];
+
+                case 'MMM':
+                    return intl.monthsShort[now.getMonth()];
+
+                case 'MM':
+                    return ('0' + (now.getMonth() + 1)).substr(-2, 2);
+
+                case 'M':
+                    return now.getMonth() + 1;
+
+                case 'dd':
+                    return ('0' + now.getDate()).substr(-2, 2);
+
+                case 'd':
+                    return now.getDate();
+
+                case 'hh':
+                    var hour1 = now.getHours();
+                    return ('0' + (hour1 % 12 > 0 ? hour1 % 12 : 12)).substr(-2, 2);
+
+                case 'h':
+                    var hour2 = now.getHours();
+                    return hour2 % 12 > 0 ? hour2 % 12 : 12;
+
+                case 'HH':
+                    return ('0' + now.getHours()).substr(-2, 2);
+
+                case 'H':
+                    return now.getHours();
+
+                case 'mm':
+                    return ('0' + now.getMinutes()).substr(-2, 2);
+
+                case 'm':
+                    return now.getMinutes();
+
+                case 'ss':
+                    return ('0' + now.getSeconds()).substr(-2, 2);
+
+                case 's':
+                    return now.getSeconds();
+
+                case 'tt':
+                    if (now.getHours() >= 12) {
+                        return 'pm';
+                    }
+
+                    return 'am';
+
+                case 't':
+                    if (now.getHours() >= 12) {
+                        return 'p';
+                    }
+
+                    return 'a';
+            }
+
+            return match;
+        });
+    },
+
+    dateDiff: function dateDiff(timestamp) {
+        var now = Date.now(),
+            timespan = now - timestamp.getTime(),
+            absTimespan = Math.abs(timespan),
+            past = timespan > 0;
+
+        if (absTimespan <= 3000) {
+            return intl.strings.now;
+        }
+
+        var timespanstring = intl.parseEpoch(absTimespan, true);
+        if (timespanstring !== null) {
+            return timespanstring + ' ' + (past ? intl.strings.ago : intl.strings.later);
+        }
+
+        return intl.shortDate(timestamp, true);
+    },
+
+    shortDate: function shortDate(timestamp, includeTime) {
+        return intl.customDate(includeTime ? intl.shortDateFormat + ' ' + intl.timeFormat : intl.shortDateFormat, timestamp);
+    },
+
+    longDate: function longDate(timestamp, includeTime) {
+        return intl.customDate(includeTime ? intl.longDateFormat + ' ' + intl.timeFormat : intl.longDateFormat, timestamp);
+    },
+
+    format: function format(message, dictionary) {
+        var temp = {};
+        Object.keys(dictionary).forEach(function (x) {
+            return temp['{' + x + '}'] = dictionary[x];
+        });
+
+        return _larouxHelpersJs2['default'].replaceAll(message, temp);
+    },
+
+    translations: {},
+
+    addTranslations: function addTranslations(culture, dictionary) {
+        _larouxHelpersJs2['default'].mergeNs(intl.translations, culture, dictionary);
+    },
+
+    translate: function translate(culture, message) {
+        return intl.format(message, intl.translations[culture]);
+    }
+};
+
+exports['default'] = intl;
+module.exports = exports['default'];
+<<<<<<< HEAD:docs/assets/js/laroux.js
+<<<<<<< HEAD:docs/assets/js/laroux.js
+<<<<<<< HEAD:docs/assets/js/laroux.js
+<<<<<<< HEAD:docs/assets/js/laroux.js
+<<<<<<< HEAD:docs/assets/js/laroux.js
+<<<<<<< HEAD:docs/assets/js/laroux.js
+},{"./laroux.helpers.js":5}],12:[function(require,module,exports){
+=======
+},{"./laroux.helpers.js":5}],14:[function(require,module,exports){
+>>>>>>> * added $l.require.:build/dist/web/laroux.js
+=======
+},{"./laroux.helpers.js":5}],15:[function(require,module,exports){
+>>>>>>> * added $l.validation.:build/dist/web/laroux.js
+/*jslint node: true */
+'use strict';
+
+Object.defineProperty(exports, '__esModule', {
+    value: true
+});
+
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+var _larouxDeferredJs = require('./laroux.deferred.js');
+
+var _larouxDeferredJs2 = _interopRequireDefault(_larouxDeferredJs);
+
+var _larouxHelpersJs = require('./laroux.helpers.js');
+
+var _larouxHelpersJs2 = _interopRequireDefault(_larouxHelpersJs);
+
+var When = (function () {
+    function When() {
+        _classCallCheck(this, When);
+
+        var self = this;
+
+        this.params = [];
+        this.queues = [];
+        this.remaining = -1;
+
+        this.deferredCompleted = function () {
+            self.remaining--;
+            self.check();
+        };
+
+        if (arguments.length > 0) {
+            this.then.apply(this, arguments);
+        }
+    }
+
+    _createClass(When, [{
+        key: 'then',
+        value: function then() {
+            var _this = this;
+
+            for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+                args[_key] = arguments[_key];
+            }
+
+            args.forEach(function (arg) {
+                return _this.params.push(arg);
+            });
+            this.queues.push(args);
+            this.check();
+
+            return this;
+        }
+    }, {
+        key: 'check',
+        value: function check() {
+            var _this2 = this;
+
+            while (this.remaining <= 0) {
+                if (this.remaining !== -1) {
+                    this.queues.shift();
+                }
+
+                if (this.queues.length === 0) {
+                    this.remaining = -1;
+                    break;
+                }
+
+                var queue = this.queues[0];
+                // console.log('queue: ', queue);
+
+                this.remaining = 0;
+                for (var i = 0, _length = queue.length; i < _length; i++) {
+                    if (queue[i].constructor === Function) {
+                        var _ret = (function () {
+                            var results = [];
+                            _this2.params.forEach(function (x) {
+                                if (x instanceof _larouxDeferredJs2['default']) {
+                                    results.push(x.events.done.result[0]);
+                                } else {
+                                    results.push(x);
+                                }
+                            });
+
+                            queue[i] = _larouxDeferredJs2['default'].async.apply(_larouxDeferredJs2['default'], [queue[i]].concat(results));
+                            return 'continue';
+                        })();
+
+                        if (_ret === 'continue') continue;
+                    }
+
+                    if (queue[i].constructor === _larouxDeferredJs2['default'] && !queue[i].is('completed')) {
+                        this.remaining++;
+                        queue[i].completed(this.deferredCompleted);
+                    }
+                }
+            }
+        }
+    }]);
+
+    return When;
+})();
+
+exports['default'] = When;
+module.exports = exports['default'];
+<<<<<<< HEAD:docs/assets/js/laroux.js
+<<<<<<< HEAD:docs/assets/js/laroux.js
+},{"./laroux.deferred.js":3,"./laroux.helpers.js":5}],13:[function(require,module,exports){
+=======
+},{"./laroux.deferred.js":3,"./laroux.helpers.js":5}],15:[function(require,module,exports){
+>>>>>>> * added $l.require.:build/dist/web/laroux.js
+=======
+},{"./laroux.deferred.js":3,"./laroux.helpers.js":5}],16:[function(require,module,exports){
+>>>>>>> * added $l.validation.:build/dist/web/laroux.js
+=======
+},{"./laroux.helpers.js":3}],14:[function(require,module,exports){
+>>>>>>> * implemented Promises/A+ instead of $l.deferred and $l.when.:build/dist/web/laroux.js
+=======
+},{"./laroux.helpers.js":4}],15:[function(require,module,exports){
+>>>>>>> * initial commit for $l.fetch.:build/dist/web/laroux.js
+=======
+},{"./laroux.helpers.js":3}],14:[function(require,module,exports){
+<<<<<<< HEAD:docs/assets/js/laroux.js
+>>>>>>> * ajax is replaced by fetchObject.:build/dist/web/laroux.js
+=======
+/*jslint node: true */
+/*global document, requestAnimationFrame, scrollTo */
+>>>>>>> * removed redundant module closures.:build/dist/web/laroux.js
+=======
+},{"./laroux.helpers.js":7}],9:[function(require,module,exports){
+(function (global){
+/*jslint node: true */
+/*global document */
+>>>>>>> * mvvm as a separate module.:build/dist/web/laroux.js
+'use strict';
+
+Object.defineProperty(exports, '__esModule', {
+    value: true
+});
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+var _larouxAjaxJs = require('./laroux.ajax.js');
+
+var _larouxAjaxJs2 = _interopRequireDefault(_larouxAjaxJs);
+
+var _larouxEventsJs = require('./laroux.events.js');
+
+var _larouxEventsJs2 = _interopRequireDefault(_larouxEventsJs);
+
+var _larouxHelpersJs = require('./laroux.helpers.js');
+
+var _larouxHelpersJs2 = _interopRequireDefault(_larouxHelpersJs);
+
+var _larouxIntlJs = require('./laroux.intl.js');
+
+var _larouxIntlJs2 = _interopRequireDefault(_larouxIntlJs);
+
+var _larouxPromiseObjectJs = require('./laroux.promiseObject.js');
+
+var _larouxPromiseObjectJs2 = _interopRequireDefault(_larouxPromiseObjectJs);
+
+var _larouxRequireJs = require('./laroux.require.js');
+
+var _larouxRequireJs2 = _interopRequireDefault(_larouxRequireJs);
+
+var _larouxStoryboardJs = require('./laroux.storyboard.js');
+
+var _larouxStoryboardJs2 = _interopRequireDefault(_larouxStoryboardJs);
+
+var _larouxTypesJs = require('./laroux.types.js');
+
+var _larouxTypesJs2 = _interopRequireDefault(_larouxTypesJs);
+
+var _larouxTemplatesJs = require('./laroux.templates.js');
+
+var _larouxTemplatesJs2 = _interopRequireDefault(_larouxTemplatesJs);
+
+var _larouxTimersJs = require('./laroux.timers.js');
+
+var _larouxTimersJs2 = _interopRequireDefault(_larouxTimersJs);
+
+var _larouxValidationJs = require('./laroux.validation.js');
+
+var _larouxValidationJs2 = _interopRequireDefault(_larouxValidationJs);
+
+var _larouxVarsJs = require('./laroux.vars.js');
+
+var _larouxVarsJs2 = _interopRequireDefault(_larouxVarsJs);
+
+var laroux = function laroux(selector, parent) {
+    if (selector.constructor === Array) {
+        return _larouxHelpersJs2['default'].toArray((parent || document).querySelectorAll(selector));
+    }
+
+    // FIXME: Laroux: non-chromium optimization, but it runs
+    //                slowly in chromium
+    //
+    // let re = /^#([^\+\>\[\]\.# ]*)$/.exec(selector);
+    // if (re) {
+    //     return (parent || document).getElementById(re[1]);
+    // }
+
+    return (parent || document).querySelector(selector);
+};
+
+_larouxHelpersJs2['default'].merge(laroux, _larouxHelpersJs2['default']);
+_larouxHelpersJs2['default'].merge(laroux, {
+    ajax: _larouxAjaxJs2['default'],
+    events: _larouxEventsJs2['default'],
+    intl: _larouxIntlJs2['default'],
+    promise: _larouxPromiseObjectJs2['default'],
+    require: _larouxRequireJs2['default'],
+    storyboard: _larouxStoryboardJs2['default'],
+    types: _larouxTypesJs2['default'],
+    templates: _larouxTemplatesJs2['default'],
+    timers: _larouxTimersJs2['default'],
+    validation: _larouxValidationJs2['default'],
+    vars: _larouxVarsJs2['default'],
+
+    extend: function extend(source) {
+        return _larouxHelpersJs2['default'].merge(laroux, source);
+    },
+
+    extendNs: function extendNs(path, source) {
+        return _larouxHelpersJs2['default'].mergeNs(laroux, path, source);
+    },
+
+    readyPassed: false,
+
+    ready: function ready(callback) {
+        if (!laroux.readyPassed) {
+            _larouxEventsJs2['default'].add('ContentLoaded', callback);
+            return;
+        }
+
+        callback();
+    },
+
+    setReady: function setReady() {
+        if (!laroux.readyPassed) {
+            _larouxEventsJs2['default'].invoke('ContentLoaded');
+            setInterval(_larouxTimersJs2['default'].ontick, 100);
+            laroux.readyPassed = true;
+        }
+    }
+});
+
+<<<<<<< HEAD:docs/assets/js/laroux.js
+<<<<<<< HEAD:docs/assets/js/laroux.js
+                if (timestamp > currentItem.startTime + currentItem.time) {
+                    if (currentItem.reset === true) {
+                        currentItem.startTime = timestamp;
+                        if (currentItem.object === document.body && currentItem.property === 'scrollTop') {
+                            scrollTo(0, currentItem.from);
+                            // setTimeout(function () { scrollTo(0, currentItem.from); }, 1);
+                        } else {
+                                currentItem.object[currentItem.property] = currentItem.from;
+                            }
+=======
+            if (timestamp > currentItem.startTime + currentItem.time) {
+                if (currentItem.reset === true) {
+                    currentItem.startTime = timestamp;
+                    if (currentItem.object === document.body && currentItem.property === 'scrollTop') {
+                        scrollTo(0, currentItem.from);
+                        // setTimeout(function () { scrollTo(0, currentItem.from); }, 1);
+>>>>>>> * removed redundant module closures.:build/dist/web/laroux.js
+                    } else {
+                        currentItem.object[currentItem.property] = currentItem.from;
+                    }
+                } else {
+                    removeKeys = _larouxHelpersJs2['default'].prependArray(removeKeys, item);
+                    currentItem.deferredResolve();
+                }
+            }
+        }
+
+        for (var item2 in removeKeys) {
+            if (!removeKeys.hasOwnProperty(item2)) {
+                continue;
+            }
+
+            anim.data.splice(removeKeys[item2], 1);
+        }
+
+        if (anim.data.length > 0) {
+            requestAnimationFrame(anim.onframe);
+        }
+    },
+
+    step: function step(newanim, timestamp) {
+        var finishT = newanim.startTime + newanim.time,
+            shift = timestamp > finishT ? 1 : (timestamp - newanim.startTime) / newanim.time;
+
+<<<<<<< HEAD:docs/assets/js/laroux.js
+            if (newanim.object === document.body && newanim.property === 'scrollTop') {
+                scrollTo(0, value);
+                // setTimeout(function () { scrollTo(0, value); }, 1);
+            } else {
+                    newanim.object[newanim.property] = value;
+                }
+        }
+    };
+=======
+        var value = anim.fx.interpolate(newanim.from, newanim.to, anim.fx.easing(shift)) + newanim.unit;
+>>>>>>> * removed redundant module closures.:build/dist/web/laroux.js
+
+        if (newanim.object === document.body && newanim.property === 'scrollTop') {
+            scrollTo(0, value);
+            // setTimeout(function () { scrollTo(0, value); }, 1);
+        } else {
+            newanim.object[newanim.property] = value;
+        }
+    }
+};
+=======
+if (global.$l === undefined) {
+    global.$l = laroux;
+}
+>>>>>>> * mvvm as a separate module.:build/dist/web/laroux.js
+
+exports['default'] = laroux;
+module.exports = exports['default'];
+<<<<<<< HEAD:docs/assets/js/laroux.js
+<<<<<<< HEAD:docs/assets/js/laroux.js
+<<<<<<< HEAD:docs/assets/js/laroux.js
+<<<<<<< HEAD:docs/assets/js/laroux.js
+<<<<<<< HEAD:docs/assets/js/laroux.js
+<<<<<<< HEAD:docs/assets/js/laroux.js
+},{"../laroux.deferred.js":3,"../laroux.helpers.js":5,"./laroux.css.js":14}],14:[function(require,module,exports){
+=======
+},{"../laroux.deferred.js":3,"../laroux.helpers.js":5,"./laroux.css.js":16}],16:[function(require,module,exports){
+>>>>>>> * added $l.require.:build/dist/web/laroux.js
+=======
+},{"../laroux.deferred.js":3,"../laroux.helpers.js":5,"./laroux.css.js":17}],17:[function(require,module,exports){
+>>>>>>> * added $l.validation.:build/dist/web/laroux.js
+=======
+},{"../laroux.helpers.js":3,"../laroux.promiseObject.js":6,"./laroux.css.js":15}],15:[function(require,module,exports){
+<<<<<<< HEAD:docs/assets/js/laroux.js
+>>>>>>> * implemented Promises/A+ instead of $l.deferred and $l.when.:build/dist/web/laroux.js
+=======
+},{"../laroux.helpers.js":4,"../laroux.promiseObject.js":7,"./laroux.css.js":16}],16:[function(require,module,exports){
+>>>>>>> * initial commit for $l.fetch.:build/dist/web/laroux.js
+=======
+},{"../laroux.helpers.js":3,"../laroux.promiseObject.js":6,"./laroux.css.js":15}],15:[function(require,module,exports){
+>>>>>>> * ajax is replaced by fetchObject.:build/dist/web/laroux.js
+=======
+/*jslint node: true */
+/*global getComputedStyle, document, innerHeight, innerWidth */
+>>>>>>> * removed redundant module closures.:build/dist/web/laroux.js
+=======
+}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+},{"./laroux.ajax.js":1,"./laroux.events.js":5,"./laroux.helpers.js":7,"./laroux.intl.js":8,"./laroux.promiseObject.js":11,"./laroux.require.js":12,"./laroux.storyboard.js":14,"./laroux.templates.js":15,"./laroux.timers.js":16,"./laroux.types.js":18,"./laroux.validation.js":19,"./laroux.vars.js":20}],10:[function(require,module,exports){
+/*jslint node: true */
+/*global event, document */
+>>>>>>> * mvvm as a separate module.:build/dist/web/laroux.js
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -4481,23 +3536,267 @@ module.exports = exports['default'];
 <<<<<<< HEAD:docs/assets/js/laroux.js
 <<<<<<< HEAD:docs/assets/js/laroux.js
 <<<<<<< HEAD:docs/assets/js/laroux.js
-},{"./laroux.dom.js":15,"./laroux.forms.js":16}],18:[function(require,module,exports){
+<<<<<<< HEAD:docs/assets/js/laroux.js
+<<<<<<< HEAD:docs/assets/js/laroux.js
+},{"../laroux.helpers.js":5}],15:[function(require,module,exports){
 =======
-},{"./laroux.dom.js":18,"./laroux.forms.js":19}],21:[function(require,module,exports){
+},{"../laroux.helpers.js":5}],17:[function(require,module,exports){
+>>>>>>> * added $l.require.:build/dist/web/laroux.js
+=======
+},{"../laroux.helpers.js":5}],18:[function(require,module,exports){
 >>>>>>> * added $l.validation.:build/dist/web/laroux.js
 =======
-},{"./laroux.dom.js":16,"./laroux.forms.js":17}],19:[function(require,module,exports){
+},{"../laroux.helpers.js":3}],16:[function(require,module,exports){
 >>>>>>> * implemented Promises/A+ instead of $l.deferred and $l.when.:build/dist/web/laroux.js
 =======
-},{"./laroux.dom.js":17,"./laroux.forms.js":18}],20:[function(require,module,exports){
+},{"../laroux.helpers.js":4}],17:[function(require,module,exports){
 >>>>>>> * initial commit for $l.fetch.:build/dist/web/laroux.js
 =======
-},{"./laroux.dom.js":16,"./laroux.forms.js":17}],19:[function(require,module,exports){
+},{"../laroux.helpers.js":3}],16:[function(require,module,exports){
 <<<<<<< HEAD:docs/assets/js/laroux.js
 >>>>>>> * ajax is replaced by fetchObject.:build/dist/web/laroux.js
 =======
+=======
+},{"./laroux.dom.js":4,"./laroux.forms.js":6}],11:[function(require,module,exports){
+>>>>>>> * mvvm as a separate module.:build/dist/web/laroux.js
+(function (global){
+<<<<<<< HEAD:docs/assets/js/laroux.js
+>>>>>>> * fixed undefined checks.:build/dist/web/laroux.js
+=======
 /*jslint node: true */
+<<<<<<< HEAD:docs/assets/js/laroux.js
+/*global document, event, Element */
 >>>>>>> * removed redundant module closures.:build/dist/web/laroux.js
+=======
+>>>>>>> * mvvm as a separate module.:build/dist/web/laroux.js
+'use strict';
+
+Object.defineProperty(exports, '__esModule', {
+    value: true
+});
+
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+var _larouxHelpersJs = require('./laroux.helpers.js');
+
+var _larouxHelpersJs2 = _interopRequireDefault(_larouxHelpersJs);
+
+// promiseObject - partially taken from 'promise-polyfill' project
+//                 can be found at: https://github.com/taylorhakes/promise-polyfill
+//                 see laroux.promiseObject.LICENSE file for details
+
+var PromisePolyfill = (function () {
+    function PromisePolyfill(callback) {
+        _classCallCheck(this, PromisePolyfill);
+
+        this.state = null;
+        this.value = null;
+        this.deferreds = [];
+
+        this['catch'] = this._catch;
+
+        if (callback !== undefined) {
+            this.doResolve(callback, _larouxHelpersJs2['default'].bindContext(this.resolve, this), _larouxHelpersJs2['default'].bindContext(this.reject, this));
+        }
+    }
+
+    _createClass(PromisePolyfill, [{
+        key: 'doResolve',
+        value: function doResolve(callback, onFulfilled, onRejected) {
+            var done = false;
+
+            try {
+                callback(function (value) {
+                    if (done) {
+                        return;
+                    }
+
+                    done = true;
+                    onFulfilled(value);
+                }, function (reason) {
+                    if (done) {
+                        return;
+                    }
+
+                    done = true;
+                    onRejected(reason);
+                });
+            } catch (err) {
+                if (done) {
+                    return;
+                }
+
+                done = true;
+                onRejected(err);
+            }
+        }
+    }, {
+        key: 'resolve',
+        value: function resolve(newValue) {
+            try {
+                if (newValue && newValue.then !== undefined && newValue.then.constructor === Function) {
+                    this.doResolve(_larouxHelpersJs2['default'].bindContext(newValue.then, newValue), _larouxHelpersJs2['default'].bindContext(this.resolve, this), _larouxHelpersJs2['default'].bindContext(this.reject, this));
+                    return;
+                }
+
+                this.state = true;
+                this.value = newValue;
+
+                this.finale();
+            } catch (err) {
+                this.reject(err);
+            }
+        }
+    }, {
+        key: 'reject',
+        value: function reject(newValue) {
+            this.state = false;
+            this.value = newValue;
+
+            this.finale();
+        }
+    }, {
+        key: 'finale',
+        value: function finale() {
+            for (var i = 0, _length = this.deferreds.length; i < _length; i++) {
+                this.handle(this.deferreds[i]);
+            }
+
+            this.deferreds = null;
+        }
+    }, {
+        key: 'handle',
+        value: function handle(deferred) {
+            var self = this;
+
+            if (this.state === null) {
+                this.deferreds.push(deferred);
+                return;
+            }
+
+            _larouxHelpersJs2['default'].async(function () {
+                var callback = self.state ? deferred.onFulfilled : deferred.onRejected;
+
+                if (callback === null) {
+                    (self.state ? deferred.resolve : deferred.reject)(self.value);
+                    return;
+                }
+
+                var result = undefined;
+                try {
+                    result = callback(self.value);
+                } catch (err) {
+                    deferred.reject(err);
+                    return;
+                }
+
+                deferred.resolve(result);
+            });
+        }
+    }, {
+        key: 'then',
+        value: function then(onFulfilled, onRejected) {
+            var self = this;
+
+            return new PromisePolyfill(function (resolve, reject) {
+                self.handle({
+                    onFulfilled: onFulfilled || null,
+                    onRejected: onRejected || null,
+                    resolve: resolve,
+                    reject: reject
+                });
+            });
+        }
+    }, {
+        key: '_catch',
+        value: function _catch(onRejected) {
+            this.then(null, onRejected);
+        }
+    }], [{
+        key: 'all',
+        value: function all() {
+            for (var _len = arguments.length, deferreds = Array(_len), _key = 0; _key < _len; _key++) {
+                deferreds[_key] = arguments[_key];
+            }
+
+            if (deferreds.length === 1 && deferreds.constructor === Array) {
+                deferreds = deferreds[0];
+            }
+
+            return new PromisePolyfill(function (resolve, reject) {
+                var remaining = deferreds.length;
+
+                if (remaining === 0) {
+                    return [];
+                }
+
+                var res = function res(i, deferred) {
+                    try {
+                        if (deferred && deferred.then !== undefined && deferred.then.constructor === Function) {
+                            deferred.then.call(deferred, function (value) {
+                                res(i, value);
+                            }, reject);
+                            return;
+                        }
+
+                        deferreds[i] = deferred;
+                        if (--remaining === 0) {
+                            resolve(deferreds);
+                        }
+                    } catch (err) {
+                        reject(err);
+                    }
+                };
+
+                for (var i = 0, _length2 = deferreds.length; i < _length2; i++) {
+                    res(i, deferreds[i]);
+                }
+            });
+        }
+    }, {
+        key: 'resolve',
+        value: function resolve(value) {
+            if (value && value.constructor === PromisePolyfill) {
+                return value;
+            }
+
+            return new PromisePolyfill(function (resolve) {
+                resolve(value);
+            });
+        }
+    }, {
+        key: 'reject',
+        value: function reject(reason) {
+            return new PromisePolyfill(function (resolve, reject) {
+                reject(reason);
+            });
+        }
+    }, {
+        key: 'race',
+        value: function race(values) {
+            return new PromisePolyfill(function (resolve, reject) {
+                for (var i = 0, _length3 = values.length; i < _length3; i++) {
+                    values[i].then(resolve, reject);
+                }
+            });
+        }
+    }]);
+
+    return PromisePolyfill;
+})();
+
+var promiseExist = ('Promise' in global);
+
+exports['default'] = promiseExist ? Promise : PromisePolyfill;
+module.exports = exports['default'];
+}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+},{"./laroux.helpers.js":7}],12:[function(require,module,exports){
+(function (global){
+/*jslint node: true */
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -4506,211 +3805,140 @@ Object.defineProperty(exports, '__esModule', {
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-var _larouxDomJs = require('./laroux.dom.js');
+var _larouxAjaxJs = require('./laroux.ajax.js');
 
-var _larouxDomJs2 = _interopRequireDefault(_larouxDomJs);
+var _larouxAjaxJs2 = _interopRequireDefault(_larouxAjaxJs);
 
-var _larouxHelpersJs = require('../laroux.helpers.js');
+var _larouxPromiseObjectJs = require('./laroux.promiseObject.js');
+
+var _larouxPromiseObjectJs2 = _interopRequireDefault(_larouxPromiseObjectJs);
+
+var _larouxHelpersJs = require('./laroux.helpers.js');
 
 var _larouxHelpersJs2 = _interopRequireDefault(_larouxHelpersJs);
 
-var mvc = {
-    apps: {},
-    pauseUpdate: false,
+var require_ = function require_() {
+    var name = undefined,
+        requirements = undefined,
+        callback = undefined;
 
-    init: function init(element, model) {
-        if (element.constructor === String) {
-            element = _larouxDomJs2['default'].selectById(element);
-        }
-
-        // if (model.constructor !== types.Observable) {
-        //     model = new types.Observable(model);
-        // }
-
-        var appKey = element.getAttribute('id');
-
-        model.on(function (event) {
-            if (!mvc.pauseUpdate) {
-                mvc.update(appKey); // , [event.key]
-            }
-        });
-
-        mvc.apps[appKey] = {
-            element: element,
-            model: model // ,
-            // modelKeys: null,
-            // boundElements: null,
-            // eventElements: null
-        };
-
-        mvc.rebind(appKey);
-    },
-
-    rebind: function rebind(appKey) {
-        var app = mvc.apps[appKey];
-        /*jslint nomen: true */
-        app.modelKeys = _larouxHelpersJs2['default'].getKeysRecursive(app.model); // FIXME: works only for $l.types.Observable
-        app.boundElements = {};
-        app.eventElements = [];
-
-        mvc.scanElements(app, app.element);
-        mvc.update(appKey);
-
-        var callback = function callback(ev, elem) {
-            var binding = mvc.bindStringParser(elem.getAttribute('lr-event'));
-            // mvc.pauseUpdate = true;
-            for (var item in binding) {
-                if (item === null || !binding.hasOwnProperty(item)) {
-                    continue;
-                }
-
-                if (binding[item].charAt(0) === '\'') {
-                    app.model[item] = binding[item].substring(1, binding[item].length - 1);
-                } else if (binding[item].substring(0, 5) === 'attr.') {
-                    app.model[item] = elem.getAttribute(binding[item].substring(5));
-                } else if (binding[item].substring(0, 5) === 'prop.') {
-                    app.model[item] = elem[binding[item].substring(5)];
-                }
-            }
-            // mvc.pauseUpdate = false;
-        };
-
-        for (var i = 0, _length = app.eventElements.length; i < _length; i++) {
-            _larouxDomJs2['default'].setEvent(app.eventElements[i].element, app.eventElements[i].binding[null], callback);
-        }
-    },
-
-    scanElements: function scanElements(app, element) {
-        for (var i = 0, atts = element.attributes, m = atts.length; i < m; i++) {
-            if (atts[i].name === 'lr-bind') {
-                var binding1 = mvc.bindStringParser(atts[i].value);
-
-                for (var item in binding1) {
-                    if (!binding1.hasOwnProperty(item)) {
-                        continue;
-                    }
-
-                    if (app.boundElements[binding1[item]] === undefined) {
-                        app.boundElements[binding1[item]] = [];
-                    }
-
-                    app.boundElements[binding1[item]].push({
-                        element: element,
-                        target: item
-                    });
-                }
-            } else if (atts[i].name === 'lr-event') {
-                var binding2 = mvc.bindStringParser(atts[i].value);
-
-                app.eventElements.push({
-                    element: element,
-                    binding: binding2
-                });
-            }
-        }
-
-        for (var j = 0, chldrn = element.childNodes, n = chldrn.length; j < n; j++) {
-            if (chldrn[j].nodeType === 1) {
-                mvc.scanElements(app, chldrn[j]);
-            }
-        }
-    },
-
-    update: function update(appKey, keys) {
-        var app = mvc.apps[appKey];
-
-        if (typeof keys === 'undefined') {
-            keys = app.modelKeys;
-        }
-
-        for (var i = 0, length1 = keys.length; i < length1; i++) {
-            if (!(keys[i] in app.boundElements)) {
-                continue;
-            }
-
-            var boundElement = app.boundElements[keys[i]],
-                value = _larouxHelpersJs2['default'].getElement(app.model, keys[i]);
-
-            if (value instanceof Function) {
-                value = value.call(app.model);
-            }
-
-            for (var j = 0, length2 = boundElement.length; j < length2; j++) {
-                if (boundElement[j].target.substring(0, 6) === 'style.') {
-                    boundElement[j].element.style[boundElement[j].target.substring(6)] = value;
-                } else if (boundElement[j].target.substring(0, 5) === 'attr.') {
-                    // FIXME removeAttribute on null value?
-                    boundElement[j].element.setAttribute(boundElement[j].target.substring(5), value);
-                } else if (boundElement[j].target.substring(0, 5) === 'prop.') {
-                    // FIXME removeAttribute on null value?
-                    boundElement[j].element[boundElement[j].target.substring(5)] = value;
-                }
-            }
-        }
-    },
-
-    bindStringParser: function bindStringParser(text) {
-        var lastBuffer = null,
-            buffer = '',
-            state = 0,
-            result = {};
-
-        for (var i = 0, _length2 = text.length; i < _length2; i++) {
-            var curr = text.charAt(i);
-
-            if (state === 0) {
-                if (curr === ':') {
-                    state = 1;
-                    lastBuffer = buffer.trim();
-                    buffer = '';
-                    continue;
-                }
-            }
-
-            if (curr === ',') {
-                state = 0;
-                result[lastBuffer] = buffer.trim();
-                buffer = '';
-                continue;
-            }
-
-            buffer += curr;
-        }
-
-        if (buffer.length > 0) {
-            result[lastBuffer] = buffer.trim();
-        }
-
-        return result;
+    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+        args[_key] = arguments[_key];
     }
+
+    if (args.length >= 3) {
+        name = args[0];
+        requirements = args[1];
+        callback = args[2];
+    } else if (args.length === 2) {
+        if (args[0].constructor === Array) {
+            name = null;
+            requirements = args[0];
+            callback = args[1];
+        } else {
+            name = args[0];
+            requirements = [];
+            callback = args[1];
+        }
+    } else {
+        name = null;
+        requirements = [];
+        callback = args[0];
+    }
+
+    var dependencies = [];
+    for (var i = 0, _length = requirements.length; i < _length; i++) {
+        var requirement = requirements[i];
+
+        if (!(requirement in require_.modules)) {
+            throw new Error('dependency not loaded: ' + requirement + '.');
+        }
+
+        dependencies.push(require_.modules[requirement]);
+    }
+
+    var result = undefined;
+    if (callback.constructor === _larouxPromiseObjectJs2['default']) {
+        dependencies.push(callback);
+
+        result = _larouxPromiseObjectJs2['default'].all(dependencies);
+    } else if (callback.constructor === String) {
+        if ('require' in global) {
+            result = _larouxPromiseObjectJs2['default'].all(dependencies).then(function (dependencies) {
+                return require(callback);
+            });
+        } else {
+            (function () {
+                var script = undefined;
+
+                var promise = _larouxAjaxJs2['default'].fetch(callback).then(function (response) {
+                    return response.text();
+                }).then(function (text) {
+                    script = text;
+                    return text;
+                });
+
+                dependencies.push(promise);
+
+                result = _larouxPromiseObjectJs2['default'].all(dependencies).then(function (dependencies) {
+                    return _larouxHelpersJs2['default'].executeScript.call(global, script);
+                });
+            })();
+        }
+    } else {
+        result = _larouxPromiseObjectJs2['default'].all(dependencies).then(function (dependencies) {
+            return callback.apply(global, dependencies);
+        });
+    }
+
+    if (name !== null) {
+        require_.modules[name] = result;
+    }
+
+    return result;
 };
 
-exports['default'] = mvc;
+require_.modules = {};
+
+exports['default'] = require_;
 module.exports = exports['default'];
 <<<<<<< HEAD:docs/assets/js/laroux.js
 <<<<<<< HEAD:docs/assets/js/laroux.js
 <<<<<<< HEAD:docs/assets/js/laroux.js
 <<<<<<< HEAD:docs/assets/js/laroux.js
 <<<<<<< HEAD:docs/assets/js/laroux.js
-},{"../laroux.helpers.js":5,"./laroux.dom.js":15}],19:[function(require,module,exports){
+<<<<<<< HEAD:docs/assets/js/laroux.js
+},{"../laroux.helpers.js":5}],16:[function(require,module,exports){
 =======
-},{"../laroux.helpers.js":5,"./laroux.dom.js":17}],21:[function(require,module,exports){
+},{"../laroux.helpers.js":5}],18:[function(require,module,exports){
 >>>>>>> * added $l.require.:build/dist/web/laroux.js
 =======
-},{"../laroux.helpers.js":5,"./laroux.dom.js":18}],22:[function(require,module,exports){
+},{"../laroux.helpers.js":5}],19:[function(require,module,exports){
 >>>>>>> * added $l.validation.:build/dist/web/laroux.js
 =======
-},{"../laroux.helpers.js":3,"./laroux.dom.js":16}],20:[function(require,module,exports){
+=======
+}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+<<<<<<< HEAD:docs/assets/js/laroux.js
+>>>>>>> * fixed undefined checks.:build/dist/web/laroux.js
+},{"../laroux.helpers.js":3,"../laroux.promiseObject.js":6}],17:[function(require,module,exports){
 >>>>>>> * implemented Promises/A+ instead of $l.deferred and $l.when.:build/dist/web/laroux.js
 =======
-},{"../laroux.helpers.js":4,"./laroux.dom.js":17}],21:[function(require,module,exports){
+},{"../laroux.helpers.js":4,"../laroux.promiseObject.js":7}],18:[function(require,module,exports){
 >>>>>>> * initial commit for $l.fetch.:build/dist/web/laroux.js
 =======
-},{"../laroux.helpers.js":3,"./laroux.dom.js":16}],20:[function(require,module,exports){
+},{"../laroux.helpers.js":3,"../laroux.promiseObject.js":6}],17:[function(require,module,exports){
+<<<<<<< HEAD:docs/assets/js/laroux.js
 >>>>>>> * ajax is replaced by fetchObject.:build/dist/web/laroux.js
+=======
+/*jslint node: true */
+/*global FormData */
+>>>>>>> * removed redundant module closures.:build/dist/web/laroux.js
+=======
+},{"./laroux.ajax.js":1,"./laroux.helpers.js":7,"./laroux.promiseObject.js":11}],13:[function(require,module,exports){
 (function (global){
 /*jslint node: true */
 /*global location, addEventListener, removeEventListener */
+>>>>>>> * mvvm as a separate module.:build/dist/web/laroux.js
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -4719,11 +3947,11 @@ Object.defineProperty(exports, '__esModule', {
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-var _larouxJs = require('../laroux.js');
+var _larouxJs = require('./laroux.js');
 
 var _larouxJs2 = _interopRequireDefault(_larouxJs);
 
-var _larouxHelpersJs = require('../laroux.helpers.js');
+var _larouxHelpersJs = require('./laroux.helpers.js');
 
 var _larouxHelpersJs2 = _interopRequireDefault(_larouxHelpersJs);
 
@@ -4910,32 +4138,298 @@ _larouxJs2['default'].ready(routes.attach);
 
 exports['default'] = routes;
 module.exports = exports['default'];
-}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 <<<<<<< HEAD:docs/assets/js/laroux.js
 <<<<<<< HEAD:docs/assets/js/laroux.js
 <<<<<<< HEAD:docs/assets/js/laroux.js
 <<<<<<< HEAD:docs/assets/js/laroux.js
 <<<<<<< HEAD:docs/assets/js/laroux.js
-},{"../laroux.helpers.js":5,"../laroux.js":6}],20:[function(require,module,exports){
+},{"../laroux.ajax.js":1,"./laroux.dom.js":15}],17:[function(require,module,exports){
 =======
-},{"../laroux.helpers.js":5,"../laroux.js":7}],22:[function(require,module,exports){
->>>>>>> * added $l.require.:build/dist/web/laroux.js
-=======
-},{"../laroux.helpers.js":5,"../laroux.js":7}],23:[function(require,module,exports){
+},{"../laroux.ajax.js":2,"../laroux.validation.js":13,"./laroux.dom.js":18}],20:[function(require,module,exports){
 >>>>>>> * added $l.validation.:build/dist/web/laroux.js
 =======
-},{"../laroux.helpers.js":3,"../laroux.js":5}],21:[function(require,module,exports){
+},{"../laroux.ajax.js":1,"../laroux.validation.js":12,"./laroux.dom.js":16}],18:[function(require,module,exports){
 <<<<<<< HEAD:docs/assets/js/laroux.js
 >>>>>>> * implemented Promises/A+ instead of $l.deferred and $l.when.:build/dist/web/laroux.js
 =======
-},{"../laroux.helpers.js":4,"../laroux.js":6}],22:[function(require,module,exports){
+},{"../laroux.ajax.js":1,"../laroux.validation.js":13,"./laroux.dom.js":17}],19:[function(require,module,exports){
 >>>>>>> * initial commit for $l.fetch.:build/dist/web/laroux.js
 =======
-},{"../laroux.helpers.js":3,"../laroux.js":5}],21:[function(require,module,exports){
+},{"../laroux.ajax.js":1,"../laroux.validation.js":12,"./laroux.dom.js":16}],18:[function(require,module,exports){
 >>>>>>> * ajax is replaced by fetchObject.:build/dist/web/laroux.js
 =======
 /*jslint node: true */
-/*global document, navigator */
+/*global event, document */
+>>>>>>> * removed redundant module closures.:build/dist/web/laroux.js
+=======
+}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+},{"./laroux.helpers.js":7,"./laroux.js":9}],14:[function(require,module,exports){
+(function (global){
+/*jslint node: true */
+>>>>>>> * mvvm as a separate module.:build/dist/web/laroux.js
+'use strict';
+
+Object.defineProperty(exports, '__esModule', {
+    value: true
+});
+
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+var _larouxPromiseObjectJs = require('./laroux.promiseObject.js');
+
+var _larouxPromiseObjectJs2 = _interopRequireDefault(_larouxPromiseObjectJs);
+
+var Storyboard = (function () {
+    function Storyboard() {
+        _classCallCheck(this, Storyboard);
+
+        var self = this;
+
+        this.phases = [];
+        this.phaseKeys = {};
+        this.currentIteration = 0;
+        this.running = false;
+
+        for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+            args[_key] = arguments[_key];
+        }
+
+        for (var i = 0, _length = args.length; i < _length; i++) {
+            this.addPhase(args[i]);
+        }
+
+        this.checkPromise = function () {
+            if (--self.phases[self.currentIteration].promises === 0 && !self.running) {
+                self.start();
+            }
+        };
+    }
+
+    _createClass(Storyboard, [{
+        key: 'addPhase',
+        value: function addPhase(key) {
+            this.phaseKeys[key] = this.phases.length;
+            this.phases.push({
+                key: key,
+                callbacks: [],
+                promises: 0
+            });
+        }
+    }, {
+        key: 'add',
+        value: function add(phase, callback) {
+            if (callback.constructor === _larouxPromiseObjectJs2['default']) {
+                return this.addPromise(phase, callback);
+            }
+
+            var phaseId = this.phaseKeys[phase];
+
+            if (phaseId < this.currentIteration) {
+                // execute immediately if phase is already passed
+                callback.apply(global);
+                return;
+            }
+
+            this.phases[phaseId].callbacks.push(callback);
+        }
+    }, {
+        key: 'addPromise',
+        value: function addPromise(phase, promise) {
+            var phaseId = this.phaseKeys[phase];
+
+            // skips if phase is already passed
+            if (phaseId < this.currentIteration) {
+                return;
+            }
+
+            this.phases[phaseId].promises++;
+            // FIXME: must be handled even if it has failed
+            promise.then(this.checkPromise);
+        }
+    }, {
+        key: 'start',
+        value: function start() {
+            this.running = true;
+
+            while (this.phases.length > this.currentIteration) {
+                var currentPhase = this.phases[this.currentIteration];
+
+                while (currentPhase.callbacks.length > 0) {
+                    var fnc = currentPhase.callbacks.shift();
+                    fnc.apply(global);
+                }
+
+                if (currentPhase.promises > 0) {
+                    break;
+                }
+
+                this.currentIteration++;
+            }
+
+            this.running = false;
+        }
+    }]);
+
+    return Storyboard;
+})();
+
+exports['default'] = Storyboard;
+module.exports = exports['default'];
+}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+},{"./laroux.promiseObject.js":11}],15:[function(require,module,exports){
+/*jslint node: true */
+/*global Hogan, Mustache, Handlebars, _ */
+'use strict';
+
+Object.defineProperty(exports, '__esModule', {
+    value: true
+});
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+var _larouxHelpersJs = require('./laroux.helpers.js');
+
+var _larouxHelpersJs2 = _interopRequireDefault(_larouxHelpersJs);
+
+var templates = {
+    engines: {
+        plain: {
+            compile: function compile(template, options) {
+                return [template, options];
+            },
+
+            render: function render(compiled, model) {
+                var result = compiled[0],
+                    dict = [],
+                    lastIndex = 0,
+                    nextIndex = undefined;
+
+                while ((nextIndex = result.indexOf('{{', lastIndex)) !== -1) {
+                    nextIndex += 2;
+                    var closeIndex = result.indexOf('}}', nextIndex);
+                    if (closeIndex === -1) {
+                        break;
+                    }
+
+                    var key = result.substring(nextIndex, closeIndex);
+                    dict['{{' + key + '}}'] = _larouxHelpersJs2['default'].getElement(model, key, '');
+                    lastIndex = closeIndex + 2;
+                }
+
+                return _larouxHelpersJs2['default'].replaceAll(result, dict);
+            }
+        },
+
+        hogan: {
+            compile: function compile(template, options) {
+                return Hogan.compile(template, options);
+            },
+
+            render: function render(compiled, model) {
+                return compiled.render(model);
+            }
+        },
+
+        mustache: {
+            compile: function compile(template, options) {
+                return Mustache.compile(template, options);
+            },
+
+            render: function render(compiled, model) {
+                return compiled(model);
+            }
+        },
+
+        handlebars: {
+            compile: function compile(template, options) {
+                return Handlebars.compile(template, options);
+            },
+
+            render: function render(compiled, model) {
+                return compiled(model);
+            }
+        },
+
+        lodash: {
+            compile: function compile(template, options) {
+                /*jslint nomen: true */
+                return _.compile(template, null, options);
+            },
+
+            render: function render(compiled, model) {
+                return compiled(model);
+            }
+        },
+
+        underscore: {
+            compile: function compile(template, options) {
+                /*jslint nomen: true */
+                return _.compile(template, null, options);
+            },
+
+            render: function render(compiled, model) {
+                return compiled(model);
+            }
+        }
+    },
+    engine: 'plain',
+
+    apply: function apply(element, model, options) {
+        var content = undefined,
+            engine = templates.engines[templates.engine];
+
+        if (element.nodeType === 1 || element.nodeType === 3 || element.nodeType === 11) {
+            content = element.textContent;
+        } else {
+            content = element.nodeValue;
+        }
+
+        var compiled = engine.compile(content, options);
+        return engine.render(compiled, model);
+    }
+
+    /*
+    insert: function (element, model, target, position, options) {
+        let output = templates.apply(element, model, options);
+         dom.insert(target, position || 'beforeend', output);
+    },
+     replace: function (element, model, target, options) {
+        let output = templates.apply(element, model, options);
+         dom.replace(target, output);
+    }
+    */
+};
+
+exports['default'] = templates;
+module.exports = exports['default'];
+<<<<<<< HEAD:docs/assets/js/laroux.js
+<<<<<<< HEAD:docs/assets/js/laroux.js
+<<<<<<< HEAD:docs/assets/js/laroux.js
+<<<<<<< HEAD:docs/assets/js/laroux.js
+<<<<<<< HEAD:docs/assets/js/laroux.js
+},{"./laroux.dom.js":15,"./laroux.forms.js":16}],18:[function(require,module,exports){
+=======
+},{"./laroux.dom.js":18,"./laroux.forms.js":19}],21:[function(require,module,exports){
+>>>>>>> * added $l.validation.:build/dist/web/laroux.js
+=======
+},{"./laroux.dom.js":16,"./laroux.forms.js":17}],19:[function(require,module,exports){
+>>>>>>> * implemented Promises/A+ instead of $l.deferred and $l.when.:build/dist/web/laroux.js
+=======
+},{"./laroux.dom.js":17,"./laroux.forms.js":18}],20:[function(require,module,exports){
+>>>>>>> * initial commit for $l.fetch.:build/dist/web/laroux.js
+=======
+},{"./laroux.dom.js":16,"./laroux.forms.js":17}],19:[function(require,module,exports){
+<<<<<<< HEAD:docs/assets/js/laroux.js
+>>>>>>> * ajax is replaced by fetchObject.:build/dist/web/laroux.js
+=======
+=======
+},{"./laroux.helpers.js":7}],16:[function(require,module,exports){
+>>>>>>> * mvvm as a separate module.:build/dist/web/laroux.js
+/*jslint node: true */
 >>>>>>> * removed redundant module closures.:build/dist/web/laroux.js
 'use strict';
 
@@ -4945,7 +4439,88 @@ Object.defineProperty(exports, '__esModule', {
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-var _larouxJs = require('../laroux.js');
+var _larouxHelpersJs = require('./laroux.helpers.js');
+
+var _larouxHelpersJs2 = _interopRequireDefault(_larouxHelpersJs);
+
+var timers = {
+    data: [],
+
+    set: function set(timer) {
+        timer.next = Date.now() + timer.timeout;
+        timers.data.push(timer);
+    },
+
+    remove: function remove(id) {
+        var targetKey = null;
+
+        for (var item in timers.data) {
+            if (!timers.data.hasOwnProperty(item)) {
+                continue;
+            }
+
+            var currentItem = timers.data[item];
+
+            if (currentItem.id !== undefined && currentItem.id == id) {
+                targetKey = item;
+                break;
+            }
+        }
+
+        if (targetKey !== null) {
+            timers.data.splice(targetKey, 1);
+            return true;
+        }
+
+        return false;
+    },
+
+    ontick: function ontick() {
+        var now = Date.now(),
+            removeKeys = [];
+
+        for (var item in timers.data) {
+            if (!timers.data.hasOwnProperty(item)) {
+                continue;
+            }
+
+            var currentItem = timers.data[item];
+
+            if (currentItem.next <= now) {
+                var result = currentItem.ontick(currentItem.state);
+
+                if (result !== false && currentItem.reset) {
+                    currentItem.next = now + currentItem.timeout;
+                } else {
+                    removeKeys = _larouxHelpersJs2['default'].prependArray(removeKeys, item);
+                }
+            }
+        }
+
+        for (var item2 in removeKeys) {
+            if (!removeKeys.hasOwnProperty(item2)) {
+                continue;
+            }
+
+            timers.data.splice(removeKeys[item2], 1);
+        }
+    }
+};
+
+exports['default'] = timers;
+module.exports = exports['default'];
+},{"./laroux.helpers.js":7}],17:[function(require,module,exports){
+/*jslint node: true */
+/*global document, navigator */
+'use strict';
+
+Object.defineProperty(exports, '__esModule', {
+    value: true
+});
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+var _larouxJs = require('./laroux.js');
 
 var _larouxJs2 = _interopRequireDefault(_larouxJs);
 
@@ -5074,6 +4649,425 @@ module.exports = exports['default'];
 <<<<<<< HEAD:docs/assets/js/laroux.js
 <<<<<<< HEAD:docs/assets/js/laroux.js
 <<<<<<< HEAD:docs/assets/js/laroux.js
+<<<<<<< HEAD:docs/assets/js/laroux.js
+<<<<<<< HEAD:docs/assets/js/laroux.js
+},{"../laroux.helpers.js":5,"./laroux.dom.js":15}],19:[function(require,module,exports){
+=======
+},{"../laroux.helpers.js":5,"./laroux.dom.js":17}],21:[function(require,module,exports){
+>>>>>>> * added $l.require.:build/dist/web/laroux.js
+=======
+},{"../laroux.helpers.js":5,"./laroux.dom.js":18}],22:[function(require,module,exports){
+>>>>>>> * added $l.validation.:build/dist/web/laroux.js
+=======
+},{"../laroux.helpers.js":3,"./laroux.dom.js":16}],20:[function(require,module,exports){
+>>>>>>> * implemented Promises/A+ instead of $l.deferred and $l.when.:build/dist/web/laroux.js
+=======
+},{"../laroux.helpers.js":4,"./laroux.dom.js":17}],21:[function(require,module,exports){
+>>>>>>> * initial commit for $l.fetch.:build/dist/web/laroux.js
+=======
+},{"../laroux.helpers.js":3,"./laroux.dom.js":16}],20:[function(require,module,exports){
+>>>>>>> * ajax is replaced by fetchObject.:build/dist/web/laroux.js
+(function (global){
+=======
+},{"./laroux.dom.js":4,"./laroux.js":9}],18:[function(require,module,exports){
+>>>>>>> * mvvm as a separate module.:build/dist/web/laroux.js
+/*jslint node: true */
+'use strict';
+
+Object.defineProperty(exports, '__esModule', {
+    value: true
+});
+
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+var _larouxHelpersJs = require('./laroux.helpers.js');
+
+var _larouxHelpersJs2 = _interopRequireDefault(_larouxHelpersJs);
+
+var staticKeys = ['_callbacks', '_onupdate'];
+
+var Observable = (function () {
+    function Observable(data) {
+        _classCallCheck(this, Observable);
+
+        var self = this;
+
+        this._callbacks = [];
+        this._onupdate = function (changes) {
+            _larouxHelpersJs2['default'].callAll(self._callbacks, self, [changes]);
+        };
+
+        this.observe(this);
+
+        if (data) {
+            this.setRange(data);
+        }
+    }
+
+    _createClass(Observable, [{
+        key: 'set',
+        value: function set(key, value) {
+            if (staticKeys.indexOf(key) === -1) {
+                this[key] = value;
+            }
+        }
+    }, {
+        key: 'setRange',
+        value: function setRange(values) {
+            for (var valueKey in values) {
+                this.set(valueKey, values[valueKey]);
+            }
+        }
+    }, {
+        key: 'get',
+        value: function get(key, defaultValue) {
+            if (key in this && staticKeys.indexOf(key) === -1) {
+                return this[key];
+            }
+
+            return defaultValue || null;
+        }
+    }, {
+        key: 'getRange',
+        value: function getRange(keys) {
+            var values = {};
+
+            for (var item in keys) {
+                values[keys[item]] = this[keys[item]];
+            }
+
+            return values;
+        }
+    }, {
+        key: 'keys',
+        value: function keys() {
+            var keys = [];
+
+            for (var item in this) {
+                if (staticKeys.indexOf(item) === -1) {
+                    keys.push(item);
+                }
+            }
+
+            return keys;
+        }
+    }, {
+        key: 'length',
+        value: function length() {
+            return this.keys().length;
+        }
+    }, {
+        key: 'exists',
+        value: function exists(key) {
+            return key in this;
+        }
+    }, {
+        key: 'remove',
+        value: function remove(key) {
+            if (staticKeys.indexOf(key) === -1) {
+                delete this[key];
+            }
+        }
+    }, {
+        key: 'clear',
+        value: function clear() {
+            for (var item in this) {
+                if (!this.hasOwnProperty(item) || staticKeys.indexOf(item) !== -1) {
+                    continue;
+                }
+
+                delete this[item];
+            }
+        }
+    }, {
+        key: 'observe',
+        value: function observe(obj) {
+            if ('observe' in Object) {
+                Object.observe(obj, this._onupdate);
+            }
+        }
+    }, {
+        key: 'unobserve',
+        value: function unobserve(obj) {
+            if ('unobserve' in Object) {
+                Object.unobserve(obj);
+            }
+        }
+    }, {
+        key: 'on',
+        value: function on(callback) {
+            this._callbacks.push(callback);
+        }
+    }, {
+        key: 'off',
+        value: function off(callback) {
+            _larouxHelpersJs2['default'].removeFromArray(this._callbacks, callback);
+        }
+    }]);
+
+    return Observable;
+})();
+
+var types = {
+    observable: Observable
+};
+
+exports['default'] = types;
+module.exports = exports['default'];
+},{"./laroux.helpers.js":7}],19:[function(require,module,exports){
+/*jslint node: true */
+'use strict';
+
+Object.defineProperty(exports, '__esModule', {
+    value: true
+});
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+var _larouxHelpersJs = require('./laroux.helpers.js');
+
+var _larouxHelpersJs2 = _interopRequireDefault(_larouxHelpersJs);
+
+var validation = {
+    // TODO: email, date, equalTo
+    rules: {
+        required: {
+            keys: ['message'],
+            callback: function callback(dictionary, name, rule) {
+                return name in dictionary;
+            }
+        },
+
+        minlength: {
+            keys: ['length', 'message'],
+            callback: function callback(dictionary, name, rule) {
+                return dictionary[name].length >= rule.length;
+            }
+        },
+
+        maxlength: {
+            keys: ['length', 'message'],
+            callback: function callback(dictionary, name, rule) {
+                return dictionary[name].length <= rule.length;
+            }
+        },
+
+        min: {
+            keys: ['value', 'message'],
+            callback: function callback(dictionary, name, rule) {
+                var floatValue = parseFloat(dictionary[name]);
+                return floatValue >= rule.value;
+            }
+        },
+
+        max: {
+            keys: ['value', 'message'],
+            callback: function callback(dictionary, name, rule) {
+                var floatValue = parseFloat(dictionary[name]);
+                return floatValue <= rule.value;
+            }
+        }
+    },
+
+    // {rule: 'required', message: 'isrequired'}
+    // 'required'
+
+    // {
+    //    'name': 'required',
+    //    'age': [
+    //        'required|The field is required.',
+    //        { rule: 'range', min: 10, max: 18 },
+    //    ]
+    // }
+
+    validate: function validate(fields, rules) {
+        var rulesKeys = Object.keys(rules),
+            result = {
+            success: true,
+            details: {}
+        };
+
+        for (var i = 0, _length = rulesKeys.length; i < _length; i++) {
+            var key = rulesKeys[i],
+                rule = rules[key];
+
+            var fieldRules = _larouxHelpersJs2['default'].getAsArray(rule);
+            for (var j = 0, length2 = fieldRules.length; j < length2; j++) {
+                var fieldRule = fieldRules[j];
+
+                if (fieldRule.constructor !== Object) {
+                    var fieldRuleSplitted = fieldRule.split('|'),
+                        fieldRuleName = fieldRuleSplitted[0];
+
+                    fieldRule = _larouxHelpersJs2['default'].assign(fieldRuleSplitted, ['name'].concat(validation.rules[fieldRuleName].keys));
+                }
+
+                if (!validation.rules[fieldRule.name].callback(fields, key, fieldRule)) {
+                    result.success = false;
+
+                    if (!(key in result.details)) {
+                        result.details[key] = [];
+                    }
+
+                    result.details[key].push(fieldRule);
+                }
+            }
+        }
+
+        return result;
+    }
+};
+
+exports['default'] = validation;
+module.exports = exports['default'];
+<<<<<<< HEAD:docs/assets/js/laroux.js
+}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+<<<<<<< HEAD:docs/assets/js/laroux.js
+<<<<<<< HEAD:docs/assets/js/laroux.js
+<<<<<<< HEAD:docs/assets/js/laroux.js
+<<<<<<< HEAD:docs/assets/js/laroux.js
+<<<<<<< HEAD:docs/assets/js/laroux.js
+},{"../laroux.helpers.js":5,"../laroux.js":6}],20:[function(require,module,exports){
+=======
+},{"../laroux.helpers.js":5,"../laroux.js":7}],22:[function(require,module,exports){
+>>>>>>> * added $l.require.:build/dist/web/laroux.js
+=======
+},{"../laroux.helpers.js":5,"../laroux.js":7}],23:[function(require,module,exports){
+>>>>>>> * added $l.validation.:build/dist/web/laroux.js
+=======
+},{"../laroux.helpers.js":3,"../laroux.js":5}],21:[function(require,module,exports){
+<<<<<<< HEAD:docs/assets/js/laroux.js
+>>>>>>> * implemented Promises/A+ instead of $l.deferred and $l.when.:build/dist/web/laroux.js
+=======
+},{"../laroux.helpers.js":4,"../laroux.js":6}],22:[function(require,module,exports){
+>>>>>>> * initial commit for $l.fetch.:build/dist/web/laroux.js
+=======
+},{"../laroux.helpers.js":3,"../laroux.js":5}],21:[function(require,module,exports){
+>>>>>>> * ajax is replaced by fetchObject.:build/dist/web/laroux.js
+=======
+/*jslint node: true */
+/*global document, navigator */
+>>>>>>> * removed redundant module closures.:build/dist/web/laroux.js
+=======
+},{"./laroux.helpers.js":7}],20:[function(require,module,exports){
+/*jslint node: true */
+/*global document, localStorage, sessionStorage */
+>>>>>>> * mvvm as a separate module.:build/dist/web/laroux.js
+'use strict';
+
+Object.defineProperty(exports, '__esModule', {
+    value: true
+});
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+var _larouxHelpersJs = require('./laroux.helpers.js');
+
+var _larouxHelpersJs2 = _interopRequireDefault(_larouxHelpersJs);
+
+var vars = {
+    storages: {
+        cookie: {
+            defaultPath: '/',
+
+            get: function get(name, defaultValue) {
+                var re = new RegExp(encodeURIComponent(name) + '=[^;]+', 'i'),
+                    match = document.cookie.match(re);
+
+                if (!match) {
+                    return defaultValue || null;
+                }
+
+                return decodeURIComponent(match[0].split('=')[1]);
+            },
+
+            set: function set(name, value, expires, path) {
+                var expireValue = '';
+                if (expires) {
+                    expireValue = '; expires=' + expires.toGMTString();
+                }
+
+                document.cookie = encodeURIComponent(name) + '=' + encodeURIComponent(value) + expireValue + '; path=' + (path || vars.storages.cookie.defaultPath);
+            },
+
+            remove: function remove(name, path) {
+                document.cookie = encodeURIComponent(name) + '=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=' + (path || vars.storages.cookie.defaultPath);
+            }
+        },
+
+        local: {
+            get: function get(name, defaultValue) {
+                if (!(name in localStorage)) {
+                    return defaultValue || null;
+                }
+
+                return JSON.parse(localStorage[name]);
+            },
+
+            set: function set(name, value) {
+                localStorage[name] = JSON.stringify(value);
+            },
+
+            remove: function remove(name) {
+                delete localStorage[name];
+            }
+        },
+
+        session: {
+            get: function get(name, defaultValue) {
+                if (!(name in sessionStorage)) {
+                    return defaultValue || null;
+                }
+
+                return JSON.parse(sessionStorage[name]);
+            },
+
+            set: function set(name, value) {
+                sessionStorage[name] = JSON.stringify(value);
+            },
+
+            remove: function remove(name) {
+                delete sessionStorage[name];
+            }
+        }
+    },
+
+    get: function get(storage) {
+        for (var _len = arguments.length, args = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+            args[_key - 1] = arguments[_key];
+        }
+
+        return vars.storages[storage].get.apply(this, args);
+    },
+
+    set: function set(storage) {
+        for (var _len2 = arguments.length, args = Array(_len2 > 1 ? _len2 - 1 : 0), _key2 = 1; _key2 < _len2; _key2++) {
+            args[_key2 - 1] = arguments[_key2];
+        }
+
+        return vars.storages[storage].set.apply(this, args);
+    },
+
+    remove: function remove(storage) {
+        for (var _len3 = arguments.length, args = Array(_len3 > 1 ? _len3 - 1 : 0), _key3 = 1; _key3 < _len3; _key3++) {
+            args[_key3 - 1] = arguments[_key3];
+        }
+
+        return vars.storages[storage].remove.apply(this, args);
+    }
+};
+
+exports['default'] = vars;
+module.exports = exports['default'];
+<<<<<<< HEAD:docs/assets/js/laroux.js
+<<<<<<< HEAD:docs/assets/js/laroux.js
+<<<<<<< HEAD:docs/assets/js/laroux.js
+<<<<<<< HEAD:docs/assets/js/laroux.js
+<<<<<<< HEAD:docs/assets/js/laroux.js
 },{"../laroux.js":6,"./laroux.dom.js":15}],21:[function(require,module,exports){
 =======
 },{"../laroux.js":5,"./laroux.dom.js":16}],22:[function(require,module,exports){
@@ -5086,6 +5080,9 @@ module.exports = exports['default'];
 <<<<<<< HEAD:docs/assets/js/laroux.js
 >>>>>>> * ajax is replaced by fetchObject.:build/dist/web/laroux.js
 =======
+=======
+},{"./laroux.helpers.js":7}],21:[function(require,module,exports){
+>>>>>>> * mvvm as a separate module.:build/dist/web/laroux.js
 (function (global){
 <<<<<<< HEAD:docs/assets/js/laroux.js
 >>>>>>> * fixed undefined checks.:build/dist/web/laroux.js
@@ -5101,7 +5098,7 @@ Object.defineProperty(exports, '__esModule', {
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-var _larouxJs = require('../laroux.js');
+var _larouxJs = require('./laroux.js');
 
 var _larouxJs2 = _interopRequireDefault(_larouxJs);
 
@@ -5121,17 +5118,13 @@ var _larouxFormsJs = require('./laroux.forms.js');
 
 var _larouxFormsJs2 = _interopRequireDefault(_larouxFormsJs);
 
-var _larouxHelpersJs = require('../laroux.helpers.js');
+var _larouxHelpersJs = require('./laroux.helpers.js');
 
 var _larouxHelpersJs2 = _interopRequireDefault(_larouxHelpersJs);
 
 var _larouxKeysJs = require('./laroux.keys.js');
 
 var _larouxKeysJs2 = _interopRequireDefault(_larouxKeysJs);
-
-var _larouxMvcJs = require('./laroux.mvc.js');
-
-var _larouxMvcJs2 = _interopRequireDefault(_larouxMvcJs);
 
 var _larouxRoutesJs = require('./laroux.routes.js');
 
@@ -5179,7 +5172,6 @@ _larouxJs2['default'].extend({
     dom: _larouxDomJs2['default'],
     forms: _larouxFormsJs2['default'],
     keys: _larouxKeysJs2['default'],
-    mvc: _larouxMvcJs2['default'],
     routes: _larouxRoutesJs2['default'],
     touch: _larouxTouchJs2['default'],
 
@@ -5231,9 +5223,13 @@ module.exports = exports['default'];
 =======
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 <<<<<<< HEAD:docs/assets/js/laroux.js
+<<<<<<< HEAD:docs/assets/js/laroux.js
 >>>>>>> * fixed undefined checks.:build/dist/web/laroux.js
 },{"../laroux.js":5,"./laroux.anim.js":14,"./laroux.css.js":15,"./laroux.dom.js":16,"./laroux.forms.js":17,"./laroux.keys.js":18,"./laroux.mvc.js":19,"./laroux.routes.js":20,"./laroux.touch.js":21}]},{},[22]);
 >>>>>>> * ajax is replaced by fetchObject.:build/dist/web/laroux.js
 =======
 },{"../laroux.helpers.js":3,"../laroux.js":5,"./laroux.anim.js":14,"./laroux.css.js":15,"./laroux.dom.js":16,"./laroux.forms.js":17,"./laroux.keys.js":18,"./laroux.mvc.js":19,"./laroux.routes.js":20,"./laroux.touch.js":21}]},{},[22]);
 >>>>>>> * removed redundant module closures.:build/dist/web/laroux.js
+=======
+},{"./laroux.anim.js":2,"./laroux.css.js":3,"./laroux.dom.js":4,"./laroux.forms.js":6,"./laroux.helpers.js":7,"./laroux.js":9,"./laroux.keys.js":10,"./laroux.routes.js":13,"./laroux.touch.js":17}]},{},[21]);
+>>>>>>> * mvvm as a separate module.:build/dist/web/laroux.js

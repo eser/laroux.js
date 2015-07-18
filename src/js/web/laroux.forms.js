@@ -2,9 +2,9 @@
 /*global FormData */
 'use strict';
 
-import ajax from '../laroux.ajax.js';
+import ajax from './laroux.ajax.js';
 import dom from './laroux.dom.js';
-import validation from '../laroux.validation.js';
+import validation from './laroux.validation.js';
 
 let forms = {
     ajaxForm: function (formobj, callback, callbackBegin) {

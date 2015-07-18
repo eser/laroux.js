@@ -2,8 +2,8 @@
 /*global document, event, Element */
 'use strict';
 
-import PromiseObject from '../laroux.promiseObject.js';
-import helpers from '../laroux.helpers.js';
+import PromiseObject from './laroux.promiseObject.js';
+import helpers from './laroux.helpers.js';
 
 let dom = {
     docprop: function (propName) {
