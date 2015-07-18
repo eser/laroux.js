@@ -2,15 +2,14 @@
 /*global document */
 'use strict';
 
-import laroux from '../laroux.js';
+import laroux from './laroux.js';
 
 import anim from './laroux.anim.js';
 import css from './laroux.css.js';
 import dom from './laroux.dom.js';
 import forms from './laroux.forms.js';
-import helpers from '../laroux.helpers.js';
+import helpers from './laroux.helpers.js';
 import keys from './laroux.keys.js';
-import mvc from './laroux.mvc.js';
 import routes from './laroux.routes.js';
 import touch from './laroux.touch.js';
 
@@ -20,7 +19,6 @@ laroux.extend({
     dom,
     forms,
     keys,
-    mvc,
     routes,
     touch,
 

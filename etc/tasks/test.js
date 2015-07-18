@@ -6,7 +6,7 @@
         handleErrors = require('../utils/handleErrors'),
         karma = require('gulp-karma');
 
-    gulp.task('test', ['pack'], function () {
+    gulp.task('test', function () {
         var files = [];
 
         Object.keys(config.bundles).forEach(function (item) {

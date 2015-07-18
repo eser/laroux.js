@@ -363,7 +363,878 @@ var ajax = {
 exports['default'] = ajax;
 module.exports = exports['default'];
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./laroux.helpers.js":3,"./laroux.promiseObject.js":6}],2:[function(require,module,exports){
+},{"./laroux.helpers.js":7,"./laroux.promiseObject.js":11}],2:[function(require,module,exports){
+/*jslint node: true */
+/*global document, requestAnimationFrame, scrollTo */
+'use strict';
+
+Object.defineProperty(exports, '__esModule', {
+    value: true
+});
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+var _larouxCssJs = require('./laroux.css.js');
+
+var _larouxCssJs2 = _interopRequireDefault(_larouxCssJs);
+
+var _larouxHelpersJs = require('./laroux.helpers.js');
+
+var _larouxHelpersJs2 = _interopRequireDefault(_larouxHelpersJs);
+
+var _larouxPromiseObjectJs = require('./laroux.promiseObject.js');
+
+var _larouxPromiseObjectJs2 = _interopRequireDefault(_larouxPromiseObjectJs);
+
+var anim = {
+    data: [],
+
+    fx: {
+        interpolate: function interpolate(source, target, shift) {
+            return source + (target - source) * shift;
+        },
+
+        easing: function easing(pos) {
+            return -Math.cos(pos * Math.PI) / 2 + 0.5;
+        }
+    },
+
+    // {object, property, from, to, time, unit, reset}
+    set: function set(newanim) {
+        newanim.deferred = new _larouxPromiseObjectJs2['default'](function (resolve, reject) {
+            newanim.deferredResolve = resolve;
+            newanim.deferredReject = reject;
+        });
+
+        newanim.startTime = undefined;
+
+        if (newanim.unit === null || newanim.unit === undefined) {
+            newanim.unit = '';
+        }
+
+        if (newanim.from === null || newanim.from === undefined) {
+            if (newanim.object === document.body && newanim.property === 'scrollTop') {
+                newanim.from = document.documentElement && document.documentElement.scrollTop || document.body.scrollTop;
+            } else {
+                newanim.from = newanim.object[newanim.property];
+            }
+        }
+
+        if (newanim.from.constructor === String) {
+            newanim.from = Number(newanim.from);
+        }
+
+        // if (newanim.id === undefined) {
+        //     newanim.id = helpers.getUniqueId();
+        // }
+
+        anim.data.push(newanim);
+        if (anim.data.length === 1) {
+            requestAnimationFrame(anim.onframe);
+        }
+
+        return newanim.deferred;
+    },
+
+    setCss: function setCss(newanim) {
+        if (newanim.from === null || newanim.from === undefined) {
+            newanim.from = _larouxCssJs2['default'].getProperty(newanim.object, newanim.property);
+        }
+
+        newanim.object = newanim.object.style;
+        newanim.property = _larouxHelpersJs2['default'].camelCase(newanim.property);
+
+        return anim.set(newanim);
+    },
+
+    remove: function remove(id) {
+        var targetKey = null;
+
+        for (var item in anim.data) {
+            if (!anim.data.hasOwnProperty(item)) {
+                continue;
+            }
+
+            var currentItem = anim.data[item];
+
+            if (currentItem.id !== undefined && currentItem.id == id) {
+                targetKey = item;
+                break;
+            }
+        }
+
+        if (targetKey !== null) {
+            var deferred = anim.data[targetKey];
+
+            deferred.deferredReject('stop');
+
+            anim.data.splice(targetKey, 1);
+            return true;
+        }
+
+        return false;
+    },
+
+    onframe: function onframe(timestamp) {
+        var removeKeys = [];
+
+        for (var item in anim.data) {
+            if (!anim.data.hasOwnProperty(item)) {
+                continue;
+            }
+
+            var currentItem = anim.data[item];
+            if (currentItem.startTime === undefined) {
+                currentItem.startTime = timestamp;
+            }
+
+            anim.step(currentItem, timestamp);
+
+            if (timestamp > currentItem.startTime + currentItem.time) {
+                if (currentItem.reset === true) {
+                    currentItem.startTime = timestamp;
+                    if (currentItem.object === document.body && currentItem.property === 'scrollTop') {
+                        scrollTo(0, currentItem.from);
+                        // setTimeout(function () { scrollTo(0, currentItem.from); }, 1);
+                    } else {
+                        currentItem.object[currentItem.property] = currentItem.from;
+                    }
+                } else {
+                    removeKeys = _larouxHelpersJs2['default'].prependArray(removeKeys, item);
+                    currentItem.deferredResolve();
+                }
+            }
+        }
+
+        for (var item2 in removeKeys) {
+            if (!removeKeys.hasOwnProperty(item2)) {
+                continue;
+            }
+
+            anim.data.splice(removeKeys[item2], 1);
+        }
+
+        if (anim.data.length > 0) {
+            requestAnimationFrame(anim.onframe);
+        }
+    },
+
+    step: function step(newanim, timestamp) {
+        var finishT = newanim.startTime + newanim.time,
+            shift = timestamp > finishT ? 1 : (timestamp - newanim.startTime) / newanim.time;
+
+        var value = anim.fx.interpolate(newanim.from, newanim.to, anim.fx.easing(shift)) + newanim.unit;
+
+        if (newanim.object === document.body && newanim.property === 'scrollTop') {
+            scrollTo(0, value);
+            // setTimeout(function () { scrollTo(0, value); }, 1);
+        } else {
+            newanim.object[newanim.property] = value;
+        }
+    }
+};
+
+exports['default'] = anim;
+module.exports = exports['default'];
+},{"./laroux.css.js":3,"./laroux.helpers.js":7,"./laroux.promiseObject.js":11}],3:[function(require,module,exports){
+/*jslint node: true */
+/*global getComputedStyle, document, innerHeight, innerWidth */
+'use strict';
+
+Object.defineProperty(exports, '__esModule', {
+    value: true
+});
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+var _larouxHelpersJs = require('./laroux.helpers.js');
+
+var _larouxHelpersJs2 = _interopRequireDefault(_larouxHelpersJs);
+
+var css = {
+    // class features
+    hasClass: function hasClass(element, className) {
+        return element.classList.contains(className);
+    },
+
+    addClass: function addClass(element, className) {
+        var elements = _larouxHelpersJs2['default'].getAsArray(element);
+
+        for (var i = 0, _length = elements.length; i < _length; i++) {
+            elements[i].classList.add(className);
+        }
+    },
+
+    removeClass: function removeClass(element, className) {
+        var elements = _larouxHelpersJs2['default'].getAsArray(element);
+
+        for (var i = 0, _length2 = elements.length; i < _length2; i++) {
+            elements[i].classList.remove(className);
+        }
+    },
+
+    toggleClass: function toggleClass(element, className) {
+        var elements = _larouxHelpersJs2['default'].getAsArray(element);
+
+        for (var i = 0, _length3 = elements.length; i < _length3; i++) {
+            if (elements[i].classList.contains(className)) {
+                elements[i].classList.remove(className);
+            } else {
+                elements[i].classList.add(className);
+            }
+        }
+    },
+
+    cycleClass: function cycleClass(elements, className) {
+        for (var i = 0, _length4 = elements.length; i < _length4; i++) {
+            if (elements[i].classList.contains(className)) {
+                elements[i].classList.remove(className);
+                elements[(i + 1) % _length4].classList.add(className);
+                return;
+            }
+        }
+    },
+
+    // style features
+    getProperty: function getProperty(element, styleName) {
+        var style = getComputedStyle(element);
+
+        styleName = _larouxHelpersJs2['default'].antiCamelCase(styleName);
+
+        return style.getPropertyValue(styleName);
+    },
+
+    setProperty: function setProperty(element, properties, value) {
+        var elements = _larouxHelpersJs2['default'].getAsArray(element);
+
+        if (typeof properties === 'string') {
+            var oldProperties = properties;
+            properties = {};
+            properties[oldProperties] = value;
+        }
+
+        for (var styleName in properties) {
+            if (!properties.hasOwnProperty(styleName)) {
+                continue;
+            }
+
+            var newStyleName = _larouxHelpersJs2['default'].camelCase(styleName);
+
+            for (var i = 0, _length5 = elements.length; i < _length5; i++) {
+                elements[i].style[newStyleName] = properties[styleName];
+            }
+        }
+    },
+
+    // transition features
+    defaultTransition: '2s ease',
+
+    setTransitionSingle: function setTransitionSingle(element, transition) {
+        var transitions = _larouxHelpersJs2['default'].getAsArray(transition),
+            style = getComputedStyle(element),
+            currentTransitions = style.getPropertyValue('transition') || style.getPropertyValue('-webkit-transition') || style.getPropertyValue('-ms-transition') || '',
+            currentTransitionsArray = undefined;
+
+        if (currentTransitions.length > 0) {
+            currentTransitionsArray = currentTransitions.split(',');
+        } else {
+            currentTransitionsArray = [];
+        }
+
+        for (var item in transitions) {
+            if (!transitions.hasOwnProperty(item)) {
+                continue;
+            }
+
+            var styleName = undefined,
+                transitionProperties = undefined,
+                pos = transitions[item].indexOf(' ');
+
+            if (pos !== -1) {
+                styleName = transitions[item].substring(0, pos);
+                transitionProperties = transitions[item].substring(pos + 1);
+            } else {
+                styleName = transitions[item];
+                transitionProperties = css.defaultTransition;
+            }
+
+            var found = false;
+            for (var j = 0; j < currentTransitionsArray.length; j++) {
+                if (currentTransitionsArray[j].trim().localeCompare(styleName) === 0) {
+                    currentTransitionsArray[j] = styleName + ' ' + transitionProperties;
+                    found = true;
+                    break;
+                }
+            }
+
+            if (!found) {
+                currentTransitionsArray.push(styleName + ' ' + transitionProperties);
+            }
+        }
+
+        var value = currentTransitionsArray.join(', ');
+
+        element.style.transition = value;
+        element.style.webkitTransition = value;
+        element.style.msTransition = value;
+    },
+
+    setTransition: function setTransition(element, transition) {
+        var elements = _larouxHelpersJs2['default'].getAsArray(element);
+
+        for (var i = 0, _length6 = elements.length; i < _length6; i++) {
+            css.setTransitionSingle(elements[i], transition);
+        }
+    },
+
+    show: function show(element, transitionProperties) {
+        if (transitionProperties !== undefined) {
+            css.setTransition(element, 'opacity ' + transitionProperties);
+        } else {
+            css.setTransition(element, 'opacity');
+        }
+
+        css.setProperty(element, { opacity: 1 });
+    },
+
+    hide: function hide(element, transitionProperties) {
+        if (transitionProperties !== undefined) {
+            css.setTransition(element, 'opacity ' + transitionProperties);
+        } else {
+            css.setTransition(element, 'opacity');
+        }
+
+        css.setProperty(element, { opacity: 0 });
+    },
+
+    // measurement features
+    // height of element without padding, margin and border
+    height: function height(element) {
+        var style = getComputedStyle(element),
+            height = style.getPropertyCSSValue('height');
+
+        return height.getFloatValue(height.primitiveType);
+    },
+
+    // height of element with padding but without margin and border
+    innerHeight: function innerHeight(element) {
+        return element.clientHeight;
+    },
+
+    // height of element with padding and border but margin optional
+    outerHeight: function outerHeight(element, includeMargin) {
+        if (includeMargin || false) {
+            return element.offsetHeight;
+        }
+
+        var style = getComputedStyle(element),
+            marginTop = style.getPropertyCSSValue('margin-top'),
+            marginBottom = style.getPropertyCSSValue('margin-bottom'),
+            margins = marginTop.getFloatValue(marginTop.primitiveType) + marginBottom.getFloatValue(marginBottom.primitiveType);
+
+        return Math.ceil(element.offsetHeight + margins);
+    },
+
+    // width of element without padding, margin and border
+    width: function width(element) {
+        var style = getComputedStyle(element),
+            height = style.getPropertyCSSValue('width');
+
+        return height.getFloatValue(height.primitiveType);
+    },
+
+    // width of element with padding but without margin and border
+    innerWidth: function innerWidth(element) {
+        return element.clientWidth;
+    },
+
+    // width of element with padding and border but margin optional
+    outerWidth: function outerWidth(element, includeMargin) {
+        if (includeMargin || false) {
+            return element.offsetWidth;
+        }
+
+        var style = getComputedStyle(element),
+            marginLeft = style.getPropertyCSSValue('margin-left'),
+            marginRight = style.getPropertyCSSValue('margin-right'),
+            margins = marginLeft.getFloatValue(marginLeft.primitiveType) + marginRight.getFloatValue(marginRight.primitiveType);
+
+        return Math.ceil(element.offsetWidth + margins);
+    },
+
+    top: function top(element) {
+        return element.getBoundingClientRect().top + (document.documentElement && document.documentElement.scrollTop || document.body.scrollTop);
+    },
+
+    left: function left(element) {
+        return element.getBoundingClientRect().left + (document.documentElement && document.documentElement.scrollLeft || document.body.scrollLeft);
+    },
+
+    aboveTheTop: function aboveTheTop(element) {
+        return element.getBoundingClientRect().bottom <= 0;
+    },
+
+    belowTheFold: function belowTheFold(element) {
+        return element.getBoundingClientRect().top > innerHeight;
+    },
+
+    leftOfScreen: function leftOfScreen(element) {
+        return element.getBoundingClientRect().right <= 0;
+    },
+
+    rightOfScreen: function rightOfScreen(element) {
+        return element.getBoundingClientRect().left > innerWidth;
+    },
+
+    inViewport: function inViewport(element) {
+        var rect = element.getBoundingClientRect();
+
+        return !(rect.bottom <= 0 || rect.top > innerHeight || rect.right <= 0 || rect.left > innerWidth);
+    }
+};
+
+exports['default'] = css;
+module.exports = exports['default'];
+},{"./laroux.helpers.js":7}],4:[function(require,module,exports){
+(function (global){
+/*jslint node: true */
+/*global document, event, Element */
+'use strict';
+
+Object.defineProperty(exports, '__esModule', {
+    value: true
+});
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+var _larouxPromiseObjectJs = require('./laroux.promiseObject.js');
+
+var _larouxPromiseObjectJs2 = _interopRequireDefault(_larouxPromiseObjectJs);
+
+var _larouxHelpersJs = require('./laroux.helpers.js');
+
+var _larouxHelpersJs2 = _interopRequireDefault(_larouxHelpersJs);
+
+var dom = {
+    docprop: function docprop(propName) {
+        return document.documentElement.classList.contains(propName);
+    },
+
+    select: function select(selector, parent) {
+        return _larouxHelpersJs2['default'].toArray((parent || document).querySelectorAll(selector));
+    },
+
+    selectByClass: function selectByClass(selector, parent) {
+        return _larouxHelpersJs2['default'].toArray((parent || document).getElementsByClassName(selector));
+    },
+
+    selectByTag: function selectByTag(selector, parent) {
+        return _larouxHelpersJs2['default'].toArray((parent || document).getElementsByTagName(selector));
+    },
+
+    selectById: function selectById(selector, parent) {
+        return (parent || document).getElementById(selector);
+    },
+
+    selectSingle: function selectSingle(selector, parent) {
+        return (parent || document).querySelector(selector);
+    },
+
+    attr: function attr(element, attributes, value) {
+        if (value === undefined && attributes.constructor !== Object) {
+            return element.getAttribute(attributes);
+        }
+
+        var elements = _larouxHelpersJs2['default'].getAsArray(element);
+        if (typeof attributes === 'string') {
+            var oldAttributes = attributes;
+            attributes = {};
+            attributes[oldAttributes] = value;
+        }
+
+        for (var attributeName in attributes) {
+            if (!attributes.hasOwnProperty(attributeName)) {
+                continue;
+            }
+
+            for (var i = 0, _length = elements.length; i < _length; i++) {
+                if (attributes[attributeName] === null) {
+                    element.removeAttribute(attributeName);
+                } else {
+                    element.setAttribute(attributeName, attributes[attributeName]);
+                }
+            }
+        }
+    },
+
+    data: function data(element, datanames, value) {
+        if (value === undefined && datanames.constructor !== Object) {
+            return element.getAttribute('data-' + datanames);
+        }
+
+        var elements = _larouxHelpersJs2['default'].getAsArray(element);
+        if (typeof datanames === 'string') {
+            var oldDatanames = datanames;
+            datanames = {};
+            datanames[oldDatanames] = value;
+        }
+
+        for (var dataName in datanames) {
+            if (!datanames.hasOwnProperty(dataName)) {
+                continue;
+            }
+
+            for (var i = 0, _length2 = elements.length; i < _length2; i++) {
+                if (datanames[dataName] === null) {
+                    element.removeAttribute('data-' + dataName);
+                } else {
+                    element.setAttribute('data-' + dataName, datanames[dataName]);
+                }
+            }
+        }
+    },
+
+    eventHistory: [],
+    setEvent: function setEvent(element, eventname, callback) {
+        var elements = _larouxHelpersJs2['default'].getAsArray(element);
+
+        for (var i = 0, _length3 = elements.length; i < _length3; i++) {
+            dom.setEventSingle(elements[i], eventname, callback);
+        }
+    },
+
+    setEventSingle: function setEventSingle(element, eventname, callback) {
+        var callbackWrapper = function callbackWrapper(e) {
+            if (callback(e, element) === false) {
+                if (e.preventDefault) {
+                    e.preventDefault();
+                } else {
+                    event.returnValue = false;
+                }
+            }
+        };
+
+        dom.eventHistory.push({ element: element, eventname: eventname, callback: callback, callbackWrapper: callbackWrapper });
+        element.addEventListener(eventname, callbackWrapper, false);
+    },
+
+    unsetEvent: function unsetEvent(element, eventname, callback) {
+        var elements = _larouxHelpersJs2['default'].getAsArray(element);
+
+        for (var i1 = 0, length1 = elements.length; i1 < length1; i1++) {
+            for (var i2 = 0, length2 = dom.eventHistory.length; i2 < length2; i2++) {
+                var item = dom.eventHistory[i2];
+
+                if (item === undefined) {
+                    continue;
+                }
+
+                if (item.element !== elements[i1]) {
+                    continue;
+                }
+
+                if (eventname !== undefined && item.eventname !== eventname) {
+                    continue;
+                }
+
+                if (callback !== undefined && item.callback !== callback) {
+                    continue;
+                }
+
+                item.element.removeEventListener(item.eventname, item.callbackWrapper, false);
+                delete dom.eventHistory[i2];
+            }
+        }
+    },
+
+    dispatchEvent: function dispatchEvent(element, eventname, data) {
+        var customEvent = document.createEvent('Event');
+        for (var item in data) {
+            if (!data.hasOwnProperty(item)) {
+                continue;
+            }
+
+            customEvent[item] = data[item];
+        }
+
+        customEvent.initEvent(eventname, true, true);
+        element.dispatchEvent(customEvent);
+    },
+
+    create: function create(html) {
+        var frag = document.createDocumentFragment(),
+            temp = document.createElement('DIV');
+
+        temp.insertAdjacentHTML('beforeend', html);
+        while (temp.firstChild) {
+            frag.appendChild(temp.firstChild);
+        }
+
+        // nulling out the reference, there is no obvious dispose method
+        temp = null;
+
+        return frag;
+    },
+
+    createElement: function createElement(element, attributes, children) {
+        var elem = document.createElement(element);
+
+        if (attributes !== undefined && attributes.constructor === Object) {
+            for (var item in attributes) {
+                if (!attributes.hasOwnProperty(item)) {
+                    continue;
+                }
+
+                elem.setAttribute(item, attributes[item]);
+            }
+        }
+
+        if (children !== undefined) {
+            if (children.constructor === Object) {
+                for (var item2 in children) {
+                    if (!children.hasOwnProperty(item2)) {
+                        continue;
+                    }
+
+                    elem.setAttribute(item2, children[item2]);
+                }
+            } else if ( /* typeof children === 'string' && */children.length > 0) {
+                dom.append(elem, children);
+            }
+        }
+
+        return elem;
+    },
+
+    createOption: function createOption(element, key, value, isDefault) {
+        /* old behaviour, does not support optgroups as parents.
+        let count = element.options.length;
+        element.options[count] = new Option(value, key);
+         if (isDefault === true) {
+            element.options.selectedIndex = count - 1;
+        }
+        */
+
+        var option = document.createElement('OPTION');
+        option.setAttribute('value', key);
+        if (isDefault === true) {
+            option.setAttribute('checked', 'checked');
+        }
+
+        dom.append(option, value);
+        element.appendChild(option);
+    },
+
+    selectByValue: function selectByValue(element, value) {
+        for (var i = 0, _length4 = element.options.length; i < _length4; i++) {
+            if (element.options[i].getAttribute('value') == value) {
+                element.selectedIndex = i;
+                break;
+            }
+        }
+    }, /*,
+       // TODO: it's redundant for now
+       loadImage: function () {
+         let images = [];
+          for (let i = 0, length = arguments.length; i < length; i++) {
+             let image = document.createElement('IMG');
+             image.setAttribute('src', arguments[i]);
+              images.push(image);
+         }
+          return images;
+       },
+       loadAsyncStyle: function (path, triggerName, async) {
+         let elem = document.createElement('LINK');
+          elem.type = 'text/css';
+         elem.async = (async !== undefined) ? async : true;
+         elem.href = path;
+         elem.rel = 'stylesheet';
+          let loaded = false;
+         elem.onload = elem.onreadystatechange = function () {
+             if ((elem.readyState && elem.readyState !== 'complete' && elem.readyState !== 'loaded') || loaded) {
+                 return false;
+             }
+              elem.onload = elem.onreadystatechange = null;
+             loaded = true;
+             if (triggerName) {
+                 if (typeof triggerName === 'function') {
+                     triggerName();
+                 } else {
+                     triggers.ontrigger(triggerName);
+                 }
+             }
+         };
+          let head = document.getElementsByTagName('head')[0];
+         head.appendChild(elem);
+       },*/
+
+    clear: function clear(element) {
+        while (element.hasChildNodes()) {
+            element.removeChild(element.firstChild);
+        }
+    },
+
+    insert: function insert(element, position, content) {
+        element.insertAdjacentHTML(position, content);
+    },
+
+    prepend: function prepend(element, content) {
+        element.insertAdjacentHTML('afterbegin', content);
+    },
+
+    append: function append(element, content) {
+        element.insertAdjacentHTML('beforeend', content);
+    },
+
+    replace: function replace(element, content) {
+        dom.clear(element);
+        element.insertAdjacentHTML('afterbegin', content);
+    },
+
+    replaceText: function replaceText(element, content) {
+        // dom.clear(element);
+        element.textContent = content;
+    },
+
+    remove: function remove(element) {
+        element.remove();
+    },
+
+    cloneReturn: 0,
+    cloneAppend: 1,
+    cloneInsertAfter: 2,
+    cloneInsertBefore: 3,
+
+    clone: function clone(element, type, container, target) {
+        var newElement = element.cloneNode(true);
+
+        if (container === undefined) {
+            container = element.parentNode;
+        }
+        if (target === undefined) {
+            target = element;
+        }
+
+        if (type !== undefined && type != dom.cloneReturn) {
+            if (type == dom.cloneAppend) {
+                container.appendChild(newElement);
+            } else if (type == dom.cloneInsertAfter) {
+                container.insertBefore(newElement, target.nextSibling);
+            } else {
+                // type == dom.cloneInsertBefore
+                container.insertBefore(newElement, target);
+            }
+        }
+
+        return newElement;
+    },
+
+    loadScript: function loadScript(url, async) {
+        return new _larouxPromiseObjectJs2['default'](function (resolve, reject) {
+            var elem = document.createElement('script');
+
+            if (async !== undefined) {
+                elem.async = async;
+            }
+
+            if (elem.readyState !== undefined) {
+                elem.onreadystatechange = function () {
+                    if (elem.readyState in ['loaded', 'complete']) {
+                        elem.onreadystatechange = null;
+                        resolve(elem);
+                    }
+                };
+            } else {
+                elem.onload = function () {
+                    resolve(elem);
+                };
+            }
+
+            elem.src = url;
+
+            var head = document.getElementsByTagName('head')[0];
+            head.appendChild(elem);
+        });
+    } /*,
+      // TODO: it's redundant for now
+      applyOperations: function (element, operations) {
+        for (let operation in operations) {
+            if (!operations.hasOwnProperty(operation)) {
+                continue;
+            }
+             for (let binding in operations[operation]) {
+                if (!operations[operation].hasOwnProperty(binding)) {
+                    continue;
+                }
+                 let value = operations[operation][binding];
+                 switch (operation) {
+                    case 'setprop':
+                        if (binding.substring(0, 1) === '_') {
+                            element.setAttribute(binding.substring(1), value);
+                            continue;
+                        }
+                         if (binding === 'content') {
+                            dom.replace(element, value);
+                            continue;
+                        }
+                        break;
+                    case 'addprop':
+                        if (binding.substring(0, 1) === '_') {
+                            element.setAttribute(binding.substring(1), element.getAttribute(binding.substring(1)) + value);
+                            continue;
+                        }
+                         if (binding === 'content') {
+                            dom.append(element, value);
+                            continue;
+                        }
+                        break;
+                    case 'removeprop':
+                        if (value.substring(0, 1) === '_') {
+                            element.removeAttribute(value.substring(1));
+                            continue;
+                        }
+                         if (value === 'content') {
+                            dom.clear(element);
+                            continue;
+                        }
+                        break;
+                    case 'addclass':
+                        css.addClass(element, value);
+                        break;
+                    case 'removeclass':
+                        css.removeClass(element, value);
+                        break;
+                    case 'addstyle':
+                        css.setProperty(element, binding, value);
+                        break;
+                    case 'removestyle':
+                        css.setProperty(element, value, 'inherit !important');
+                        break;
+                    case 'repeat':
+                        break;
+                    default:
+                        console.log(operation);
+                }
+            }
+        }
+      }*/
+};
+
+// a fix for Internet Explorer
+if ('Element' in global) {
+    if (Element.prototype.remove === undefined) {
+        Element.prototype.remove = function () {
+            if (this.parentElement !== null) {
+                this.parentElement.removeChild(this);
+            }
+        };
+    }
+}
+
+exports['default'] = dom;
+module.exports = exports['default'];
+}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+},{"./laroux.helpers.js":7,"./laroux.promiseObject.js":11}],5:[function(require,module,exports){
 /*jslint node: true */
 'use strict';
 
@@ -396,7 +1267,245 @@ var events = {
 
 exports['default'] = events;
 module.exports = exports['default'];
-},{}],3:[function(require,module,exports){
+},{}],6:[function(require,module,exports){
+/*jslint node: true */
+/*global FormData */
+'use strict';
+
+Object.defineProperty(exports, '__esModule', {
+    value: true
+});
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+var _larouxAjaxJs = require('./laroux.ajax.js');
+
+var _larouxAjaxJs2 = _interopRequireDefault(_larouxAjaxJs);
+
+var _larouxDomJs = require('./laroux.dom.js');
+
+var _larouxDomJs2 = _interopRequireDefault(_larouxDomJs);
+
+var _larouxValidationJs = require('./laroux.validation.js');
+
+var _larouxValidationJs2 = _interopRequireDefault(_larouxValidationJs);
+
+var forms = {
+    ajaxForm: function ajaxForm(formobj, callback, callbackBegin) {
+        _larouxDomJs2['default'].setEvent(formobj, 'submit', function () {
+            if (callbackBegin !== undefined) {
+                callbackBegin();
+            }
+
+            var promise = _larouxAjaxJs2['default'].fetch(formobj.getAttribute('action'), {
+                method: 'POST',
+                body: forms.serializeFormData(formobj)
+            });
+
+            if (callback !== undefined) {
+                promise.then(callback);
+            }
+
+            return false;
+        });
+    },
+
+    isFormField: function isFormField(element) {
+        if (element.tagName === 'SELECT') {
+            return true;
+        }
+
+        if (element.tagName === 'INPUT') {
+            var type = element.getAttribute('type').toUpperCase();
+
+            if (type === 'FILE' || type === 'CHECKBOX' || type === 'RADIO' || type === 'TEXT' || type === 'PASSWORD' || type === 'HIDDEN') {
+                return true;
+            }
+
+            return false;
+        }
+
+        if (element.tagName === 'TEXTAREA') {
+            return true;
+        }
+
+        return false;
+    },
+
+    getFormFieldValue: function getFormFieldValue(element) {
+        if (element.disabled === true) {
+            return null;
+        }
+
+        if (element.tagName === 'SELECT') {
+            return element.options[element.selectedIndex].value;
+        }
+
+        if (element.tagName === 'INPUT') {
+            var type = element.getAttribute('type').toUpperCase();
+
+            if (type === 'FILE') {
+                return element.files[0];
+            }
+
+            if (type === 'CHECKBOX' || type === 'RADIO') {
+                if (element.checked) {
+                    return element.value;
+                }
+
+                return null;
+            }
+
+            if (type === 'TEXT' || type === 'PASSWORD' || type === 'HIDDEN') {
+                return element.value;
+            }
+
+            return null;
+        }
+
+        if (element.tagName === 'TEXTAREA') {
+            return element.value;
+        }
+
+        return null;
+    },
+
+    setFormFieldValue: function setFormFieldValue(element, value) {
+        if (element.disabled === true) {
+            return;
+        }
+
+        if (element.tagName === 'SELECT') {
+            for (var option in element.options) {
+                if (!element.options.hasOwnProperty(option)) {
+                    continue;
+                }
+
+                if (element.options[option].value == value) {
+                    element.selectedIndex = option;
+                    return;
+                }
+            }
+
+            return;
+        }
+
+        if (element.tagName === 'INPUT') {
+            var type = element.getAttribute('type').toUpperCase();
+
+            if (type === 'FILE') {
+                element.files[0] = value;
+                return;
+            }
+
+            if (type === 'CHECKBOX' || type === 'RADIO') {
+                if (value === true || value == element.value) {
+                    element.checked = true;
+                }
+
+                return;
+            }
+
+            if (type === 'TEXT' || type === 'PASSWORD' || type === 'HIDDEN') {
+                element.value = value;
+                return;
+            }
+
+            return;
+        }
+
+        if (element.tagName === 'TEXTAREA') {
+            element.value = value;
+            return;
+        }
+    },
+
+    toggleFormEditing: function toggleFormEditing(formobj, value) {
+        var selection = formobj.querySelectorAll('*[name]');
+
+        if (value === undefined) {
+            if (formobj.getAttribute('data-last-enabled') === null) {
+                formobj.setAttribute('data-last-enabled', 'enabled');
+                value = false;
+            } else {
+                formobj.removeAttribute('data-last-enabled');
+                value = true;
+            }
+        }
+
+        for (var selected = 0, _length = selection.length; selected < _length; selected++) {
+            if (!forms.isFormField(selection[selected])) {
+                continue;
+            }
+
+            var lastDisabled = selection[selected].getAttribute('data-last-disabled');
+            if (!value) {
+                if (lastDisabled === null) {
+                    if (selection[selected].getAttribute('disabled') !== null) {
+                        selection[selected].setAttribute('data-last-disabled', 'disabled');
+                    }
+                }
+
+                selection[selected].setAttribute('disabled', 'disabled');
+                continue;
+            }
+
+            if (lastDisabled !== null) {
+                selection[selected].removeAttribute('data-last-disabled');
+            } else {
+                selection[selected].removeAttribute('disabled');
+            }
+        }
+    },
+
+    serializeFormData: function serializeFormData(formobj) {
+        var formdata = new FormData();
+        var selection = formobj.querySelectorAll('*[name]');
+
+        for (var selected = 0, _length2 = selection.length; selected < _length2; selected++) {
+            var value = forms.getFormFieldValue(selection[selected]);
+
+            if (value !== null) {
+                formdata.append(selection[selected].getAttribute('name'), value);
+            }
+        }
+
+        return formdata;
+    },
+
+    serialize: function serialize(formobj) {
+        var values = {};
+        var selection = formobj.querySelectorAll('*[name]');
+
+        for (var selected = 0, _length3 = selection.length; selected < _length3; selected++) {
+            var value = forms.getFormFieldValue(selection[selected]);
+
+            if (value !== null) {
+                values[selection[selected].getAttribute('name')] = value;
+            }
+        }
+
+        return values;
+    },
+
+    deserialize: function deserialize(formobj, data) {
+        var selection = formobj.querySelectorAll('*[name]');
+
+        for (var selected = 0, _length4 = selection.length; selected < _length4; selected++) {
+            forms.setFormFieldValue(selection[selected], data[selection[selected].getAttribute('name')]);
+        }
+    },
+
+    validate: function validate(formobj, rules) {
+        var fields = forms.serialize(formobj);
+
+        return _larouxValidationJs2['default'].validate(fields, rules);
+    }
+};
+
+exports['default'] = forms;
+module.exports = exports['default'];
+},{"./laroux.ajax.js":1,"./laroux.dom.js":4,"./laroux.validation.js":19}],7:[function(require,module,exports){
 (function (global){
 /*jslint node: true */
 /*global FormData, NodeList */
@@ -863,7 +1972,7 @@ var helpers = {
 exports['default'] = helpers;
 module.exports = exports['default'];
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],4:[function(require,module,exports){
+},{}],8:[function(require,module,exports){
 /*jslint node: true */
 'use strict';
 
@@ -1096,7 +2205,7 @@ var intl = {
 
 exports['default'] = intl;
 module.exports = exports['default'];
-},{"./laroux.helpers.js":3}],5:[function(require,module,exports){
+},{"./laroux.helpers.js":7}],9:[function(require,module,exports){
 (function (global){
 /*jslint node: true */
 /*global document */
@@ -1221,7 +2330,169 @@ if (global.$l === undefined) {
 exports['default'] = laroux;
 module.exports = exports['default'];
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./laroux.ajax.js":1,"./laroux.events.js":2,"./laroux.helpers.js":3,"./laroux.intl.js":4,"./laroux.promiseObject.js":6,"./laroux.require.js":7,"./laroux.storyboard.js":8,"./laroux.templates.js":9,"./laroux.timers.js":10,"./laroux.types.js":11,"./laroux.validation.js":12,"./laroux.vars.js":13}],6:[function(require,module,exports){
+},{"./laroux.ajax.js":1,"./laroux.events.js":5,"./laroux.helpers.js":7,"./laroux.intl.js":8,"./laroux.promiseObject.js":11,"./laroux.require.js":12,"./laroux.storyboard.js":14,"./laroux.templates.js":15,"./laroux.timers.js":16,"./laroux.types.js":18,"./laroux.validation.js":19,"./laroux.vars.js":20}],10:[function(require,module,exports){
+/*jslint node: true */
+/*global event, document */
+'use strict';
+
+Object.defineProperty(exports, '__esModule', {
+    value: true
+});
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+var _larouxDomJs = require('./laroux.dom.js');
+
+var _larouxDomJs2 = _interopRequireDefault(_larouxDomJs);
+
+var _larouxFormsJs = require('./laroux.forms.js');
+
+var _larouxFormsJs2 = _interopRequireDefault(_larouxFormsJs);
+
+var keys = {
+    keyName: function keyName(keycode) {
+        keycode = keycode.toLowerCase();
+
+        switch (keycode) {
+            case 'backspace':
+                return 8;
+
+            case 'tab':
+                return 9;
+
+            case 'enter':
+            case 'return':
+                return 13;
+
+            case 'esc':
+            case 'escape':
+                return 27;
+
+            case 'space':
+                return 32;
+
+            case 'pgup':
+                return 33;
+
+            case 'pgdn':
+                return 34;
+
+            case 'end':
+                return 35;
+
+            case 'home':
+                return 36;
+
+            case 'left':
+                return 37;
+
+            case 'up':
+                return 38;
+
+            case 'right':
+                return 39;
+
+            case 'down':
+                return 40;
+
+            case 'insert':
+                return 45;
+
+            case 'delete':
+                return 46;
+
+            case 'f1':
+                return 112;
+
+            case 'f2':
+                return 113;
+
+            case 'f3':
+                return 114;
+
+            case 'f4':
+                return 115;
+
+            case 'f5':
+                return 116;
+
+            case 'f6':
+                return 117;
+
+            case 'f7':
+                return 118;
+
+            case 'f8':
+                return 119;
+
+            case 'f9':
+                return 120;
+
+            case 'f10':
+                return 121;
+
+            case 'f11':
+                return 122;
+
+            case 'f12':
+                return 123;
+
+            case ',':
+                return 188;
+
+            case '.':
+                return 190;
+        }
+
+        return String.fromCharCode(keycode);
+    },
+
+    // {target, key, shift, ctrl, alt, disableInputs, callback}
+    assign: function assign(options) {
+        var wrapper = function wrapper(ev) {
+            if (!ev) {
+                ev = event;
+            }
+
+            var element = ev.target || ev.srcElement;
+            if (element.nodeType === 3 || element.nodeType === 11) {
+                // element.nodeType === 1 ||
+                element = element.parentNode;
+            }
+
+            if (options.disableInputs && _larouxFormsJs2['default'].isFormField(element)) {
+                return;
+            }
+
+            if (options.shift && !ev.shiftKey) {
+                return;
+            }
+
+            if (options.ctrl && !ev.ctrlKey) {
+                return;
+            }
+
+            if (options.alt && !ev.altKey) {
+                return;
+            }
+
+            var key = keys.keyName(options.key);
+            if (key !== (ev.keyCode || ev.which)) {
+                return;
+            }
+
+            options.callback(ev);
+
+            return false;
+        };
+
+        _larouxDomJs2['default'].setEvent(options.target || document, 'keydown', wrapper);
+    }
+};
+
+exports['default'] = keys;
+module.exports = exports['default'];
+},{"./laroux.dom.js":4,"./laroux.forms.js":6}],11:[function(require,module,exports){
 (function (global){
 /*jslint node: true */
 'use strict';
@@ -1449,7 +2720,7 @@ var promiseExist = ('Promise' in global);
 exports['default'] = promiseExist ? Promise : PromisePolyfill;
 module.exports = exports['default'];
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./laroux.helpers.js":3}],7:[function(require,module,exports){
+},{"./laroux.helpers.js":7}],12:[function(require,module,exports){
 (function (global){
 /*jslint node: true */
 'use strict';
@@ -1558,2154 +2829,7 @@ require_.modules = {};
 exports['default'] = require_;
 module.exports = exports['default'];
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./laroux.ajax.js":1,"./laroux.helpers.js":3,"./laroux.promiseObject.js":6}],8:[function(require,module,exports){
-(function (global){
-/*jslint node: true */
-'use strict';
-
-Object.defineProperty(exports, '__esModule', {
-    value: true
-});
-
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
-
-var _larouxPromiseObjectJs = require('./laroux.promiseObject.js');
-
-var _larouxPromiseObjectJs2 = _interopRequireDefault(_larouxPromiseObjectJs);
-
-var Storyboard = (function () {
-    function Storyboard() {
-        _classCallCheck(this, Storyboard);
-
-        var self = this;
-
-        this.phases = [];
-        this.phaseKeys = {};
-        this.currentIteration = 0;
-        this.running = false;
-
-        for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-            args[_key] = arguments[_key];
-        }
-
-        for (var i = 0, _length = args.length; i < _length; i++) {
-            this.addPhase(args[i]);
-        }
-
-        this.checkPromise = function () {
-            if (--self.phases[self.currentIteration].promises === 0 && !self.running) {
-                self.start();
-            }
-        };
-    }
-
-    _createClass(Storyboard, [{
-        key: 'addPhase',
-        value: function addPhase(key) {
-            this.phaseKeys[key] = this.phases.length;
-            this.phases.push({
-                key: key,
-                callbacks: [],
-                promises: 0
-            });
-        }
-    }, {
-        key: 'add',
-        value: function add(phase, callback) {
-            if (callback.constructor === _larouxPromiseObjectJs2['default']) {
-                return this.addPromise(phase, callback);
-            }
-
-            var phaseId = this.phaseKeys[phase];
-
-            if (phaseId < this.currentIteration) {
-                // execute immediately if phase is already passed
-                callback.apply(global);
-                return;
-            }
-
-            this.phases[phaseId].callbacks.push(callback);
-        }
-    }, {
-        key: 'addPromise',
-        value: function addPromise(phase, promise) {
-            var phaseId = this.phaseKeys[phase];
-
-            // skips if phase is already passed
-            if (phaseId < this.currentIteration) {
-                return;
-            }
-
-            this.phases[phaseId].promises++;
-            // FIXME: must be handled even if it has failed
-            promise.then(this.checkPromise);
-        }
-    }, {
-        key: 'start',
-        value: function start() {
-            this.running = true;
-
-            while (this.phases.length > this.currentIteration) {
-                var currentPhase = this.phases[this.currentIteration];
-
-                while (currentPhase.callbacks.length > 0) {
-                    var fnc = currentPhase.callbacks.shift();
-                    fnc.apply(global);
-                }
-
-                if (currentPhase.promises > 0) {
-                    break;
-                }
-
-                this.currentIteration++;
-            }
-
-            this.running = false;
-        }
-    }]);
-
-    return Storyboard;
-})();
-
-exports['default'] = Storyboard;
-module.exports = exports['default'];
-}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./laroux.promiseObject.js":6}],9:[function(require,module,exports){
-/*jslint node: true */
-/*global Hogan, Mustache, Handlebars, _ */
-'use strict';
-
-Object.defineProperty(exports, '__esModule', {
-    value: true
-});
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-var _larouxHelpersJs = require('./laroux.helpers.js');
-
-var _larouxHelpersJs2 = _interopRequireDefault(_larouxHelpersJs);
-
-var templates = {
-    engines: {
-        plain: {
-            compile: function compile(template, options) {
-                return [template, options];
-            },
-
-            render: function render(compiled, model) {
-                var result = compiled[0],
-                    dict = [],
-                    lastIndex = 0,
-                    nextIndex = undefined;
-
-                while ((nextIndex = result.indexOf('{{', lastIndex)) !== -1) {
-                    nextIndex += 2;
-                    var closeIndex = result.indexOf('}}', nextIndex);
-                    if (closeIndex === -1) {
-                        break;
-                    }
-
-                    var key = result.substring(nextIndex, closeIndex);
-                    dict['{{' + key + '}}'] = _larouxHelpersJs2['default'].getElement(model, key, '');
-                    lastIndex = closeIndex + 2;
-                }
-
-                return _larouxHelpersJs2['default'].replaceAll(result, dict);
-            }
-        },
-
-        hogan: {
-            compile: function compile(template, options) {
-                return Hogan.compile(template, options);
-            },
-
-            render: function render(compiled, model) {
-                return compiled.render(model);
-            }
-        },
-
-        mustache: {
-            compile: function compile(template, options) {
-                return Mustache.compile(template, options);
-            },
-
-            render: function render(compiled, model) {
-                return compiled(model);
-            }
-        },
-
-        handlebars: {
-            compile: function compile(template, options) {
-                return Handlebars.compile(template, options);
-            },
-
-            render: function render(compiled, model) {
-                return compiled(model);
-            }
-        },
-
-        lodash: {
-            compile: function compile(template, options) {
-                /*jslint nomen: true */
-                return _.compile(template, null, options);
-            },
-
-            render: function render(compiled, model) {
-                return compiled(model);
-            }
-        },
-
-        underscore: {
-            compile: function compile(template, options) {
-                /*jslint nomen: true */
-                return _.compile(template, null, options);
-            },
-
-            render: function render(compiled, model) {
-                return compiled(model);
-            }
-        }
-    },
-    engine: 'plain',
-
-    apply: function apply(element, model, options) {
-        var content = undefined,
-            engine = templates.engines[templates.engine];
-
-        if (element.nodeType === 1 || element.nodeType === 3 || element.nodeType === 11) {
-            content = element.textContent;
-        } else {
-            content = element.nodeValue;
-        }
-
-        var compiled = engine.compile(content, options);
-        return engine.render(compiled, model);
-    }
-
-    /*
-    insert: function (element, model, target, position, options) {
-        let output = templates.apply(element, model, options);
-         dom.insert(target, position || 'beforeend', output);
-    },
-     replace: function (element, model, target, options) {
-        let output = templates.apply(element, model, options);
-         dom.replace(target, output);
-    }
-    */
-};
-
-exports['default'] = templates;
-module.exports = exports['default'];
-},{"./laroux.helpers.js":3}],10:[function(require,module,exports){
-/*jslint node: true */
-'use strict';
-
-Object.defineProperty(exports, '__esModule', {
-    value: true
-});
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-var _larouxHelpersJs = require('./laroux.helpers.js');
-
-var _larouxHelpersJs2 = _interopRequireDefault(_larouxHelpersJs);
-
-var timers = {
-    data: [],
-
-    set: function set(timer) {
-        timer.next = Date.now() + timer.timeout;
-        timers.data.push(timer);
-    },
-
-    remove: function remove(id) {
-        var targetKey = null;
-
-        for (var item in timers.data) {
-            if (!timers.data.hasOwnProperty(item)) {
-                continue;
-            }
-
-            var currentItem = timers.data[item];
-
-            if (currentItem.id !== undefined && currentItem.id == id) {
-                targetKey = item;
-                break;
-            }
-        }
-
-        if (targetKey !== null) {
-            timers.data.splice(targetKey, 1);
-            return true;
-        }
-
-        return false;
-    },
-
-    ontick: function ontick() {
-        var now = Date.now(),
-            removeKeys = [];
-
-        for (var item in timers.data) {
-            if (!timers.data.hasOwnProperty(item)) {
-                continue;
-            }
-
-            var currentItem = timers.data[item];
-
-            if (currentItem.next <= now) {
-                var result = currentItem.ontick(currentItem.state);
-
-                if (result !== false && currentItem.reset) {
-                    currentItem.next = now + currentItem.timeout;
-                } else {
-                    removeKeys = _larouxHelpersJs2['default'].prependArray(removeKeys, item);
-                }
-            }
-        }
-
-        for (var item2 in removeKeys) {
-            if (!removeKeys.hasOwnProperty(item2)) {
-                continue;
-            }
-
-            timers.data.splice(removeKeys[item2], 1);
-        }
-    }
-};
-
-exports['default'] = timers;
-module.exports = exports['default'];
-},{"./laroux.helpers.js":3}],11:[function(require,module,exports){
-/*jslint node: true */
-'use strict';
-
-Object.defineProperty(exports, '__esModule', {
-    value: true
-});
-
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
-
-var _larouxHelpersJs = require('./laroux.helpers.js');
-
-var _larouxHelpersJs2 = _interopRequireDefault(_larouxHelpersJs);
-
-var staticKeys = ['_callbacks', '_onupdate'];
-
-var Observable = (function () {
-    function Observable(data) {
-        _classCallCheck(this, Observable);
-
-        var self = this;
-
-        this._callbacks = [];
-        this._onupdate = function (changes) {
-            _larouxHelpersJs2['default'].callAll(self._callbacks, self, [changes]);
-        };
-
-        this.observe(this);
-
-        if (data) {
-            this.setRange(data);
-        }
-    }
-
-    _createClass(Observable, [{
-        key: 'set',
-        value: function set(key, value) {
-            if (staticKeys.indexOf(key) === -1) {
-                this[key] = value;
-            }
-        }
-    }, {
-        key: 'setRange',
-        value: function setRange(values) {
-            for (var valueKey in values) {
-                this.set(valueKey, values[valueKey]);
-            }
-        }
-    }, {
-        key: 'get',
-        value: function get(key, defaultValue) {
-            if (key in this && staticKeys.indexOf(key) === -1) {
-                return this[key];
-            }
-
-            return defaultValue || null;
-        }
-    }, {
-        key: 'getRange',
-        value: function getRange(keys) {
-            var values = {};
-
-            for (var item in keys) {
-                values[keys[item]] = this[keys[item]];
-            }
-
-            return values;
-        }
-    }, {
-        key: 'keys',
-        value: function keys() {
-            var keys = [];
-
-            for (var item in this) {
-                if (staticKeys.indexOf(item) === -1) {
-                    keys.push(item);
-                }
-            }
-
-            return keys;
-        }
-    }, {
-        key: 'length',
-        value: function length() {
-            return this.keys().length;
-        }
-    }, {
-        key: 'exists',
-        value: function exists(key) {
-            return key in this;
-        }
-    }, {
-        key: 'remove',
-        value: function remove(key) {
-            if (staticKeys.indexOf(key) === -1) {
-                delete this[key];
-            }
-        }
-    }, {
-        key: 'clear',
-        value: function clear() {
-            for (var item in this) {
-                if (!this.hasOwnProperty(item) || staticKeys.indexOf(item) !== -1) {
-                    continue;
-                }
-
-                delete this[item];
-            }
-        }
-    }, {
-        key: 'observe',
-        value: function observe(obj) {
-            if ('observe' in Object) {
-                Object.observe(obj, this._onupdate);
-            }
-        }
-    }, {
-        key: 'unobserve',
-        value: function unobserve(obj) {
-            if ('unobserve' in Object) {
-                Object.unobserve(obj);
-            }
-        }
-    }, {
-        key: 'on',
-        value: function on(callback) {
-            this._callbacks.push(callback);
-        }
-    }, {
-        key: 'off',
-        value: function off(callback) {
-            _larouxHelpersJs2['default'].removeFromArray(this._callbacks, callback);
-        }
-    }]);
-
-    return Observable;
-})();
-
-var types = {
-    observable: Observable
-};
-
-exports['default'] = types;
-module.exports = exports['default'];
-},{"./laroux.helpers.js":3}],12:[function(require,module,exports){
-/*jslint node: true */
-'use strict';
-
-Object.defineProperty(exports, '__esModule', {
-    value: true
-});
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-var _larouxHelpersJs = require('./laroux.helpers.js');
-
-var _larouxHelpersJs2 = _interopRequireDefault(_larouxHelpersJs);
-
-var validation = {
-    // TODO: email, date, equalTo
-    rules: {
-        required: {
-            keys: ['message'],
-            callback: function callback(dictionary, name, rule) {
-                return name in dictionary;
-            }
-        },
-
-        minlength: {
-            keys: ['length', 'message'],
-            callback: function callback(dictionary, name, rule) {
-                return dictionary[name].length >= rule.length;
-            }
-        },
-
-        maxlength: {
-            keys: ['length', 'message'],
-            callback: function callback(dictionary, name, rule) {
-                return dictionary[name].length <= rule.length;
-            }
-        },
-
-        min: {
-            keys: ['value', 'message'],
-            callback: function callback(dictionary, name, rule) {
-                var floatValue = parseFloat(dictionary[name]);
-                return floatValue >= rule.value;
-            }
-        },
-
-        max: {
-            keys: ['value', 'message'],
-            callback: function callback(dictionary, name, rule) {
-                var floatValue = parseFloat(dictionary[name]);
-                return floatValue <= rule.value;
-            }
-        }
-    },
-
-    // {rule: 'required', message: 'isrequired'}
-    // 'required'
-
-    // {
-    //    'name': 'required',
-    //    'age': [
-    //        'required|The field is required.',
-    //        { rule: 'range', min: 10, max: 18 },
-    //    ]
-    // }
-
-    validate: function validate(fields, rules) {
-        var rulesKeys = Object.keys(rules),
-            result = {
-            success: true,
-            details: {}
-        };
-
-        for (var i = 0, _length = rulesKeys.length; i < _length; i++) {
-            var key = rulesKeys[i],
-                rule = rules[key];
-
-            var fieldRules = _larouxHelpersJs2['default'].getAsArray(rule);
-            for (var j = 0, length2 = fieldRules.length; j < length2; j++) {
-                var fieldRule = fieldRules[j];
-
-                if (fieldRule.constructor !== Object) {
-                    var fieldRuleSplitted = fieldRule.split('|'),
-                        fieldRuleName = fieldRuleSplitted[0];
-
-                    fieldRule = _larouxHelpersJs2['default'].assign(fieldRuleSplitted, ['name'].concat(validation.rules[fieldRuleName].keys));
-                }
-
-                if (!validation.rules[fieldRule.name].callback(fields, key, fieldRule)) {
-                    result.success = false;
-
-                    if (!(key in result.details)) {
-                        result.details[key] = [];
-                    }
-
-                    result.details[key].push(fieldRule);
-                }
-            }
-        }
-
-        return result;
-    }
-};
-
-exports['default'] = validation;
-module.exports = exports['default'];
-},{"./laroux.helpers.js":3}],13:[function(require,module,exports){
-/*jslint node: true */
-/*global document, localStorage, sessionStorage */
-'use strict';
-
-Object.defineProperty(exports, '__esModule', {
-    value: true
-});
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-var _larouxHelpersJs = require('./laroux.helpers.js');
-
-var _larouxHelpersJs2 = _interopRequireDefault(_larouxHelpersJs);
-
-var vars = {
-    storages: {
-        cookie: {
-            defaultPath: '/',
-
-            get: function get(name, defaultValue) {
-                var re = new RegExp(encodeURIComponent(name) + '=[^;]+', 'i'),
-                    match = document.cookie.match(re);
-
-                if (!match) {
-                    return defaultValue || null;
-                }
-
-                return decodeURIComponent(match[0].split('=')[1]);
-            },
-
-            set: function set(name, value, expires, path) {
-                var expireValue = '';
-                if (expires) {
-                    expireValue = '; expires=' + expires.toGMTString();
-                }
-
-                document.cookie = encodeURIComponent(name) + '=' + encodeURIComponent(value) + expireValue + '; path=' + (path || vars.storages.cookie.defaultPath);
-            },
-
-            remove: function remove(name, path) {
-                document.cookie = encodeURIComponent(name) + '=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=' + (path || vars.storages.cookie.defaultPath);
-            }
-        },
-
-        local: {
-            get: function get(name, defaultValue) {
-                if (!(name in localStorage)) {
-                    return defaultValue || null;
-                }
-
-                return JSON.parse(localStorage[name]);
-            },
-
-            set: function set(name, value) {
-                localStorage[name] = JSON.stringify(value);
-            },
-
-            remove: function remove(name) {
-                delete localStorage[name];
-            }
-        },
-
-        session: {
-            get: function get(name, defaultValue) {
-                if (!(name in sessionStorage)) {
-                    return defaultValue || null;
-                }
-
-                return JSON.parse(sessionStorage[name]);
-            },
-
-            set: function set(name, value) {
-                sessionStorage[name] = JSON.stringify(value);
-            },
-
-            remove: function remove(name) {
-                delete sessionStorage[name];
-            }
-        }
-    },
-
-    get: function get(storage) {
-        for (var _len = arguments.length, args = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
-            args[_key - 1] = arguments[_key];
-        }
-
-        return vars.storages[storage].get.apply(this, args);
-    },
-
-    set: function set(storage) {
-        for (var _len2 = arguments.length, args = Array(_len2 > 1 ? _len2 - 1 : 0), _key2 = 1; _key2 < _len2; _key2++) {
-            args[_key2 - 1] = arguments[_key2];
-        }
-
-        return vars.storages[storage].set.apply(this, args);
-    },
-
-    remove: function remove(storage) {
-        for (var _len3 = arguments.length, args = Array(_len3 > 1 ? _len3 - 1 : 0), _key3 = 1; _key3 < _len3; _key3++) {
-            args[_key3 - 1] = arguments[_key3];
-        }
-
-        return vars.storages[storage].remove.apply(this, args);
-    }
-};
-
-exports['default'] = vars;
-module.exports = exports['default'];
-},{"./laroux.helpers.js":3}],14:[function(require,module,exports){
-/*jslint node: true */
-/*global document, requestAnimationFrame, scrollTo */
-'use strict';
-
-Object.defineProperty(exports, '__esModule', {
-    value: true
-});
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-var _larouxCssJs = require('./laroux.css.js');
-
-var _larouxCssJs2 = _interopRequireDefault(_larouxCssJs);
-
-var _larouxHelpersJs = require('../laroux.helpers.js');
-
-var _larouxHelpersJs2 = _interopRequireDefault(_larouxHelpersJs);
-
-var _larouxPromiseObjectJs = require('../laroux.promiseObject.js');
-
-var _larouxPromiseObjectJs2 = _interopRequireDefault(_larouxPromiseObjectJs);
-
-var anim = {
-    data: [],
-
-    fx: {
-        interpolate: function interpolate(source, target, shift) {
-            return source + (target - source) * shift;
-        },
-
-        easing: function easing(pos) {
-            return -Math.cos(pos * Math.PI) / 2 + 0.5;
-        }
-    },
-
-    // {object, property, from, to, time, unit, reset}
-    set: function set(newanim) {
-        newanim.deferred = new _larouxPromiseObjectJs2['default'](function (resolve, reject) {
-            newanim.deferredResolve = resolve;
-            newanim.deferredReject = reject;
-        });
-
-        newanim.startTime = undefined;
-
-        if (newanim.unit === null || newanim.unit === undefined) {
-            newanim.unit = '';
-        }
-
-        if (newanim.from === null || newanim.from === undefined) {
-            if (newanim.object === document.body && newanim.property === 'scrollTop') {
-                newanim.from = document.documentElement && document.documentElement.scrollTop || document.body.scrollTop;
-            } else {
-                newanim.from = newanim.object[newanim.property];
-            }
-        }
-
-        if (newanim.from.constructor === String) {
-            newanim.from = Number(newanim.from);
-        }
-
-        // if (newanim.id === undefined) {
-        //     newanim.id = helpers.getUniqueId();
-        // }
-
-        anim.data.push(newanim);
-        if (anim.data.length === 1) {
-            requestAnimationFrame(anim.onframe);
-        }
-
-        return newanim.deferred;
-    },
-
-    setCss: function setCss(newanim) {
-        if (newanim.from === null || newanim.from === undefined) {
-            newanim.from = _larouxCssJs2['default'].getProperty(newanim.object, newanim.property);
-        }
-
-        newanim.object = newanim.object.style;
-        newanim.property = _larouxHelpersJs2['default'].camelCase(newanim.property);
-
-        return anim.set(newanim);
-    },
-
-    remove: function remove(id) {
-        var targetKey = null;
-
-        for (var item in anim.data) {
-            if (!anim.data.hasOwnProperty(item)) {
-                continue;
-            }
-
-            var currentItem = anim.data[item];
-
-            if (currentItem.id !== undefined && currentItem.id == id) {
-                targetKey = item;
-                break;
-            }
-        }
-
-        if (targetKey !== null) {
-            var deferred = anim.data[targetKey];
-
-            deferred.deferredReject('stop');
-
-            anim.data.splice(targetKey, 1);
-            return true;
-        }
-
-        return false;
-    },
-
-    onframe: function onframe(timestamp) {
-        var removeKeys = [];
-
-        for (var item in anim.data) {
-            if (!anim.data.hasOwnProperty(item)) {
-                continue;
-            }
-
-            var currentItem = anim.data[item];
-            if (currentItem.startTime === undefined) {
-                currentItem.startTime = timestamp;
-            }
-
-            anim.step(currentItem, timestamp);
-
-            if (timestamp > currentItem.startTime + currentItem.time) {
-                if (currentItem.reset === true) {
-                    currentItem.startTime = timestamp;
-                    if (currentItem.object === document.body && currentItem.property === 'scrollTop') {
-                        scrollTo(0, currentItem.from);
-                        // setTimeout(function () { scrollTo(0, currentItem.from); }, 1);
-                    } else {
-                        currentItem.object[currentItem.property] = currentItem.from;
-                    }
-                } else {
-                    removeKeys = _larouxHelpersJs2['default'].prependArray(removeKeys, item);
-                    currentItem.deferredResolve();
-                }
-            }
-        }
-
-        for (var item2 in removeKeys) {
-            if (!removeKeys.hasOwnProperty(item2)) {
-                continue;
-            }
-
-            anim.data.splice(removeKeys[item2], 1);
-        }
-
-        if (anim.data.length > 0) {
-            requestAnimationFrame(anim.onframe);
-        }
-    },
-
-    step: function step(newanim, timestamp) {
-        var finishT = newanim.startTime + newanim.time,
-            shift = timestamp > finishT ? 1 : (timestamp - newanim.startTime) / newanim.time;
-
-        var value = anim.fx.interpolate(newanim.from, newanim.to, anim.fx.easing(shift)) + newanim.unit;
-
-        if (newanim.object === document.body && newanim.property === 'scrollTop') {
-            scrollTo(0, value);
-            // setTimeout(function () { scrollTo(0, value); }, 1);
-        } else {
-            newanim.object[newanim.property] = value;
-        }
-    }
-};
-
-exports['default'] = anim;
-module.exports = exports['default'];
-},{"../laroux.helpers.js":3,"../laroux.promiseObject.js":6,"./laroux.css.js":15}],15:[function(require,module,exports){
-/*jslint node: true */
-/*global getComputedStyle, document, innerHeight, innerWidth */
-'use strict';
-
-Object.defineProperty(exports, '__esModule', {
-    value: true
-});
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-var _larouxHelpersJs = require('../laroux.helpers.js');
-
-var _larouxHelpersJs2 = _interopRequireDefault(_larouxHelpersJs);
-
-var css = {
-    // class features
-    hasClass: function hasClass(element, className) {
-        return element.classList.contains(className);
-    },
-
-    addClass: function addClass(element, className) {
-        var elements = _larouxHelpersJs2['default'].getAsArray(element);
-
-        for (var i = 0, _length = elements.length; i < _length; i++) {
-            elements[i].classList.add(className);
-        }
-    },
-
-    removeClass: function removeClass(element, className) {
-        var elements = _larouxHelpersJs2['default'].getAsArray(element);
-
-        for (var i = 0, _length2 = elements.length; i < _length2; i++) {
-            elements[i].classList.remove(className);
-        }
-    },
-
-    toggleClass: function toggleClass(element, className) {
-        var elements = _larouxHelpersJs2['default'].getAsArray(element);
-
-        for (var i = 0, _length3 = elements.length; i < _length3; i++) {
-            if (elements[i].classList.contains(className)) {
-                elements[i].classList.remove(className);
-            } else {
-                elements[i].classList.add(className);
-            }
-        }
-    },
-
-    cycleClass: function cycleClass(elements, className) {
-        for (var i = 0, _length4 = elements.length; i < _length4; i++) {
-            if (elements[i].classList.contains(className)) {
-                elements[i].classList.remove(className);
-                elements[(i + 1) % _length4].classList.add(className);
-                return;
-            }
-        }
-    },
-
-    // style features
-    getProperty: function getProperty(element, styleName) {
-        var style = getComputedStyle(element);
-
-        styleName = _larouxHelpersJs2['default'].antiCamelCase(styleName);
-
-        return style.getPropertyValue(styleName);
-    },
-
-    setProperty: function setProperty(element, properties, value) {
-        var elements = _larouxHelpersJs2['default'].getAsArray(element);
-
-        if (typeof properties === 'string') {
-            var oldProperties = properties;
-            properties = {};
-            properties[oldProperties] = value;
-        }
-
-        for (var styleName in properties) {
-            if (!properties.hasOwnProperty(styleName)) {
-                continue;
-            }
-
-            var newStyleName = _larouxHelpersJs2['default'].camelCase(styleName);
-
-            for (var i = 0, _length5 = elements.length; i < _length5; i++) {
-                elements[i].style[newStyleName] = properties[styleName];
-            }
-        }
-    },
-
-    // transition features
-    defaultTransition: '2s ease',
-
-    setTransitionSingle: function setTransitionSingle(element, transition) {
-        var transitions = _larouxHelpersJs2['default'].getAsArray(transition),
-            style = getComputedStyle(element),
-            currentTransitions = style.getPropertyValue('transition') || style.getPropertyValue('-webkit-transition') || style.getPropertyValue('-ms-transition') || '',
-            currentTransitionsArray = undefined;
-
-        if (currentTransitions.length > 0) {
-            currentTransitionsArray = currentTransitions.split(',');
-        } else {
-            currentTransitionsArray = [];
-        }
-
-        for (var item in transitions) {
-            if (!transitions.hasOwnProperty(item)) {
-                continue;
-            }
-
-            var styleName = undefined,
-                transitionProperties = undefined,
-                pos = transitions[item].indexOf(' ');
-
-            if (pos !== -1) {
-                styleName = transitions[item].substring(0, pos);
-                transitionProperties = transitions[item].substring(pos + 1);
-            } else {
-                styleName = transitions[item];
-                transitionProperties = css.defaultTransition;
-            }
-
-            var found = false;
-            for (var j = 0; j < currentTransitionsArray.length; j++) {
-                if (currentTransitionsArray[j].trim().localeCompare(styleName) === 0) {
-                    currentTransitionsArray[j] = styleName + ' ' + transitionProperties;
-                    found = true;
-                    break;
-                }
-            }
-
-            if (!found) {
-                currentTransitionsArray.push(styleName + ' ' + transitionProperties);
-            }
-        }
-
-        var value = currentTransitionsArray.join(', ');
-
-        element.style.transition = value;
-        element.style.webkitTransition = value;
-        element.style.msTransition = value;
-    },
-
-    setTransition: function setTransition(element, transition) {
-        var elements = _larouxHelpersJs2['default'].getAsArray(element);
-
-        for (var i = 0, _length6 = elements.length; i < _length6; i++) {
-            css.setTransitionSingle(elements[i], transition);
-        }
-    },
-
-    show: function show(element, transitionProperties) {
-        if (transitionProperties !== undefined) {
-            css.setTransition(element, 'opacity ' + transitionProperties);
-        } else {
-            css.setTransition(element, 'opacity');
-        }
-
-        css.setProperty(element, { opacity: 1 });
-    },
-
-    hide: function hide(element, transitionProperties) {
-        if (transitionProperties !== undefined) {
-            css.setTransition(element, 'opacity ' + transitionProperties);
-        } else {
-            css.setTransition(element, 'opacity');
-        }
-
-        css.setProperty(element, { opacity: 0 });
-    },
-
-    // measurement features
-    // height of element without padding, margin and border
-    height: function height(element) {
-        var style = getComputedStyle(element),
-            height = style.getPropertyCSSValue('height');
-
-        return height.getFloatValue(height.primitiveType);
-    },
-
-    // height of element with padding but without margin and border
-    innerHeight: function innerHeight(element) {
-        return element.clientHeight;
-    },
-
-    // height of element with padding and border but margin optional
-    outerHeight: function outerHeight(element, includeMargin) {
-        if (includeMargin || false) {
-            return element.offsetHeight;
-        }
-
-        var style = getComputedStyle(element),
-            marginTop = style.getPropertyCSSValue('margin-top'),
-            marginBottom = style.getPropertyCSSValue('margin-bottom'),
-            margins = marginTop.getFloatValue(marginTop.primitiveType) + marginBottom.getFloatValue(marginBottom.primitiveType);
-
-        return Math.ceil(element.offsetHeight + margins);
-    },
-
-    // width of element without padding, margin and border
-    width: function width(element) {
-        var style = getComputedStyle(element),
-            height = style.getPropertyCSSValue('width');
-
-        return height.getFloatValue(height.primitiveType);
-    },
-
-    // width of element with padding but without margin and border
-    innerWidth: function innerWidth(element) {
-        return element.clientWidth;
-    },
-
-    // width of element with padding and border but margin optional
-    outerWidth: function outerWidth(element, includeMargin) {
-        if (includeMargin || false) {
-            return element.offsetWidth;
-        }
-
-        var style = getComputedStyle(element),
-            marginLeft = style.getPropertyCSSValue('margin-left'),
-            marginRight = style.getPropertyCSSValue('margin-right'),
-            margins = marginLeft.getFloatValue(marginLeft.primitiveType) + marginRight.getFloatValue(marginRight.primitiveType);
-
-        return Math.ceil(element.offsetWidth + margins);
-    },
-
-    top: function top(element) {
-        return element.getBoundingClientRect().top + (document.documentElement && document.documentElement.scrollTop || document.body.scrollTop);
-    },
-
-    left: function left(element) {
-        return element.getBoundingClientRect().left + (document.documentElement && document.documentElement.scrollLeft || document.body.scrollLeft);
-    },
-
-    aboveTheTop: function aboveTheTop(element) {
-        return element.getBoundingClientRect().bottom <= 0;
-    },
-
-    belowTheFold: function belowTheFold(element) {
-        return element.getBoundingClientRect().top > innerHeight;
-    },
-
-    leftOfScreen: function leftOfScreen(element) {
-        return element.getBoundingClientRect().right <= 0;
-    },
-
-    rightOfScreen: function rightOfScreen(element) {
-        return element.getBoundingClientRect().left > innerWidth;
-    },
-
-    inViewport: function inViewport(element) {
-        var rect = element.getBoundingClientRect();
-
-        return !(rect.bottom <= 0 || rect.top > innerHeight || rect.right <= 0 || rect.left > innerWidth);
-    }
-};
-
-exports['default'] = css;
-module.exports = exports['default'];
-},{"../laroux.helpers.js":3}],16:[function(require,module,exports){
-(function (global){
-/*jslint node: true */
-/*global document, event, Element */
-'use strict';
-
-Object.defineProperty(exports, '__esModule', {
-    value: true
-});
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-var _larouxPromiseObjectJs = require('../laroux.promiseObject.js');
-
-var _larouxPromiseObjectJs2 = _interopRequireDefault(_larouxPromiseObjectJs);
-
-var _larouxHelpersJs = require('../laroux.helpers.js');
-
-var _larouxHelpersJs2 = _interopRequireDefault(_larouxHelpersJs);
-
-var dom = {
-    docprop: function docprop(propName) {
-        return document.documentElement.classList.contains(propName);
-    },
-
-    select: function select(selector, parent) {
-        return _larouxHelpersJs2['default'].toArray((parent || document).querySelectorAll(selector));
-    },
-
-    selectByClass: function selectByClass(selector, parent) {
-        return _larouxHelpersJs2['default'].toArray((parent || document).getElementsByClassName(selector));
-    },
-
-    selectByTag: function selectByTag(selector, parent) {
-        return _larouxHelpersJs2['default'].toArray((parent || document).getElementsByTagName(selector));
-    },
-
-    selectById: function selectById(selector, parent) {
-        return (parent || document).getElementById(selector);
-    },
-
-    selectSingle: function selectSingle(selector, parent) {
-        return (parent || document).querySelector(selector);
-    },
-
-    attr: function attr(element, attributes, value) {
-        if (value === undefined && attributes.constructor !== Object) {
-            return element.getAttribute(attributes);
-        }
-
-        var elements = _larouxHelpersJs2['default'].getAsArray(element);
-        if (typeof attributes === 'string') {
-            var oldAttributes = attributes;
-            attributes = {};
-            attributes[oldAttributes] = value;
-        }
-
-        for (var attributeName in attributes) {
-            if (!attributes.hasOwnProperty(attributeName)) {
-                continue;
-            }
-
-            for (var i = 0, _length = elements.length; i < _length; i++) {
-                if (attributes[attributeName] === null) {
-                    element.removeAttribute(attributeName);
-                } else {
-                    element.setAttribute(attributeName, attributes[attributeName]);
-                }
-            }
-        }
-    },
-
-    data: function data(element, datanames, value) {
-        if (value === undefined && datanames.constructor !== Object) {
-            return element.getAttribute('data-' + datanames);
-        }
-
-        var elements = _larouxHelpersJs2['default'].getAsArray(element);
-        if (typeof datanames === 'string') {
-            var oldDatanames = datanames;
-            datanames = {};
-            datanames[oldDatanames] = value;
-        }
-
-        for (var dataName in datanames) {
-            if (!datanames.hasOwnProperty(dataName)) {
-                continue;
-            }
-
-            for (var i = 0, _length2 = elements.length; i < _length2; i++) {
-                if (datanames[dataName] === null) {
-                    element.removeAttribute('data-' + dataName);
-                } else {
-                    element.setAttribute('data-' + dataName, datanames[dataName]);
-                }
-            }
-        }
-    },
-
-    eventHistory: [],
-    setEvent: function setEvent(element, eventname, callback) {
-        var elements = _larouxHelpersJs2['default'].getAsArray(element);
-
-        for (var i = 0, _length3 = elements.length; i < _length3; i++) {
-            dom.setEventSingle(elements[i], eventname, callback);
-        }
-    },
-
-    setEventSingle: function setEventSingle(element, eventname, callback) {
-        var callbackWrapper = function callbackWrapper(e) {
-            if (callback(e, element) === false) {
-                if (e.preventDefault) {
-                    e.preventDefault();
-                } else {
-                    event.returnValue = false;
-                }
-            }
-        };
-
-        dom.eventHistory.push({ element: element, eventname: eventname, callback: callback, callbackWrapper: callbackWrapper });
-        element.addEventListener(eventname, callbackWrapper, false);
-    },
-
-    unsetEvent: function unsetEvent(element, eventname, callback) {
-        var elements = _larouxHelpersJs2['default'].getAsArray(element);
-
-        for (var i1 = 0, length1 = elements.length; i1 < length1; i1++) {
-            for (var i2 = 0, length2 = dom.eventHistory.length; i2 < length2; i2++) {
-                var item = dom.eventHistory[i2];
-
-                if (item === undefined) {
-                    continue;
-                }
-
-                if (item.element !== elements[i1]) {
-                    continue;
-                }
-
-                if (eventname !== undefined && item.eventname !== eventname) {
-                    continue;
-                }
-
-                if (callback !== undefined && item.callback !== callback) {
-                    continue;
-                }
-
-                item.element.removeEventListener(item.eventname, item.callbackWrapper, false);
-                delete dom.eventHistory[i2];
-            }
-        }
-    },
-
-    dispatchEvent: function dispatchEvent(element, eventname, data) {
-        var customEvent = document.createEvent('Event');
-        for (var item in data) {
-            if (!data.hasOwnProperty(item)) {
-                continue;
-            }
-
-            customEvent[item] = data[item];
-        }
-
-        customEvent.initEvent(eventname, true, true);
-        element.dispatchEvent(customEvent);
-    },
-
-    create: function create(html) {
-        var frag = document.createDocumentFragment(),
-            temp = document.createElement('DIV');
-
-        temp.insertAdjacentHTML('beforeend', html);
-        while (temp.firstChild) {
-            frag.appendChild(temp.firstChild);
-        }
-
-        // nulling out the reference, there is no obvious dispose method
-        temp = null;
-
-        return frag;
-    },
-
-    createElement: function createElement(element, attributes, children) {
-        var elem = document.createElement(element);
-
-        if (attributes !== undefined && attributes.constructor === Object) {
-            for (var item in attributes) {
-                if (!attributes.hasOwnProperty(item)) {
-                    continue;
-                }
-
-                elem.setAttribute(item, attributes[item]);
-            }
-        }
-
-        if (children !== undefined) {
-            if (children.constructor === Object) {
-                for (var item2 in children) {
-                    if (!children.hasOwnProperty(item2)) {
-                        continue;
-                    }
-
-                    elem.setAttribute(item2, children[item2]);
-                }
-            } else if ( /* typeof children === 'string' && */children.length > 0) {
-                dom.append(elem, children);
-            }
-        }
-
-        return elem;
-    },
-
-    createOption: function createOption(element, key, value, isDefault) {
-        /* old behaviour, does not support optgroups as parents.
-        let count = element.options.length;
-        element.options[count] = new Option(value, key);
-         if (isDefault === true) {
-            element.options.selectedIndex = count - 1;
-        }
-        */
-
-        var option = document.createElement('OPTION');
-        option.setAttribute('value', key);
-        if (isDefault === true) {
-            option.setAttribute('checked', 'checked');
-        }
-
-        dom.append(option, value);
-        element.appendChild(option);
-    },
-
-    selectByValue: function selectByValue(element, value) {
-        for (var i = 0, _length4 = element.options.length; i < _length4; i++) {
-            if (element.options[i].getAttribute('value') == value) {
-                element.selectedIndex = i;
-                break;
-            }
-        }
-    }, /*,
-       // TODO: it's redundant for now
-       loadImage: function () {
-         let images = [];
-          for (let i = 0, length = arguments.length; i < length; i++) {
-             let image = document.createElement('IMG');
-             image.setAttribute('src', arguments[i]);
-              images.push(image);
-         }
-          return images;
-       },
-       loadAsyncStyle: function (path, triggerName, async) {
-         let elem = document.createElement('LINK');
-          elem.type = 'text/css';
-         elem.async = (async !== undefined) ? async : true;
-         elem.href = path;
-         elem.rel = 'stylesheet';
-          let loaded = false;
-         elem.onload = elem.onreadystatechange = function () {
-             if ((elem.readyState && elem.readyState !== 'complete' && elem.readyState !== 'loaded') || loaded) {
-                 return false;
-             }
-              elem.onload = elem.onreadystatechange = null;
-             loaded = true;
-             if (triggerName) {
-                 if (typeof triggerName === 'function') {
-                     triggerName();
-                 } else {
-                     triggers.ontrigger(triggerName);
-                 }
-             }
-         };
-          let head = document.getElementsByTagName('head')[0];
-         head.appendChild(elem);
-       },*/
-
-    clear: function clear(element) {
-        while (element.hasChildNodes()) {
-            element.removeChild(element.firstChild);
-        }
-    },
-
-    insert: function insert(element, position, content) {
-        element.insertAdjacentHTML(position, content);
-    },
-
-    prepend: function prepend(element, content) {
-        element.insertAdjacentHTML('afterbegin', content);
-    },
-
-    append: function append(element, content) {
-        element.insertAdjacentHTML('beforeend', content);
-    },
-
-    replace: function replace(element, content) {
-        dom.clear(element);
-        element.insertAdjacentHTML('afterbegin', content);
-    },
-
-    replaceText: function replaceText(element, content) {
-        // dom.clear(element);
-        element.textContent = content;
-    },
-
-    remove: function remove(element) {
-        element.remove();
-    },
-
-    cloneReturn: 0,
-    cloneAppend: 1,
-    cloneInsertAfter: 2,
-    cloneInsertBefore: 3,
-
-    clone: function clone(element, type, container, target) {
-        var newElement = element.cloneNode(true);
-
-        if (container === undefined) {
-            container = element.parentNode;
-        }
-        if (target === undefined) {
-            target = element;
-        }
-
-        if (type !== undefined && type != dom.cloneReturn) {
-            if (type == dom.cloneAppend) {
-                container.appendChild(newElement);
-            } else if (type == dom.cloneInsertAfter) {
-                container.insertBefore(newElement, target.nextSibling);
-            } else {
-                // type == dom.cloneInsertBefore
-                container.insertBefore(newElement, target);
-            }
-        }
-
-        return newElement;
-    },
-
-    loadScript: function loadScript(url, async) {
-        return new _larouxPromiseObjectJs2['default'](function (resolve, reject) {
-            var elem = document.createElement('script');
-
-            if (async !== undefined) {
-                elem.async = async;
-            }
-
-            if (elem.readyState !== undefined) {
-                elem.onreadystatechange = function () {
-                    if (elem.readyState in ['loaded', 'complete']) {
-                        elem.onreadystatechange = null;
-                        resolve(elem);
-                    }
-                };
-            } else {
-                elem.onload = function () {
-                    resolve(elem);
-                };
-            }
-
-            elem.src = url;
-
-            var head = document.getElementsByTagName('head')[0];
-            head.appendChild(elem);
-        });
-    } /*,
-      // TODO: it's redundant for now
-      applyOperations: function (element, operations) {
-        for (let operation in operations) {
-            if (!operations.hasOwnProperty(operation)) {
-                continue;
-            }
-             for (let binding in operations[operation]) {
-                if (!operations[operation].hasOwnProperty(binding)) {
-                    continue;
-                }
-                 let value = operations[operation][binding];
-                 switch (operation) {
-                    case 'setprop':
-                        if (binding.substring(0, 1) === '_') {
-                            element.setAttribute(binding.substring(1), value);
-                            continue;
-                        }
-                         if (binding === 'content') {
-                            dom.replace(element, value);
-                            continue;
-                        }
-                        break;
-                    case 'addprop':
-                        if (binding.substring(0, 1) === '_') {
-                            element.setAttribute(binding.substring(1), element.getAttribute(binding.substring(1)) + value);
-                            continue;
-                        }
-                         if (binding === 'content') {
-                            dom.append(element, value);
-                            continue;
-                        }
-                        break;
-                    case 'removeprop':
-                        if (value.substring(0, 1) === '_') {
-                            element.removeAttribute(value.substring(1));
-                            continue;
-                        }
-                         if (value === 'content') {
-                            dom.clear(element);
-                            continue;
-                        }
-                        break;
-                    case 'addclass':
-                        css.addClass(element, value);
-                        break;
-                    case 'removeclass':
-                        css.removeClass(element, value);
-                        break;
-                    case 'addstyle':
-                        css.setProperty(element, binding, value);
-                        break;
-                    case 'removestyle':
-                        css.setProperty(element, value, 'inherit !important');
-                        break;
-                    case 'repeat':
-                        break;
-                    default:
-                        console.log(operation);
-                }
-            }
-        }
-      }*/
-};
-
-// a fix for Internet Explorer
-if ('Element' in global) {
-    if (Element.prototype.remove === undefined) {
-        Element.prototype.remove = function () {
-            if (this.parentElement !== null) {
-                this.parentElement.removeChild(this);
-            }
-        };
-    }
-}
-
-exports['default'] = dom;
-module.exports = exports['default'];
-}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"../laroux.helpers.js":3,"../laroux.promiseObject.js":6}],17:[function(require,module,exports){
-/*jslint node: true */
-/*global FormData */
-'use strict';
-
-Object.defineProperty(exports, '__esModule', {
-    value: true
-});
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-var _larouxAjaxJs = require('../laroux.ajax.js');
-
-var _larouxAjaxJs2 = _interopRequireDefault(_larouxAjaxJs);
-
-var _larouxDomJs = require('./laroux.dom.js');
-
-var _larouxDomJs2 = _interopRequireDefault(_larouxDomJs);
-
-var _larouxValidationJs = require('../laroux.validation.js');
-
-var _larouxValidationJs2 = _interopRequireDefault(_larouxValidationJs);
-
-var forms = {
-    ajaxForm: function ajaxForm(formobj, callback, callbackBegin) {
-        _larouxDomJs2['default'].setEvent(formobj, 'submit', function () {
-            if (callbackBegin !== undefined) {
-                callbackBegin();
-            }
-
-            var promise = _larouxAjaxJs2['default'].fetch(formobj.getAttribute('action'), {
-                method: 'POST',
-                body: forms.serializeFormData(formobj)
-            });
-
-            if (callback !== undefined) {
-                promise.then(callback);
-            }
-
-            return false;
-        });
-    },
-
-    isFormField: function isFormField(element) {
-        if (element.tagName === 'SELECT') {
-            return true;
-        }
-
-        if (element.tagName === 'INPUT') {
-            var type = element.getAttribute('type').toUpperCase();
-
-            if (type === 'FILE' || type === 'CHECKBOX' || type === 'RADIO' || type === 'TEXT' || type === 'PASSWORD' || type === 'HIDDEN') {
-                return true;
-            }
-
-            return false;
-        }
-
-        if (element.tagName === 'TEXTAREA') {
-            return true;
-        }
-
-        return false;
-    },
-
-    getFormFieldValue: function getFormFieldValue(element) {
-        if (element.disabled === true) {
-            return null;
-        }
-
-        if (element.tagName === 'SELECT') {
-            return element.options[element.selectedIndex].value;
-        }
-
-        if (element.tagName === 'INPUT') {
-            var type = element.getAttribute('type').toUpperCase();
-
-            if (type === 'FILE') {
-                return element.files[0];
-            }
-
-            if (type === 'CHECKBOX' || type === 'RADIO') {
-                if (element.checked) {
-                    return element.value;
-                }
-
-                return null;
-            }
-
-            if (type === 'TEXT' || type === 'PASSWORD' || type === 'HIDDEN') {
-                return element.value;
-            }
-
-            return null;
-        }
-
-        if (element.tagName === 'TEXTAREA') {
-            return element.value;
-        }
-
-        return null;
-    },
-
-    setFormFieldValue: function setFormFieldValue(element, value) {
-        if (element.disabled === true) {
-            return;
-        }
-
-        if (element.tagName === 'SELECT') {
-            for (var option in element.options) {
-                if (!element.options.hasOwnProperty(option)) {
-                    continue;
-                }
-
-                if (element.options[option].value == value) {
-                    element.selectedIndex = option;
-                    return;
-                }
-            }
-
-            return;
-        }
-
-        if (element.tagName === 'INPUT') {
-            var type = element.getAttribute('type').toUpperCase();
-
-            if (type === 'FILE') {
-                element.files[0] = value;
-                return;
-            }
-
-            if (type === 'CHECKBOX' || type === 'RADIO') {
-                if (value === true || value == element.value) {
-                    element.checked = true;
-                }
-
-                return;
-            }
-
-            if (type === 'TEXT' || type === 'PASSWORD' || type === 'HIDDEN') {
-                element.value = value;
-                return;
-            }
-
-            return;
-        }
-
-        if (element.tagName === 'TEXTAREA') {
-            element.value = value;
-            return;
-        }
-    },
-
-    toggleFormEditing: function toggleFormEditing(formobj, value) {
-        var selection = formobj.querySelectorAll('*[name]');
-
-        if (value === undefined) {
-            if (formobj.getAttribute('data-last-enabled') === null) {
-                formobj.setAttribute('data-last-enabled', 'enabled');
-                value = false;
-            } else {
-                formobj.removeAttribute('data-last-enabled');
-                value = true;
-            }
-        }
-
-        for (var selected = 0, _length = selection.length; selected < _length; selected++) {
-            if (!forms.isFormField(selection[selected])) {
-                continue;
-            }
-
-            var lastDisabled = selection[selected].getAttribute('data-last-disabled');
-            if (!value) {
-                if (lastDisabled === null) {
-                    if (selection[selected].getAttribute('disabled') !== null) {
-                        selection[selected].setAttribute('data-last-disabled', 'disabled');
-                    }
-                }
-
-                selection[selected].setAttribute('disabled', 'disabled');
-                continue;
-            }
-
-            if (lastDisabled !== null) {
-                selection[selected].removeAttribute('data-last-disabled');
-            } else {
-                selection[selected].removeAttribute('disabled');
-            }
-        }
-    },
-
-    serializeFormData: function serializeFormData(formobj) {
-        var formdata = new FormData();
-        var selection = formobj.querySelectorAll('*[name]');
-
-        for (var selected = 0, _length2 = selection.length; selected < _length2; selected++) {
-            var value = forms.getFormFieldValue(selection[selected]);
-
-            if (value !== null) {
-                formdata.append(selection[selected].getAttribute('name'), value);
-            }
-        }
-
-        return formdata;
-    },
-
-    serialize: function serialize(formobj) {
-        var values = {};
-        var selection = formobj.querySelectorAll('*[name]');
-
-        for (var selected = 0, _length3 = selection.length; selected < _length3; selected++) {
-            var value = forms.getFormFieldValue(selection[selected]);
-
-            if (value !== null) {
-                values[selection[selected].getAttribute('name')] = value;
-            }
-        }
-
-        return values;
-    },
-
-    deserialize: function deserialize(formobj, data) {
-        var selection = formobj.querySelectorAll('*[name]');
-
-        for (var selected = 0, _length4 = selection.length; selected < _length4; selected++) {
-            forms.setFormFieldValue(selection[selected], data[selection[selected].getAttribute('name')]);
-        }
-    },
-
-    validate: function validate(formobj, rules) {
-        var fields = forms.serialize(formobj);
-
-        return _larouxValidationJs2['default'].validate(fields, rules);
-    }
-};
-
-exports['default'] = forms;
-module.exports = exports['default'];
-},{"../laroux.ajax.js":1,"../laroux.validation.js":12,"./laroux.dom.js":16}],18:[function(require,module,exports){
-/*jslint node: true */
-/*global event, document */
-'use strict';
-
-Object.defineProperty(exports, '__esModule', {
-    value: true
-});
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-var _larouxDomJs = require('./laroux.dom.js');
-
-var _larouxDomJs2 = _interopRequireDefault(_larouxDomJs);
-
-var _larouxFormsJs = require('./laroux.forms.js');
-
-var _larouxFormsJs2 = _interopRequireDefault(_larouxFormsJs);
-
-var keys = {
-    keyName: function keyName(keycode) {
-        keycode = keycode.toLowerCase();
-
-        switch (keycode) {
-            case 'backspace':
-                return 8;
-
-            case 'tab':
-                return 9;
-
-            case 'enter':
-            case 'return':
-                return 13;
-
-            case 'esc':
-            case 'escape':
-                return 27;
-
-            case 'space':
-                return 32;
-
-            case 'pgup':
-                return 33;
-
-            case 'pgdn':
-                return 34;
-
-            case 'end':
-                return 35;
-
-            case 'home':
-                return 36;
-
-            case 'left':
-                return 37;
-
-            case 'up':
-                return 38;
-
-            case 'right':
-                return 39;
-
-            case 'down':
-                return 40;
-
-            case 'insert':
-                return 45;
-
-            case 'delete':
-                return 46;
-
-            case 'f1':
-                return 112;
-
-            case 'f2':
-                return 113;
-
-            case 'f3':
-                return 114;
-
-            case 'f4':
-                return 115;
-
-            case 'f5':
-                return 116;
-
-            case 'f6':
-                return 117;
-
-            case 'f7':
-                return 118;
-
-            case 'f8':
-                return 119;
-
-            case 'f9':
-                return 120;
-
-            case 'f10':
-                return 121;
-
-            case 'f11':
-                return 122;
-
-            case 'f12':
-                return 123;
-
-            case ',':
-                return 188;
-
-            case '.':
-                return 190;
-        }
-
-        return String.fromCharCode(keycode);
-    },
-
-    // {target, key, shift, ctrl, alt, disableInputs, callback}
-    assign: function assign(options) {
-        var wrapper = function wrapper(ev) {
-            if (!ev) {
-                ev = event;
-            }
-
-            var element = ev.target || ev.srcElement;
-            if (element.nodeType === 3 || element.nodeType === 11) {
-                // element.nodeType === 1 ||
-                element = element.parentNode;
-            }
-
-            if (options.disableInputs && _larouxFormsJs2['default'].isFormField(element)) {
-                return;
-            }
-
-            if (options.shift && !ev.shiftKey) {
-                return;
-            }
-
-            if (options.ctrl && !ev.ctrlKey) {
-                return;
-            }
-
-            if (options.alt && !ev.altKey) {
-                return;
-            }
-
-            var key = keys.keyName(options.key);
-            if (key !== (ev.keyCode || ev.which)) {
-                return;
-            }
-
-            options.callback(ev);
-
-            return false;
-        };
-
-        _larouxDomJs2['default'].setEvent(options.target || document, 'keydown', wrapper);
-    }
-};
-
-exports['default'] = keys;
-module.exports = exports['default'];
-},{"./laroux.dom.js":16,"./laroux.forms.js":17}],19:[function(require,module,exports){
-/*jslint node: true */
-'use strict';
-
-Object.defineProperty(exports, '__esModule', {
-    value: true
-});
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-var _larouxDomJs = require('./laroux.dom.js');
-
-var _larouxDomJs2 = _interopRequireDefault(_larouxDomJs);
-
-var _larouxHelpersJs = require('../laroux.helpers.js');
-
-var _larouxHelpersJs2 = _interopRequireDefault(_larouxHelpersJs);
-
-var mvc = {
-    apps: {},
-    pauseUpdate: false,
-
-    init: function init(element, model) {
-        if (element.constructor === String) {
-            element = _larouxDomJs2['default'].selectById(element);
-        }
-
-        // if (model.constructor !== types.Observable) {
-        //     model = new types.Observable(model);
-        // }
-
-        var appKey = element.getAttribute('id');
-
-        model.on(function (event) {
-            if (!mvc.pauseUpdate) {
-                mvc.update(appKey); // , [event.key]
-            }
-        });
-
-        mvc.apps[appKey] = {
-            element: element,
-            model: model // ,
-            // modelKeys: null,
-            // boundElements: null,
-            // eventElements: null
-        };
-
-        mvc.rebind(appKey);
-    },
-
-    rebind: function rebind(appKey) {
-        var app = mvc.apps[appKey];
-        /*jslint nomen: true */
-        app.modelKeys = _larouxHelpersJs2['default'].getKeysRecursive(app.model); // FIXME: works only for $l.types.Observable
-        app.boundElements = {};
-        app.eventElements = [];
-
-        mvc.scanElements(app, app.element);
-        mvc.update(appKey);
-
-        var callback = function callback(ev, elem) {
-            var binding = mvc.bindStringParser(elem.getAttribute('lr-event'));
-            // mvc.pauseUpdate = true;
-            for (var item in binding) {
-                if (item === null || !binding.hasOwnProperty(item)) {
-                    continue;
-                }
-
-                if (binding[item].charAt(0) === '\'') {
-                    app.model[item] = binding[item].substring(1, binding[item].length - 1);
-                } else if (binding[item].substring(0, 5) === 'attr.') {
-                    app.model[item] = elem.getAttribute(binding[item].substring(5));
-                } else if (binding[item].substring(0, 5) === 'prop.') {
-                    app.model[item] = elem[binding[item].substring(5)];
-                }
-            }
-            // mvc.pauseUpdate = false;
-        };
-
-        for (var i = 0, _length = app.eventElements.length; i < _length; i++) {
-            _larouxDomJs2['default'].setEvent(app.eventElements[i].element, app.eventElements[i].binding[null], callback);
-        }
-    },
-
-    scanElements: function scanElements(app, element) {
-        for (var i = 0, atts = element.attributes, m = atts.length; i < m; i++) {
-            if (atts[i].name === 'lr-bind') {
-                var binding1 = mvc.bindStringParser(atts[i].value);
-
-                for (var item in binding1) {
-                    if (!binding1.hasOwnProperty(item)) {
-                        continue;
-                    }
-
-                    if (app.boundElements[binding1[item]] === undefined) {
-                        app.boundElements[binding1[item]] = [];
-                    }
-
-                    app.boundElements[binding1[item]].push({
-                        element: element,
-                        target: item
-                    });
-                }
-            } else if (atts[i].name === 'lr-event') {
-                var binding2 = mvc.bindStringParser(atts[i].value);
-
-                app.eventElements.push({
-                    element: element,
-                    binding: binding2
-                });
-            }
-        }
-
-        for (var j = 0, chldrn = element.childNodes, n = chldrn.length; j < n; j++) {
-            if (chldrn[j].nodeType === 1) {
-                mvc.scanElements(app, chldrn[j]);
-            }
-        }
-    },
-
-    update: function update(appKey, keys) {
-        var app = mvc.apps[appKey];
-
-        if (typeof keys === 'undefined') {
-            keys = app.modelKeys;
-        }
-
-        for (var i = 0, length1 = keys.length; i < length1; i++) {
-            if (!(keys[i] in app.boundElements)) {
-                continue;
-            }
-
-            var boundElement = app.boundElements[keys[i]],
-                value = _larouxHelpersJs2['default'].getElement(app.model, keys[i]);
-
-            if (value instanceof Function) {
-                value = value.call(app.model);
-            }
-
-            for (var j = 0, length2 = boundElement.length; j < length2; j++) {
-                if (boundElement[j].target.substring(0, 6) === 'style.') {
-                    boundElement[j].element.style[boundElement[j].target.substring(6)] = value;
-                } else if (boundElement[j].target.substring(0, 5) === 'attr.') {
-                    // FIXME removeAttribute on null value?
-                    boundElement[j].element.setAttribute(boundElement[j].target.substring(5), value);
-                } else if (boundElement[j].target.substring(0, 5) === 'prop.') {
-                    // FIXME removeAttribute on null value?
-                    boundElement[j].element[boundElement[j].target.substring(5)] = value;
-                }
-            }
-        }
-    },
-
-    bindStringParser: function bindStringParser(text) {
-        var lastBuffer = null,
-            buffer = '',
-            state = 0,
-            result = {};
-
-        for (var i = 0, _length2 = text.length; i < _length2; i++) {
-            var curr = text.charAt(i);
-
-            if (state === 0) {
-                if (curr === ':') {
-                    state = 1;
-                    lastBuffer = buffer.trim();
-                    buffer = '';
-                    continue;
-                }
-            }
-
-            if (curr === ',') {
-                state = 0;
-                result[lastBuffer] = buffer.trim();
-                buffer = '';
-                continue;
-            }
-
-            buffer += curr;
-        }
-
-        if (buffer.length > 0) {
-            result[lastBuffer] = buffer.trim();
-        }
-
-        return result;
-    }
-};
-
-exports['default'] = mvc;
-module.exports = exports['default'];
-},{"../laroux.helpers.js":3,"./laroux.dom.js":16}],20:[function(require,module,exports){
+},{"./laroux.ajax.js":1,"./laroux.helpers.js":7,"./laroux.promiseObject.js":11}],13:[function(require,module,exports){
 (function (global){
 /*jslint node: true */
 /*global location, addEventListener, removeEventListener */
@@ -3717,11 +2841,11 @@ Object.defineProperty(exports, '__esModule', {
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-var _larouxJs = require('../laroux.js');
+var _larouxJs = require('./laroux.js');
 
 var _larouxJs2 = _interopRequireDefault(_larouxJs);
 
-var _larouxHelpersJs = require('../laroux.helpers.js');
+var _larouxHelpersJs = require('./laroux.helpers.js');
 
 var _larouxHelpersJs2 = _interopRequireDefault(_larouxHelpersJs);
 
@@ -3909,7 +3033,329 @@ _larouxJs2['default'].ready(routes.attach);
 exports['default'] = routes;
 module.exports = exports['default'];
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"../laroux.helpers.js":3,"../laroux.js":5}],21:[function(require,module,exports){
+},{"./laroux.helpers.js":7,"./laroux.js":9}],14:[function(require,module,exports){
+(function (global){
+/*jslint node: true */
+'use strict';
+
+Object.defineProperty(exports, '__esModule', {
+    value: true
+});
+
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+var _larouxPromiseObjectJs = require('./laroux.promiseObject.js');
+
+var _larouxPromiseObjectJs2 = _interopRequireDefault(_larouxPromiseObjectJs);
+
+var Storyboard = (function () {
+    function Storyboard() {
+        _classCallCheck(this, Storyboard);
+
+        var self = this;
+
+        this.phases = [];
+        this.phaseKeys = {};
+        this.currentIteration = 0;
+        this.running = false;
+
+        for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+            args[_key] = arguments[_key];
+        }
+
+        for (var i = 0, _length = args.length; i < _length; i++) {
+            this.addPhase(args[i]);
+        }
+
+        this.checkPromise = function () {
+            if (--self.phases[self.currentIteration].promises === 0 && !self.running) {
+                self.start();
+            }
+        };
+    }
+
+    _createClass(Storyboard, [{
+        key: 'addPhase',
+        value: function addPhase(key) {
+            this.phaseKeys[key] = this.phases.length;
+            this.phases.push({
+                key: key,
+                callbacks: [],
+                promises: 0
+            });
+        }
+    }, {
+        key: 'add',
+        value: function add(phase, callback) {
+            if (callback.constructor === _larouxPromiseObjectJs2['default']) {
+                return this.addPromise(phase, callback);
+            }
+
+            var phaseId = this.phaseKeys[phase];
+
+            if (phaseId < this.currentIteration) {
+                // execute immediately if phase is already passed
+                callback.apply(global);
+                return;
+            }
+
+            this.phases[phaseId].callbacks.push(callback);
+        }
+    }, {
+        key: 'addPromise',
+        value: function addPromise(phase, promise) {
+            var phaseId = this.phaseKeys[phase];
+
+            // skips if phase is already passed
+            if (phaseId < this.currentIteration) {
+                return;
+            }
+
+            this.phases[phaseId].promises++;
+            // FIXME: must be handled even if it has failed
+            promise.then(this.checkPromise);
+        }
+    }, {
+        key: 'start',
+        value: function start() {
+            this.running = true;
+
+            while (this.phases.length > this.currentIteration) {
+                var currentPhase = this.phases[this.currentIteration];
+
+                while (currentPhase.callbacks.length > 0) {
+                    var fnc = currentPhase.callbacks.shift();
+                    fnc.apply(global);
+                }
+
+                if (currentPhase.promises > 0) {
+                    break;
+                }
+
+                this.currentIteration++;
+            }
+
+            this.running = false;
+        }
+    }]);
+
+    return Storyboard;
+})();
+
+exports['default'] = Storyboard;
+module.exports = exports['default'];
+}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+},{"./laroux.promiseObject.js":11}],15:[function(require,module,exports){
+/*jslint node: true */
+/*global Hogan, Mustache, Handlebars, _ */
+'use strict';
+
+Object.defineProperty(exports, '__esModule', {
+    value: true
+});
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+var _larouxHelpersJs = require('./laroux.helpers.js');
+
+var _larouxHelpersJs2 = _interopRequireDefault(_larouxHelpersJs);
+
+var templates = {
+    engines: {
+        plain: {
+            compile: function compile(template, options) {
+                return [template, options];
+            },
+
+            render: function render(compiled, model) {
+                var result = compiled[0],
+                    dict = [],
+                    lastIndex = 0,
+                    nextIndex = undefined;
+
+                while ((nextIndex = result.indexOf('{{', lastIndex)) !== -1) {
+                    nextIndex += 2;
+                    var closeIndex = result.indexOf('}}', nextIndex);
+                    if (closeIndex === -1) {
+                        break;
+                    }
+
+                    var key = result.substring(nextIndex, closeIndex);
+                    dict['{{' + key + '}}'] = _larouxHelpersJs2['default'].getElement(model, key, '');
+                    lastIndex = closeIndex + 2;
+                }
+
+                return _larouxHelpersJs2['default'].replaceAll(result, dict);
+            }
+        },
+
+        hogan: {
+            compile: function compile(template, options) {
+                return Hogan.compile(template, options);
+            },
+
+            render: function render(compiled, model) {
+                return compiled.render(model);
+            }
+        },
+
+        mustache: {
+            compile: function compile(template, options) {
+                return Mustache.compile(template, options);
+            },
+
+            render: function render(compiled, model) {
+                return compiled(model);
+            }
+        },
+
+        handlebars: {
+            compile: function compile(template, options) {
+                return Handlebars.compile(template, options);
+            },
+
+            render: function render(compiled, model) {
+                return compiled(model);
+            }
+        },
+
+        lodash: {
+            compile: function compile(template, options) {
+                /*jslint nomen: true */
+                return _.compile(template, null, options);
+            },
+
+            render: function render(compiled, model) {
+                return compiled(model);
+            }
+        },
+
+        underscore: {
+            compile: function compile(template, options) {
+                /*jslint nomen: true */
+                return _.compile(template, null, options);
+            },
+
+            render: function render(compiled, model) {
+                return compiled(model);
+            }
+        }
+    },
+    engine: 'plain',
+
+    apply: function apply(element, model, options) {
+        var content = undefined,
+            engine = templates.engines[templates.engine];
+
+        if (element.nodeType === 1 || element.nodeType === 3 || element.nodeType === 11) {
+            content = element.textContent;
+        } else {
+            content = element.nodeValue;
+        }
+
+        var compiled = engine.compile(content, options);
+        return engine.render(compiled, model);
+    }
+
+    /*
+    insert: function (element, model, target, position, options) {
+        let output = templates.apply(element, model, options);
+         dom.insert(target, position || 'beforeend', output);
+    },
+     replace: function (element, model, target, options) {
+        let output = templates.apply(element, model, options);
+         dom.replace(target, output);
+    }
+    */
+};
+
+exports['default'] = templates;
+module.exports = exports['default'];
+},{"./laroux.helpers.js":7}],16:[function(require,module,exports){
+/*jslint node: true */
+'use strict';
+
+Object.defineProperty(exports, '__esModule', {
+    value: true
+});
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+var _larouxHelpersJs = require('./laroux.helpers.js');
+
+var _larouxHelpersJs2 = _interopRequireDefault(_larouxHelpersJs);
+
+var timers = {
+    data: [],
+
+    set: function set(timer) {
+        timer.next = Date.now() + timer.timeout;
+        timers.data.push(timer);
+    },
+
+    remove: function remove(id) {
+        var targetKey = null;
+
+        for (var item in timers.data) {
+            if (!timers.data.hasOwnProperty(item)) {
+                continue;
+            }
+
+            var currentItem = timers.data[item];
+
+            if (currentItem.id !== undefined && currentItem.id == id) {
+                targetKey = item;
+                break;
+            }
+        }
+
+        if (targetKey !== null) {
+            timers.data.splice(targetKey, 1);
+            return true;
+        }
+
+        return false;
+    },
+
+    ontick: function ontick() {
+        var now = Date.now(),
+            removeKeys = [];
+
+        for (var item in timers.data) {
+            if (!timers.data.hasOwnProperty(item)) {
+                continue;
+            }
+
+            var currentItem = timers.data[item];
+
+            if (currentItem.next <= now) {
+                var result = currentItem.ontick(currentItem.state);
+
+                if (result !== false && currentItem.reset) {
+                    currentItem.next = now + currentItem.timeout;
+                } else {
+                    removeKeys = _larouxHelpersJs2['default'].prependArray(removeKeys, item);
+                }
+            }
+        }
+
+        for (var item2 in removeKeys) {
+            if (!removeKeys.hasOwnProperty(item2)) {
+                continue;
+            }
+
+            timers.data.splice(removeKeys[item2], 1);
+        }
+    }
+};
+
+exports['default'] = timers;
+module.exports = exports['default'];
+},{"./laroux.helpers.js":7}],17:[function(require,module,exports){
 /*jslint node: true */
 /*global document, navigator */
 'use strict';
@@ -3920,7 +3366,7 @@ Object.defineProperty(exports, '__esModule', {
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-var _larouxJs = require('../laroux.js');
+var _larouxJs = require('./laroux.js');
 
 var _larouxJs2 = _interopRequireDefault(_larouxJs);
 
@@ -4045,7 +3491,370 @@ _larouxJs2['default'].ready(touch.init);
 
 exports['default'] = touch;
 module.exports = exports['default'];
-},{"../laroux.js":5,"./laroux.dom.js":16}],22:[function(require,module,exports){
+},{"./laroux.dom.js":4,"./laroux.js":9}],18:[function(require,module,exports){
+/*jslint node: true */
+'use strict';
+
+Object.defineProperty(exports, '__esModule', {
+    value: true
+});
+
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+var _larouxHelpersJs = require('./laroux.helpers.js');
+
+var _larouxHelpersJs2 = _interopRequireDefault(_larouxHelpersJs);
+
+var staticKeys = ['_callbacks', '_onupdate'];
+
+var Observable = (function () {
+    function Observable(data) {
+        _classCallCheck(this, Observable);
+
+        var self = this;
+
+        this._callbacks = [];
+        this._onupdate = function (changes) {
+            _larouxHelpersJs2['default'].callAll(self._callbacks, self, [changes]);
+        };
+
+        this.observe(this);
+
+        if (data) {
+            this.setRange(data);
+        }
+    }
+
+    _createClass(Observable, [{
+        key: 'set',
+        value: function set(key, value) {
+            if (staticKeys.indexOf(key) === -1) {
+                this[key] = value;
+            }
+        }
+    }, {
+        key: 'setRange',
+        value: function setRange(values) {
+            for (var valueKey in values) {
+                this.set(valueKey, values[valueKey]);
+            }
+        }
+    }, {
+        key: 'get',
+        value: function get(key, defaultValue) {
+            if (key in this && staticKeys.indexOf(key) === -1) {
+                return this[key];
+            }
+
+            return defaultValue || null;
+        }
+    }, {
+        key: 'getRange',
+        value: function getRange(keys) {
+            var values = {};
+
+            for (var item in keys) {
+                values[keys[item]] = this[keys[item]];
+            }
+
+            return values;
+        }
+    }, {
+        key: 'keys',
+        value: function keys() {
+            var keys = [];
+
+            for (var item in this) {
+                if (staticKeys.indexOf(item) === -1) {
+                    keys.push(item);
+                }
+            }
+
+            return keys;
+        }
+    }, {
+        key: 'length',
+        value: function length() {
+            return this.keys().length;
+        }
+    }, {
+        key: 'exists',
+        value: function exists(key) {
+            return key in this;
+        }
+    }, {
+        key: 'remove',
+        value: function remove(key) {
+            if (staticKeys.indexOf(key) === -1) {
+                delete this[key];
+            }
+        }
+    }, {
+        key: 'clear',
+        value: function clear() {
+            for (var item in this) {
+                if (!this.hasOwnProperty(item) || staticKeys.indexOf(item) !== -1) {
+                    continue;
+                }
+
+                delete this[item];
+            }
+        }
+    }, {
+        key: 'observe',
+        value: function observe(obj) {
+            if ('observe' in Object) {
+                Object.observe(obj, this._onupdate);
+            }
+        }
+    }, {
+        key: 'unobserve',
+        value: function unobserve(obj) {
+            if ('unobserve' in Object) {
+                Object.unobserve(obj);
+            }
+        }
+    }, {
+        key: 'on',
+        value: function on(callback) {
+            this._callbacks.push(callback);
+        }
+    }, {
+        key: 'off',
+        value: function off(callback) {
+            _larouxHelpersJs2['default'].removeFromArray(this._callbacks, callback);
+        }
+    }]);
+
+    return Observable;
+})();
+
+var types = {
+    observable: Observable
+};
+
+exports['default'] = types;
+module.exports = exports['default'];
+},{"./laroux.helpers.js":7}],19:[function(require,module,exports){
+/*jslint node: true */
+'use strict';
+
+Object.defineProperty(exports, '__esModule', {
+    value: true
+});
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+var _larouxHelpersJs = require('./laroux.helpers.js');
+
+var _larouxHelpersJs2 = _interopRequireDefault(_larouxHelpersJs);
+
+var validation = {
+    // TODO: email, date, equalTo
+    rules: {
+        required: {
+            keys: ['message'],
+            callback: function callback(dictionary, name, rule) {
+                return name in dictionary;
+            }
+        },
+
+        minlength: {
+            keys: ['length', 'message'],
+            callback: function callback(dictionary, name, rule) {
+                return dictionary[name].length >= rule.length;
+            }
+        },
+
+        maxlength: {
+            keys: ['length', 'message'],
+            callback: function callback(dictionary, name, rule) {
+                return dictionary[name].length <= rule.length;
+            }
+        },
+
+        min: {
+            keys: ['value', 'message'],
+            callback: function callback(dictionary, name, rule) {
+                var floatValue = parseFloat(dictionary[name]);
+                return floatValue >= rule.value;
+            }
+        },
+
+        max: {
+            keys: ['value', 'message'],
+            callback: function callback(dictionary, name, rule) {
+                var floatValue = parseFloat(dictionary[name]);
+                return floatValue <= rule.value;
+            }
+        }
+    },
+
+    // {rule: 'required', message: 'isrequired'}
+    // 'required'
+
+    // {
+    //    'name': 'required',
+    //    'age': [
+    //        'required|The field is required.',
+    //        { rule: 'range', min: 10, max: 18 },
+    //    ]
+    // }
+
+    validate: function validate(fields, rules) {
+        var rulesKeys = Object.keys(rules),
+            result = {
+            success: true,
+            details: {}
+        };
+
+        for (var i = 0, _length = rulesKeys.length; i < _length; i++) {
+            var key = rulesKeys[i],
+                rule = rules[key];
+
+            var fieldRules = _larouxHelpersJs2['default'].getAsArray(rule);
+            for (var j = 0, length2 = fieldRules.length; j < length2; j++) {
+                var fieldRule = fieldRules[j];
+
+                if (fieldRule.constructor !== Object) {
+                    var fieldRuleSplitted = fieldRule.split('|'),
+                        fieldRuleName = fieldRuleSplitted[0];
+
+                    fieldRule = _larouxHelpersJs2['default'].assign(fieldRuleSplitted, ['name'].concat(validation.rules[fieldRuleName].keys));
+                }
+
+                if (!validation.rules[fieldRule.name].callback(fields, key, fieldRule)) {
+                    result.success = false;
+
+                    if (!(key in result.details)) {
+                        result.details[key] = [];
+                    }
+
+                    result.details[key].push(fieldRule);
+                }
+            }
+        }
+
+        return result;
+    }
+};
+
+exports['default'] = validation;
+module.exports = exports['default'];
+},{"./laroux.helpers.js":7}],20:[function(require,module,exports){
+/*jslint node: true */
+/*global document, localStorage, sessionStorage */
+'use strict';
+
+Object.defineProperty(exports, '__esModule', {
+    value: true
+});
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+var _larouxHelpersJs = require('./laroux.helpers.js');
+
+var _larouxHelpersJs2 = _interopRequireDefault(_larouxHelpersJs);
+
+var vars = {
+    storages: {
+        cookie: {
+            defaultPath: '/',
+
+            get: function get(name, defaultValue) {
+                var re = new RegExp(encodeURIComponent(name) + '=[^;]+', 'i'),
+                    match = document.cookie.match(re);
+
+                if (!match) {
+                    return defaultValue || null;
+                }
+
+                return decodeURIComponent(match[0].split('=')[1]);
+            },
+
+            set: function set(name, value, expires, path) {
+                var expireValue = '';
+                if (expires) {
+                    expireValue = '; expires=' + expires.toGMTString();
+                }
+
+                document.cookie = encodeURIComponent(name) + '=' + encodeURIComponent(value) + expireValue + '; path=' + (path || vars.storages.cookie.defaultPath);
+            },
+
+            remove: function remove(name, path) {
+                document.cookie = encodeURIComponent(name) + '=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=' + (path || vars.storages.cookie.defaultPath);
+            }
+        },
+
+        local: {
+            get: function get(name, defaultValue) {
+                if (!(name in localStorage)) {
+                    return defaultValue || null;
+                }
+
+                return JSON.parse(localStorage[name]);
+            },
+
+            set: function set(name, value) {
+                localStorage[name] = JSON.stringify(value);
+            },
+
+            remove: function remove(name) {
+                delete localStorage[name];
+            }
+        },
+
+        session: {
+            get: function get(name, defaultValue) {
+                if (!(name in sessionStorage)) {
+                    return defaultValue || null;
+                }
+
+                return JSON.parse(sessionStorage[name]);
+            },
+
+            set: function set(name, value) {
+                sessionStorage[name] = JSON.stringify(value);
+            },
+
+            remove: function remove(name) {
+                delete sessionStorage[name];
+            }
+        }
+    },
+
+    get: function get(storage) {
+        for (var _len = arguments.length, args = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+            args[_key - 1] = arguments[_key];
+        }
+
+        return vars.storages[storage].get.apply(this, args);
+    },
+
+    set: function set(storage) {
+        for (var _len2 = arguments.length, args = Array(_len2 > 1 ? _len2 - 1 : 0), _key2 = 1; _key2 < _len2; _key2++) {
+            args[_key2 - 1] = arguments[_key2];
+        }
+
+        return vars.storages[storage].set.apply(this, args);
+    },
+
+    remove: function remove(storage) {
+        for (var _len3 = arguments.length, args = Array(_len3 > 1 ? _len3 - 1 : 0), _key3 = 1; _key3 < _len3; _key3++) {
+            args[_key3 - 1] = arguments[_key3];
+        }
+
+        return vars.storages[storage].remove.apply(this, args);
+    }
+};
+
+exports['default'] = vars;
+module.exports = exports['default'];
+},{"./laroux.helpers.js":7}],21:[function(require,module,exports){
 (function (global){
 /*jslint node: true */
 /*global document */
@@ -4057,7 +3866,7 @@ Object.defineProperty(exports, '__esModule', {
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-var _larouxJs = require('../laroux.js');
+var _larouxJs = require('./laroux.js');
 
 var _larouxJs2 = _interopRequireDefault(_larouxJs);
 
@@ -4077,17 +3886,13 @@ var _larouxFormsJs = require('./laroux.forms.js');
 
 var _larouxFormsJs2 = _interopRequireDefault(_larouxFormsJs);
 
-var _larouxHelpersJs = require('../laroux.helpers.js');
+var _larouxHelpersJs = require('./laroux.helpers.js');
 
 var _larouxHelpersJs2 = _interopRequireDefault(_larouxHelpersJs);
 
 var _larouxKeysJs = require('./laroux.keys.js');
 
 var _larouxKeysJs2 = _interopRequireDefault(_larouxKeysJs);
-
-var _larouxMvcJs = require('./laroux.mvc.js');
-
-var _larouxMvcJs2 = _interopRequireDefault(_larouxMvcJs);
 
 var _larouxRoutesJs = require('./laroux.routes.js');
 
@@ -4103,7 +3908,6 @@ _larouxJs2['default'].extend({
     dom: _larouxDomJs2['default'],
     forms: _larouxFormsJs2['default'],
     keys: _larouxKeysJs2['default'],
-    mvc: _larouxMvcJs2['default'],
     routes: _larouxRoutesJs2['default'],
     touch: _larouxTouchJs2['default'],
 
@@ -4137,4 +3941,4 @@ if ('document' in global) {
 exports['default'] = _larouxJs2['default'];
 module.exports = exports['default'];
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"../laroux.helpers.js":3,"../laroux.js":5,"./laroux.anim.js":14,"./laroux.css.js":15,"./laroux.dom.js":16,"./laroux.forms.js":17,"./laroux.keys.js":18,"./laroux.mvc.js":19,"./laroux.routes.js":20,"./laroux.touch.js":21}]},{},[22]);
+},{"./laroux.anim.js":2,"./laroux.css.js":3,"./laroux.dom.js":4,"./laroux.forms.js":6,"./laroux.helpers.js":7,"./laroux.js":9,"./laroux.keys.js":10,"./laroux.routes.js":13,"./laroux.touch.js":17}]},{},[21]);

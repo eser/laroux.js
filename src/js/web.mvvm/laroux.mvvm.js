@@ -1,10 +1,12 @@
 /*jslint node: true */
+/*global $l */
 'use strict';
 
-import dom from './laroux.dom.js';
-import helpers from '../laroux.helpers.js';
+let laroux = $l,
+    dom = laroux.dom,
+    helpers = laroux;
 
-let mvc = {
+let mvvm = {
     apps: {},
     pauseUpdate: false,
 
@@ -20,12 +22,12 @@ let mvc = {
         let appKey = element.getAttribute('id');
 
         model.on(function (event) {
-            if (!mvc.pauseUpdate) {
-                mvc.update(appKey); // , [event.key]
+            if (!mvvm.pauseUpdate) {
+                mvvm.update(appKey); // , [event.key]
             }
         });
 
-        mvc.apps[appKey] = {
+        mvvm.apps[appKey] = {
             element: element,
             model: model // ,
             // modelKeys: null,
@@ -33,22 +35,22 @@ let mvc = {
             // eventElements: null
         };
 
-        mvc.rebind(appKey);
+        mvvm.rebind(appKey);
     },
 
     rebind: function (appKey) {
-        let app = mvc.apps[appKey];
+        let app = mvvm.apps[appKey];
         /*jslint nomen: true */
         app.modelKeys = helpers.getKeysRecursive(app.model); // FIXME: works only for $l.types.Observable
         app.boundElements = {};
         app.eventElements = [];
 
-        mvc.scanElements(app, app.element);
-        mvc.update(appKey);
+        mvvm.scanElements(app, app.element);
+        mvvm.update(appKey);
 
         let callback = function (ev, elem) {
-            let binding = mvc.bindStringParser(elem.getAttribute('lr-event'));
-            // mvc.pauseUpdate = true;
+            let binding = mvvm.bindStringParser(elem.getAttribute('lr-event'));
+            // mvvm.pauseUpdate = true;
             for (let item in binding) {
                 if (item === null || !binding.hasOwnProperty(item)) {
                     continue;
@@ -62,7 +64,7 @@ let mvc = {
                     app.model[item] = elem[binding[item].substring(5)];
                 }
             }
-            // mvc.pauseUpdate = false;
+            // mvvm.pauseUpdate = false;
         };
 
         for (let i = 0, length = app.eventElements.length; i < length; i++) {
@@ -77,7 +79,7 @@ let mvc = {
     scanElements: function (app, element) {
         for (let i = 0, atts = element.attributes, m = atts.length; i < m; i++) {
             if (atts[i].name === 'lr-bind') {
-                let binding1 = mvc.bindStringParser(atts[i].value);
+                let binding1 = mvvm.bindStringParser(atts[i].value);
 
                 for (let item in binding1) {
                     if (!binding1.hasOwnProperty(item)) {
@@ -94,7 +96,7 @@ let mvc = {
                     });
                 }
             } else if (atts[i].name === 'lr-event') {
-                let binding2 = mvc.bindStringParser(atts[i].value);
+                let binding2 = mvvm.bindStringParser(atts[i].value);
 
                 app.eventElements.push({
                     element: element,
@@ -105,13 +107,13 @@ let mvc = {
 
         for (let j = 0, chldrn = element.childNodes, n = chldrn.length; j < n; j++) {
             if (chldrn[j].nodeType === 1) {
-                mvc.scanElements(app, chldrn[j]);
+                mvvm.scanElements(app, chldrn[j]);
             }
         }
     },
 
     update: function (appKey, keys) {
-        let app = mvc.apps[appKey];
+        let app = mvvm.apps[appKey];
 
         if (typeof keys === 'undefined') {
             keys = app.modelKeys;
@@ -179,4 +181,6 @@ let mvc = {
     }
 };
 
-export default mvc;
+laroux.extendNs('mvvm', mvvm);
+
+export default mvvm;

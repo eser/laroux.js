@@ -355,14 +355,14 @@
         );
     });
 
-    // mvc - Simple Model Binding
+    // mvvm - Simple Model Binding
     $l.ready(function() {
-        var textbox = $l.id('textbox-mvc-simple');
+        var textbox = $l.id('textbox-mvvm-simple');
         var myModel = new $l.types.observable({
             name: ''
         });
 
-        $l.mvc.init('mvcsimple', myModel);
+        $l.mvvm.init('mvvmsimple', myModel);
 
         $l.dom.setEvent(
             textbox,
@@ -375,7 +375,7 @@
         );
     });
 
-    // mvc - Model Binding with Calculation
+    // mvvm - Model Binding with Calculation
     $l.ready(function() {
         var myModel = new $l.types.observable({
             a: 3,
@@ -385,16 +385,16 @@
             }
         });
 
-        $l.mvc.init('mvccalculation', myModel);
+        $l.mvvm.init('mvvmcalculation', myModel);
     });
 
-    // mvc - Model Binding in two-way
+    // mvvm - Model Binding in two-way
     $l.ready(function() {
         var myModel = new $l.types.observable({
             text: 'initial'
         });
 
-        $l.mvc.init('mvctwoway', myModel);
+        $l.mvvm.init('mvvmtwoway', myModel);
     });
 
     // routes - Routing

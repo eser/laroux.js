@@ -2,9 +2,9 @@
 /*global location, addEventListener, removeEventListener */
 'use strict';
 
-import laroux from '../laroux.js';
+import laroux from './laroux.js';
 
-import helpers from '../laroux.helpers.js';
+import helpers from './laroux.helpers.js';
 
 // routes - partially taken from 'routie' project
 //          can be found at: https://github.com/jgallen23/routie

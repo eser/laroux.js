@@ -3,8 +3,8 @@
 'use strict';
 
 import css from './laroux.css.js';
-import helpers from '../laroux.helpers.js';
-import PromiseObject from '../laroux.promiseObject.js';
+import helpers from './laroux.helpers.js';
+import PromiseObject from './laroux.promiseObject.js';
 
 let anim = {
     data: [],

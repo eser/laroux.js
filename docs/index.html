@@ -68,7 +68,7 @@
                                     <ul>
                                         <li><a href="https://github.com/larukedi/laroux.js/wiki/forms">Forms</a></li>
                                         <li><a href="https://github.com/larukedi/laroux.js/wiki/keys">Keys</a></li>
-                                        <li><a href="https://github.com/larukedi/laroux.js/wiki/mvc">MVC</a></li>
+                                        <li><a href="https://github.com/larukedi/laroux.js/wiki/mvvm">MVVM</a></li>
                                         <li><a href="https://github.com/larukedi/laroux.js/wiki/routes">Routes</a></li>
                                         <li><a href="https://github.com/larukedi/laroux.js/wiki/touch">Touch</a></li>
                                         <li class="divider"></li>
@@ -673,12 +673,12 @@ $l.keys.assign({
                 </div>
             </div>
 
-            <div id="mvc-examples" class="row header-row">
+            <div id="mvvm-examples" class="row header-row">
                 <div class="col-sm-6">
-                    <h2 class="nomargin">MVC Examples</h2>
+                    <h2 class="nomargin">MVVM Examples</h2>
                 </div>
                 <div class="col-sm-6 text-right">
-                    <a class="btn btn-sm btn-default" href="https://github.com/larukedi/laroux.js/wiki/mvc" role="button">Wiki Page</a>
+                    <a class="btn btn-sm btn-default" href="https://github.com/larukedi/laroux.js/wiki/mvvm" role="button">Wiki Page</a>
                 </div>
             </div>
 
@@ -686,8 +686,8 @@ $l.keys.assign({
                 <h3>Simple Model Binding</h3>
                 <div class="row">
                     <div class="col-sm-4">
-                        <div id="mvcsimple">
-                            Name: <input id="textbox-mvc-simple" type="text" value="" placeholder="Enter text" />
+                        <div id="mvvmsimple">
+                            Name: <input id="textbox-mvvm-simple" type="text" value="" placeholder="Enter text" />
                             <br />
                             Entered: <span lr-bind="prop.textContent: name"></span>
                         </div>
@@ -695,8 +695,8 @@ $l.keys.assign({
                     <div class="col-sm-8">
                         <h4>HTML</h4>
                         <pre class="prettyprint">
-&lt;div id="mvcsimple"&gt;
-    Name: &lt;input id="textbox-mvc-simple" type="text" value="" placeholder="Enter text" /&gt;
+&lt;div id="mvvmsimple"&gt;
+    Name: &lt;input id="textbox-mvvm-simple" type="text" value="" placeholder="Enter text" /&gt;
     &lt;br /&gt;
     Entered: &lt;span lr-bind="prop.textContent: name"&gt;
 &lt;/div&gt;
@@ -708,10 +708,10 @@ var myModel = new $l.types.observable({
     name: ''
 });
 
-$l.mvc.init('mvcsimple', myModel);
+$l.mvvm.init('mvvmsimple', myModel);
 
 $l.dom.setEvent(
-    $l.id('textbox-mvc-simple'),
+    $l.id('textbox-mvvm-simple'),
     'keyup',
     function(ev, element) {
         myModel.name = element.value;
@@ -726,7 +726,7 @@ $l.dom.setEvent(
                 <h3>Model Binding with Calculation</h3>
                 <div class="row">
                     <div class="col-sm-4">
-                        <div id="mvccalculation">
+                        <div id="mvvmcalculation">
                             A: <input type="text" name="a" value="3" size="3" lr-event="keyup, a: prop.value" />
                             B: <input type="text" name="b" value="5" size="3" lr-event="keyup, b: prop.value" />
                             <br />
@@ -736,7 +736,7 @@ $l.dom.setEvent(
                     <div class="col-sm-8">
                         <h4>HTML</h4>
                         <pre class="prettyprint">
-&lt;div id="mvccalculation"&gt;
+&lt;div id="mvvmcalculation"&gt;
     A: &lt;input type="text" name="a" value="3" size="3" lr-event="keyup, a: prop.value" /&gt;
     B: &lt;input type="text" name="b" value="5" size="3" lr-event="keyup, b: prop.value" /&gt;
     &lt;br /&gt;
@@ -754,7 +754,7 @@ var myModel = new $l.types.observable({
     }
 });
 
-$l.mvc.init('mvccalculation', myModel);
+$l.mvvm.init('mvvmcalculation', myModel);
                         </pre>
                     </div>
 
@@ -762,7 +762,7 @@ $l.mvc.init('mvccalculation', myModel);
                 <h3>Model Binding in two-way</h3>
                 <div class="row">
                     <div class="col-sm-4">
-                        <div id="mvctwoway">
+                        <div id="mvvmtwoway">
                             <input type="text" name="text" lr-bind="prop.value: text" lr-event="keyup, text: prop.value" />
                             <input type="button" value="Set" lr-event="click, text: 'clicked'" />
                             <br />
@@ -772,7 +772,7 @@ $l.mvc.init('mvccalculation', myModel);
                     <div class="col-sm-8">
                         <h4>HTML</h4>
                         <pre class="prettyprint">
-&lt;div id="mvctwoway"&gt;
+&lt;div id="mvvmtwoway"&gt;
     &lt;input type="text" name="text" lr-bind="prop.value: text" lr-event="keyup, text: prop.value" /&gt;
     &lt;input type="button" value="Set" lr-event="click, text: 'clicked'" /&gt;
     &lt;br /&gt;
@@ -786,7 +786,7 @@ var myModel = new $l.types.observable({
     text: 'initial'
 });
 
-$l.mvc.init('mvctwoway', myModel);
+$l.mvvm.init('mvvmtwoway', myModel);
                         </pre>
                     </div>
                 </div>
@@ -1186,6 +1186,7 @@ $l.dom.setEvent(
 
         <script src="assets/js/prettify.min.js"></script>
         <script src="../build/dist/web/laroux.js"></script>
+        <script src="../build/dist/web.mvvm/laroux.mvvm.js"></script>
         <script src="assets/js/common.js"></script>
         <script src="assets/js/demos.js"></script>
     </body>

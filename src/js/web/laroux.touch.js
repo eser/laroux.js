@@ -2,7 +2,7 @@
 /*global document, navigator */
 'use strict';
 
-import laroux from '../laroux.js';
+import laroux from './laroux.js';
 
 import dom from './laroux.dom.js';
 
