@@ -38,9 +38,9 @@ let web_touch = {
         ];
 
         for (let i = 0, length = events.length; i < length; i++) {
-            $l.dom.setEventSingle(document, web_touch.events.start[events[i]], web_touch.onstart);
-            $l.dom.setEventSingle(document, web_touch.events.end[events[i]], web_touch.onend);
-            $l.dom.setEventSingle(document, web_touch.events.move[events[i]], web_touch.locatePointer);
+            $l.web.dom.setEventSingle(document, web_touch.events.start[events[i]], web_touch.onstart);
+            $l.web.dom.setEventSingle(document, web_touch.events.end[events[i]], web_touch.onend);
+            $l.web.dom.setEventSingle(document, web_touch.events.move[events[i]], web_touch.locatePointer);
         }
     },
 
@@ -57,7 +57,7 @@ let web_touch = {
                     web_touch.cached[1] >= web_touch.pos[1] - web_touch.precision &&
                     web_touch.cached[1] <= web_touch.pos[1] + web_touch.precision) {
                 if (web_touch.touchStarted === null) {
-                    $l.dom.dispatchEvent(
+                    $l.web.dom.dispatchEvent(
                         event.target,
                         (web_touch.tapCount === 2) ? 'dbltap' : 'tap',
                         {
@@ -72,7 +72,7 @@ let web_touch = {
                 }
 
                 if (Date.now() - web_touch.touchStarted > web_touch.longTapTreshold) {
-                    $l.dom.dispatchEvent(
+                    $l.web.dom.dispatchEvent(
                         event.target,
                         'longtap',
                         {
@@ -116,19 +116,19 @@ let web_touch = {
         web_touch.touchStarted = null;
 
         if (delta[0] <= -web_touch.swipeTreshold) {
-            $l.dom.dispatchEvent(event.target, 'swiperight', data);
+            $l.web.dom.dispatchEvent(event.target, 'swiperight', data);
         }
 
         if (delta[0] >= web_touch.swipeTreshold) {
-            $l.dom.dispatchEvent(event.target, 'swipeleft', data);
+            $l.web.dom.dispatchEvent(event.target, 'swipeleft', data);
         }
 
         if (delta[1] <= -web_touch.swipeTreshold) {
-            $l.dom.dispatchEvent(event.target, 'swipedown', data);
+            $l.web.dom.dispatchEvent(event.target, 'swipedown', data);
         }
 
         if (delta[1] >= web_touch.swipeTreshold) {
-            $l.dom.dispatchEvent(event.target, 'swipeup', data);
+            $l.web.dom.dispatchEvent(event.target, 'swipeup', data);
         }
     }
 };

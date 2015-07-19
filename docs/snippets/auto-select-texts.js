@@ -1,4 +1,4 @@
-$l.dom.setEvent(
+$l.web.dom.setEvent(
     $l(['input[type=text], input[type=password], textarea']),
     'click',
     function(event, element) {

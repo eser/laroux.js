@@ -3,14 +3,14 @@
 
     var crlf = '<br />';
 
-    var snippetList = $l.id('snippet-list');
-    var snippetDescription = $l.id('snippet-description');
-    var snippetArea = $l.id('snippet-area');
-    var checkboxExecSnippetOnLoad = $l.id('checkbox-exec-snippet-on-load');
+    var snippetList = $l.web.id('snippet-list');
+    var snippetDescription = $l.web.id('snippet-description');
+    var snippetArea = $l.web.id('snippet-area');
+    var checkboxExecSnippetOnLoad = $l.web.id('checkbox-exec-snippet-on-load');
     var lastLoaded = null;
 
     function drawSnippet() {
-        $l.dom.clear(snippetArea);
+        $l.web.dom.clear(snippetArea);
 
         if (lastLoaded === null) {
             return;
@@ -30,25 +30,25 @@
             code = $l.quoteAttr(lastLoaded);
         }
 
-        var pre = $l.dom.createElement('PRE', { class: 'prettyprint' }, code);
+        var pre = $l.web.dom.createElement('PRE', { class: 'prettyprint' }, code);
         snippetArea.appendChild(pre);
 
         prettyPrint();
 
-        $l.css.addClass(snippetArea, 'in');
+        $l.web.css.addClass(snippetArea, 'in');
     }
 
     function loadSnippet(ev, element) {
-        $l.css.removeClass(snippetArea, 'in');
+        $l.web.css.removeClass(snippetArea, 'in');
 
-        $l.css.removeClass($l(['li'], snippetList), 'active');
-        $l.css.addClass(element.parentElement, 'active');
+        $l.web.css.removeClass($l(['li'], snippetList), 'active');
+        $l.web.css.addClass(element.parentElement, 'active');
 
-        $l.dom.replace(
+        $l.web.dom.replace(
             $l('div', snippetDescription),
             element.getAttribute('title')
         );
-        $l.css.addClass(snippetDescription, 'in');
+        $l.web.css.addClass(snippetDescription, 'in');
 
         $l.ajax.get(
             'snippets/' + element.getAttribute('data-file')
@@ -63,7 +63,7 @@
     $l.ready(function() {
         prettyPrint();
 
-        $l.dom.setEvent(checkboxExecSnippetOnLoad, 'change', drawSnippet);
+        $l.web.dom.setEvent(checkboxExecSnippetOnLoad, 'change', drawSnippet);
 
         $l.ajax.getJson(
             'snippets.json'
@@ -75,10 +75,10 @@
                     checkboxExecSnippetOnLoad.setAttribute('disabled', 'disabled');
                 }
 
-                var li = $l.dom.createElement('LI');
+                var li = $l.web.dom.createElement('LI');
                 snippetList.appendChild(li);
 
-                var a = $l.dom.createElement(
+                var a = $l.web.dom.createElement(
                     'A',
                     {
                         href:          'javascript:;',
@@ -88,7 +88,7 @@
                     response[item].name
                 );
 
-                $l.dom.setEvent(a, 'click', loadSnippet);
+                $l.web.dom.setEvent(a, 'click', loadSnippet);
                 li.appendChild(a);
             }
         });

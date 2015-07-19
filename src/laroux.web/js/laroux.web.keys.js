@@ -140,7 +140,7 @@ let web_keys = {
             return false;
         };
 
-        $l.dom.setEvent(options.target || document, 'keydown', wrapper);
+        $l.web.dom.setEvent(options.target || document, 'keydown', wrapper);
     }
 };
 

@@ -4,7 +4,7 @@
 
 let web_forms = {
     ajaxForm: function (formobj, callback, callbackBegin) {
-        $l.dom.setEvent(formobj, 'submit', function () {
+        $l.web.dom.setEvent(formobj, 'submit', function () {
             if (callbackBegin !== undefined) {
                 callbackBegin();
             }

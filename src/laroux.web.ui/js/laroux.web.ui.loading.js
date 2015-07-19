@@ -15,7 +15,7 @@ let web_ui_loading = {
     hide: function () {
         web_ui_loading.killTimer();
 
-        $l.css.setProperty(web_ui_loading.element, { display: 'none' });
+        $l.web.css.setProperty(web_ui_loading.element, { display: 'none' });
         localStorage.loadingIndicator = 'false';
     },
 
@@ -29,19 +29,19 @@ let web_ui_loading = {
         if (delay > 0) {
             setTimeout(function () { web_ui_loading.show(0); }, delay);
         } else {
-            $l.css.setProperty(web_ui_loading.element, { display: 'block' });
+            $l.web.css.setProperty(web_ui_loading.element, { display: 'block' });
             localStorage.loadingIndicator = 'true';
         }
     },
 
     init: function () {
         if (web_ui_loading.element === null && web_ui_loading.elementSelector !== null) {
-            web_ui_loading.element = $l.dom.selectSingle(web_ui_loading.elementSelector);
+            web_ui_loading.element = $l.web.dom.selectSingle(web_ui_loading.elementSelector);
         }
 
         if (web_ui_loading.element !== null) {
-            $l.dom.setEvent(global, 'load', web_ui_loading.hide);
-            $l.dom.setEvent(global, 'beforeunload', web_ui_loading.show);
+            $l.web.dom.setEvent(global, 'load', web_ui_loading.hide);
+            $l.web.dom.setEvent(global, 'beforeunload', web_ui_loading.show);
 
             if (localStorage.loadingIndicator !== undefined && localStorage.loadingIndicator == 'true') {
                 web_ui_loading.show(0);

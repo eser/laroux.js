@@ -7,7 +7,7 @@ let web_ui_dynamicDates = {
 
     updateDates: function () {
         if (web_ui_dynamicDates.updateDatesElements === null) {
-            web_ui_dynamicDates.updateDatesElements = $l.dom.select('*[data-epoch]');
+            web_ui_dynamicDates.updateDatesElements = $l.web.dom.select('*[data-epoch]');
         }
 
         for (let item in web_ui_dynamicDates.updateDatesElements) {
@@ -19,7 +19,7 @@ let web_ui_dynamicDates = {
             // bitshifting (str >> 0) used instead of parseInt(str, 10)
             let date = new Date((obj.getAttribute('data-epoch') >> 0) * 1000);
 
-            $l.dom.replace(
+            $l.web.dom.replace(
                 obj,
                 $l.intl.shortDate(date)
             );

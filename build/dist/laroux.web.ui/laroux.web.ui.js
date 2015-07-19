@@ -18,7 +18,7 @@ var web_ui_dynamicDates = {
 
     updateDates: function updateDates() {
         if (web_ui_dynamicDates.updateDatesElements === null) {
-            web_ui_dynamicDates.updateDatesElements = $l.dom.select('*[data-epoch]');
+            web_ui_dynamicDates.updateDatesElements = $l.web.dom.select('*[data-epoch]');
         }
 
         for (var item in web_ui_dynamicDates.updateDatesElements) {
@@ -30,7 +30,7 @@ var web_ui_dynamicDates = {
             // bitshifting (str >> 0) used instead of parseInt(str, 10)
             var date = new Date((obj.getAttribute('data-epoch') >> 0) * 1000);
 
-            $l.dom.replace(obj, $l.intl.shortDate(date));
+            $l.web.dom.replace(obj, $l.intl.shortDate(date));
 
             obj.setAttribute('title', $l.intl.longDate(date));
         }
@@ -88,7 +88,7 @@ var web_ui = {
 
     createFloatContainer: function createFloatContainer() {
         if (!web_ui.floatContainer) {
-            web_ui.floatContainer = $l.dom.createElement('DIV', { id: 'laroux-floatdiv', 'class': 'laroux-floatdiv' });
+            web_ui.floatContainer = $l.web.dom.createElement('DIV', { id: 'laroux-floatdiv', 'class': 'laroux-floatdiv' });
             document.body.insertBefore(web_ui.floatContainer, document.body.firstChild);
         }
     }
@@ -123,7 +123,7 @@ var web_ui_loading = {
     hide: function hide() {
         web_ui_loading.killTimer();
 
-        $l.css.setProperty(web_ui_loading.element, { display: 'none' });
+        $l.web.css.setProperty(web_ui_loading.element, { display: 'none' });
         localStorage.loadingIndicator = 'false';
     },
 
@@ -139,19 +139,19 @@ var web_ui_loading = {
                 web_ui_loading.show(0);
             }, delay);
         } else {
-            $l.css.setProperty(web_ui_loading.element, { display: 'block' });
+            $l.web.css.setProperty(web_ui_loading.element, { display: 'block' });
             localStorage.loadingIndicator = 'true';
         }
     },
 
     init: function init() {
         if (web_ui_loading.element === null && web_ui_loading.elementSelector !== null) {
-            web_ui_loading.element = $l.dom.selectSingle(web_ui_loading.elementSelector);
+            web_ui_loading.element = $l.web.dom.selectSingle(web_ui_loading.elementSelector);
         }
 
         if (web_ui_loading.element !== null) {
-            $l.dom.setEvent(global, 'load', web_ui_loading.hide);
-            $l.dom.setEvent(global, 'beforeunload', web_ui_loading.show);
+            $l.web.dom.setEvent(global, 'load', web_ui_loading.hide);
+            $l.web.dom.setEvent(global, 'beforeunload', web_ui_loading.show);
 
             if (localStorage.loadingIndicator !== undefined && localStorage.loadingIndicator == 'true') {
                 web_ui_loading.show(0);
@@ -186,7 +186,7 @@ var web_ui_popup = {
     defaultTimeout: 500,
 
     createBox: function createBox(id, xclass, message) {
-        return $l.dom.createElement('DIV', { id: id, 'class': xclass }, message);
+        return $l.web.dom.createElement('DIV', { id: id, 'class': xclass }, message);
     },
 
     msgbox: function msgbox(timeout, message) {
@@ -195,14 +195,14 @@ var web_ui_popup = {
 
         _larouxWebUiJs2['default'].floatContainer.appendChild(obj);
 
-        $l.css.setProperty(obj, { opacity: 1 });
+        $l.web.css.setProperty(obj, { opacity: 1 });
 
         $l.timers.set({
             timeout: timeout,
             reset: false,
             ontick: function ontick(x) {
-                // $l.css.setProperty(x, {opacity: 0});
-                $l.dom.remove(x);
+                // $l.web.css.setProperty(x, {opacity: 0});
+                $l.web.dom.remove(x);
             },
             state: obj
         });
@@ -232,25 +232,25 @@ var web_ui_scrollView = {
     selectedElements: [],
 
     onhidden: function onhidden(elements) {
-        $l.css.setProperty(elements, { opacity: 0 });
-        $l.css.setTransition(elements, ['opacity']);
+        $l.web.css.setProperty(elements, { opacity: 0 });
+        $l.web.css.setTransition(elements, ['opacity']);
     },
 
     onreveal: function onreveal(elements) {
-        $l.css.setProperty(elements, { opacity: 1 });
+        $l.web.css.setProperty(elements, { opacity: 1 });
     },
 
     set: function set(element) {
         var elements = $l.getAsArray(element);
 
         for (var i = 0, _length = elements.length; i < _length; i++) {
-            if (!$l.css.inViewport(elements[i])) {
+            if (!$l.web.css.inViewport(elements[i])) {
                 web_ui_scrollView.selectedElements.push(elements[i]);
             }
         }
 
         web_ui_scrollView.onhidden(web_ui_scrollView.selectedElements);
-        $l.dom.setEvent(global, 'scroll', web_ui_scrollView.reveal);
+        $l.web.dom.setEvent(global, 'scroll', web_ui_scrollView.reveal);
     },
 
     reveal: function reveal() {
@@ -258,7 +258,7 @@ var web_ui_scrollView = {
             elements = [];
 
         $l.each(web_ui_scrollView.selectedElements, function (i, element) {
-            if ($l.css.inViewport(element)) {
+            if ($l.web.css.inViewport(element)) {
                 removeKeys.unshift(i);
                 elements.push(element);
             }
@@ -273,7 +273,7 @@ var web_ui_scrollView = {
         }
 
         if (web_ui_scrollView.selectedElements.length === 0) {
-            $l.dom.unsetEvent(global, 'scroll', web_ui_scrollView.reveal);
+            $l.web.dom.unsetEvent(global, 'scroll', web_ui_scrollView.reveal);
         }
 
         if (elements.length > 0) {

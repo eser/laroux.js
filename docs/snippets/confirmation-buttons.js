@@ -1,4 +1,4 @@
-$l.dom.setEvent(
+$l.web.dom.setEvent(
     $l(['.confirm-action']),
     'click',
     function(event, element) {

@@ -18,7 +18,7 @@ let web_ui = {
 
     createFloatContainer: function () {
         if (!web_ui.floatContainer) {
-            web_ui.floatContainer = $l.dom.createElement('DIV', { id: 'laroux-floatdiv', 'class': 'laroux-floatdiv' });
+            web_ui.floatContainer = $l.web.dom.createElement('DIV', { id: 'laroux-floatdiv', 'class': 'laroux-floatdiv' });
             document.body.insertBefore(web_ui.floatContainer, document.body.firstChild);
         }
     }
