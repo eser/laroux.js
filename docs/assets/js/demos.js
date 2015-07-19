@@ -362,7 +362,7 @@
             name: ''
         });
 
-        $l.mvvm.init('mvvmsimple', myModel);
+        $l.web.mvvm.init('mvvmsimple', myModel);
 
         $l.dom.setEvent(
             textbox,
@@ -385,7 +385,7 @@
             }
         });
 
-        $l.mvvm.init('mvvmcalculation', myModel);
+        $l.web.mvvm.init('mvvmcalculation', myModel);
     });
 
     // mvvm - Model Binding in two-way
@@ -394,7 +394,7 @@
             text: 'initial'
         });
 
-        $l.mvvm.init('mvvmtwoway', myModel);
+        $l.web.mvvm.init('mvvmtwoway', myModel);
     });
 
     // routes - Routing

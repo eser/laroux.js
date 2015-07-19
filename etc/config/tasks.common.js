@@ -1,6 +1,6 @@
 module.exports = {
     bundles: {
-        base: {
+        'laroux': {
             banner: [
                 '/**',
                 ' * <%= pkg.name %> - <%= pkg.description %> (<%= pkg.bundle %> bundle)',
@@ -13,12 +13,66 @@ module.exports = {
             ].join('\n'),
 
             jsFiles: [
-                './src/js/base/**/*.js'
+                './src/laroux/js/**/*.js'
             ],
 
             jsPreprocessVars: {
-                BUNDLE: 'base',
-                ENV: 'base',
+                BUNDLE: 'laroux',
+                ENV: 'web',
+                COMPAT: true
+            },
+
+            jsBrowserifyEntryPoints: [
+                'laroux.js'
+            ],
+
+            jsBrowserifyOutputFile: '_browserified.js',
+
+            lessFiles: [
+            ],
+
+            cssFiles: [
+            ],
+
+            testFiles: [
+                './src/laroux/js.tests/**/*.js'
+            ],
+
+            packs: [
+                {
+                    uglify: true,
+                    minifyCSS: false,
+                    csscomb: false,
+                    header: true,
+                    concat: 'laroux.js',
+                    dest: './build/dist/laroux/',
+                    files: [
+                        // FIXME '~/laroux/js/laroux.backward.js',
+                        '~/laroux/js/_browserified.js'
+                    ]
+                }
+            ]
+        },
+
+        'laroux-node': {
+            banner: [
+                '/**',
+                ' * <%= pkg.name %> - <%= pkg.description %> (<%= pkg.bundle %> bundle)',
+                ' *',
+                ' * @version v<%= pkg.version %>',
+                ' * @link <%= pkg.link %>',
+                ' * @license <%= pkg.license %>',
+                ' */',
+                ''
+            ].join('\n'),
+
+            jsFiles: [
+                './src/laroux/js/**/*.js'
+            ],
+
+            jsPreprocessVars: {
+                BUNDLE: 'laroux',
+                ENV: 'node',
                 COMPAT: false
             },
 
@@ -29,7 +83,7 @@ module.exports = {
             ],
 
             testFiles: [
-                './tests/base/**/*.js'
+                './src/laroux/js.tests/**/*.js'
             ],
 
             packs: [
@@ -38,24 +92,27 @@ module.exports = {
                     minifyCSS: false,
                     csscomb: false,
                     header: true,
-                    dest: './build/dist/base/',
+                    dest: './build/dist/laroux-node/',
                     files: [
-                        '~/base/js/laroux.js',
-                        '~/base/js/laroux.helpers.js',
-                        '~/base/js/laroux.events.js',
-                        '~/base/js/laroux.ajax.js',
-                        '~/base/js/laroux.timers.js',
-                        '~/base/js/laroux.promiseObject.js',
-                        '~/base/js/laroux.vars.js',
-                        '~/base/js/laroux.date.js',
-                        '~/base/js/laroux.types.js',
-                        '~/base/js/laroux.templates.js'
+                        '~/laroux-node/js/laroux.js',
+                        '~/laroux-node/js/laroux.ajax.js',
+                        '~/laroux-node/js/laroux.events.js',
+                        '~/laroux-node/js/laroux.helpers.js',
+                        '~/laroux-node/js/laroux.intl.js',
+                        '~/laroux-node/js/laroux.promiseObject.js',
+                        '~/laroux-node/js/laroux.require.js',
+                        '~/laroux-node/js/laroux.storyboard.js',
+                        '~/laroux-node/js/laroux.templates.js',
+                        '~/laroux-node/js/laroux.timers.js',
+                        '~/laroux-node/js/laroux.types.js',
+                        '~/laroux-node/js/laroux.validation.js',
+                        '~/laroux-node/js/laroux.vars.js'
                     ]
                 }
             ]
         },
 
-        web: {
+        'laroux.web': {
             banner: [
                 '/**',
                 ' * <%= pkg.name %> - <%= pkg.description %> (<%= pkg.bundle %> bundle)',
@@ -68,12 +125,11 @@ module.exports = {
             ].join('\n'),
 
             jsFiles: [
-                './src/js/base/**/*.js',
-                './src/js/web/**/*.js'
+                './src/laroux.web/js/**/*.js'
             ],
 
             jsPreprocessVars: {
-                BUNDLE: 'web',
+                BUNDLE: 'laroux.web',
                 ENV: 'web',
                 COMPAT: true
             },
@@ -91,7 +147,7 @@ module.exports = {
             ],
 
             testFiles: [
-                './tests/web/**/*.js'
+                './src/laroux.web/js.tests/**/*.js'
             ],
 
             packs: [
@@ -100,17 +156,16 @@ module.exports = {
                     minifyCSS: false,
                     csscomb: false,
                     header: true,
-                    concat: 'laroux.js',
-                    dest: './build/dist/web/',
+                    concat: 'laroux.web.js',
+                    dest: './build/dist/laroux.web/',
                     files: [
-                        // FIXME '~/web/js/laroux.backward.js',
-                        '~/web/js/_browserified.js'
+                        '~/laroux.web/js/_browserified.js'
                     ]
                 }
             ]
         },
 
-        'web.mvvm': {
+        'laroux.web.mvvm': {
             banner: [
                 '/**',
                 ' * <%= pkg.name %> - <%= pkg.description %> (<%= pkg.bundle %> bundle)',
@@ -123,17 +178,17 @@ module.exports = {
             ].join('\n'),
 
             jsFiles: [
-                './src/js/web.mvvm/**/*.js'
+                './src/laroux.web.mvvm/js/**/*.js'
             ],
 
             jsPreprocessVars: {
-                BUNDLE: 'web.mvvm',
+                BUNDLE: 'laroux.web.mvvm',
                 ENV: 'web',
                 COMPAT: true
             },
 
             jsBrowserifyEntryPoints: [
-                'laroux.mvvm.js'
+                'laroux.web.mvvm.js'
             ],
 
             jsBrowserifyOutputFile: '_browserified.js',
@@ -145,7 +200,7 @@ module.exports = {
             ],
 
             testFiles: [
-                './tests/web.mvvm/**/*.js'
+                './src/laroux.web.mvvm/js.tests/**/*.js'
             ],
 
             packs: [
@@ -154,16 +209,16 @@ module.exports = {
                     minifyCSS: false,
                     csscomb: false,
                     header: true,
-                    concat: 'laroux.mvvm.js',
-                    dest: './build/dist/web.mvvm/',
+                    concat: 'laroux.web.mvvm.js',
+                    dest: './build/dist/laroux.web.mvvm/',
                     files: [
-                        '~/web.mvvm/js/_browserified.js'
+                        '~/laroux.web.mvvm/js/_browserified.js'
                     ]
                 }
             ]
         },
 
-        'web.ui': {
+        'laroux.web.ui': {
             banner: [
                 '/**',
                 ' * <%= pkg.name %> - <%= pkg.description %> (<%= pkg.bundle %> bundle)',
@@ -176,30 +231,30 @@ module.exports = {
             ].join('\n'),
 
             jsFiles: [
-                './src/js/web.ui/**/*.js'
+                './src/laroux.web.ui/js/**/*.js'
             ],
 
             jsPreprocessVars: {
-                BUNDLE: 'web.ui',
+                BUNDLE: 'laroux.web.ui',
                 ENV: 'web',
                 COMPAT: true
             },
 
             jsBrowserifyEntryPoints: [
-                'laroux.ui.js'
+                'laroux.web.ui.js'
             ],
 
             jsBrowserifyOutputFile: '_browserified.js',
 
             lessFiles: [
-                './src/less/web.ui/**/*.less'
+                './src/laroux.web.ui/less/**/*.less'
             ],
 
             cssFiles: [
             ],
 
             testFiles: [
-                './tests/web.ui/**/*.js'
+                './src/laroux.web.ui/js.tests/**/*.js'
             ],
 
             packs: [
@@ -208,10 +263,10 @@ module.exports = {
                     minifyCSS: false,
                     csscomb: false,
                     header: true,
-                    concat: 'laroux.ui.js',
-                    dest: './build/dist/web.ui/',
+                    concat: 'laroux.web.ui.js',
+                    dest: './build/dist/laroux.web.ui/',
                     files: [
-                        '~/web.ui/js/_browserified.js'
+                        '~/laroux.web.ui/js/_browserified.js'
                     ]
                 },
                 {
@@ -219,10 +274,10 @@ module.exports = {
                     minifyCSS: true,
                     csscomb: true,
                     header: true,
-                    concat: 'laroux.ui.css',
-                    dest: './build/dist/web.ui/',
+                    concat: 'laroux.web.ui.css',
+                    dest: './build/dist/laroux.web.ui/',
                     files: [
-                        '~/web.ui/css/laroux.ui.less.css'
+                        '~/laroux.web.ui/css/laroux.web.ui.less.css'
                     ]
                 }
             ]
