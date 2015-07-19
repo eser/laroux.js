@@ -3,6 +3,9 @@
 'use strict';
 
 import ui_popup from './laroux.ui.popup.js';
+import ui_loading from './laroux.ui.loading.js';
+import ui_dynamicDates from './laroux.ui.dynamicDates.js';
+import ui_scrollView from './laroux.ui.scrollView.js';
 
 let laroux = $l,
     dom = laroux.dom,
@@ -10,6 +13,9 @@ let laroux = $l,
 
 let ui = {
     popup: ui_popup,
+    loading: ui_loading,
+    dynamicDates: ui_dynamicDates,
+    scrollView: ui_scrollView,
 
     floatContainer: null,
     popupFunc: helpers.bindContext(alert, global),

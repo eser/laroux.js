@@ -5,7 +5,7 @@
 import ui from './laroux.ui.js';
 
 let laroux = $l,
-	css = laroux.css,
+    css = laroux.css,
     dom = laroux.dom,
     helpers = laroux,
     timers = laroux.timers;
@@ -20,8 +20,9 @@ let popup = {
     },
 
     msgbox: function (timeout, message) {
-        var id = helpers.getUniqueId();
-        var obj = popup.createBox(id, 'laroux-msgbox', message);
+        let id = helpers.getUniqueId(),
+            obj = popup.createBox(id, 'laroux-msgbox laroux-fade', message);
+
         ui.floatContainer.appendChild(obj);
 
         css.setProperty(obj, { opacity: 1 });
@@ -43,5 +44,7 @@ let popup = {
         };
     }
 };
+
+laroux.ready(popup.init);
 
 export default popup;
