@@ -161,6 +161,71 @@ module.exports = {
                     ]
                 }
             ]
+        },
+
+        'web.ui': {
+            banner: [
+                '/**',
+                ' * <%= pkg.name %> - <%= pkg.description %> (<%= pkg.bundle %> bundle)',
+                ' *',
+                ' * @version v<%= pkg.version %>',
+                ' * @link <%= pkg.link %>',
+                ' * @license <%= pkg.license %>',
+                ' */',
+                ''
+            ].join('\n'),
+
+            jsFiles: [
+                './src/js/web.ui/**/*.js'
+            ],
+
+            jsPreprocessVars: {
+                BUNDLE: 'web.ui',
+                ENV: 'web',
+                COMPAT: true
+            },
+
+            jsBrowserifyEntryPoints: [
+                'laroux.ui.js'
+            ],
+
+            jsBrowserifyOutputFile: '_browserified.js',
+
+            lessFiles: [
+                './src/less/web.ui/**/*.less'
+            ],
+
+            cssFiles: [
+            ],
+
+            testFiles: [
+                './tests/web.ui/**/*.js'
+            ],
+
+            packs: [
+                {
+                    uglify: true,
+                    minifyCSS: false,
+                    csscomb: false,
+                    header: true,
+                    concat: 'laroux.ui.js',
+                    dest: './build/dist/web.ui/',
+                    files: [
+                        '~/web.ui/js/_browserified.js'
+                    ]
+                },
+                {
+                    uglify: false,
+                    minifyCSS: true,
+                    csscomb: true,
+                    header: true,
+                    concat: 'laroux.ui.css',
+                    dest: './build/dist/web.ui/',
+                    files: [
+                        '~/web.ui/css/laroux.ui.less.css'
+                    ]
+                }
+            ]
         }
     },
 
