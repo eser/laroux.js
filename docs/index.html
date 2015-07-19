@@ -162,10 +162,10 @@ $l.ajax.fetch('test.json')
         return response.json();
 
     }).then(function (json) {
-        $l.dom.replace($l.id('text-ajax-get-request'), json.testResponse);
+        $l.web.dom.replace($l.web.id('text-ajax-get-request'), json.testResponse);
 
     }).catch(function (error) {
-        $l.dom.replace(text, 'Error: ' + error.message);
+        $l.web.dom.replace(text, 'Error: ' + error.message);
 
     });
                         </pre>
@@ -191,7 +191,7 @@ $l.ajax.fetch('test.json')
                     <div class="col-sm-8">
                         <h4>Javascript</h4>
                         <pre class="prettyprint">
-$l.anim.set({
+$l.web.anim.set({
     object:   document.body,
     property: 'scrollTop',
     from:     null,
@@ -218,8 +218,8 @@ $l.anim.set({
 
                         <h4>Javascript</h4>
                         <pre class="prettyprint">
-$l.anim.setCss({
-    object:   $l.id('div-anim-css-animate'),
+$l.web.anim.setCss({
+    object:   $l.web.id('div-anim-css-animate'),
     property: 'top',
     from:     0, // current value
     to:       50,
@@ -256,9 +256,9 @@ $l.anim.setCss({
 
                         <h4>Javascript</h4>
                         <pre class="prettyprint">
-var box = $l.id('div-css-transition');
+var box = $l.web.id('div-css-transition');
 
-$l.css.setTransition(
+$l.web.css.setTransition(
     box,
     [
         'background-color',
@@ -266,7 +266,7 @@ $l.css.setTransition(
     ]
 );
 
-$l.css.toggleClass(box, 'box-silver');
+$l.web.css.toggleClass(box, 'box-silver');
                         </pre>
                     </div>
                 </div>
@@ -296,31 +296,31 @@ $l.css.toggleClass(box, 'box-silver');
 
                         <h4>Javascript</h4>
                         <pre class="prettyprint">
-var text = $l.id('text-intl-dates');
+var text = $l.web.id('text-intl-dates');
 
 var now = new Date();
 var yesterday = new Date();
 yesterday.setDate(yesterday.getDate() - 1);
 
-$l.dom.clear(text);
+$l.web.dom.clear(text);
 
-$l.dom.append(text, '&lt;div&gt;&lt;strong&gt;From yesterday to today:&lt;/strong&gt;&lt;/div&gt;');
-$l.dom.append(text, $l.intl.parseEpoch(now.getTime() - yesterday.getTime()));
+$l.web.dom.append(text, '&lt;div&gt;&lt;strong&gt;From yesterday to today:&lt;/strong&gt;&lt;/div&gt;');
+$l.web.dom.append(text, $l.intl.parseEpoch(now.getTime() - yesterday.getTime()));
 
-$l.dom.append(text, '&lt;div&gt;&lt;strong&gt;Short Date:&lt;/strong&gt;&lt;/div&gt;');
-$l.dom.append(text, $l.intl.shortDate(now) + '&lt;br /&gt;');
+$l.web.dom.append(text, '&lt;div&gt;&lt;strong&gt;Short Date:&lt;/strong&gt;&lt;/div&gt;');
+$l.web.dom.append(text, $l.intl.shortDate(now) + '&lt;br /&gt;');
 
-$l.dom.append(text, '&lt;div&gt;&lt;strong&gt;Short Date + month names:&lt;/strong&gt;&lt;/div&gt;');
-$l.dom.append(text, $l.intl.shortDate(now, true) + '&lt;br /&gt;');
+$l.web.dom.append(text, '&lt;div&gt;&lt;strong&gt;Short Date + month names:&lt;/strong&gt;&lt;/div&gt;');
+$l.web.dom.append(text, $l.intl.shortDate(now, true) + '&lt;br /&gt;');
 
-$l.dom.append(text, '&lt;div&gt;&lt;strong&gt;Long Date:&lt;/strong&gt;&lt;/div&gt;');
-$l.dom.append(text, $l.intl.longDate(now) + '&lt;br /&gt;');
+$l.web.dom.append(text, '&lt;div&gt;&lt;strong&gt;Long Date:&lt;/strong&gt;&lt;/div&gt;');
+$l.web.dom.append(text, $l.intl.longDate(now) + '&lt;br /&gt;');
 
-$l.dom.append(text, '&lt;div&gt;&lt;strong&gt;Long Date + month names:&lt;/strong&gt;&lt;/div&gt;');
-$l.dom.append(text, $l.intl.longDate(now, true) + '&lt;br /&gt;');
+$l.web.dom.append(text, '&lt;div&gt;&lt;strong&gt;Long Date + month names:&lt;/strong&gt;&lt;/div&gt;');
+$l.web.dom.append(text, $l.intl.longDate(now, true) + '&lt;br /&gt;');
 
-$l.dom.append(text, '&lt;div&gt;&lt;strong&gt;Custom Date:&lt;/strong&gt;&lt;/div&gt;');
-$l.dom.append(text, $l.intl.customDate('dd/MM/yyyy HH:ss', now) + '&lt;br /&gt;');
+$l.web.dom.append(text, '&lt;div&gt;&lt;strong&gt;Custom Date:&lt;/strong&gt;&lt;/div&gt;');
+$l.web.dom.append(text, $l.intl.customDate('dd/MM/yyyy HH:ss', now) + '&lt;br /&gt;');
                         </pre>
                     </div>
                 </div>
@@ -354,9 +354,9 @@ $l.dom.append(text, $l.intl.customDate('dd/MM/yyyy HH:ss', now) + '&lt;br /&gt;'
 
                         <h4>Javascript</h4>
                         <pre class="prettyprint">
-var target = $l.id('target-dom-clone');
+var target = $l.web.id('target-dom-clone');
 
-$l.dom.clone(target.firstElementChild, $l.dom.cloneAppend);
+$l.web.dom.clone(target.firstElementChild, $l.web.dom.cloneAppend);
                         </pre>
                     </div>
                 </div>
@@ -387,16 +387,16 @@ $l.dom.clone(target.firstElementChild, $l.dom.cloneAppend);
 
                         <h4>Javascript</h4>
                         <pre class="prettyprint">
-var text = $l.id('text-events-setting-events');
+var text = $l.web.id('text-events-setting-events');
 
-$l.dom.setEvent(
-    $l.id('checkbox-events-setting-events'),
+$l.web.dom.setEvent(
+    $l.web.id('checkbox-events-setting-events'),
     'change',
     function(ev, element) {
         if (element.checked) {
-            $l.dom.replace(text, 'checked');
+            $l.web.dom.replace(text, 'checked');
         } else {
-            $l.dom.replace(text, 'unchecked');
+            $l.web.dom.replace(text, 'unchecked');
         }
 
         return false;
@@ -446,8 +446,8 @@ $l.dom.setEvent(
 
                         <h4>Javascript</h4>
                         <pre class="prettyprint">
-var serialized = $l.forms.serialize($l.id('target-forms-serializing'));
-$l.dom.replace($l.id('text-forms-serializing'), JSON.stringify(serialized));
+var serialized = $l.web.forms.serialize($l.web.id('target-forms-serializing'));
+$l.web.dom.replace($l.web.id('text-forms-serializing'), JSON.stringify(serialized));
                         </pre>
                     </div>
                 </div>
@@ -481,7 +481,7 @@ $l.dom.replace($l.id('text-forms-serializing'), JSON.stringify(serialized));
 
                         <h4>Javascript</h4>
                         <pre class="prettyprint">
-$l.forms.toggleFormEditing($l.id('target-forms-toggle'));
+$l.web.forms.toggleFormEditing($l.web.id('target-forms-toggle'));
                         </pre>
                     </div>
                 </div>
@@ -511,48 +511,48 @@ $l.forms.toggleFormEditing($l.id('target-forms-toggle'));
 
                         <h4>Javascript</h4>
                         <pre class="prettyprint">
-var text = $l.id('text-helpers-helpers');
+var text = $l.web.id('text-helpers-helpers');
 
-$l.dom.clear(text);
+$l.web.dom.clear(text);
 
-$l.dom.append(text, '&lt;div&gt;&lt;strong&gt;Unique Id Generator:&lt;/strong&gt;&lt;/div&gt;');
-$l.dom.append(text, $l.helpers.getUniqueId() + '&lt;br /&gt;');
-$l.dom.append(text, $l.helpers.getUniqueId() + '&lt;br /&gt;');
+$l.web.dom.append(text, '&lt;div&gt;&lt;strong&gt;Unique Id Generator:&lt;/strong&gt;&lt;/div&gt;');
+$l.web.dom.append(text, $l.getUniqueId() + '&lt;br /&gt;');
+$l.web.dom.append(text, $l.getUniqueId() + '&lt;br /&gt;');
 
-$l.dom.append(text, '&lt;div&gt;&lt;strong&gt;Query String Generation:&lt;/strong&gt;&lt;/div&gt;');
-$l.dom.append(text, $l.helpers.buildQueryString({ pageId: 5, showAll: 'yes' }) + '&lt;br /&gt;');
+$l.web.dom.append(text, '&lt;div&gt;&lt;strong&gt;Query String Generation:&lt;/strong&gt;&lt;/div&gt;');
+$l.web.dom.append(text, $l.buildQueryString({ pageId: 5, showAll: 'yes' }) + '&lt;br /&gt;');
 
-$l.dom.append(text, '&lt;div&gt;&lt;strong&gt;Transform string into camel case:&lt;/strong&gt;&lt;/div&gt;');
-$l.dom.append(text, $l.helpers.camelCase('text-align') + '&lt;br /&gt;');
+$l.web.dom.append(text, '&lt;div&gt;&lt;strong&gt;Transform string into camel case:&lt;/strong&gt;&lt;/div&gt;');
+$l.web.dom.append(text, $l.camelCase('text-align') + '&lt;br /&gt;');
 
-$l.dom.append(text, '&lt;div&gt;&lt;strong&gt;Transform string back from camel case:&lt;/strong&gt;&lt;/div&gt;');
-$l.dom.append(text, $l.helpers.antiCamelCase('textAlign') + '&lt;br /&gt;');
+$l.web.dom.append(text, '&lt;div&gt;&lt;strong&gt;Transform string back from camel case:&lt;/strong&gt;&lt;/div&gt;');
+$l.web.dom.append(text, $l.antiCamelCase('textAlign') + '&lt;br /&gt;');
 
-$l.dom.append(text, '&lt;div&gt;&lt;strong&gt;Encoding special characters:&lt;/strong&gt;&lt;/div&gt;');
-$l.dom.append(text, $l.helpers.quoteAttr('&lt;br clear="all" /&gt;') + '&lt;br /&gt;');
+$l.web.dom.append(text, '&lt;div&gt;&lt;strong&gt;Encoding special characters:&lt;/strong&gt;&lt;/div&gt;');
+$l.web.dom.append(text, $l.quoteAttr('&lt;br clear="all" /&gt;') + '&lt;br /&gt;');
 
-$l.dom.append(text, '&lt;div&gt;&lt;strong&gt;Generating random value:&lt;/strong&gt;&lt;/div&gt;');
-$l.dom.append(text, $l.helpers.random(1, 15) + '&lt;br /&gt;');
-$l.dom.append(text, $l.helpers.random(1, 15) + '&lt;br /&gt;');
+$l.web.dom.append(text, '&lt;div&gt;&lt;strong&gt;Generating random value:&lt;/strong&gt;&lt;/div&gt;');
+$l.web.dom.append(text, $l.random(1, 15) + '&lt;br /&gt;');
+$l.web.dom.append(text, $l.random(1, 15) + '&lt;br /&gt;');
 
-$l.dom.append(text, '&lt;div&gt;&lt;strong&gt;Getting values from a single column:&lt;/strong&gt;&lt;/div&gt;');
+$l.web.dom.append(text, '&lt;div&gt;&lt;strong&gt;Getting values from a single column:&lt;/strong&gt;&lt;/div&gt;');
 var arr = [{id: 1, count: 5}, {id: 2, count: 12}];
-$l.dom.append(text, JSON.stringify($l.helpers.column(arr, 'count')) + '&lt;br /&gt;');
+$l.web.dom.append(text, JSON.stringify($l.column(arr, 'count')) + '&lt;br /&gt;');
 
-$l.dom.append(text, '&lt;div&gt;&lt;strong&gt;Shuffling values:&lt;/strong&gt;&lt;/div&gt;');
-$l.dom.append(text, $l.helpers.shuffle([1, 2, 3, 4, 5]) + '&lt;br /&gt;');
+$l.web.dom.append(text, '&lt;div&gt;&lt;strong&gt;Shuffling values:&lt;/strong&gt;&lt;/div&gt;');
+$l.web.dom.append(text, $l.shuffle([1, 2, 3, 4, 5]) + '&lt;br /&gt;');
 
-$l.dom.append(text, '&lt;div&gt;&lt;strong&gt;Merging objects:&lt;/strong&gt;&lt;/div&gt;');
-$l.dom.append(text, JSON.stringify($l.merge({id: 1}, {name: 'eser', count: 5})) + '&lt;br /&gt;');
+$l.web.dom.append(text, '&lt;div&gt;&lt;strong&gt;Merging objects:&lt;/strong&gt;&lt;/div&gt;');
+$l.web.dom.append(text, JSON.stringify($l.merge({id: 1}, {name: 'eser', count: 5})) + '&lt;br /&gt;');
 
-$l.dom.append(text, '&lt;div&gt;&lt;strong&gt;Getting count of elements:&lt;/strong&gt;&lt;/div&gt;');
-$l.dom.append(text, $l.helpers.getLength({id: 1, name: 'eser', count: 5}) + '&lt;br /&gt;');
+$l.web.dom.append(text, '&lt;div&gt;&lt;strong&gt;Getting count of elements:&lt;/strong&gt;&lt;/div&gt;');
+$l.web.dom.append(text, $l.getLength({id: 1, name: 'eser', count: 5}) + '&lt;br /&gt;');
 
-$l.dom.append(text, '&lt;div&gt;&lt;strong&gt;Getting elements with dot notation:&lt;/strong&gt;&lt;/div&gt;');
-$l.dom.append(text, $l.helpers.getElement({id: 1, child: { a: 1, b: 2 }}, 'child.a') + '&lt;br /&gt;');
+$l.web.dom.append(text, '&lt;div&gt;&lt;strong&gt;Getting elements with dot notation:&lt;/strong&gt;&lt;/div&gt;');
+$l.web.dom.append(text, $l.getElement({id: 1, child: { a: 1, b: 2 }}, 'child.a') + '&lt;br /&gt;');
 
-$l.dom.append(text, '&lt;div&gt;&lt;strong&gt;Getting keys for dot notation:&lt;/strong&gt;&lt;/div&gt;');
-$l.dom.append(text, JSON.stringify($l.helpers.getKeysRecursive({id: 1, child: { a: 1, b: 2 }})) + '&lt;br /&gt;');
+$l.web.dom.append(text, '&lt;div&gt;&lt;strong&gt;Getting keys for dot notation:&lt;/strong&gt;&lt;/div&gt;');
+$l.web.dom.append(text, JSON.stringify($l.getKeysRecursive({id: 1, child: { a: 1, b: 2 }})) + '&lt;br /&gt;');
 
                         </pre>
                     </div>
@@ -583,13 +583,13 @@ $l.dom.append(text, JSON.stringify($l.helpers.getKeysRecursive({id: 1, child: { 
 
                         <h4>Javascript</h4>
                         <pre class="prettyprint">
-var box = $l.id('div-storyboard-animation');
+var box = $l.web.id('div-storyboard-animation');
 
 var step1action1 = function () {
-    $l.css.setProperty(box, 'background-color', 'blue');
+    $l.web.css.setProperty(box, 'background-color', 'blue');
 };
 
-var step1action2 = $l.anim.setCss({
+var step1action2 = $l.web.anim.setCss({
     object:   box,
     property: 'left',
     from:     0, // current value
@@ -600,7 +600,7 @@ var step1action2 = $l.anim.setCss({
 });
 
 var step2 = function () {
-    var promise = $l.anim.setCss({
+    var promise = $l.web.anim.setCss({
         object:   box,
         property: 'left',
         from:     50, // current value
@@ -614,7 +614,7 @@ var step2 = function () {
 };
 
 var step3 = function () {
-    $l.css.setProperty(box, 'background-color', 'red');
+    $l.web.css.setProperty(box, 'background-color', 'red');
 };
 
 var myStory = new $l.storyboard();
@@ -659,14 +659,14 @@ myStory.start();
 
                         <h4>Javascript</h4>
                         <pre class="prettyprint">
-var text = $l.id('text-keys-assign');
+var text = $l.web.id('text-keys-assign');
 var pressCount = 0;
 
-$l.keys.assign({
+$l.web.keys.assign({
     target: document,
     key: 'f7',
     callback: function() {
-        $l.dom.replace(text, 'pressed: ' + ++pressCount);
+        $l.web.dom.replace(text, 'pressed: ' + ++pressCount);
     }
 });
                         </pre>
@@ -709,10 +709,10 @@ var myModel = new $l.types.observable({
     name: ''
 });
 
-$l.mvvm.init('mvvmsimple', myModel);
+$l.web.mvvm.init('mvvmsimple', myModel);
 
-$l.dom.setEvent(
-    $l.id('textbox-mvvm-simple'),
+$l.web.dom.setEvent(
+    $l.web.id('textbox-mvvm-simple'),
     'keyup',
     function(ev, element) {
         myModel.name = element.value;
@@ -755,7 +755,7 @@ var myModel = new $l.types.observable({
     }
 });
 
-$l.mvvm.init('mvvmcalculation', myModel);
+$l.web.mvvm.init('mvvmcalculation', myModel);
                         </pre>
                     </div>
 
@@ -787,7 +787,7 @@ var myModel = new $l.types.observable({
     text: 'initial'
 });
 
-$l.mvvm.init('mvvmtwoway', myModel);
+$l.web.mvvm.init('mvvmtwoway', myModel);
                         </pre>
                     </div>
                 </div>
@@ -822,28 +822,28 @@ $l.mvvm.init('mvvmtwoway', myModel);
 
                         <h4>Javascript</h4>
                         <pre class="prettyprint">
-var text = $l.id('text-routes-routing');
-var button1 = $l.id('button-routes-routing-1');
-var button2 = $l.id('button-routes-routing-2');
-var button3 = $l.id('button-routes-routing-3');
+var text = $l.web.id('text-routes-routing');
+var button1 = $l.web.id('button-routes-routing-1');
+var button2 = $l.web.id('button-routes-routing-2');
+var button3 = $l.web.id('button-routes-routing-3');
 
-$l.routes.add(
+$l.web.routes.add(
     'test/:name',
     function (name, trans) {
-        $l.dom.clear(text);
+        $l.web.dom.clear(text);
 
-        $l.dom.append(text, '&lt;div&gt;&lt;strong&gt;Name:&lt;/strong&gt;&lt;/div&gt;');
-        $l.dom.append(text, name + '&lt;br /&gt;');
+        $l.web.dom.append(text, '&lt;div&gt;&lt;strong&gt;Name:&lt;/strong&gt;&lt;/div&gt;');
+        $l.web.dom.append(text, name + '&lt;br /&gt;');
 
-        $l.dom.append(text, '&lt;div&gt;&lt;strong&gt;Transition Data:&lt;/strong&gt;&lt;/div&gt;');
-        $l.dom.append(text, JSON.stringify(trans) + '&lt;br /&gt;');
+        $l.web.dom.append(text, '&lt;div&gt;&lt;strong&gt;Transition Data:&lt;/strong&gt;&lt;/div&gt;');
+        $l.web.dom.append(text, JSON.stringify(trans) + '&lt;br /&gt;');
     }
 );
-$l.routes.reload();
+$l.web.routes.reload();
 
-$l.dom.setEvent(button1, 'click', function () { $l.routes.go('test/route1'); });
-$l.dom.setEvent(button2, 'click', function () { $l.routes.go('test/route2'); });
-$l.dom.setEvent(button3, 'click', function () { $l.routes.go('test/route3'); });
+$l.web.dom.setEvent(button1, 'click', function () { $l.web.routes.go('test/route1'); });
+$l.web.dom.setEvent(button2, 'click', function () { $l.web.routes.go('test/route2'); });
+$l.web.dom.setEvent(button3, 'click', function () { $l.web.routes.go('test/route3'); });
                         </pre>
                     </div>
                 </div>
@@ -867,29 +867,29 @@ $l.dom.setEvent(button3, 'click', function () { $l.routes.go('test/route3'); });
 
                         <h4>Javascript</h4>
                         <pre class="prettyprint">
-var text = $l.id('text-routes-namedrouting');
-var button1 = $l.id('button-routes-namedrouting-1');
-var button2 = $l.id('button-routes-namedrouting-2');
-var button3 = $l.id('button-routes-namedrouting-3');
+var text = $l.web.id('text-routes-namedrouting');
+var button1 = $l.web.id('button-routes-namedrouting-1');
+var button2 = $l.web.id('button-routes-namedrouting-2');
+var button3 = $l.web.id('button-routes-namedrouting-3');
 
-$l.routes.addNamed(
+$l.web.routes.addNamed(
     'test2',
     'testNamed/:name',
     function (name, trans) {
-        $l.dom.clear(text);
+        $l.web.dom.clear(text);
 
-        $l.dom.append(text, '&lt;div&gt;&lt;strong&gt;Name:&lt;/strong&gt;&lt;/div&gt;');
-        $l.dom.append(text, name + '&lt;br /&gt;');
+        $l.web.dom.append(text, '&lt;div&gt;&lt;strong&gt;Name:&lt;/strong&gt;&lt;/div&gt;');
+        $l.web.dom.append(text, name + '&lt;br /&gt;');
 
-        $l.dom.append(text, '&lt;div&gt;&lt;strong&gt;Transition Data:&lt;/strong&gt;&lt;/div&gt;');
-        $l.dom.append(text, JSON.stringify(trans) + '&lt;br /&gt;');
+        $l.web.dom.append(text, '&lt;div&gt;&lt;strong&gt;Transition Data:&lt;/strong&gt;&lt;/div&gt;');
+        $l.web.dom.append(text, JSON.stringify(trans) + '&lt;br /&gt;');
     }
 );
-$l.routes.reload();
+$l.web.routes.reload();
 
-$l.dom.setEvent(button1, 'click', function () { $l.routes.goNamed('test2', { name: 'route1' }); });
-$l.dom.setEvent(button2, 'click', function () { $l.routes.goNamed('test2', { name: 'route2' }); });
-$l.dom.setEvent(button3, 'click', function () { $l.routes.goNamed('test2', { name: 'route3' }); });
+$l.web.dom.setEvent(button1, 'click', function () { $l.web.routes.goNamed('test2', { name: 'route1' }); });
+$l.web.dom.setEvent(button2, 'click', function () { $l.web.routes.goNamed('test2', { name: 'route2' }); });
+$l.web.dom.setEvent(button3, 'click', function () { $l.web.routes.goNamed('test2', { name: 'route3' }); });
                         </pre>
                     </div>
                 </div>
@@ -925,12 +925,12 @@ $l.dom.setEvent(button3, 'click', function () { $l.routes.goNamed('test2', { nam
 
                         <h4>Javascript</h4>
                         <pre class="prettyprint">
-var text = $l.id('text-templates-example');
-var script = $l.id('script-templates-example');
+var text = $l.web.id('text-templates-example');
+var script = $l.web.id('script-templates-example');
 
 var model = { name: { first: 'Jane', last: 'Doe' }, age: 25 };
 var result = $l.templates.apply(script, model);
-$l.dom.replace(text, result);
+$l.web.dom.replace(text, result);
                         </pre>
                     </div>
                 </div>
@@ -960,14 +960,14 @@ $l.dom.replace(text, result);
 
                         <h4>Javascript</h4>
                         <pre class="prettyprint">
-var text = $l.id('text-timers-set');
-$l.dom.replace(text, 'waiting...&lt;br /&gt;');
+var text = $l.web.id('text-timers-set');
+$l.web.dom.replace(text, 'waiting...&lt;br /&gt;');
 
 $l.timers.set({
     'timeout': 500,
     'reset': false,
     'ontick': function() {
-        $l.dom.append(text, 'time\'s up');
+        $l.web.dom.append(text, 'time\'s up');
     }
 });
                         </pre>
@@ -1001,32 +1001,32 @@ $l.timers.set({
 
                         <h4>Javascript</h4>
                         <pre class="prettyprint">
-var box = $l.id('div-touch-events');
-var target = $l.id('target-touch-events');
+var box = $l.web.id('div-touch-events');
+var target = $l.web.id('target-touch-events');
 
-$l.dom.setEvent(
+$l.web.dom.setEvent(
     box,
     'tap',
     function(event) {
-        var createdElement = $l.dom.createElement('LI', { }, 'tap');
+        var createdElement = $l.web.dom.createElement('LI', { }, 'tap');
         target.appendChild(createdElement);
     }
 );
 
-$l.dom.setEvent(
+$l.web.dom.setEvent(
     box,
     'dbltap',
     function(event) {
-        var createdElement = $l.dom.createElement('LI', { }, 'dbltap');
+        var createdElement = $l.web.dom.createElement('LI', { }, 'dbltap');
         target.appendChild(createdElement);
     }
 );
 
-$l.dom.setEvent(
+$l.web.dom.setEvent(
     box,
     'longtap',
     function(event) {
-        var createdElement = $l.dom.createElement('LI', { }, 'longtap');
+        var createdElement = $l.web.dom.createElement('LI', { }, 'longtap');
         target.appendChild(createdElement);
     }
 );
@@ -1063,22 +1063,22 @@ var myModel = new $l.types.observable();
 myModel.set('id', 1);
 myModel.setRange({count: 15, name: 'eser'});
 
-$l.dom.clear(text);
+$l.web.dom.clear(text);
 
-$l.dom.append(text, '&lt;div&gt;&lt;strong&gt;Element with key \'id\':&lt;/strong&gt;&lt;/div&gt;');
-$l.dom.append(text, myModel.get('id') + '&lt;br /&gt;');
+$l.web.dom.append(text, '&lt;div&gt;&lt;strong&gt;Element with key \'id\':&lt;/strong&gt;&lt;/div&gt;');
+$l.web.dom.append(text, myModel.get('id') + '&lt;br /&gt;');
 
-$l.dom.append(text, '&lt;div&gt;&lt;strong&gt;Elements with keys \'id\' and \'name\':&lt;/strong&gt;&lt;/div&gt;');
-$l.dom.append(text, JSON.stringify(myModel.getRange(['id', 'name'])) + '&lt;br /&gt;');
+$l.web.dom.append(text, '&lt;div&gt;&lt;strong&gt;Elements with keys \'id\' and \'name\':&lt;/strong&gt;&lt;/div&gt;');
+$l.web.dom.append(text, JSON.stringify(myModel.getRange(['id', 'name'])) + '&lt;br /&gt;');
 
-$l.dom.append(text, '&lt;div&gt;&lt;strong&gt;Keys:&lt;/strong&gt;&lt;/div&gt;');
-$l.dom.append(text, JSON.stringify(myModel.keys()) + '&lt;br /&gt;');
+$l.web.dom.append(text, '&lt;div&gt;&lt;strong&gt;Keys:&lt;/strong&gt;&lt;/div&gt;');
+$l.web.dom.append(text, JSON.stringify(myModel.keys()) + '&lt;br /&gt;');
 
-$l.dom.append(text, '&lt;div&gt;&lt;strong&gt;Length:&lt;/strong&gt;&lt;/div&gt;');
-$l.dom.append(text, JSON.stringify(myModel.length()) + '&lt;br /&gt;');
+$l.web.dom.append(text, '&lt;div&gt;&lt;strong&gt;Length:&lt;/strong&gt;&lt;/div&gt;');
+$l.web.dom.append(text, JSON.stringify(myModel.length()) + '&lt;br /&gt;');
 
-$l.dom.append(text, '&lt;div&gt;&lt;strong&gt;Check if it has element with key \'name\':&lt;/strong&gt;&lt;/div&gt;');
-$l.dom.append(text, JSON.stringify(myModel.exists('name')) + '&lt;br /&gt;');
+$l.web.dom.append(text, '&lt;div&gt;&lt;strong&gt;Check if it has element with key \'name\':&lt;/strong&gt;&lt;/div&gt;');
+$l.web.dom.append(text, JSON.stringify(myModel.exists('name')) + '&lt;br /&gt;');
                         </pre>
                     </div>
                 </div>
@@ -1125,44 +1125,44 @@ $l.dom.append(text, JSON.stringify(myModel.exists('name')) + '&lt;br /&gt;');
 
                         <h4>Javascript</h4>
                         <pre class="prettyprint">
-var text = $l.id('text-vars');
-var select = $l.id('select-vars');
+var text = $l.web.id('text-vars');
+var select = $l.web.id('select-vars');
 
-$l.dom.setEvent(
-    $l.id('button-vars-set'),
+$l.web.dom.setEvent(
+    $l.web.id('button-vars-set'),
     'click',
     function() {
         var storage = select.options[select.selectedIndex].value;
         $l.vars.set(storage, 'demopage', 'a ' + storage + ' test&lt;br /&gt;');
-        $l.dom.append(text, storage + ' set');
+        $l.web.dom.append(text, storage + ' set');
 
         return false;
     }
 );
 
-$l.dom.setEvent(
-    $l.id('button-vars-read'),
+$l.web.dom.setEvent(
+    $l.web.id('button-vars-read'),
     'click',
     function() {
         var storage = select.options[select.selectedIndex].value;
         var value = $l.vars.get(storage, 'demopage');
         if (value !== null) {
-            $l.dom.append(text, storage + '\'s value is: ' + value + '&lt;br /&gt;');
+            $l.web.dom.append(text, storage + '\'s value is: ' + value + '&lt;br /&gt;');
         } else {
-            $l.dom.append(text, 'you need to set a ' + storage + ' first&lt;br /&gt;');
+            $l.web.dom.append(text, 'you need to set a ' + storage + ' first&lt;br /&gt;');
         }
 
         return false;
     }
 );
 
-$l.dom.setEvent(
-    $l.id('button-vars-remove'),
+$l.web.dom.setEvent(
+    $l.web.id('button-vars-remove'),
     'click',
     function() {
         var storage = select.options[select.selectedIndex].value;
         $l.vars.remove(storage, 'demopage');
-        $l.dom.append(text, storage + ' is removed&lt;br /&gt;');
+        $l.web.dom.append(text, storage + ' is removed&lt;br /&gt;');
 
         return false;
     }

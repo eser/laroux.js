@@ -2,20 +2,20 @@
     'use strict';
 
     $l.ready(function() {
-        var dropdownToggleButton = $l.id('dropdown-toggle-button'),
-            dropdownToggleElement = $l.id('dropdown-toggle-element');
+        var dropdownToggleButton = $l.web.id('dropdown-toggle-button'),
+            dropdownToggleElement = $l.web.id('dropdown-toggle-element');
 
-        $l.dom.setEvent(
+        $l.web.dom.setEvent(
             dropdownToggleButton,
             'click',
             function(event, element) {
-                $l.css.toggleClass(dropdownToggleElement, 'open');
+                $l.web.css.toggleClass(dropdownToggleElement, 'open');
                 return false;
             }
         );
 
         var hrefButtons = $l(['.btn-href']);
-        $l.dom.setEvent(
+        $l.web.dom.setEvent(
             hrefButtons,
             'click',
             function(event, element) {
@@ -29,7 +29,7 @@
             timeout: 8000,
             reset: true,
             ontick: function() {
-                $l.css.cycleClass(slides, 'active');
+                $l.web.css.cycleClass(slides, 'active');
             }
         });
     });

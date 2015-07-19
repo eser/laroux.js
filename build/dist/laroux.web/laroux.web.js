@@ -860,7 +860,7 @@ Object.defineProperty(exports, '__esModule', {
 });
 var web_forms = {
     ajaxForm: function ajaxForm(formobj, callback, callbackBegin) {
-        $l.dom.setEvent(formobj, 'submit', function () {
+        $l.web.dom.setEvent(formobj, 'submit', function () {
             if (callbackBegin !== undefined) {
                 callbackBegin();
             }
@@ -1149,8 +1149,8 @@ if ('document' in global) {
     document.addEventListener('DOMContentLoaded', $l.setReady);
 }
 
-// $l.extendNs('web', web);
-$l.extend(web);
+$l.extendNs('web', web);
+// $l.extend(web);
 
 exports['default'] = web;
 module.exports = exports['default'];
@@ -1307,7 +1307,7 @@ var web_keys = {
             return false;
         };
 
-        $l.dom.setEvent(options.target || document, 'keydown', wrapper);
+        $l.web.dom.setEvent(options.target || document, 'keydown', wrapper);
     }
 };
 
@@ -1546,9 +1546,9 @@ var web_touch = {
         var events = [0, navigator.msPointerEnabled ? 2 : 1, 3];
 
         for (var i = 0, _length = events.length; i < _length; i++) {
-            $l.dom.setEventSingle(document, web_touch.events.start[events[i]], web_touch.onstart);
-            $l.dom.setEventSingle(document, web_touch.events.end[events[i]], web_touch.onend);
-            $l.dom.setEventSingle(document, web_touch.events.move[events[i]], web_touch.locatePointer);
+            $l.web.dom.setEventSingle(document, web_touch.events.start[events[i]], web_touch.onstart);
+            $l.web.dom.setEventSingle(document, web_touch.events.end[events[i]], web_touch.onend);
+            $l.web.dom.setEventSingle(document, web_touch.events.move[events[i]], web_touch.locatePointer);
         }
     },
 
@@ -1562,7 +1562,7 @@ var web_touch = {
         var callback = function callback() {
             if (web_touch.cached[0] >= web_touch.pos[0] - web_touch.precision && web_touch.cached[0] <= web_touch.pos[0] + web_touch.precision && web_touch.cached[1] >= web_touch.pos[1] - web_touch.precision && web_touch.cached[1] <= web_touch.pos[1] + web_touch.precision) {
                 if (web_touch.touchStarted === null) {
-                    $l.dom.dispatchEvent(event.target, web_touch.tapCount === 2 ? 'dbltap' : 'tap', {
+                    $l.web.dom.dispatchEvent(event.target, web_touch.tapCount === 2 ? 'dbltap' : 'tap', {
                         innerEvent: event,
                         x: web_touch.pos[0],
                         y: web_touch.pos[1]
@@ -1573,7 +1573,7 @@ var web_touch = {
                 }
 
                 if (Date.now() - web_touch.touchStarted > web_touch.longTapTreshold) {
-                    $l.dom.dispatchEvent(event.target, 'longtap', {
+                    $l.web.dom.dispatchEvent(event.target, 'longtap', {
                         innerEvent: event,
                         x: web_touch.pos[0],
                         y: web_touch.pos[1]
@@ -1610,19 +1610,19 @@ var web_touch = {
         web_touch.touchStarted = null;
 
         if (delta[0] <= -web_touch.swipeTreshold) {
-            $l.dom.dispatchEvent(event.target, 'swiperight', data);
+            $l.web.dom.dispatchEvent(event.target, 'swiperight', data);
         }
 
         if (delta[0] >= web_touch.swipeTreshold) {
-            $l.dom.dispatchEvent(event.target, 'swipeleft', data);
+            $l.web.dom.dispatchEvent(event.target, 'swipeleft', data);
         }
 
         if (delta[1] <= -web_touch.swipeTreshold) {
-            $l.dom.dispatchEvent(event.target, 'swipedown', data);
+            $l.web.dom.dispatchEvent(event.target, 'swipedown', data);
         }
 
         if (delta[1] >= web_touch.swipeTreshold) {
-            $l.dom.dispatchEvent(event.target, 'swipeup', data);
+            $l.web.dom.dispatchEvent(event.target, 'swipeup', data);
         }
     }
 };

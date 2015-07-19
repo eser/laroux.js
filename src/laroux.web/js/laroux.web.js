@@ -56,7 +56,7 @@ if ('document' in global) {
     );
 }
 
-// $l.extendNs('web', web);
-$l.extend(web);
+$l.extendNs('web', web);
+// $l.extend(web);
 
 export default web;

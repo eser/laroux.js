@@ -8,7 +8,7 @@ let web_ui_popup = {
     defaultTimeout: 500,
 
     createBox: function (id, xclass, message) {
-        return $l.dom.createElement('DIV', { id: id, 'class': xclass },
+        return $l.web.dom.createElement('DIV', { id: id, 'class': xclass },
             message
         );
     },
@@ -19,14 +19,14 @@ let web_ui_popup = {
 
         web_ui.floatContainer.appendChild(obj);
 
-        $l.css.setProperty(obj, { opacity: 1 });
+        $l.web.css.setProperty(obj, { opacity: 1 });
 
         $l.timers.set({
             timeout: timeout,
             reset: false,
             ontick: function (x) {
-                // $l.css.setProperty(x, {opacity: 0});
-                $l.dom.remove(x);
+                // $l.web.css.setProperty(x, {opacity: 0});
+                $l.web.dom.remove(x);
             },
             state: obj
         });

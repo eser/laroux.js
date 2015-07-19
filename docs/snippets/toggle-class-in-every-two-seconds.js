@@ -1,5 +1,5 @@
 // replace the 'target-element' with your target element's id
-var target = $l.id('target-element');
+var target = $l.web.id('target-element');
 
 // set the class name
 var className = 'in';
@@ -11,6 +11,6 @@ $l.timers.set({
     'timeout': delay,
     'reset': true,
     'ontick': function() {
-        $l.css.toggleClass(target, className);
+        $l.web.css.toggleClass(target, className);
     }
 });

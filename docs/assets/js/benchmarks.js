@@ -12,8 +12,8 @@
 
         button.setAttribute('disabled', 'disabled');
 
-        $l.dom.clear(target);
-        $l.dom.append(target, 'Awaiting test results...' + crlf);
+        $l.web.dom.clear(target);
+        $l.web.dom.append(target, 'Awaiting test results...' + crlf);
 
         // add tests
         for (var item in tests) {
@@ -24,10 +24,10 @@
         // add listeners
         suite
             .on('cycle', function(event) {
-                $l.dom.append(target, String(event.target) + crlf);
+                $l.web.dom.append(target, String(event.target) + crlf);
             })
             .on('complete', function() {
-                $l.dom.append(target, 'Fastest is <strong>' + this.filter('fastest').pluck('name') + '</strong>' + crlf);
+                $l.web.dom.append(target, 'Fastest is <strong>' + this.filter('fastest').pluck('name') + '</strong>' + crlf);
                 button.removeAttribute('disabled');
             });
 
@@ -87,7 +87,7 @@
 
     // Selectors by Tagname
     $l.ready(function() {
-        var graph = $l.id('graph-selectors-tagname');
+        var graph = $l.web.id('graph-selectors-tagname');
         var graphdata = [
             {
                 name: 'Chrome',
@@ -132,10 +132,10 @@
         ];
         drawGraph(graph, graphdata);
 
-        var button = $l.id('button-selectors-tagname');
-        var text = $l.id('text-selectors-tagname');
+        var button = $l.web.id('button-selectors-tagname');
+        var text = $l.web.id('text-selectors-tagname');
 
-        $l.dom.setEvent(
+        $l.web.dom.setEvent(
             button,
             'click',
             function() {
@@ -171,7 +171,7 @@
 
     // Selectors by Element Id
     $l.ready(function() {
-        var graph = $l.id('graph-selectors-elementid');
+        var graph = $l.web.id('graph-selectors-elementid');
         var graphdata = [
             {
                 name: 'Chrome',
@@ -224,10 +224,10 @@
         ];
         drawGraph(graph, graphdata);
 
-        var button = $l.id('button-selectors-elementid');
-        var text = $l.id('text-selectors-elementid');
+        var button = $l.web.id('button-selectors-elementid');
+        var text = $l.web.id('text-selectors-elementid');
 
-        $l.dom.setEvent(
+        $l.web.dom.setEvent(
             button,
             'click',
             function() {
@@ -238,19 +238,19 @@
                         {
                             name: 'laroux.js',
                             fnc: function() {
-                                $l.id('home');
+                                $l.web.id('home');
                             }
                         },
                         {
                             name: 'laroux.js (Alternative)',
                             fnc: function() {
-                                $l.id('home');
+                                $l.web.id('home');
                             }
                         },
                         {
                             name: 'laroux.js (Alternative 2)',
                             fnc: function() {
-                                $l.idc('home');
+                                $l.web.idc('home');
                             }
                         },
                         {
@@ -275,7 +275,7 @@
 
     // Selectors by Class
     $l.ready(function() {
-        var graph = $l.id('graph-selectors-class');
+        var graph = $l.web.id('graph-selectors-class');
         var graphdata = [
             {
                 name: 'Chrome',
@@ -324,10 +324,10 @@
         ];
         drawGraph(graph, graphdata);
 
-        var button = $l.id('button-selectors-class');
-        var text = $l.id('text-selectors-class');
+        var button = $l.web.id('button-selectors-class');
+        var text = $l.web.id('text-selectors-class');
 
-        $l.dom.setEvent(
+        $l.web.dom.setEvent(
             button,
             'click',
             function() {
@@ -344,7 +344,7 @@
                         {
                             name: 'laroux.js (Alternative)',
                             fnc: function() {
-                                $l.dom.selectByClass('container');
+                                $l.web.dom.selectByClass('container');
                             }
                         },
                         {
@@ -369,7 +369,7 @@
 
     // Each on Arrays
     $l.ready(function() {
-        var graph = $l.id('graph-main-each-arrays');
+        var graph = $l.web.id('graph-main-each-arrays');
         var graphdata = [
             {
                 name: 'Chrome',
@@ -418,10 +418,10 @@
         ];
         drawGraph(graph, graphdata);
 
-        var button = $l.id('button-main-each-arrays');
-        var text = $l.id('text-main-each-arrays');
+        var button = $l.web.id('button-main-each-arrays');
+        var text = $l.web.id('text-main-each-arrays');
 
-        $l.dom.setEvent(
+        $l.web.dom.setEvent(
             button,
             'click',
             function() {
@@ -471,7 +471,7 @@
 
     // Each on Objects
     $l.ready(function() {
-        var graph = $l.id('graph-main-each-objects');
+        var graph = $l.web.id('graph-main-each-objects');
         var graphdata = [
             {
                 name: 'Chrome',
@@ -516,10 +516,10 @@
         ];
         drawGraph(graph, graphdata);
 
-        var button = $l.id('button-main-each-objects');
-        var text = $l.id('text-main-each-objects');
+        var button = $l.web.id('button-main-each-objects');
+        var text = $l.web.id('text-main-each-objects');
 
-        $l.dom.setEvent(
+        $l.web.dom.setEvent(
             button,
             'click',
             function() {
@@ -561,7 +561,7 @@
 
     // Map on Arrays
     $l.ready(function() {
-        var graph = $l.id('graph-main-map-arrays');
+        var graph = $l.web.id('graph-main-map-arrays');
         var graphdata = [
             {
                 name: 'Chrome',
@@ -610,10 +610,10 @@
         ];
         drawGraph(graph, graphdata);
 
-        var button = $l.id('button-main-map-arrays');
-        var text = $l.id('text-main-map-arrays');
+        var button = $l.web.id('button-main-map-arrays');
+        var text = $l.web.id('text-main-map-arrays');
 
-        $l.dom.setEvent(
+        $l.web.dom.setEvent(
             button,
             'click',
             function() {
@@ -663,7 +663,7 @@
 
     // Map on Objects
     $l.ready(function() {
-        var graph = $l.id('graph-main-map-objects');
+        var graph = $l.web.id('graph-main-map-objects');
         var graphdata = [
             {
                 name: 'Chrome',
@@ -708,10 +708,10 @@
         ];
         drawGraph(graph, graphdata);
 
-        var button = $l.id('button-main-map-objects');
-        var text = $l.id('text-main-map-objects');
+        var button = $l.web.id('button-main-map-objects');
+        var text = $l.web.id('text-main-map-objects');
 
-        $l.dom.setEvent(
+        $l.web.dom.setEvent(
             button,
             'click',
             function() {
@@ -753,7 +753,7 @@
 
     // Create DOM element
     $l.ready(function() {
-        var graph = $l.id('graph-dom-create-element');
+        var graph = $l.web.id('graph-dom-create-element');
         var graphdata = [
             {
                 name: 'Chrome',
@@ -802,10 +802,10 @@
         ];
         drawGraph(graph, graphdata);
 
-        var button = $l.id('button-dom-create-element');
-        var text = $l.id('text-dom-create-element');
+        var button = $l.web.id('button-dom-create-element');
+        var text = $l.web.id('text-dom-create-element');
 
-        $l.dom.setEvent(
+        $l.web.dom.setEvent(
             button,
             'click',
             function() {
@@ -816,13 +816,13 @@
                         {
                             name: 'laroux.js',
                             fnc: function() {
-                                $l.dom.createElement('DIV', { class: 'x' }, 'y');
+                                $l.web.dom.createElement('DIV', { class: 'x' }, 'y');
                             }
                         },
                         {
                             name: 'laroux.js (Alternative)',
                             fnc: function() {
-                                $l.dom.create('<div class="x">y</div>');
+                                $l.web.dom.create('<div class="x">y</div>');
                             }
                         },
                         {
@@ -847,7 +847,7 @@
 
     // DOM Manipulations
     $l.ready(function() {
-        var graph = $l.id('graph-dom-manipulations');
+        var graph = $l.web.id('graph-dom-manipulations');
         var graphdata = [
             {
                 name: 'Chrome',
@@ -892,10 +892,10 @@
         ];
         drawGraph(graph, graphdata);
 
-        var button = $l.id('button-dom-manipulations');
-        var text = $l.id('text-dom-manipulations');
+        var button = $l.web.id('button-dom-manipulations');
+        var text = $l.web.id('text-dom-manipulations');
 
-        $l.dom.setEvent(
+        $l.web.dom.setEvent(
             button,
             'click',
             function() {
@@ -906,11 +906,11 @@
                         {
                             name: 'laroux.js',
                             fnc: function() {
-                                var div = $l.dom.createElement('DIV');
-                                $l.dom.append(div, 'appended');
-                                $l.dom.prepend(div, 'prepended');
-                                $l.dom.clear(div);
-                                $l.dom.remove(div);
+                                var div = $l.web.dom.createElement('DIV');
+                                $l.web.dom.append(div, 'appended');
+                                $l.web.dom.prepend(div, 'prepended');
+                                $l.web.dom.clear(div);
+                                $l.web.dom.remove(div);
                             }
                         },
                         {

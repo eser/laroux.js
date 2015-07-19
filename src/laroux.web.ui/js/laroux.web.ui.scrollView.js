@@ -6,25 +6,25 @@ let web_ui_scrollView = {
     selectedElements: [],
 
     onhidden: function (elements) {
-        $l.css.setProperty(elements, { opacity: 0 });
-        $l.css.setTransition(elements, ['opacity']);
+        $l.web.css.setProperty(elements, { opacity: 0 });
+        $l.web.css.setTransition(elements, ['opacity']);
     },
 
     onreveal: function (elements) {
-        $l.css.setProperty(elements, { opacity: 1 });
+        $l.web.css.setProperty(elements, { opacity: 1 });
     },
 
     set: function (element) {
         let elements = $l.getAsArray(element);
 
         for (let i = 0, length = elements.length; i < length; i++) {
-            if (!$l.css.inViewport(elements[i])) {
+            if (!$l.web.css.inViewport(elements[i])) {
                 web_ui_scrollView.selectedElements.push(elements[i]);
             }
         }
 
         web_ui_scrollView.onhidden(web_ui_scrollView.selectedElements);
-        $l.dom.setEvent(global, 'scroll', web_ui_scrollView.reveal);
+        $l.web.dom.setEvent(global, 'scroll', web_ui_scrollView.reveal);
     },
 
     reveal: function () {
@@ -34,7 +34,7 @@ let web_ui_scrollView = {
         $l.each(
             web_ui_scrollView.selectedElements,
             function (i, element) {
-                if ($l.css.inViewport(element)) {
+                if ($l.web.css.inViewport(element)) {
                     removeKeys.unshift(i);
                     elements.push(element);
                 }
@@ -50,7 +50,7 @@ let web_ui_scrollView = {
         }
 
         if (web_ui_scrollView.selectedElements.length === 0) {
-            $l.dom.unsetEvent(global, 'scroll', web_ui_scrollView.reveal);
+            $l.web.dom.unsetEvent(global, 'scroll', web_ui_scrollView.reveal);
         }
 
         if (elements.length > 0) {

@@ -19,7 +19,7 @@ var web_mvvm = {
 
     init: function init(element, model) {
         if (element.constructor === String) {
-            element = $l.dom.selectById(element);
+            element = $l.web.dom.selectById(element);
         }
 
         // if (model.constructor !== types.Observable) {
@@ -75,7 +75,7 @@ var web_mvvm = {
         };
 
         for (var i = 0, _length = app.eventElements.length; i < _length; i++) {
-            $l.dom.setEvent(app.eventElements[i].element, app.eventElements[i].binding[null], callback);
+            $l.web.dom.setEvent(app.eventElements[i].element, app.eventElements[i].binding[null], callback);
         }
     },
 

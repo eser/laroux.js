@@ -183,11 +183,11 @@ $l('#home');
                         </pre>
                         <h4>laroux.js (Alternative)</h4>
                         <pre class="prettyprint">
-$l.id('home');
+$l.web.id('home');
                         </pre>
                         <h4>laroux.js (Alternative 2)</h4>
                         <pre class="prettyprint">
-$l.idc('home');
+$l.web.idc('home');
                         </pre>
                         <h4>jQuery/Zepto</h4>
                         <pre class="prettyprint">
@@ -219,7 +219,7 @@ $l('.container');
                         </pre>
                         <h4>laroux.js (Alternative)</h4>
                         <pre class="prettyprint">
-$l.dom.selectByClass('container');
+$l.web.dom.selectByClass('container');
                         </pre>
                         <h4>jQuery/Zepto</h4>
                         <pre class="prettyprint">
@@ -387,11 +387,11 @@ $.map({a: 'eser', b: 'ozvataf'}, function(value) {
                     <div class="col-sm-7">
                         <h4>laroux.js</h4>
                         <pre class="prettyprint">
-$l.dom.createElement('DIV', { class: 'x' }, 'y');
+$l.web.dom.createElement('DIV', { class: 'x' }, 'y');
                         </pre>
                         <h4>laroux.js (Alternative)</h4>
                         <pre class="prettyprint">
-$l.dom.create('&lt;div class="x"&gt;y&lt;/div&gt;');
+$l.web.dom.create('&lt;div class="x"&gt;y&lt;/div&gt;');
                         </pre>
                         <h4>jQuery/Zepto</h4>
                         <pre class="prettyprint">
@@ -419,11 +419,11 @@ $('&lt;div class="x"&gt;y&lt;/div&gt;');
                     <div class="col-sm-7">
                         <h4>laroux.js</h4>
                         <pre class="prettyprint">
-var div = $l.dom.createElement('DIV');
-$l.dom.append(div, 'appended');
-$l.dom.prepend(div, 'prepended');
-$l.dom.clear(div);
-$l.dom.remove(div);
+var div = $l.web.dom.createElement('DIV');
+$l.web.dom.append(div, 'appended');
+$l.web.dom.prepend(div, 'prepended');
+$l.web.dom.clear(div);
+$l.web.dom.remove(div);
                         </pre>
                         <h4>jQuery/Zepto</h4>
                         <pre class="prettyprint">

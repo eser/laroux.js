@@ -8,7 +8,7 @@ let web_mvvm = {
 
     init: function (element, model) {
         if (element.constructor === String) {
-            element = $l.dom.selectById(element);
+            element = $l.web.dom.selectById(element);
         }
 
         // if (model.constructor !== types.Observable) {
@@ -64,7 +64,7 @@ let web_mvvm = {
         };
 
         for (let i = 0, length = app.eventElements.length; i < length; i++) {
-            $l.dom.setEvent(
+            $l.web.dom.setEvent(
                 app.eventElements[i].element,
                 app.eventElements[i].binding[null],
                 callback
