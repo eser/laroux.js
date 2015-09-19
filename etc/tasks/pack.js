@@ -23,7 +23,7 @@
                 description: pkg.description,
                 version: pkg.version,
                 link: pkg.homepage,
-                license: pkg.licenses[0].type
+                license: pkg.license
             };
 
         Object.keys(bundle.packs).forEach(function (item2) {

@@ -2,7 +2,7 @@
  * laroux.js - A jquery substitute for modern browsers (base bundle)
  *
  * @version v2.1.0
- * @link https://larukedi.github.io/laroux.js
+ * @link https://eserozvataf.github.io/laroux.js
  * @license Apache-2.0
  */
 'use strict';

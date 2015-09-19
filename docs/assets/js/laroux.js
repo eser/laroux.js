@@ -1,77 +1,11 @@
 /**
  * laroux.js - A jquery substitute for modern browsers (web bundle)
  *
- * @version v2.0.0
- * @link https://larukedi.github.io/laroux.js
+ * @version v2.1.0
+ * @link https://eserozvataf.github.io/laroux.js
  * @license Apache-2.0
  */
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
-'use strict';
-
-Object.defineProperty(exports, '__esModule', {
-    value: true
-});
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-var _larouxJs = require('../laroux.js');
-
-var _larouxJs2 = _interopRequireDefault(_larouxJs);
-
-var _larouxHelpersJs = require('../laroux.helpers.js');
-
-var _larouxHelpersJs2 = _interopRequireDefault(_larouxHelpersJs);
-
-var _larouxAnimJs = require('./laroux.anim.js');
-
-var _larouxAnimJs2 = _interopRequireDefault(_larouxAnimJs);
-
-var _larouxCssJs = require('./laroux.css.js');
-
-var _larouxCssJs2 = _interopRequireDefault(_larouxCssJs);
-
-var _larouxDomJs = require('./laroux.dom.js');
-
-var _larouxDomJs2 = _interopRequireDefault(_larouxDomJs);
-
-var _larouxFormsJs = require('./laroux.forms.js');
-
-var _larouxFormsJs2 = _interopRequireDefault(_larouxFormsJs);
-
-var _larouxKeysJs = require('./laroux.keys.js');
-
-var _larouxKeysJs2 = _interopRequireDefault(_larouxKeysJs);
-
-var _larouxMvcJs = require('./laroux.mvc.js');
-
-var _larouxMvcJs2 = _interopRequireDefault(_larouxMvcJs);
-
-var _larouxTouchJs = require('./laroux.touch.js');
-
-var _larouxTouchJs2 = _interopRequireDefault(_larouxTouchJs);
-
-exports['default'] = (function () {
-    'use strict';
-
-    _larouxHelpersJs2['default'].extend(_larouxJs2['default'], {
-        anim: _larouxAnimJs2['default'],
-        css: _larouxCssJs2['default'],
-        dom: _larouxDomJs2['default'],
-        forms: _larouxFormsJs2['default'],
-        keys: _larouxKeysJs2['default'],
-        mvc: _larouxMvcJs2['default'],
-        touch: _larouxTouchJs2['default']
-    });
-
-    if (typeof document !== 'undefined') {
-        document.addEventListener('DOMContentLoaded', _larouxJs2['default'].setReady);
-    }
-
-    return _larouxJs2['default'];
-})();
-
-module.exports = exports['default'];
-},{"../laroux.helpers.js":6,"../laroux.js":7,"./laroux.anim.js":13,"./laroux.css.js":14,"./laroux.dom.js":15,"./laroux.forms.js":16,"./laroux.keys.js":17,"./laroux.mvc.js":18,"./laroux.touch.js":19}],2:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -126,7 +60,7 @@ exports['default'] = (function () {
         },
 
         xhrResp: function xhrResp(xhr, options) {
-            var response;
+            var response = undefined;
 
             if (options.datatype === undefined) {
                 response = xhr.responseText;
@@ -332,7 +266,7 @@ exports['default'] = (function () {
 })();
 
 module.exports = exports['default'];
-},{"./laroux.deferred.js":4,"./laroux.events.js":5,"./laroux.helpers.js":6}],3:[function(require,module,exports){
+},{"./laroux.deferred.js":3,"./laroux.events.js":4,"./laroux.helpers.js":5}],2:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -544,7 +478,7 @@ exports['default'] = (function () {
 })();
 
 module.exports = exports['default'];
-},{}],4:[function(require,module,exports){
+},{}],3:[function(require,module,exports){
 /*jslint node: true */
 'use strict';
 
@@ -571,10 +505,12 @@ var Deferred = (function () {
 
     _createClass(Deferred, [{
         key: 'invoke',
-        value: function invoke() {
-            var args = _larouxHelpersJs2['default'].toArray(arguments),
-                eventName = args.shift(),
-                finalEvent = eventName === 'done' || eventName === 'fail';
+        value: function invoke(eventName) {
+            for (var _len = arguments.length, args = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+                args[_key - 1] = arguments[_key];
+            }
+
+            var finalEvent = eventName === 'done' || eventName === 'fail';
 
             if (eventName in this.events) {
                 this.events[eventName].invoked = true;
@@ -608,18 +544,24 @@ var Deferred = (function () {
     }, {
         key: 'resolve',
         value: function resolve() {
-            var args = _larouxHelpersJs2['default'].toArray(arguments);
-            args.unshift('done');
+            var _invoke;
 
-            return this.invoke.apply(this, args);
+            for (var _len2 = arguments.length, args = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
+                args[_key2] = arguments[_key2];
+            }
+
+            return (_invoke = this.invoke).call.apply(_invoke, [this, 'done'].concat(args));
         }
     }, {
         key: 'reject',
         value: function reject() {
-            var args = _larouxHelpersJs2['default'].toArray(arguments);
-            args.unshift('fail');
+            var _invoke2;
 
-            return this.invoke.apply(this, args);
+            for (var _len3 = arguments.length, args = Array(_len3), _key3 = 0; _key3 < _len3; _key3++) {
+                args[_key3] = arguments[_key3];
+            }
+
+            return (_invoke2 = this.invoke).call.apply(_invoke2, [this, 'fail'].concat(args));
         }
     }, {
         key: 'on',
@@ -672,14 +614,16 @@ var Deferred = (function () {
         }
     }], [{
         key: 'async',
-        value: function async() {
-            var deferred = new Deferred(),
-                args = _larouxHelpersJs2['default'].toArray(arguments),
-                fnc = args.shift();
+        value: function async(callback) {
+            for (var _len4 = arguments.length, args = Array(_len4 > 1 ? _len4 - 1 : 0), _key4 = 1; _key4 < _len4; _key4++) {
+                args[_key4 - 1] = arguments[_key4];
+            }
+
+            var deferred = new Deferred();
 
             setTimeout(function () {
                 try {
-                    var result = fnc.apply(deferred, args);
+                    var result = callback.apply(deferred, args);
                     deferred.resolve(result);
                 } catch (err) {
                     deferred.reject(err);
@@ -695,7 +639,7 @@ var Deferred = (function () {
 
 exports['default'] = Deferred;
 module.exports = exports['default'];
-},{"./laroux.helpers.js":6}],5:[function(require,module,exports){
+},{"./laroux.helpers.js":5}],4:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -708,8 +652,8 @@ exports['default'] = (function () {
     var events = {
         delegates: [],
 
-        add: function add(event, fnc) {
-            events.delegates.push({ event: event, fnc: fnc });
+        add: function add(event, callback) {
+            events.delegates.push({ event: event, callback: callback });
         },
 
         invoke: function invoke(event, args) {
@@ -722,7 +666,7 @@ exports['default'] = (function () {
                     continue;
                 }
 
-                events.delegates[item].fnc(args);
+                events.delegates[item].callback(args);
             }
         }
     };
@@ -731,7 +675,7 @@ exports['default'] = (function () {
 })();
 
 module.exports = exports['default'];
-},{}],6:[function(require,module,exports){
+},{}],5:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -749,44 +693,39 @@ exports['default'] = (function () {
             return 'uid-' + ++helpers.uniqueId;
         },
 
-        extend: (function (_extend) {
-            function extend(_x, _x2) {
-                return _extend.apply(this, arguments);
-            }
+        clone: function clone(obj) {
+            return JSON.parse(JSON.stringify(obj));
+        },
 
-            extend.toString = function () {
-                return _extend.toString();
-            };
+        merge: function merge(target, source, clone) {
+            var result = clone ? helpers.clone(target) : target,
+                keys = Object.keys(source);
 
-            return extend;
-        })(function (target, source) {
-            var keys = Object.keys(source);
-
-            for (var i = 0, length = keys.length; i < length; i++) {
+            for (var i = 0, _length = keys.length; i < _length; i++) {
                 var key = keys[i];
 
-                if (target[key] instanceof Array) {
-                    target[key] = target[key].concat(source[key]);
+                if (result[key] instanceof Array) {
+                    result[key] = result[key].concat(source[key]);
                     continue;
                 }
 
-                if (target[key] instanceof Object) {
-                    extend(target[key], source[key]);
+                if (result[key] instanceof Object) {
+                    helpers.merge(result[key], source[key]);
                     continue;
                 }
 
-                target[key] = source[key];
+                result[key] = source[key];
             }
 
-            return target;
-        }),
+            return result;
+        },
 
-        extendNs: function extendNs(target, path, source) {
+        mergeNs: function mergeNs(target, path, source) {
             var ptr = target,
                 pathSlices = path.split('.'),
                 keys = Object.keys(source);
 
-            for (var i = 0, length = pathSlices.length; i < length; i++) {
+            for (var i = 0, _length2 = pathSlices.length; i < _length2; i++) {
                 var current = pathSlices[i];
 
                 if (ptr[current] === undefined) {
@@ -797,8 +736,8 @@ exports['default'] = (function () {
             }
 
             if (source !== undefined) {
-                // might be replaced w/ $l.extend method
-                helpers.extend(ptr, source);
+                // might be replaced w/ $l.merge method
+                helpers.merge(ptr, source);
             }
 
             return target;
@@ -808,16 +747,16 @@ exports['default'] = (function () {
             var uri = '',
                 regEx = /%20/g;
 
-            for (var name in values) {
-                if (!values.hasOwnProperty(name)) {
+            for (var _name in values) {
+                if (!values.hasOwnProperty(_name)) {
                     continue;
                 }
 
-                if (typeof values[name] !== 'function') {
+                if (typeof values[_name] !== 'function') {
                     if (rfc3986 || false) {
-                        uri += '&' + encodeURIComponent(name).replace(regEx, '+') + '=' + encodeURIComponent(values[name].toString()).replace(regEx, '+');
+                        uri += '&' + encodeURIComponent(_name).replace(regEx, '+') + '=' + encodeURIComponent(values[_name].toString()).replace(regEx, '+');
                     } else {
-                        uri += '&' + encodeURIComponent(name) + '=' + encodeURIComponent(values[name].toString());
+                        uri += '&' + encodeURIComponent(_name) + '=' + encodeURIComponent(values[_name].toString());
                     }
                 }
             }
@@ -828,13 +767,13 @@ exports['default'] = (function () {
         buildFormData: function buildFormData(values) {
             var data = new FormData();
 
-            for (var name in values) {
-                if (!values.hasOwnProperty(name)) {
+            for (var _name2 in values) {
+                if (!values.hasOwnProperty(_name2)) {
                     continue;
                 }
 
-                if (typeof values[name] !== 'function') {
-                    data.append(name, values[name]);
+                if (typeof values[_name2] !== 'function') {
+                    data.append(_name2, values[_name2]);
                 }
             }
 
@@ -842,7 +781,10 @@ exports['default'] = (function () {
         },
 
         format: function format() {
-            var args = arguments;
+            for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+                args[_key] = arguments[_key];
+            }
+
             return Array.prototype.shift.call(args).replace(/%s/g, function () {
                 return Array.prototype.shift.call(args);
             });
@@ -903,7 +845,7 @@ exports['default'] = (function () {
         },
 
         find: function find(obj, iterator, context) {
-            var result;
+            var result = undefined;
 
             obj.some(function (value, index, list) {
                 if (iterator.call(context, value, index, list)) {
@@ -915,13 +857,13 @@ exports['default'] = (function () {
             return result;
         },
 
-        each: function each(arr, fnc, testOwnProperties) {
+        each: function each(arr, callback, testOwnProperties) {
             for (var item in arr) {
                 if (testOwnProperties && !arr.hasOwnProperty(item)) {
                     continue;
                 }
 
-                if (fnc(item, arr[item]) === false) {
+                if (callback(item, arr[item]) === false) {
                     break;
                 }
             }
@@ -929,7 +871,7 @@ exports['default'] = (function () {
             return arr;
         },
 
-        map: function map(arr, fnc, dontSkipReturns, testOwnProperties) {
+        map: function map(arr, callback, dontSkipReturns, testOwnProperties) {
             var results = [];
 
             for (var item in arr) {
@@ -937,7 +879,7 @@ exports['default'] = (function () {
                     continue;
                 }
 
-                var result = fnc(arr[item], item);
+                var result = callback(arr[item], item);
                 if (result === false) {
                     break;
                 }
@@ -964,9 +906,9 @@ exports['default'] = (function () {
             return null;
         },
 
-        aeach: function aeach(arr, fnc) {
-            for (var i = 0, length = arr.length; i < length; i++) {
-                if (fnc(i, arr[i]) === false) {
+        aeach: function aeach(arr, callback) {
+            for (var i = 0, _length3 = arr.length; i < _length3; i++) {
+                if (callback(i, arr[i]) === false) {
                     break;
                 }
             }
@@ -974,11 +916,11 @@ exports['default'] = (function () {
             return arr;
         },
 
-        amap: function amap(arr, fnc, dontSkipReturns) {
+        amap: function amap(arr, callback, dontSkipReturns) {
             var results = [];
 
-            for (var i = 0, length = arr.length; i < length; i++) {
-                var result = fnc(arr[i], i);
+            for (var i = 0, _length4 = arr.length; i < _length4; i++) {
+                var result = callback(arr[i], i);
                 if (result === false) {
                     break;
                 }
@@ -992,7 +934,7 @@ exports['default'] = (function () {
         },
 
         aindex: function aindex(arr, value, start) {
-            for (var i = start || 0, length = arr.length; i < length; i++) {
+            for (var i = start || 0, _length5 = arr.length; i < _length5; i++) {
                 if (arr[i] === value) {
                     return i;
                 }
@@ -1024,33 +966,6 @@ exports['default'] = (function () {
             return shuffled;
         },
 
-        merge: function merge() {
-            var target = Array.prototype.shift.call(arguments),
-                tmp = target,
-                isArray = tmp instanceof Array;
-
-            for (var item in arguments) {
-                if (isArray) {
-                    tmp = tmp.concat(arguments[item]);
-                    continue;
-                }
-
-                for (var attr in arguments[item]) {
-                    if (!arguments[item].hasOwnProperty(attr)) {
-                        continue;
-                    }
-
-                    tmp[attr] = arguments[item][attr];
-                }
-            }
-
-            return tmp;
-        },
-
-        duplicate: function duplicate(obj) {
-            return JSON.parse(JSON.stringify(obj));
-        },
-
         prependArray: function prependArray(obj, value) {
             var length = obj.length,
                 items = new Array(length + 1);
@@ -1061,6 +976,28 @@ exports['default'] = (function () {
             }
 
             return items;
+        },
+
+        removeFromArray: function removeFromArray(obj, value) {
+            var targetKey = null;
+
+            for (var item in obj) {
+                if (!obj.hasOwnProperty(item)) {
+                    continue;
+                }
+
+                if (obj[item] === value) {
+                    targetKey = item;
+                    break;
+                }
+            }
+
+            if (targetKey !== null) {
+                obj.splice(targetKey, 1);
+                return true;
+            }
+
+            return false;
         },
 
         toArray: function toArray(obj) {
@@ -1080,10 +1017,10 @@ exports['default'] = (function () {
             }
 
             if (obj instanceof NodeList) {
-                var length = obj.length;
+                var _length6 = obj.length;
 
-                var items = new Array(length);
-                for (var i = 0; i < length; i++) {
+                var items = new Array(_length6);
+                for (var i = 0; i < _length6; i++) {
                     items[i] = obj[i];
                 }
 
@@ -1141,8 +1078,8 @@ exports['default'] = (function () {
             }
 
             var pos = path.indexOf(delimiter);
-            var key;
-            var rest;
+            var key = undefined;
+            var rest = undefined;
             if (pos === -1) {
                 key = path;
                 rest = null;
@@ -1160,6 +1097,12 @@ exports['default'] = (function () {
             }
 
             return helpers.getElement(obj[key], rest, defaultValue, delimiter);
+        },
+
+        callAll: function callAll(callbacks, scope, parameters) {
+            for (var i = 0, _length7 = callbacks.length; i < _length7; i++) {
+                callbacks[i].apply(scope, parameters);
+            }
         }
     };
 
@@ -1167,7 +1110,7 @@ exports['default'] = (function () {
 })();
 
 module.exports = exports['default'];
-},{}],7:[function(require,module,exports){
+},{}],6:[function(require,module,exports){
 (function (global){
 'use strict';
 
@@ -1197,9 +1140,13 @@ var _larouxHelpersJs = require('./laroux.helpers.js');
 
 var _larouxHelpersJs2 = _interopRequireDefault(_larouxHelpersJs);
 
-var _larouxStackJs = require('./laroux.stack.js');
+var _larouxStoryboardJs = require('./laroux.storyboard.js');
 
-var _larouxStackJs2 = _interopRequireDefault(_larouxStackJs);
+var _larouxStoryboardJs2 = _interopRequireDefault(_larouxStoryboardJs);
+
+var _larouxTypesJs = require('./laroux.types.js');
+
+var _larouxTypesJs2 = _interopRequireDefault(_larouxTypesJs);
 
 var _larouxTemplatesJs = require('./laroux.templates.js');
 
@@ -1228,7 +1175,7 @@ exports['default'] = (function () {
         // FIXME: Laroux: non-chromium optimization, but it runs
         //                slowly in chromium
         //
-        // var re = /^#([^\+\>\[\]\.# ]*)$/.exec(selector);
+        // let re = /^#([^\+\>\[\]\.# ]*)$/.exec(selector);
         // if (re) {
         //     return (parent || document).getElementById(re[1]);
         // }
@@ -1236,49 +1183,36 @@ exports['default'] = (function () {
         return (parent || document).querySelector(selector);
     };
 
-    _larouxHelpersJs2['default'].extend(laroux, _larouxHelpersJs2['default']);
-    _larouxHelpersJs2['default'].extend(laroux, {
+    _larouxHelpersJs2['default'].merge(laroux, _larouxHelpersJs2['default']);
+    _larouxHelpersJs2['default'].merge(laroux, {
         ajax: _larouxAjaxJs2['default'],
         date: _larouxDateJs2['default'],
         deferred: _larouxDeferredJs2['default'],
         events: _larouxEventsJs2['default'],
-        stack: _larouxStackJs2['default'],
+        storyboard: _larouxStoryboardJs2['default'],
+        types: _larouxTypesJs2['default'],
         templates: _larouxTemplatesJs2['default'],
         timers: _larouxTimersJs2['default'],
         vars: _larouxVarsJs2['default'],
         when: _larouxWhenJs2['default'],
 
-        cached: {
-            single: {},
-            array: {},
-            id: {}
+        extend: function extend(source) {
+            return _larouxHelpersJs2['default'].merge(laroux, source);
         },
 
-        c: function c(selector) {
-            if (selector instanceof Array) {
-                return laroux.cached.array[selector] || (laroux.cached.array[selector] = _larouxHelpersJs2['default'].toArray(document.querySelectorAll(selector)));
-            }
-
-            return laroux.cached.single[selector] || (laroux.cached.single[selector] = document.querySelector(selector));
-        },
-
-        id: function id(selector, parent) {
-            return (parent || document).getElementById(selector);
-        },
-
-        idc: function idc(selector) {
-            return laroux.cached.id[selector] || (laroux.cached.id[selector] = document.getElementById(selector));
+        extendNs: function extendNs(path, source) {
+            return _larouxHelpersJs2['default'].mergeNs(laroux, path, source);
         },
 
         readyPassed: false,
 
-        ready: function ready(fnc) {
+        ready: function ready(callback) {
             if (!laroux.readyPassed) {
-                _larouxEventsJs2['default'].add('ContentLoaded', fnc);
+                _larouxEventsJs2['default'].add('ContentLoaded', callback);
                 return;
             }
 
-            fnc();
+            callback();
         },
 
         setReady: function setReady() {
@@ -1299,7 +1233,8 @@ exports['default'] = (function () {
 
 module.exports = exports['default'];
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./laroux.ajax.js":2,"./laroux.date.js":3,"./laroux.deferred.js":4,"./laroux.events.js":5,"./laroux.helpers.js":6,"./laroux.stack.js":8,"./laroux.templates.js":9,"./laroux.timers.js":10,"./laroux.vars.js":11,"./laroux.when.js":12}],8:[function(require,module,exports){
+},{"./laroux.ajax.js":1,"./laroux.date.js":2,"./laroux.deferred.js":3,"./laroux.events.js":4,"./laroux.helpers.js":5,"./laroux.storyboard.js":7,"./laroux.templates.js":8,"./laroux.timers.js":9,"./laroux.types.js":10,"./laroux.vars.js":11,"./laroux.when.js":12}],7:[function(require,module,exports){
+(function (global){
 /*jslint node: true */
 'use strict';
 
@@ -1309,153 +1244,111 @@ Object.defineProperty(exports, '__esModule', {
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
-var Stack = (function () {
-    function Stack(data, depth, top) {
-        _classCallCheck(this, Stack);
+var _larouxDeferredJs = require('./laroux.deferred.js');
 
-        this._data = {};
-        this._depth = depth;
-        this._top = top || this;
+var _larouxDeferredJs2 = _interopRequireDefault(_larouxDeferredJs);
 
-        if (data) {
-            this.setRange(data);
+var Storyboard = (function () {
+    function Storyboard() {
+        _classCallCheck(this, Storyboard);
+
+        var self = this;
+
+        this.phases = [];
+        this.phaseKeys = {};
+        this.currentIteration = 0;
+        this.running = false;
+
+        for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+            args[_key] = arguments[_key];
         }
+
+        for (var i = 0, _length = args.length; i < _length; i++) {
+            this.addPhase(args[i]);
+        }
+
+        this.checkPromise = function () {
+            if (--self.phases[self.currentIteration].promises === 0 && !self.running) {
+                self.start();
+            }
+        };
     }
 
-    _createClass(Stack, [{
-        key: 'set',
-        value: function set(key, value) {
-            // delete this._data[key];
+    _createClass(Storyboard, [{
+        key: 'addPhase',
+        value: function addPhase(key) {
+            this.phaseKeys[key] = this.phases.length;
+            this.phases.push({
+                key: key,
+                callbacks: [],
+                promises: 0
+            });
+        }
+    }, {
+        key: 'add',
+        value: function add(phase, fnc) {
+            if (fnc instanceof _larouxDeferredJs2['default']) {
+                return this.addPromise(phase, fnc);
+            }
 
-            var type = typeof value;
-            switch (type) {
-                case 'function':
-                    this._data[key] = value;
+            var phaseId = this.phaseKeys[phase];
 
-                    Object.defineProperty(this, key, {
-                        configurable: true,
-                        get: function get() {
-                            return this._data[key]();
-                        }
-                    });
+            if (phaseId < this.currentIteration) {
+                // execute immediately if phase is already passed
+                fnc.apply(global);
+                return;
+            }
+
+            this.phases[phaseId].callbacks.push(fnc);
+        }
+    }, {
+        key: 'addPromise',
+        value: function addPromise(phase, promise) {
+            var phaseId = this.phaseKeys[phase];
+
+            // skips if phase is already passed
+            if (phaseId < this.currentIteration) {
+                return;
+            }
+
+            this.phases[phaseId].promises++;
+            promise.done(this.checkPromise);
+        }
+    }, {
+        key: 'start',
+        value: function start() {
+            this.running = true;
+
+            while (this.phases.length > this.currentIteration) {
+                var currentPhase = this.phases[this.currentIteration];
+
+                while (currentPhase.callbacks.length > 0) {
+                    var fnc = currentPhase.callbacks.shift();
+                    fnc.apply(global);
+                }
+
+                if (currentPhase.promises > 0) {
                     break;
-
-                default:
-                    /*
-                    if (type === 'object') {
-                        this._data[key] = new Stack(
-                            value,
-                            this._depth ?
-                                this._depth + '.' + key :
-                                key,
-                            this._top
-                        );
-                    } else {
-                        this._data[key] = value;
-                    }
-                    */
-                    this._data[key] = value;
-
-                    Object.defineProperty(this, key, {
-                        configurable: true,
-                        get: function get() {
-                            return this._data[key];
-                        },
-                        set: function set(newValue) {
-                            var oldValue = this._data[key];
-                            if (this._data[key] === newValue) {
-                                return;
-                            }
-
-                            // this.set(this, key, newValue);
-                            this._data[key] = newValue;
-                            this._top.onupdate({ scope: this, key: key, oldValue: oldValue, newValue: newValue });
-                        }
-                    });
-                    break;
-            }
-        }
-    }, {
-        key: 'setRange',
-        value: function setRange(values) {
-            for (var valueKey in values) {
-                if (!values.hasOwnProperty(valueKey)) {
-                    continue;
                 }
 
-                this.set(valueKey, values[valueKey]);
-            }
-        }
-    }, {
-        key: 'get',
-        value: function get(key, defaultValue) {
-            return this[key] || defaultValue || null;
-        }
-    }, {
-        key: 'getRange',
-        value: function getRange(keys) {
-            var values = {};
-
-            for (var item in keys) {
-                if (!keys.hasOwnProperty(item)) {
-                    continue;
-                }
-
-                values[keys[item]] = this[keys[item]];
+                this.currentIteration++;
             }
 
-            return values;
+            this.running = false;
         }
-    }, {
-        key: 'keys',
-        value: function keys() {
-            return Object.keys(this._data);
-        }
-    }, {
-        key: 'length',
-        value: function length() {
-            return Object.keys(this._data).length;
-        }
-    }, {
-        key: 'exists',
-        value: function exists(key) {
-            return key in this._data;
-        }
-    }, {
-        key: 'remove',
-        value: function remove(key) {
-            if (key in this._data) {
-                delete this[key];
-                delete this._data[key];
-            }
-        }
-    }, {
-        key: 'clear',
-        value: function clear() {
-            for (var item in this._data) {
-                if (!this._data.hasOwnProperty(item)) {
-                    continue;
-                }
-
-                delete this[item];
-                delete this._data[item];
-            }
-
-            this._data = {};
-        }
-    }, {
-        key: 'onupdate',
-        value: function onupdate(event) {}
     }]);
 
-    return Stack;
+    return Storyboard;
 })();
 
-exports['default'] = Stack;
+exports['default'] = Storyboard;
 module.exports = exports['default'];
-},{}],9:[function(require,module,exports){
+}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+},{"./laroux.deferred.js":3}],8:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -1482,7 +1375,7 @@ exports['default'] = (function () {
                     var result = compiled[0],
                         dict = [],
                         lastIndex = 0,
-                        nextIndex;
+                        nextIndex = undefined;
 
                     while ((nextIndex = result.indexOf('{{', lastIndex)) !== -1) {
                         nextIndex += 2;
@@ -1555,7 +1448,7 @@ exports['default'] = (function () {
         engine: 'plain',
 
         apply: function apply(element, model, options) {
-            var content,
+            var content = undefined,
                 engine = templates.engines[templates.engine];
 
             if (element.nodeType === 1 || element.nodeType === 3 || element.nodeType === 11) {
@@ -1570,11 +1463,11 @@ exports['default'] = (function () {
 
         /*
         insert: function (element, model, target, position, options) {
-            var output = templates.apply(element, model, options);
+            let output = templates.apply(element, model, options);
              dom.insert(target, position || 'beforeend', output);
         },
          replace: function (element, model, target, options) {
-            var output = templates.apply(element, model, options);
+            let output = templates.apply(element, model, options);
              dom.replace(target, output);
         }
         */
@@ -1584,7 +1477,7 @@ exports['default'] = (function () {
 })();
 
 module.exports = exports['default'];
-},{"./laroux.helpers.js":6}],10:[function(require,module,exports){
+},{"./laroux.helpers.js":5}],9:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -1668,7 +1561,154 @@ exports['default'] = (function () {
 })();
 
 module.exports = exports['default'];
-},{"./laroux.helpers.js":6}],11:[function(require,module,exports){
+},{"./laroux.helpers.js":5}],10:[function(require,module,exports){
+/*jslint node: true */
+'use strict';
+
+Object.defineProperty(exports, '__esModule', {
+    value: true
+});
+
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+var _larouxHelpersJs = require('./laroux.helpers.js');
+
+var _larouxHelpersJs2 = _interopRequireDefault(_larouxHelpersJs);
+
+var staticKeys = ['_callbacks', '_onupdate'];
+
+var Observable = (function () {
+    function Observable(data) {
+        _classCallCheck(this, Observable);
+
+        var self = this;
+
+        this._callbacks = [];
+        this._onupdate = function (changes) {
+            _larouxHelpersJs2['default'].callAll(self._callbacks, self, [changes]);
+        };
+
+        Object.observe(this, this._onupdate);
+
+        if (data) {
+            this.setRange(data);
+        }
+    }
+
+    _createClass(Observable, [{
+        key: 'set',
+        value: function set(key, value) {
+            if (staticKeys.indexOf(key) === -1) {
+                this[key] = value;
+            }
+        }
+    }, {
+        key: 'setRange',
+        value: function setRange(values) {
+            for (var valueKey in values) {
+                this.set(valueKey, values[valueKey]);
+            }
+        }
+    }, {
+        key: 'get',
+        value: function get(key, defaultValue) {
+            if (key in this && staticKeys.indexOf(key) === -1) {
+                return this[key];
+            }
+
+            return defaultValue || null;
+        }
+    }, {
+        key: 'getRange',
+        value: function getRange(keys) {
+            var values = {};
+
+            for (var item in keys) {
+                values[keys[item]] = this[keys[item]];
+            }
+
+            return values;
+        }
+    }, {
+        key: 'keys',
+        value: function keys() {
+            var keys = [];
+
+            for (var item in this) {
+                if (staticKeys.indexOf(item) === -1) {
+                    keys.push(item);
+                }
+            }
+
+            return keys;
+        }
+    }, {
+        key: 'length',
+        value: function length() {
+            return this.keys().length;
+        }
+    }, {
+        key: 'exists',
+        value: function exists(key) {
+            return key in this;
+        }
+    }, {
+        key: 'remove',
+        value: function remove(key) {
+            if (staticKeys.indexOf(key) === -1) {
+                delete this[key];
+            }
+        }
+    }, {
+        key: 'clear',
+        value: function clear() {
+            for (var item in this) {
+                if (!this.hasOwnProperty(item) || staticKeys.indexOf(item) !== -1) {
+                    continue;
+                }
+
+                delete this[item];
+            }
+        }
+    }, {
+        key: 'observe',
+        value: function observe(obj) {
+            Object.observe(obj, this._onupdate);
+        }
+    }, {
+        key: 'unobserve',
+        value: function unobserve(obj) {
+            Object.unobserve(obj);
+        }
+    }, {
+        key: 'on',
+        value: function on(callback) {
+            this._callbacks.push(callback);
+        }
+    }, {
+        key: 'off',
+        value: function off(callback) {
+            _larouxHelpersJs2['default'].removeFromArray(this._callbacks, callback);
+        }
+    }]);
+
+    return Observable;
+})();
+
+exports['default'] = (function () {
+    var types = {
+        observable: Observable
+    };
+
+    return types;
+})();
+
+module.exports = exports['default'];
+},{"./laroux.helpers.js":5}],11:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -1750,25 +1790,27 @@ exports['default'] = (function () {
                 }
             }
         },
-        storage: 'local',
 
-        get: function get() {
-            var args = _larouxHelpersJs2['default'].toArray(arguments),
-                storage = args.shift();
+        get: function get(storage) {
+            for (var _len = arguments.length, args = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+                args[_key - 1] = arguments[_key];
+            }
 
             return vars.storages[storage].get.apply(this, args);
         },
 
-        set: function set() {
-            var args = _larouxHelpersJs2['default'].toArray(arguments),
-                storage = args.shift();
+        set: function set(storage) {
+            for (var _len2 = arguments.length, args = Array(_len2 > 1 ? _len2 - 1 : 0), _key2 = 1; _key2 < _len2; _key2++) {
+                args[_key2 - 1] = arguments[_key2];
+            }
 
             return vars.storages[storage].set.apply(this, args);
         },
 
-        remove: function remove() {
-            var args = _larouxHelpersJs2['default'].toArray(arguments),
-                storage = args.shift();
+        remove: function remove(storage) {
+            for (var _len3 = arguments.length, args = Array(_len3 > 1 ? _len3 - 1 : 0), _key3 = 1; _key3 < _len3; _key3++) {
+                args[_key3 - 1] = arguments[_key3];
+            }
 
             return vars.storages[storage].remove.apply(this, args);
         }
@@ -1778,7 +1820,7 @@ exports['default'] = (function () {
 })();
 
 module.exports = exports['default'];
-},{"./laroux.helpers.js":6}],12:[function(require,module,exports){
+},{"./laroux.helpers.js":5}],12:[function(require,module,exports){
 /*jslint node: true */
 'use strict';
 
@@ -1822,9 +1864,11 @@ var When = (function () {
     _createClass(When, [{
         key: 'then',
         value: function then() {
-            var args = _larouxHelpersJs2['default'].toArray(arguments);
-            this.queues.push(args);
+            for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+                args[_key] = arguments[_key];
+            }
 
+            this.queues.push(args);
             this.check();
 
             return this;
@@ -1865,7 +1909,7 @@ var When = (function () {
 
 exports['default'] = When;
 module.exports = exports['default'];
-},{"./laroux.deferred.js":4,"./laroux.helpers.js":6}],13:[function(require,module,exports){
+},{"./laroux.deferred.js":3,"./laroux.helpers.js":5}],13:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -1997,8 +2041,8 @@ exports['default'] = (function () {
                             scrollTo(0, currentItem.from);
                             // setTimeout(function () { scrollTo(0, currentItem.from); }, 1);
                         } else {
-                            currentItem.object[currentItem.property] = currentItem.from;
-                        }
+                                currentItem.object[currentItem.property] = currentItem.from;
+                            }
                     } else {
                         removeKeys = _larouxHelpersJs2['default'].prependArray(removeKeys, item);
                         currentItem.deferred.resolve();
@@ -2029,8 +2073,8 @@ exports['default'] = (function () {
                 scrollTo(0, value);
                 // setTimeout(function () { scrollTo(0, value); }, 1);
             } else {
-                newanim.object[newanim.property] = value;
-            }
+                    newanim.object[newanim.property] = value;
+                }
         }
     };
 
@@ -2038,7 +2082,7 @@ exports['default'] = (function () {
 })();
 
 module.exports = exports['default'];
-},{"../laroux.deferred.js":4,"../laroux.helpers.js":6,"./laroux.css.js":14}],14:[function(require,module,exports){
+},{"../laroux.deferred.js":3,"../laroux.helpers.js":5,"./laroux.css.js":14}],14:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -2063,7 +2107,7 @@ exports['default'] = (function () {
         addClass: function addClass(element, className) {
             var elements = _larouxHelpersJs2['default'].getAsArray(element);
 
-            for (var i = 0, length = elements.length; i < length; i++) {
+            for (var i = 0, _length = elements.length; i < _length; i++) {
                 elements[i].classList.add(className);
             }
         },
@@ -2071,7 +2115,7 @@ exports['default'] = (function () {
         removeClass: function removeClass(element, className) {
             var elements = _larouxHelpersJs2['default'].getAsArray(element);
 
-            for (var i = 0, length = elements.length; i < length; i++) {
+            for (var i = 0, _length2 = elements.length; i < _length2; i++) {
                 elements[i].classList.remove(className);
             }
         },
@@ -2079,7 +2123,7 @@ exports['default'] = (function () {
         toggleClass: function toggleClass(element, className) {
             var elements = _larouxHelpersJs2['default'].getAsArray(element);
 
-            for (var i = 0, length = elements.length; i < length; i++) {
+            for (var i = 0, _length3 = elements.length; i < _length3; i++) {
                 if (elements[i].classList.contains(className)) {
                     elements[i].classList.remove(className);
                 } else {
@@ -2089,10 +2133,10 @@ exports['default'] = (function () {
         },
 
         cycleClass: function cycleClass(elements, className) {
-            for (var i = 0, length = elements.length; i < length; i++) {
+            for (var i = 0, _length4 = elements.length; i < _length4; i++) {
                 if (elements[i].classList.contains(className)) {
                     elements[i].classList.remove(className);
-                    elements[(i + 1) % length].classList.add(className);
+                    elements[(i + 1) % _length4].classList.add(className);
                     return;
                 }
             }
@@ -2123,7 +2167,7 @@ exports['default'] = (function () {
 
                 var newStyleName = _larouxHelpersJs2['default'].camelCase(styleName);
 
-                for (var i = 0, length = elements.length; i < length; i++) {
+                for (var i = 0, _length5 = elements.length; i < _length5; i++) {
                     elements[i].style[newStyleName] = properties[styleName];
                 }
             }
@@ -2136,7 +2180,7 @@ exports['default'] = (function () {
             var transitions = _larouxHelpersJs2['default'].getAsArray(transition),
                 style = getComputedStyle(element),
                 currentTransitions = style.getPropertyValue('transition') || style.getPropertyValue('-webkit-transition') || style.getPropertyValue('-ms-transition') || '',
-                currentTransitionsArray;
+                currentTransitionsArray = undefined;
 
             if (currentTransitions.length > 0) {
                 currentTransitionsArray = currentTransitions.split(',');
@@ -2149,8 +2193,8 @@ exports['default'] = (function () {
                     continue;
                 }
 
-                var styleName,
-                    transitionProperties,
+                var styleName = undefined,
+                    transitionProperties = undefined,
                     pos = transitions[item].indexOf(' ');
 
                 if (pos !== -1) {
@@ -2185,7 +2229,7 @@ exports['default'] = (function () {
         setTransition: function setTransition(element, transition) {
             var elements = _larouxHelpersJs2['default'].getAsArray(element);
 
-            for (var i = 0, length = elements.length; i < length; i++) {
+            for (var i = 0, _length6 = elements.length; i < _length6; i++) {
                 css.setTransitionSingle(elements[i], transition);
             }
         },
@@ -2300,7 +2344,7 @@ exports['default'] = (function () {
 })();
 
 module.exports = exports['default'];
-},{"../laroux.helpers.js":6}],15:[function(require,module,exports){
+},{"../laroux.helpers.js":5}],15:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -2358,7 +2402,7 @@ exports['default'] = (function () {
                     continue;
                 }
 
-                for (var i = 0, length = elements.length; i < length; i++) {
+                for (var i = 0, _length = elements.length; i < _length; i++) {
                     if (attributes[attributeName] === null) {
                         element.removeAttribute(attributeName);
                     } else {
@@ -2385,7 +2429,7 @@ exports['default'] = (function () {
                     continue;
                 }
 
-                for (var i = 0, length = elements.length; i < length; i++) {
+                for (var i = 0, _length2 = elements.length; i < _length2; i++) {
                     if (datanames[dataName] === null) {
                         element.removeAttribute('data-' + dataName);
                     } else {
@@ -2396,17 +2440,17 @@ exports['default'] = (function () {
         },
 
         eventHistory: [],
-        setEvent: function setEvent(element, eventname, fnc) {
+        setEvent: function setEvent(element, eventname, callback) {
             var elements = _larouxHelpersJs2['default'].getAsArray(element);
 
-            for (var i = 0, length = elements.length; i < length; i++) {
-                dom.setEventSingle(elements[i], eventname, fnc);
+            for (var i = 0, _length3 = elements.length; i < _length3; i++) {
+                dom.setEventSingle(elements[i], eventname, callback);
             }
         },
 
-        setEventSingle: function setEventSingle(element, eventname, fnc) {
-            var fncWrapper = function fncWrapper(e) {
-                if (fnc(e, element) === false) {
+        setEventSingle: function setEventSingle(element, eventname, callback) {
+            var callbackWrapper = function callbackWrapper(e) {
+                if (callback(e, element) === false) {
                     if (e.preventDefault) {
                         e.preventDefault();
                     } else {
@@ -2415,11 +2459,11 @@ exports['default'] = (function () {
                 }
             };
 
-            dom.eventHistory.push({ element: element, eventname: eventname, fnc: fnc, fncWrapper: fncWrapper });
-            element.addEventListener(eventname, fncWrapper, false);
+            dom.eventHistory.push({ element: element, eventname: eventname, callback: callback, callbackWrapper: callbackWrapper });
+            element.addEventListener(eventname, callbackWrapper, false);
         },
 
-        unsetEvent: function unsetEvent(element, eventname, fnc) {
+        unsetEvent: function unsetEvent(element, eventname, callback) {
             var elements = _larouxHelpersJs2['default'].getAsArray(element);
 
             for (var i1 = 0, length1 = elements.length; i1 < length1; i1++) {
@@ -2438,11 +2482,11 @@ exports['default'] = (function () {
                         continue;
                     }
 
-                    if (fnc !== undefined && item.fnc !== fnc) {
+                    if (callback !== undefined && item.callback !== callback) {
                         continue;
                     }
 
-                    item.element.removeEventListener(item.eventname, item.fncWrapper, false);
+                    item.element.removeEventListener(item.eventname, item.callbackWrapper, false);
                     delete dom.eventHistory[i2];
                 }
             }
@@ -2509,7 +2553,7 @@ exports['default'] = (function () {
 
         createOption: function createOption(element, key, value, isDefault) {
             /* old behaviour, does not support optgroups as parents.
-            var count = element.options.length;
+            let count = element.options.length;
             element.options[count] = new Option(value, key);
              if (isDefault === true) {
                 element.options.selectedIndex = count - 1;
@@ -2527,7 +2571,7 @@ exports['default'] = (function () {
         },
 
         selectByValue: function selectByValue(element, value) {
-            for (var i = 0, length = element.options.length; i < length; i++) {
+            for (var i = 0, _length4 = element.options.length; i < _length4; i++) {
                 if (element.options[i].getAttribute('value') == value) {
                     element.selectedIndex = i;
                     break;
@@ -2536,20 +2580,20 @@ exports['default'] = (function () {
         }, /*,
            // TODO: it's redundant for now
            loadImage: function () {
-             var images = [];
-              for (var i = 0, length = arguments.length; i < length; i++) {
-                 var image = document.createElement('IMG');
+             let images = [];
+              for (let i = 0, length = arguments.length; i < length; i++) {
+                 let image = document.createElement('IMG');
                  image.setAttribute('src', arguments[i]);
                   images.push(image);
              }
               return images;
            },
            loadAsyncScript: function (path, triggerName, async) {
-             var elem = document.createElement('script');
+             let elem = document.createElement('script');
               elem.type = 'text/javascript';
              elem.async = (async !== undefined) ? async : true;
              elem.src = path;
-              var loaded = false;
+              let loaded = false;
              elem.onload = elem.onreadystatechange = function () {
                  if ((elem.readyState && elem.readyState !== 'complete' && elem.readyState !== 'loaded') || loaded) {
                      return false;
@@ -2564,16 +2608,16 @@ exports['default'] = (function () {
                      }
                  }
              };
-              var head = document.getElementsByTagName('head')[0];
+              let head = document.getElementsByTagName('head')[0];
              head.appendChild(elem);
            },
            loadAsyncStyle: function (path, triggerName, async) {
-             var elem = document.createElement('LINK');
+             let elem = document.createElement('LINK');
               elem.type = 'text/css';
              elem.async = (async !== undefined) ? async : true;
              elem.href = path;
              elem.rel = 'stylesheet';
-              var loaded = false;
+              let loaded = false;
              elem.onload = elem.onreadystatechange = function () {
                  if ((elem.readyState && elem.readyState !== 'complete' && elem.readyState !== 'loaded') || loaded) {
                      return false;
@@ -2588,7 +2632,7 @@ exports['default'] = (function () {
                      }
                  }
              };
-              var head = document.getElementsByTagName('head')[0];
+              let head = document.getElementsByTagName('head')[0];
              head.appendChild(elem);
            },*/
 
@@ -2654,15 +2698,15 @@ exports['default'] = (function () {
         } /*,
           // TODO: it's redundant for now
           applyOperations: function (element, operations) {
-             for (var operation in operations) {
+             for (let operation in operations) {
                  if (!operations.hasOwnProperty(operation)) {
                      continue;
                  }
-                  for (var binding in operations[operation]) {
+                  for (let binding in operations[operation]) {
                      if (!operations[operation].hasOwnProperty(binding)) {
                          continue;
                      }
-                      var value = operations[operation][binding];
+                      let value = operations[operation][binding];
                       switch (operation) {
                          case 'setprop':
                              if (binding.substring(0, 1) === '_') {
@@ -2731,7 +2775,7 @@ exports['default'] = (function () {
 })();
 
 module.exports = exports['default'];
-},{"../laroux.helpers.js":6}],16:[function(require,module,exports){
+},{"../laroux.helpers.js":5}],16:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -2752,13 +2796,13 @@ exports['default'] = (function () {
     'use strict';
 
     var forms = {
-        ajaxForm: function ajaxForm(formobj, fnc, fncBegin) {
+        ajaxForm: function ajaxForm(formobj, callback, callbackBegin) {
             _larouxDomJs2['default'].setEvent(formobj, 'submit', function () {
-                if (fncBegin !== undefined) {
-                    fncBegin();
+                if (callbackBegin !== undefined) {
+                    callbackBegin();
                 }
 
-                _larouxAjaxJs2['default'].post(formobj.getAttribute('action'), forms.serializeFormData(formobj), fnc);
+                _larouxAjaxJs2['default'].post(formobj.getAttribute('action'), forms.serializeFormData(formobj), callback);
 
                 return false;
             });
@@ -2887,7 +2931,7 @@ exports['default'] = (function () {
                 }
             }
 
-            for (var selected = 0, length = selection.length; selected < length; selected++) {
+            for (var selected = 0, _length = selection.length; selected < _length; selected++) {
                 if (!forms.isFormField(selection[selected])) {
                     continue;
                 }
@@ -2916,7 +2960,7 @@ exports['default'] = (function () {
             var formdata = new FormData();
             var selection = formobj.querySelectorAll('*[name]');
 
-            for (var selected = 0, length = selection.length; selected < length; selected++) {
+            for (var selected = 0, _length2 = selection.length; selected < _length2; selected++) {
                 var value = forms.getFormFieldValue(selection[selected]);
 
                 if (value !== null) {
@@ -2931,7 +2975,7 @@ exports['default'] = (function () {
             var values = {};
             var selection = formobj.querySelectorAll('*[name]');
 
-            for (var selected = 0, length = selection.length; selected < length; selected++) {
+            for (var selected = 0, _length3 = selection.length; selected < _length3; selected++) {
                 var value = forms.getFormFieldValue(selection[selected]);
 
                 if (value !== null) {
@@ -2945,7 +2989,7 @@ exports['default'] = (function () {
         deserialize: function deserialize(formobj, data) {
             var selection = formobj.querySelectorAll('*[name]');
 
-            for (var selected = 0, length = selection.length; selected < length; selected++) {
+            for (var selected = 0, _length4 = selection.length; selected < _length4; selected++) {
                 forms.setFormFieldValue(selection[selected], data[selection[selected].getAttribute('name')]);
             }
         }
@@ -2955,7 +2999,7 @@ exports['default'] = (function () {
 })();
 
 module.exports = exports['default'];
-},{"../laroux.ajax.js":2,"./laroux.dom.js":15}],17:[function(require,module,exports){
+},{"../laroux.ajax.js":1,"./laroux.dom.js":15}],17:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -3073,7 +3117,7 @@ exports['default'] = (function () {
             return String.fromCharCode(keycode);
         },
 
-        // {target, key, shift, ctrl, alt, disableInputs, fnc}
+        // {target, key, shift, ctrl, alt, disableInputs, callback}
         assign: function assign(options) {
             var wrapper = function wrapper(ev) {
                 if (!ev) {
@@ -3107,7 +3151,7 @@ exports['default'] = (function () {
                     return;
                 }
 
-                options.fnc(ev);
+                options.callback(ev);
 
                 return false;
             };
@@ -3149,17 +3193,17 @@ exports['default'] = (function () {
                 element = _larouxDomJs2['default'].selectById(element);
             }
 
-            // if (model.constructor !== Stack) {
-            //     model = new Stack(model);
+            // if (model.constructor !== types.Observable) {
+            //     model = new types.Observable(model);
             // }
 
             var appKey = element.getAttribute('id');
 
-            model.onupdate = function (event) {
+            model.on(function (event) {
                 if (!mvc.pauseUpdate) {
                     mvc.update(appKey); // , [event.key]
                 }
-            };
+            });
 
             mvc.apps[appKey] = {
                 element: element,
@@ -3175,14 +3219,14 @@ exports['default'] = (function () {
         rebind: function rebind(appKey) {
             var app = mvc.apps[appKey];
             /*jslint nomen: true */
-            app.modelKeys = _larouxHelpersJs2['default'].getKeysRecursive(app.model._data); // FIXME: works only for $l.stack
+            app.modelKeys = _larouxHelpersJs2['default'].getKeysRecursive(app.model); // FIXME: works only for $l.types.Observable
             app.boundElements = {};
             app.eventElements = [];
 
             mvc.scanElements(app, app.element);
             mvc.update(appKey);
 
-            var fnc = function fnc(ev, elem) {
+            var callback = function callback(ev, elem) {
                 var binding = mvc.bindStringParser(elem.getAttribute('lr-event'));
                 // mvc.pauseUpdate = true;
                 for (var item in binding) {
@@ -3201,8 +3245,8 @@ exports['default'] = (function () {
                 // mvc.pauseUpdate = false;
             };
 
-            for (var i = 0, length = app.eventElements.length; i < length; i++) {
-                _larouxDomJs2['default'].setEvent(app.eventElements[i].element, app.eventElements[i].binding[null], fnc);
+            for (var i = 0, _length = app.eventElements.length; i < _length; i++) {
+                _larouxDomJs2['default'].setEvent(app.eventElements[i].element, app.eventElements[i].binding[null], callback);
             }
         },
 
@@ -3254,17 +3298,22 @@ exports['default'] = (function () {
                     continue;
                 }
 
-                var boundElement = app.boundElements[keys[i]];
+                var boundElement = app.boundElements[keys[i]],
+                    value = _larouxHelpersJs2['default'].getElement(app.model, keys[i]);
+
+                if (value instanceof Function) {
+                    value = value.call(app.model);
+                }
 
                 for (var j = 0, length2 = boundElement.length; j < length2; j++) {
                     if (boundElement[j].target.substring(0, 6) === 'style.') {
-                        boundElement[j].element.style[boundElement[j].target.substring(6)] = _larouxHelpersJs2['default'].getElement(app.model, keys[i]);
+                        boundElement[j].element.style[boundElement[j].target.substring(6)] = value;
                     } else if (boundElement[j].target.substring(0, 5) === 'attr.') {
                         // FIXME removeAttribute on null value?
-                        boundElement[j].element.setAttribute(boundElement[j].target.substring(5), _larouxHelpersJs2['default'].getElement(app.model, keys[i]));
+                        boundElement[j].element.setAttribute(boundElement[j].target.substring(5), value);
                     } else if (boundElement[j].target.substring(0, 5) === 'prop.') {
                         // FIXME removeAttribute on null value?
-                        boundElement[j].element[boundElement[j].target.substring(5)] = _larouxHelpersJs2['default'].getElement(app.model, keys[i]);
+                        boundElement[j].element[boundElement[j].target.substring(5)] = value;
                     }
                 }
             }
@@ -3276,7 +3325,7 @@ exports['default'] = (function () {
                 state = 0,
                 result = {};
 
-            for (var i = 0, length = text.length; i < length; i++) {
+            for (var i = 0, _length2 = text.length; i < _length2; i++) {
                 var curr = text.charAt(i);
 
                 if (state === 0) {
@@ -3310,7 +3359,213 @@ exports['default'] = (function () {
 })();
 
 module.exports = exports['default'];
-},{"../laroux.helpers.js":6,"./laroux.dom.js":15}],19:[function(require,module,exports){
+},{"../laroux.helpers.js":5,"./laroux.dom.js":15}],19:[function(require,module,exports){
+(function (global){
+'use strict';
+
+Object.defineProperty(exports, '__esModule', {
+    value: true
+});
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+var _larouxJs = require('../laroux.js');
+
+var _larouxJs2 = _interopRequireDefault(_larouxJs);
+
+var _larouxHelpersJs = require('../laroux.helpers.js');
+
+var _larouxHelpersJs2 = _interopRequireDefault(_larouxHelpersJs);
+
+exports['default'] = (function () {
+    'use strict';
+
+    // routes - partially taken from 'routie' project
+    //          can be found at: https://github.com/jgallen23/routie
+    var routes = {
+        map: {},
+        attached: false,
+        current: null,
+
+        regexConverter: function regexConverter(path, sensitive, strict) {
+            var keys = [],
+                regexString = path.concat(strict ? '' : '/?').replace(/\/\(/g, '(?:/').replace(/\+/g, '__plus__').replace(/(\/)?(\.)?:(\w+)(?:(\(.*?\)))?(\?)?/g, function (_, slash, format, key, capture, optional) {
+                keys.push({ name: key, optional: !!optional });
+                slash = slash || '';
+
+                return '' + (optional ? '' : slash) + '(?:' + (optional ? slash : '') + (format || '') + (capture || (format && '([^/.]+?)' || '([^/]+?)')) + ')' + (optional || '');
+            }).replace(/([\/.])/g, '\\$1').replace(/__plus__/g, '(.+)').replace(/\*/g, '(.*)');
+
+            return {
+                regex: new RegExp('^' + regexString + '$', sensitive ? '' : 'i'),
+                keys: keys
+            };
+        },
+
+        add: function add(path, callback) {
+            routes.addNamed(null, path, callback);
+        },
+
+        addNamed: function addNamed(name, path, callback) {
+            if (!(path in routes.map)) {
+                var converted = routes.regexConverter(path);
+
+                routes.map[path] = {
+                    name: name,
+                    callback: callback,
+                    params: {},
+                    keys: converted.keys,
+                    regex: converted.regex
+                };
+            } else {
+                routes.map[path].callback = callback;
+            }
+        },
+
+        get: function get(path) {
+            for (var item in routes.map) {
+                if (!routes.map.hasOwnProperty(item)) {
+                    continue;
+                }
+
+                var route = routes.map[item],
+                    match = route.regex.exec(path);
+
+                if (!match) {
+                    continue;
+                }
+
+                var params = {};
+                for (var i = 1, _length = match.length; i < _length; i++) {
+                    var key = route.keys[i - 1];
+
+                    if (key !== undefined) {
+                        params[key.name] = typeof match[i] == 'string' ? decodeURIComponent(match[i]) : match[i];
+                    }
+                }
+
+                return {
+                    route: item,
+                    resolved: path,
+                    params: params,
+                    callback: route.callback
+                };
+            }
+
+            return null;
+        },
+
+        getNamed: function getNamed(name, params) {
+            for (var item in routes.map) {
+                if (!routes.map.hasOwnProperty(item)) {
+                    continue;
+                }
+
+                var route = routes.map[item],
+                    path = item;
+
+                for (var i = 0, _length2 = route.keys.length; i < _length2; i++) {
+                    var key = route.keys[i];
+
+                    path = path.replace(':' + key.name, params[key.name] || '');
+                }
+
+                if (route.name == name) {
+                    return {
+                        route: item,
+                        resolved: path,
+                        params: params,
+                        callback: route.callback
+                    };
+                }
+            }
+
+            return null;
+        },
+
+        link: function link(name, params) {
+            var route = routes.getNamed(name, params);
+
+            if (route === null) {
+                return null;
+            }
+
+            return route.resolved;
+        },
+
+        exec: function exec(route) {
+            var previous = routes.current,
+                args = _larouxHelpersJs2['default'].map(route.params, function (value) {
+                return value;
+            });
+
+            routes.current = route;
+            args.push({
+                previous: previous,
+                current: routes.current
+            });
+
+            return route.callback.apply(global, args);
+        },
+
+        go: function go(path, silent) {
+            var attached = routes.attached;
+
+            if (silent && attached) {
+                routes.detach();
+            }
+
+            setTimeout(function () {
+                global.location.hash = path;
+
+                if (silent && attached) {
+                    setTimeout(function () {
+                        routes.attach();
+                    }, 1);
+                }
+            }, 1);
+        },
+
+        goNamed: function goNamed(name, params, silent) {
+            var path = routes.link(name, params);
+
+            if (path === null) {
+                return null;
+            }
+
+            routes.go(path, silent);
+        },
+
+        reload: function reload() {
+            var hash = location.hash.substring(1),
+                route = routes.get(hash);
+
+            if (route === null) {
+                return;
+            }
+
+            routes.exec(route);
+        },
+
+        attach: function attach() {
+            global.addEventListener('hashchange', routes.reload, false);
+            routes.attached = true;
+        },
+
+        detach: function detach() {
+            global.removeEventListener('hashchange', routes.reload);
+            routes.attached = false;
+        }
+    };
+
+    _larouxJs2['default'].ready(routes.attach);
+
+    return routes;
+})();
+
+module.exports = exports['default'];
+}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+},{"../laroux.helpers.js":5,"../laroux.js":6}],20:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -3360,7 +3615,7 @@ exports['default'] = (function () {
         init: function init() {
             var events = [0, navigator.msPointerEnabled ? 2 : 1, 3];
 
-            for (var i = 0, length = events.length; i < length; i++) {
+            for (var i = 0, _length = events.length; i < _length; i++) {
                 _larouxDomJs2['default'].setEventSingle(document, touch.events.start[events[i]], touch.onstart);
                 _larouxDomJs2['default'].setEventSingle(document, touch.events.end[events[i]], touch.onend);
                 _larouxDomJs2['default'].setEventSingle(document, touch.events.move[events[i]], touch.locatePointer);
@@ -3374,7 +3629,7 @@ exports['default'] = (function () {
             /*jslint plusplus: true */
             touch.tapCount++;
 
-            var fnc = function fnc() {
+            var callback = function callback() {
                 if (touch.cached[0] >= touch.pos[0] - touch.precision && touch.cached[0] <= touch.pos[0] + touch.precision && touch.cached[1] >= touch.pos[1] - touch.precision && touch.cached[1] <= touch.pos[1] + touch.precision) {
                     if (touch.touchStarted === null) {
                         _larouxDomJs2['default'].dispatchEvent(event.target, touch.tapCount === 2 ? 'dbltap' : 'tap', {
@@ -3399,7 +3654,7 @@ exports['default'] = (function () {
                         return;
                     }
 
-                    touch.tapTimer = setTimeout(fnc, touch.tapTreshold);
+                    touch.tapTimer = setTimeout(callback, touch.tapTreshold);
                     return;
                 }
 
@@ -3407,7 +3662,7 @@ exports['default'] = (function () {
             };
 
             clearTimeout(touch.tapTimer);
-            touch.tapTimer = setTimeout(fnc, touch.tapTreshold);
+            touch.tapTimer = setTimeout(callback, touch.tapTreshold);
         },
 
         onend: function onend(event) {
@@ -3448,4 +3703,93 @@ exports['default'] = (function () {
 })();
 
 module.exports = exports['default'];
-},{"../laroux.js":7,"./laroux.dom.js":15}]},{},[1]);
+},{"../laroux.js":6,"./laroux.dom.js":15}],21:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, '__esModule', {
+    value: true
+});
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+var _larouxJs = require('../laroux.js');
+
+var _larouxJs2 = _interopRequireDefault(_larouxJs);
+
+var _larouxAnimJs = require('./laroux.anim.js');
+
+var _larouxAnimJs2 = _interopRequireDefault(_larouxAnimJs);
+
+var _larouxCssJs = require('./laroux.css.js');
+
+var _larouxCssJs2 = _interopRequireDefault(_larouxCssJs);
+
+var _larouxDomJs = require('./laroux.dom.js');
+
+var _larouxDomJs2 = _interopRequireDefault(_larouxDomJs);
+
+var _larouxFormsJs = require('./laroux.forms.js');
+
+var _larouxFormsJs2 = _interopRequireDefault(_larouxFormsJs);
+
+var _larouxKeysJs = require('./laroux.keys.js');
+
+var _larouxKeysJs2 = _interopRequireDefault(_larouxKeysJs);
+
+var _larouxMvcJs = require('./laroux.mvc.js');
+
+var _larouxMvcJs2 = _interopRequireDefault(_larouxMvcJs);
+
+var _larouxRoutesJs = require('./laroux.routes.js');
+
+var _larouxRoutesJs2 = _interopRequireDefault(_larouxRoutesJs);
+
+var _larouxTouchJs = require('./laroux.touch.js');
+
+var _larouxTouchJs2 = _interopRequireDefault(_larouxTouchJs);
+
+exports['default'] = (function () {
+    'use strict';
+
+    _larouxJs2['default'].extend({
+        anim: _larouxAnimJs2['default'],
+        css: _larouxCssJs2['default'],
+        dom: _larouxDomJs2['default'],
+        forms: _larouxFormsJs2['default'],
+        keys: _larouxKeysJs2['default'],
+        mvc: _larouxMvcJs2['default'],
+        routes: _larouxRoutesJs2['default'],
+        touch: _larouxTouchJs2['default'],
+
+        cached: {
+            single: {},
+            array: {},
+            id: {}
+        },
+
+        c: function c(selector) {
+            if (selector instanceof Array) {
+                return _larouxJs2['default'].cached.array[selector] || (_larouxJs2['default'].cached.array[selector] = helpers.toArray(document.querySelectorAll(selector)));
+            }
+
+            return _larouxJs2['default'].cached.single[selector] || (_larouxJs2['default'].cached.single[selector] = document.querySelector(selector));
+        },
+
+        id: function id(selector, parent) {
+            return (parent || document).getElementById(selector);
+        },
+
+        idc: function idc(selector) {
+            return _larouxJs2['default'].cached.id[selector] || (_larouxJs2['default'].cached.id[selector] = document.getElementById(selector));
+        }
+    });
+
+    if (typeof document !== 'undefined') {
+        document.addEventListener('DOMContentLoaded', _larouxJs2['default'].setReady);
+    }
+
+    return _larouxJs2['default'];
+})();
+
+module.exports = exports['default'];
+},{"../laroux.js":6,"./laroux.anim.js":13,"./laroux.css.js":14,"./laroux.dom.js":15,"./laroux.forms.js":16,"./laroux.keys.js":17,"./laroux.mvc.js":18,"./laroux.routes.js":19,"./laroux.touch.js":20}]},{},[21]);
