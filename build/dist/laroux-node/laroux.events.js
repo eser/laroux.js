@@ -2,7 +2,7 @@
  * laroux.js - A jquery substitute for modern browsers (laroux-node bundle)
  *
  * @version v2.2.0
- * @link https://larukedi.github.io/laroux.js
+ * @link https://eserozvataf.github.io/laroux.js
  * @license Apache-2.0
  */
 /*jslint node: true */
@@ -19,15 +19,15 @@ var events = {
     },
 
     invoke: function invoke(event) {
+        for (var _len = arguments.length, args = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+            args[_key - 1] = arguments[_key];
+        }
+
         for (var i = 0, _length = events.delegates.length; i < _length; i++) {
             var _events$delegates$i;
 
             if (events.delegates[i].event != event) {
                 continue;
-            }
-
-            for (var _len = arguments.length, args = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
-                args[_key - 1] = arguments[_key];
             }
 
             (_events$delegates$i = events.delegates[i]).callback.apply(_events$delegates$i, args);

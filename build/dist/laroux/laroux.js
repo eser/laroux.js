@@ -2,7 +2,7 @@
  * laroux.js - A jquery substitute for modern browsers (laroux bundle)
  *
  * @version v2.2.0
- * @link https://larukedi.github.io/laroux.js
+ * @link https://eserozvataf.github.io/laroux.js
  * @license Apache-2.0
  */
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
@@ -21,7 +21,7 @@ var _createClass = (function () { function defineProperties(target, props) { for
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; }
+function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
@@ -300,6 +300,8 @@ var Body = (function () {
 })();
 
 var RequestPolyfill = (function (_Body) {
+    _inherits(RequestPolyfill, _Body);
+
     function RequestPolyfill(url, options) {
         _classCallCheck(this, RequestPolyfill);
 
@@ -321,12 +323,12 @@ var RequestPolyfill = (function (_Body) {
         }
     }
 
-    _inherits(RequestPolyfill, _Body);
-
     return RequestPolyfill;
 })(Body);
 
 var ResponsePolyfill = (function (_Body2) {
+    _inherits(ResponsePolyfill, _Body2);
+
     function ResponsePolyfill(body, options) {
         _classCallCheck(this, ResponsePolyfill);
 
@@ -345,8 +347,6 @@ var ResponsePolyfill = (function (_Body2) {
 
         this.content = body;
     }
-
-    _inherits(ResponsePolyfill, _Body2);
 
     return ResponsePolyfill;
 })(Body);
@@ -378,15 +378,15 @@ var events = {
     },
 
     invoke: function invoke(event) {
+        for (var _len = arguments.length, args = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+            args[_key - 1] = arguments[_key];
+        }
+
         for (var i = 0, _length = events.delegates.length; i < _length; i++) {
             var _events$delegates$i;
 
             if (events.delegates[i].event != event) {
                 continue;
-            }
-
-            for (var _len = arguments.length, args = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
-                args[_key - 1] = arguments[_key];
             }
 
             (_events$delegates$i = events.delegates[i]).callback.apply(_events$delegates$i, args);

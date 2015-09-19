@@ -2,7 +2,7 @@
  * laroux.js - A jquery substitute for modern browsers (laroux.web bundle)
  *
  * @version v2.2.0
- * @link https://larukedi.github.io/laroux.js
+ * @link https://eserozvataf.github.io/laroux.js
  * @license Apache-2.0
  */
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
@@ -131,8 +131,8 @@ var web_anim = {
                         scrollTo(0, currentItem.from);
                         // setTimeout(function () { scrollTo(0, currentItem.from); }, 1);
                     } else {
-                        currentItem.object[currentItem.property] = currentItem.from;
-                    }
+                            currentItem.object[currentItem.property] = currentItem.from;
+                        }
                 } else {
                     removeKeys = $l.prependArray(removeKeys, item);
                     currentItem.deferredResolve();
@@ -163,8 +163,8 @@ var web_anim = {
             scrollTo(0, value);
             // setTimeout(function () { scrollTo(0, value); }, 1);
         } else {
-            newanim.object[newanim.property] = value;
-        }
+                newanim.object[newanim.property] = value;
+            }
     }
 };
 
@@ -1319,12 +1319,12 @@ module.exports = exports['default'];
 /*global $l, location, addEventListener, removeEventListener */
 'use strict';
 
-Object.defineProperty(exports, '__esModule', {
-    value: true
-});
 // routes - partially taken from 'routie' project
 //          can be found at: https://github.com/jgallen23/routie
 //          see laroux.web.routes.LICENSE file for details
+Object.defineProperty(exports, '__esModule', {
+    value: true
+});
 var web_routes = {
     map: {},
     attached: false,
@@ -1511,12 +1511,12 @@ module.exports = exports['default'];
 /*global $l, document, navigator */
 'use strict';
 
-Object.defineProperty(exports, '__esModule', {
-    value: true
-});
 // touch - partially taken from 'tocca.js' project
 //         can be found at: https://github.com/GianlucaGuarini/Tocca.js
 //         see laroux.web.touch.LICENSE file for details
+Object.defineProperty(exports, '__esModule', {
+    value: true
+});
 var web_touch = {
     touchStarted: null,
     swipeTreshold: 80,
