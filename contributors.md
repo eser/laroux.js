@@ -2,7 +2,7 @@
 
 ## Committers
 
-* Eser Ozvataf - @larukedi (http://eser.ozvataf.com/)
+* Eser Ozvataf - @eserozvataf (http://eser.ozvataf.com/)
 * Sercan Cakir - @mayoz
 * Onur Babacan - @babua
 * Afshin Mokhtari - @afshinator

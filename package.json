@@ -4,20 +4,15 @@
     "description": "A jquery substitute for modern browsers",
     "keywords": [ "laroux", "larouxjs", "laroux.js", "jquery", "substitute", "dom", "css", "helpers", "ajax" ],
     "author": "Eser Ozvataf",
-    "homepage": "https://larukedi.github.io/laroux.js",
+    "homepage": "https://eserozvataf.github.io/laroux.js",
     "bugs": {
-        "url": "https://github.com/larukedi/laroux.js/issues",
-        "email": "eser@sent.com"
+        "url": "https://github.com/eserozvataf/laroux.js/issues",
+        "email": "eser@ozvataf.com"
     },
-    "licenses": [
-        {
-            "type": "Apache-2.0",
-            "url": "https://github.com/larukedi/laroux.js/blob/master/LICENSE"
-        }
-    ],
+    "license": "Apache-2.0",
     "contributors": [
         {
-            "name": "Eser 'Laroux' Ozvataf",
+            "name": "Eser Ozvataf",
             "email": "eser@ozvataf.com",
             "url": "http://eser.ozvataf.com/"
         }
@@ -25,7 +20,7 @@
     "main": "build/dist/web/laroux.js",
     "repository": {
         "type": "git",
-        "url": "https://github.com/larukedi/laroux.js.git"
+        "url": "https://github.com/eserozvataf/laroux.js.git"
     },
     "devDependencies": {
         "jasmine-core": "~2.3.4",
@@ -34,7 +29,7 @@
         "karma-jasmine": "~0.3.5",
         "karma-coverage": "~0.3.1",
         "karma-phantomjs-launcher": "~0.1.4",
-        "gulp": "~3.8.11",
+        "gulp": "~3.9.0",
         "gulp-header": "~1.2.2",
         "gulp-add-src": "~0.2.0",
         "gulp-babel": "~5.1.0",

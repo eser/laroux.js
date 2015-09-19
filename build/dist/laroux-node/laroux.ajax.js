@@ -2,7 +2,7 @@
  * laroux.js - A jquery substitute for modern browsers (laroux-node bundle)
  *
  * @version v2.2.0
- * @link https://larukedi.github.io/laroux.js
+ * @link https://eserozvataf.github.io/laroux.js
  * @license Apache-2.0
  */
 /*jslint node: true */
@@ -19,7 +19,7 @@ var _createClass = (function () { function defineProperties(target, props) { for
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; }
+function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
@@ -298,6 +298,8 @@ var Body = (function () {
 })();
 
 var RequestPolyfill = (function (_Body) {
+    _inherits(RequestPolyfill, _Body);
+
     function RequestPolyfill(url, options) {
         _classCallCheck(this, RequestPolyfill);
 
@@ -319,12 +321,12 @@ var RequestPolyfill = (function (_Body) {
         }
     }
 
-    _inherits(RequestPolyfill, _Body);
-
     return RequestPolyfill;
 })(Body);
 
 var ResponsePolyfill = (function (_Body2) {
+    _inherits(ResponsePolyfill, _Body2);
+
     function ResponsePolyfill(body, options) {
         _classCallCheck(this, ResponsePolyfill);
 
@@ -343,8 +345,6 @@ var ResponsePolyfill = (function (_Body2) {
 
         this.content = body;
     }
-
-    _inherits(ResponsePolyfill, _Body2);
 
     return ResponsePolyfill;
 })(Body);
