@@ -205,6 +205,36 @@ export default (function () {
             for (let selected = 0, length = selection.length; selected < length; selected++) {
                 forms.setFormFieldValue(selection[selected], data[selection[selected].getAttribute('name')]);
             }
+        },
+
+        validate: function (formobj, rules) {
+
+            formobj.addEventListener('submit', function (e) {
+                e.preventDefault();
+
+                let invalid = [];
+
+                for (var key in rules) {
+                    if (rules.hasOwnProperty(key)) {
+                        let formElement = dom.selectById(key);
+                        if (formElement){
+
+                            if (typeof rules[key].required != 'undefined' && rules[key].required === true)
+                                if (formElement.value.length === 0)
+                                    invalid.push({ element: formElement, rule: 'required', msj: 'This field is required.' });
+
+                            if (typeof rules[key].numeric != 'undefined' && rules[key].numeric === true)
+                                if (isNaN(parseFloat(formElement.value)) )
+                                    invalid.push({ element: formElement, rule: 'numeric', msj: 'This field should be a number.' });
+
+                        }
+                    }
+                }
+
+                console.log(invalid);
+                return invalid;
+            });
+
         }
     };
 
