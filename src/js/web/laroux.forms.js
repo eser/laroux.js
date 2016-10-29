@@ -224,7 +224,7 @@ export default (function () {
                                     invalid.push({ element: formElement, rule: 'required', msj: 'This field is required.' });
 
                             if (typeof rules[key].numeric != 'undefined' && rules[key].numeric === true)
-                                if (isNaN(parseFloat(formElement.value)) )
+                                if (isNaN(parseFloat(formElement.value)))
                                     invalid.push({ element: formElement, rule: 'numeric', msj: 'This field should be a number.' });
 
                         }
