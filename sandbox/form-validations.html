@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>laroux.js sandbox</title>
+    <meta charset="utf-8" />
+
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+
+    <script src="../build/dist/web/laroux.js"></script>
+</head>
+<body>
+
+    <h2>Form Validations</h2>
+
+    <form id="form" action="" method="POST">
+
+        <lable>Name</lable>
+        <input type="text" id="name" name="name" value="123" />
+
+        <lable>Email</lable>
+        <input type="email" id="email" name="email" />
+
+        <input type="submit" value="Submit" />
+    </form>
+
+    <!-- Initialize form validations -->
+    <script>
+        var element = $l('#form');
+        var valid = $l.forms.validate(element, {
+            name: {
+                required: true,
+                numeric: true
+            }
+        });
+        console.log(valid);
+    </script>
+
+</body>
+</html>
