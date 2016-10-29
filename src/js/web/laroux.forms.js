@@ -207,7 +207,15 @@ export default (function () {
             }
         },
 
-        validate: function (formobj, rules) {
+        validate: function (formobj, rules, messages) {
+
+            messages = Object.assign({
+                required: 'This field is required.',
+                numeric: 'This field needs to be a number.',
+                email: 'Not a valid email address.',
+                min: 'Lower than minimun value.',
+                max: 'Exceeds maximun value.'
+            }, messages);
 
             formobj.addEventListener('submit', function (e) {
                 e.preventDefault();
@@ -221,21 +229,53 @@ export default (function () {
 
                             if (typeof rules[key].required != 'undefined' && rules[key].required === true)
                                 if (formElement.value.length === 0)
-                                    invalid.push({ element: formElement, rule: 'required', msj: 'This field is required.' });
+                                    invalid.push({ element: formElement, rule: 'required', msg: messages.required });
 
-                            if (typeof rules[key].numeric != 'undefined' && rules[key].numeric === true)
-                                if (isNaN(parseFloat(formElement.value)))
-                                    invalid.push({ element: formElement, rule: 'numeric', msj: 'This field should be a number.' });
+                            if (typeof rules[key].numeric != 'undefined' && rules[key].numeric === true && formElement.value.length > 0){
+                                if (isNaN(parseInt(formElement.value)))
+                                    invalid.push({ element: formElement, rule: 'numeric', msg: messages.numeric });
+
+                                if (typeof rules[key].min != 'undefined' && !isNaN(rules[key].min))
+                                    if (parseInt(formElement.value) < rules[key].min)
+                                        invalid.push({ element: formElement, rule: 'min', msg: messages.min });
+
+                                if (typeof rules[key].max != 'undefined' && !isNaN(rules[key].max))
+                                    if (parseInt(formElement.value) > rules[key].max)
+                                        invalid.push({ element: formElement, rule: 'max', msg: messages.max });
+                            }
+
+                            //jscs:disable maximumLineLength
+                            let isEmailReg = /^(([^<>()[]\.,;:s@"]+(.[^<>()[]\.,;:s@"]+)*)|(".+"))@(([[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}])|(([a-zA-Z-0-9]+.)+[a-zA-Z]{2,}))$/;
+                            //jscs:enable maximumLineLength
+                            if (typeof rules[key].email != 'undefined' && rules[key].email === true && formElement.value.length > 0)
+                                if (!isEmailReg.test(formElement.value))
+                                    invalid.push({ element: formElement, rule: 'email', msg: messages.email });
 
                         }
                     }
                 }
+                return forms.formValidationErrors(formobj, invalid);
+            });
 
-                console.log(invalid);
-                return invalid;
+        },
+
+        formValidationErrors: function (formobj, invalidFields) {
+
+            var errorLabels = dom.selectByClass('error-message');
+            errorLabels.forEach(function (el) { dom.remove(el) });
+
+            invalidFields.forEach(function (invalid) {
+
+                let parent = invalid.element.parentNode;
+                let error = document.createElement('span');
+                error.classList.add('error-message');
+                error.innerHTML = invalid.msg;
+                parent.appendChild(error);
+
             });
 
         }
+
     };
 
     return forms;
