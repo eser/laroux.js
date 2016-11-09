@@ -33,7 +33,11 @@
                                     </ul>
 
                                     <div class="box-large vertical-spaces">
+<<<<<<< HEAD
                                         <h2>2.2.0</h2>
+=======
+                                        <h2>2.2.1</h2>
+>>>>>>> development-merge
                                     </div>
 
                                     <button data-href="https://github.com/eserozvataf/laroux.js/releases/latest" class="btn btn-primary btn-href">Download</button>
@@ -100,7 +104,11 @@
 
                             <!-- Slides -->
                             <div id="one" class="slide active">
+<<<<<<< HEAD
                                 <h1>laroux.js 2.2.0</h1>
+=======
+                                <h1>laroux.js 2.2.1</h1>
+>>>>>>> development-merge
                                 <div class="lead">
                                     This project is a jQuery substitute for modern browsers and mobile devices. But instead of offering some wrappers and own dynamics, it simply provides helper functions to achieve the same objectives as jQuery or Zepto.
                                 </div>
@@ -1163,6 +1171,74 @@ $l.web.dom.setEvent(
         var storage = select.options[select.selectedIndex].value;
         $l.vars.remove(storage, 'demopage');
         $l.web.dom.append(text, storage + ' is removed&lt;br /&gt;');
+<<<<<<< HEAD
+=======
+
+        return false;
+    }
+);
+                        </pre>
+                    </div>
+                </div>
+            </div>
+
+            <div id="when-examples" class="row header-row">
+                <div class="col-sm-6">
+                    <h2 class="nomargin">When Examples</h2>
+                </div>
+                <div class="col-sm-6 text-right">
+                    <a class="btn btn-sm btn-default" href="https://github.com/eserozvataf/laroux.js/wiki/when" role="button">Wiki Page</a>
+                </div>
+            </div>
+
+            <div class="example-area">
+                <h3>Triggers</h3>
+                <div class="row">
+                    <div class="col-sm-4">
+                        <button id="button-when-set-1" class="btn btn-default">Button 1</button>
+                        <button id="button-when-set-2" class="btn btn-default">Button 2</button>
+                        <button id="button-when-set-reset" class="btn btn-default" disabled="disabled">Reset</button>
+                        <div id="text-when-set"></div>
+                    </div>
+                    <div class="col-sm-8">
+                        <h4>HTML</h4>
+                        <pre class="prettyprint">
+&lt;button id="button-when-set-1" class="btn btn-default"&gt;Button 1&lt;/button&gt;
+&lt;button id="button-when-set-2" class="btn btn-default"&gt;Button 2&lt;/button&gt;
+&lt;div id="text-when-set"&gt;&lt;/div&gt;
+                        </pre>
+
+                        <h4>Javascript</h4>
+                        <pre class="prettyprint">
+var text = $l.id('text-when-set');
+$l.dom.replace(text, 'click both buttons in any order&lt;br /&gt;');
+
+var promise1 = new $l.deferred();
+var promise2 = new $l.deferred();
+
+new $l.when(promise1, promise2)
+    .then(function() {
+        $l.dom.append(text, 'all set&lt;br /&gt;');
+    });
+
+$l.dom.setEvent(
+    $l.id('button-when-set-1'),
+    'click',
+    function() {
+        $l.dom.append(text, 'button1 clicked...&lt;br /&gt;');
+        promise1.resolve();
+
+        return false;
+    }
+);
+
+$l.dom.setEvent(
+    $l.id('button-when-set-2'),
+    'click',
+    function() {
+        $l.dom.append(text, 'button2 clicked...&lt;br /&gt;');
+        promise2.resolve();
+>>>>>>> development-merge
 
         return false;
     }

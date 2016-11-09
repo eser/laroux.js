@@ -203,18 +203,86 @@ let web_forms = {
         return values;
     },
 
+    validate: function (formobj, rules, messages) {
+
+        messages = Object.assign({
+            required: 'This field is required.',
+            numeric: 'This field needs to be a number.',
+            email: 'Not a valid email address.',
+            min: 'Lower than minimun value.',
+            max: 'Exceeds maximun value.'
+        }, messages);
+
+        formobj.addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            let invalid = [];
+
+            for (var key in rules) {
+                if (rules.hasOwnProperty(key)) {
+                    let formElement = dom.selectById(key);
+                    if (formElement){
+
+                        if (typeof rules[key].required != 'undefined' && rules[key].required === true)
+                            if (formElement.value.length === 0)
+                                invalid.push({ element: formElement, rule: 'required', msg: messages.required });
+
+                        if (typeof rules[key].numeric != 'undefined' && rules[key].numeric === true && formElement.value.length > 0){
+                            if (isNaN(parseInt(formElement.value)))
+                                invalid.push({ element: formElement, rule: 'numeric', msg: messages.numeric });
+
+                            if (typeof rules[key].min != 'undefined' && !isNaN(rules[key].min))
+                                if (parseInt(formElement.value) < rules[key].min)
+                                    invalid.push({ element: formElement, rule: 'min', msg: messages.min });
+
+                            if (typeof rules[key].max != 'undefined' && !isNaN(rules[key].max))
+                                if (parseInt(formElement.value) > rules[key].max)
+                                    invalid.push({ element: formElement, rule: 'max', msg: messages.max });
+                        }
+
+                        //jscs:disable maximumLineLength
+                        let isEmailReg = /^(([^<>()[]\.,;:s@"]+(.[^<>()[]\.,;:s@"]+)*)|(".+"))@(([[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}])|(([a-zA-Z-0-9]+.)+[a-zA-Z]{2,}))$/;
+                        //jscs:enable maximumLineLength
+                        if (typeof rules[key].email != 'undefined' && rules[key].email === true && formElement.value.length > 0)
+                            if (!isEmailReg.test(formElement.value))
+                                invalid.push({ element: formElement, rule: 'email', msg: messages.email });
+
+                    }
+                }
+            }
+            return forms.formValidationErrors(formobj, invalid);
+        });
+
+    },
+
+    formValidationErrors: function (formobj, invalidFields) {
+
+        var errorLabels = dom.selectByClass('error-message');
+        errorLabels.forEach(function (el) { dom.remove(el) });
+
+        invalidFields.forEach(function (invalid) {
+
+            let parent = invalid.element.parentNode;
+            let error = document.createElement('span');
+            error.classList.add('error-message');
+            error.innerHTML = invalid.msg;
+            parent.appendChild(error);
+
+        });
+    },
+
+    // validate: function (formobj, rules) {
+    //     let fields = web_forms.serialize(formobj);
+    //
+    //     return validation.validate(fields, rules);
+    // },
+
     deserialize: function (formobj, data) {
         let selection = formobj.querySelectorAll('*[name]');
 
         for (let selected = 0, length = selection.length; selected < length; selected++) {
             web_forms.setFormFieldValue(selection[selected], data[selection[selected].getAttribute('name')]);
         }
-    },
-
-    validate: function (formobj, rules) {
-        let fields = web_forms.serialize(formobj);
-
-        return $l.validation.validate(fields, rules);
     }
 };
 
